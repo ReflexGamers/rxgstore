@@ -21,7 +21,7 @@
 
 			{% for price, mult in options %}
 
-				{% include 'PayPalOrders/option.inc.tpl' %}
+				{% include 'PaypalOrders/option.inc.tpl' %}
 
 			{% endfor %}
 
