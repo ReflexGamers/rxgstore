@@ -104,7 +104,7 @@ class ItemsController extends AppController {
 
 			//Redirect on unrecognized game
 			if (empty($serverItems) && !$this->request->is('ajax')) {
-				$this->redirect(array('controller' => 'items', 'action' => 'index'));
+				$this->redirect(array('controller' => 'Items', 'action' => 'index'));
 			}
 		}
 
@@ -149,7 +149,7 @@ class ItemsController extends AppController {
 			'itemsIndexed' => Hash::combine($items, '{n}.item_id', '{n}'),
 			'currencyMult' => Configure::read('Store.CurrencyMultiplier'),
 			'cashStackSize' => Configure::read('Store.CashStackSize'),
-			'pageLocation' => array('controller' => 'items', 'action' => 'recent')
+			'pageLocation' => array('controller' => 'Items', 'action' => 'recent')
 		));
 
 		if ($doRender) {
@@ -191,7 +191,7 @@ class ItemsController extends AppController {
 			'items' => $items,
 			'itemsIndexed' => Hash::combine($items, '{n}.item_id', '{n}'),
 			'activities' => $activities,
-			'pageLocation' => array('controller' => 'items', 'action' => 'activity', 'name' => $name)
+			'pageLocation' => array('controller' => 'Items', 'action' => 'activity', 'name' => $name)
 		));
 	}
 

@@ -320,7 +320,7 @@ class RouterTest extends CakeTestCase {
 		$result = Router::normalize('users/logout');
 		$this->assertEquals($expected, $result);
 
-		$result = Router::normalize(array('controller' => 'users', 'action' => 'logout'));
+		$result = Router::normalize(array('controller' => 'Users', 'action' => 'logout'));
 		$this->assertEquals($expected, $result);
 
 		$result = Router::normalize('/');
@@ -468,7 +468,7 @@ class RouterTest extends CakeTestCase {
 		Router::parse('/');
 		$request = new CakeRequest();
 		$request->addParams(array(
-			'action' => 'index', 'plugin' => null, 'controller' => 'users', 'url' => array('url' => 'users')
+			'action' => 'index', 'plugin' => null, 'controller' => 'Users', 'url' => array('url' => 'users')
 		));
 		$request->base = '/';
 		$request->here = '/';
@@ -711,7 +711,7 @@ class RouterTest extends CakeTestCase {
 		Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
 		Router::connect('/pages/contact_us', array('controller' => 'pages', 'action' => 'contact_us'));
 		Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
-		Router::connect('/reset/*', array('admin' => true, 'controller' => 'users', 'action' => 'reset'));
+		Router::connect('/reset/*', array('admin' => true, 'controller' => 'Users', 'action' => 'reset'));
 		Router::connect('/tests', array('controller' => 'tests', 'action' => 'index'));
 		Router::parseExtensions('rss');
 
@@ -766,14 +766,14 @@ class RouterTest extends CakeTestCase {
 		$expected = '/magazine/admin/subscriptions/edit/1';
 		$this->assertEquals($expected, $result);
 
-		$result = Router::url(array('admin' => true, 'controller' => 'users', 'action' => 'login'));
+		$result = Router::url(array('admin' => true, 'controller' => 'Users', 'action' => 'login'));
 		$expected = '/magazine/admin/users/login';
 		$this->assertEquals($expected, $result);
 
 		Router::reload();
 		$request = new CakeRequest();
 		$request->addParams(array(
-			'admin' => true, 'action' => 'index', 'plugin' => null, 'controller' => 'users',
+			'admin' => true, 'action' => 'index', 'plugin' => null, 'controller' => 'Users',
 			'url' => array('url' => 'users')
 		));
 		$request->base = '/';
@@ -2074,7 +2074,7 @@ class RouterTest extends CakeTestCase {
 		$expected = '/base/members/posts/index/page:2';
 		$this->assertEquals($expected, $result);
 
-		$result = Router::url(array('members' => true, 'controller' => 'users', 'action' => 'add'));
+		$result = Router::url(array('members' => true, 'controller' => 'Users', 'action' => 'add'));
 		$expected = '/base/members/users/add';
 		$this->assertEquals($expected, $result);
 	}
@@ -2086,20 +2086,20 @@ class RouterTest extends CakeTestCase {
  */
 	public function testUrlWritingWithPrefixes() {
 		Router::connect('/company/:controller/:action/*', array('prefix' => 'company', 'company' => true));
-		Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
+		Router::connect('/login', array('controller' => 'Users', 'action' => 'login'));
 
-		$result = Router::url(array('controller' => 'users', 'action' => 'login', 'company' => true));
+		$result = Router::url(array('controller' => 'Users', 'action' => 'login', 'company' => true));
 		$expected = '/company/users/login';
 		$this->assertEquals($expected, $result);
 
-		$result = Router::url(array('controller' => 'users', 'action' => 'company_login', 'company' => true));
+		$result = Router::url(array('controller' => 'Users', 'action' => 'company_login', 'company' => true));
 		$expected = '/company/users/login';
 		$this->assertEquals($expected, $result);
 
 		$request = new CakeRequest();
 		Router::setRequestInfo(
 			$request->addParams(array(
-				'plugin' => null, 'controller' => 'users', 'action' => 'login',
+				'plugin' => null, 'controller' => 'Users', 'action' => 'login',
 				'company' => true
 			))->addPaths(array(
 				'base' => '/',
@@ -2108,7 +2108,7 @@ class RouterTest extends CakeTestCase {
 			))
 		);
 
-		$result = Router::url(array('controller' => 'users', 'action' => 'login', 'company' => false));
+		$result = Router::url(array('controller' => 'Users', 'action' => 'login', 'company' => false));
 		$expected = '/login';
 		$this->assertEquals($expected, $result);
 	}
@@ -2121,7 +2121,7 @@ class RouterTest extends CakeTestCase {
 	public function testUrlWritingWithPrefixesAndCustomRoutes() {
 		Router::connect(
 			'/admin/login',
-			array('controller' => 'users', 'action' => 'login', 'prefix' => 'admin', 'admin' => true)
+			array('controller' => 'Users', 'action' => 'login', 'prefix' => 'admin', 'admin' => true)
 		);
 		$request = new CakeRequest();
 		Router::setRequestInfo(
@@ -2134,13 +2134,13 @@ class RouterTest extends CakeTestCase {
 				'webroot' => '/',
 			))
 		);
-		$result = Router::url(array('controller' => 'users', 'action' => 'login', 'admin' => true));
+		$result = Router::url(array('controller' => 'Users', 'action' => 'login', 'admin' => true));
 		$this->assertEquals('/admin/login', $result);
 
-		$result = Router::url(array('controller' => 'users', 'action' => 'login'));
+		$result = Router::url(array('controller' => 'Users', 'action' => 'login'));
 		$this->assertEquals('/admin/login', $result);
 
-		$result = Router::url(array('controller' => 'users', 'action' => 'admin_login'));
+		$result = Router::url(array('controller' => 'Users', 'action' => 'admin_login'));
 		$this->assertEquals('/admin/login', $result);
 	}
 
@@ -2183,7 +2183,7 @@ class RouterTest extends CakeTestCase {
 		);
 
 		Router::connect('/protected/:controller/:action/*', array(
-			'controller' => 'users',
+			'controller' => 'Users',
 			'action' => 'index',
 			'prefix' => 'protected'
 		));

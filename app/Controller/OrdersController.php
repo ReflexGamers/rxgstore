@@ -139,7 +139,7 @@ class OrdersController extends AppController {
 
 		if (empty($orderDetails)) {
 			$this->Session->setFlash('Oops! You do not have any items in your shopping cart.', 'default', array('class' => 'error'));
-			$this->redirect(array('controller' => 'cart', 'action' => 'view'));
+			$this->redirect(array('controller' => 'Cart', 'action' => 'view'));
 			return;
 		}
 

@@ -23,7 +23,7 @@ class StoreController extends AppController {
 
 			//Redirect on unrecognized game
 			if (empty($serverItems) && !$this->request->is('ajax')) {
-				$this->redirect(array('controller' => 'store', 'action' => 'store'));
+				$this->redirect(array('controller' => 'Store', 'action' => 'store'));
 			}
 
 			$this->set('game', $server);

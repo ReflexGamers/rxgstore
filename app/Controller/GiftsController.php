@@ -78,7 +78,7 @@ class GiftsController extends AppController {
 	public function compose($steamid) {
 
 		if (empty($steamid)) {
-			$this->redirect(array('controller' => 'items', 'action' => 'index'));
+			$this->redirect(array('controller' => 'Items', 'action' => 'index'));
 			return;
 		}
 
@@ -93,7 +93,7 @@ class GiftsController extends AppController {
 
 		if ($user_id == $recipient_id) {
 			$this->Session->setFlash('You cannot send a gift to yourself.', 'default', array('class' => 'error'));
-			$this->redirect(array('controller' => 'items', 'action' => 'index'));
+			$this->redirect(array('controller' => 'Items', 'action' => 'index'));
 			return;
 		}
 
@@ -139,7 +139,7 @@ class GiftsController extends AppController {
 			'itemsIndexed' => Hash::combine($items, '{n}.item_id', '{n}'),
 			'currencyMult' => Configure::read('Store.CurrencyMultiplier'),
 			'cashStackSize' => Configure::read('Store.CashStackSize'),
-			'pageLocation' => array('controller' => 'gifts', 'action' => 'activity')
+			'pageLocation' => array('controller' => 'Gifts', 'action' => 'activity')
 		));
 
 		if ($doRender) {
@@ -152,7 +152,7 @@ class GiftsController extends AppController {
 		$this->request->allowMethod('post');
 
 		if (empty($steamid)) {
-			$this->redirect(array('controller' => 'items', 'action' => 'index'));
+			$this->redirect(array('controller' => 'Items', 'action' => 'index'));
 			return;
 		}
 
@@ -170,7 +170,7 @@ class GiftsController extends AppController {
 
 		if ($user_id == $recipient_id) {
 			$this->Session->setFlash('You cannot send a gift to yourself.', 'default', array('class' => 'error'));
-			$this->redirect(array('controller' => 'items', 'action' => 'index'));
+			$this->redirect(array('controller' => 'Items', 'action' => 'index'));
 			return;
 		}
 

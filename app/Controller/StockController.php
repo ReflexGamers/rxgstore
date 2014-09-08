@@ -109,7 +109,7 @@ class StockController extends AppController {
 			'activities' => $shipments,
 			'items' => $items,
 			'itemsIndexed' => Hash::combine($items, '{n}.item_id', '{n}'),
-			'pageLocation' => array('controller' => 'stock', 'action' => 'activity')
+			'pageLocation' => array('controller' => 'Stock', 'action' => 'activity')
 		));
 
 		if ($doRender) {

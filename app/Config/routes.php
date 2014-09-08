@@ -26,22 +26,22 @@
  */
 	//Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
 
-	//Router::connect('/', array('controller' => 'store', 'action' => 'index'));
+	//Router::connect('/', array('controller' => 'Store', 'action' => 'index'));
 
-	Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
-	Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));
+	Router::connect('/login', array('controller' => 'Users', 'action' => 'login'));
+	Router::connect('/logout', array('controller' => 'Users', 'action' => 'logout'));
 
-	Router::connect('/checkout', array('controller' => 'orders', 'action' => 'checkout'));
-	Router::connect('/buy', array('controller' => 'orders', 'action' => 'buy'));
+	Router::connect('/checkout', array('controller' => 'Orders', 'action' => 'checkout'));
+	Router::connect('/buy', array('controller' => 'Orders', 'action' => 'buy'));
 
-	Router::connect('/recent/*', array('controller' => 'orders', 'action' => 'recent'));
+	Router::connect('/recent/*', array('controller' => 'Orders', 'action' => 'recent'));
 
-	Router::connect('/store/:action', array('controller' => 'store'));
+	Router::connect('/store/:action', array('controller' => 'Store'));
 
-	Router::connect('/', array('controller' => 'items', 'action' => 'index'));
-	Router::connect('/browse', array('controller' => 'items', 'action' => 'index'));
+	Router::connect('/', array('controller' => 'Items', 'action' => 'index'));
+	Router::connect('/browse', array('controller' => 'Items', 'action' => 'index'));
 	Router::connect('/browse/:server', array(
-			'controller' => 'items', 'action' => 'index'
+			'controller' => 'Items', 'action' => 'index'
 		), array(
 			'pass' => array('server'),
 			'server' => '[a-z0-9]+'
@@ -57,55 +57,55 @@
 		)
 	);
 
-	Router::connect('/server', array('controller' => 'items', 'action' => 'server'));
+	Router::connect('/server', array('controller' => 'Items', 'action' => 'server'));
 	Router::connect('/server/:server', array(
-			'controller' => 'items', 'action' => 'server'
+			'controller' => 'Items', 'action' => 'server'
 		), array(
 			'pass' => array('server'),
 			'server' => '[a-z0-9]+'
 	));
 
-	Router::connect('/faq', array('controller' => 'items', 'action' => 'faq'));
+	Router::connect('/faq', array('controller' => 'Items', 'action' => 'faq'));
 
 	Router::connect('/item/:name', array(
-			'controller' => 'items', 'action' => 'view'
+			'controller' => 'Items', 'action' => 'view'
 		), array(
 			'pass' => array('name'),
 			'name' => '[a-z_]+'
 	));
 
 	Router::connect('/item/:name/:action/*', array(
-			'controller' => 'items'
+			'controller' => 'Items'
 		), array(
 			'pass' => array('name'),
 			'name' => '[a-z_]+'
 	));
 
-	Router::connect('/rate/', array('controller' => 'ratings', 'action' => 'rate'));
+	Router::connect('/rate/', array('controller' => 'Ratings', 'action' => 'rate'));
 	Router::connect('/rate/:id', array(
-			'controller' => 'ratings', 'action' => 'rate'
+			'controller' => 'Ratings', 'action' => 'rate'
 		), array(
 			'pass' => array('id'),
 			'id' => '[0-9]+'
 	));
 	Router::connect('/rate/recent/:id', array(
-			'controller' => 'ratings', 'action' => 'rate'
+			'controller' => 'Ratings', 'action' => 'rate'
 		), array(
 			'pass' => array('id')
 	));
 
-	Router::connect('/review/:type/:action', array('controller' => 'reviews'));
+	Router::connect('/review/:type/:action', array('controller' => 'Reviews'));
 	Router::connect('/review/:type/:action/:id', array(
-			'controller' => 'reviews',
+			'controller' => 'Reviews',
 		), array(
 			'pass' => array('type', 'id'),
 			'type' => '[a-z]+',
 			'id' => '[0-9]+'
 	));
 
-	Router::connect('/cart', array('controller' => 'cart', 'action' => 'view'));
+	Router::connect('/cart', array('controller' => 'Cart', 'action' => 'view'));
 	Router::connect('/cart/:action/:id', array(
-			'controller' => 'cart'
+			'controller' => 'Cart'
 		), array(
 			'pass' => array('id'),
 			'id' => '[0-9]+'
@@ -113,70 +113,70 @@
 	);
 
 
-	Router::connect('/shout', array('controller' => 'shoutboxmessages', 'action' => 'add'));
+	Router::connect('/shout', array('controller' => 'ShoutboxMessages', 'action' => 'add'));
 	Router::connect('/shout/check/:time', array(
-			'controller' => 'shoutboxmessages', 'action' => 'view'
+			'controller' => 'ShoutboxMessages', 'action' => 'view'
 		), array(
 			'pass' => array('time'),
 			'time' => '[0-9]+'
 	));
 	Router::connect('/shout/delete/:id', array(
-			'controller' => 'shoutboxmessages', 'action' => 'delete'
+			'controller' => 'ShoutboxMessages', 'action' => 'delete'
 		), array(
 			'pass' => array('id'),
 			'time' => '[0-9]+'
 	));
 
 	Router::connect('/user/:id', array(
-			'controller' => 'users', 'action' => 'profile'
+			'controller' => 'Users', 'action' => 'profile'
 		), array(
 			'pass' => array('id'),
 			'id' => '[0-9]+'
 	));
 	Router::connect('/user/:action/:id/*', array(
-			'controller' => 'users'
+			'controller' => 'Users'
 		), array(
 			'pass' => array('id'),
 			'id' => '[0-9]+'
 	));
 
 	Router::connect('/receipt/:id', array(
-			'controller' => 'orders', 'action' => 'receipt'
+			'controller' => 'Orders', 'action' => 'receipt'
 		), array(
 			'pass' => array('id'),
 			'id' => '[0-9]+'
 	));
 
-	Router::connect('/search', array('controller' => 'users', 'action' => 'search'));
+	Router::connect('/search', array('controller' => 'Users', 'action' => 'search'));
 
-	Router::connect('/gift/:action', array('controller' => 'gifts'));
+	Router::connect('/gift/:action', array('controller' => 'Gifts'));
 	Router::connect('/gift/:action/:id', array(
-			'controller' => 'gifts'
+			'controller' => 'Gifts'
 		), array(
 			'pass' => array('id'),
 			'id' => '[0-9]+'
 	));
 
-	Router::connect('/reward/:action', array('controller' => 'rewards'));
+	Router::connect('/reward/:action', array('controller' => 'Rewards'));
 	Router::connect('/reward/:action/:id', array(
-			'controller' => 'rewards'
+			'controller' => 'Rewards'
 		), array(
 			'pass' => array('id'),
 			'id' => '[0-9]+'
 	));
 
-	Router::connect('/quickauth', array('controller' => 'quickauth', 'action' => 'auth'));
-	Router::connect('/admin/quickauth', array('controller' => 'quickauth', 'action' => 'view'));
+	Router::connect('/quickauth', array('controller' => 'QuickAuth', 'action' => 'auth'));
+	Router::connect('/admin/quickauth', array('controller' => 'QuickAuth', 'action' => 'view'));
 	Router::connect('/admin/quickauth/delete/:id', array(
-			'controller' => 'quickauth', 'action' => 'delete'
+			'controller' => 'QuickAuth', 'action' => 'delete'
 		), array(
 			'pass' => array('id'),
 			'id' => '[0-9]+'
 		)
 	);
 
-	Router::connect('/admin/sort', array('controller' => 'items', 'action' => 'sort'));
-	Router::connect('/admin/stock', array('controller' => 'stock', 'action' => 'edit'));
+	Router::connect('/admin/sort', array('controller' => 'Items', 'action' => 'sort'));
+	Router::connect('/admin/stock', array('controller' => 'Stock', 'action' => 'edit'));
 
 	Router::connect('/admin/cache', array('controller' => 'SteamPlayerCache', 'action' => 'view'));
 	Router::connect('/admin/cache/:action', array('controller' => 'SteamPlayerCache'));
@@ -199,7 +199,7 @@
 	);
 
 	//Temp
-	Router::connect('/convert', array('controller' => 'store', 'action' => 'convert'));
+	Router::connect('/convert', array('controller' => 'Store', 'action' => 'convert'));
 
 
 	//Router::connectNamed(array('page'));

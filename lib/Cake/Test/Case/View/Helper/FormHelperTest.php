@@ -7729,7 +7729,7 @@ class FormHelperTest extends CakeTestCase {
 
 		$result = $this->Form->postLink(
 			'',
-			array('controller' => 'items', 'action' => 'delete', 10),
+			array('controller' => 'Items', 'action' => 'delete', 10),
 			array('class' => 'btn btn-danger', 'escape' => false),
 			'Confirm thing'
 		);
@@ -8393,7 +8393,7 @@ class FormHelperTest extends CakeTestCase {
  * @return void
  */
 	public function testCreateCustomRoute() {
-		Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
+		Router::connect('/login', array('controller' => 'Users', 'action' => 'login'));
 		$encoding = strtolower(Configure::read('App.encoding'));
 
 		$result = $this->Form->create('User', array('action' => 'login'));

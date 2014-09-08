@@ -556,7 +556,7 @@ class PaginatorHelperTest extends CakeTestCase {
 
 		Router::reload();
 		Router::setRequestInfo(array(
-			array('pass' => array(), 'named' => array(), 'controller' => 'users', 'plugin' => null, 'action' => 'admin_index', 'prefix' => 'admin', 'admin' => true, 'url' => array('ext' => 'html', 'url' => 'admin/users')),
+			array('pass' => array(), 'named' => array(), 'controller' => 'Users', 'plugin' => null, 'action' => 'admin_index', 'prefix' => 'admin', 'admin' => true, 'url' => array('ext' => 'html', 'url' => 'admin/users')),
 			array('base' => '', 'here' => '/admin/users', 'webroot' => '/')
 		));
 		Router::parse('/admin/users');

@@ -870,7 +870,7 @@ class AuthComponentTest extends CakeTestCase {
 		$this->Auth->request->url = Router::normalize($url);
 
 		$this->Auth->initialize($this->Controller);
-		$this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
+		$this->Auth->loginAction = array('controller' => 'Users', 'action' => 'login');
 		$this->Auth->startup($this->Controller);
 		$expected = Router::normalize('/posts/add');
 		$this->assertEquals($expected, $this->Auth->Session->read('Auth.redirect'));
@@ -1356,7 +1356,7 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testRedirectSet() {
-		$value = array('controller' => 'users', 'action' => 'home');
+		$value = array('controller' => 'Users', 'action' => 'home');
 		$result = $this->Auth->redirectUrl($value);
 		$this->assertEquals('/users/home', $result);
 		$this->assertEquals($value, $this->Auth->Session->read('Auth.redirect'));
@@ -1368,7 +1368,7 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testRedirectSessionRead() {
-		$this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
+		$this->Auth->loginAction = array('controller' => 'Users', 'action' => 'login');
 		$this->Auth->Session->write('Auth.redirect', '/users/home');
 
 		$result = $this->Auth->redirectUrl();
@@ -1400,9 +1400,9 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testRedirectSessionReadEqualToLoginAction() {
-		$this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
-		$this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'home');
-		$this->Auth->Session->write('Auth.redirect', array('controller' => 'users', 'action' => 'login'));
+		$this->Auth->loginAction = array('controller' => 'Users', 'action' => 'login');
+		$this->Auth->loginRedirect = array('controller' => 'Users', 'action' => 'home');
+		$this->Auth->Session->write('Auth.redirect', array('controller' => 'Users', 'action' => 'login'));
 
 		$result = $this->Auth->redirectUrl();
 		$this->assertEquals('/users/home', $result);
@@ -1433,8 +1433,8 @@ class AuthComponentTest extends CakeTestCase {
 
 		Router::setRequestInfo($this->Auth->request);
 
-		$this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
-		$this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'home');
+		$this->Auth->loginAction = array('controller' => 'Users', 'action' => 'login');
+		$this->Auth->loginRedirect = array('controller' => 'Users', 'action' => 'home');
 
 		$result = $this->Auth->redirectUrl();
 		$this->assertEquals('/users/home', $result);

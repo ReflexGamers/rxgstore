@@ -40,7 +40,7 @@ class QuickAuthController extends AppController {
 	public function auth() {
 
 		$params = $this->request->query;
-		$redirLoc = array('controller' => 'items', 'action' => 'index');
+		$redirLoc = array('controller' => 'Items', 'action' => 'index');
 
 		if (empty($params)) {
 			$this->redirect($redirLoc);
@@ -110,7 +110,7 @@ class QuickAuthController extends AppController {
 		$this->loadModel('Server');
 		$server = Hash::extract($this->Server->findByServerIp($auth['server'], array('short_name')), 'Server');
 		$server = !empty($server) ? $server['short_name'] : $params['source'];
-		$redirLoc = array('controller' => 'items', 'action' => 'index', 'server' => $server);
+		$redirLoc = array('controller' => 'Items', 'action' => 'index', 'server' => $server);
 
 		if (!in_array($params['source'], $config['PopupFromServers'])) {
 			//Go straight to store

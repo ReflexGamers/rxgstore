@@ -136,7 +136,7 @@ class RewardsController extends AppController {
 			'itemsIndexed' => Hash::combine($items, '{n}.item_id', '{n}'),
 			'currencyMult' => Configure::read('Store.CurrencyMultiplier'),
 			'cashStackSize' => Configure::read('Store.CashStackSize'),
-			'pageLocation' => array('controller' => 'rewards', 'action' => 'activity')
+			'pageLocation' => array('controller' => 'Rewards', 'action' => 'activity')
 		));
 
 		if ($doRender) {

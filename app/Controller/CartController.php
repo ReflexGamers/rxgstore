@@ -39,7 +39,7 @@ class CartController extends AppController {
 
 		if (empty($this->request->data['ProcessAction'])) {
 			$this->Session->setFlash('Oops! There was an error processing your cart.', 'default', array('class' => 'error'));
-			$this->redirect(array('controller' => 'cart', 'action' => 'view'));
+			$this->redirect(array('controller' => 'Cart', 'action' => 'view'));
 			return;
 		}
 
@@ -48,13 +48,13 @@ class CartController extends AppController {
 		if ($processAction == 'empty') {
 			$this->Session->delete('cart');
 			$this->Session->setFlash('Your cart has been emptied.', 'default', array('class' => 'success'));
-			$this->redirect(array('controller' => 'items', 'action' => 'index'));
+			$this->redirect(array('controller' => 'Items', 'action' => 'index'));
 			return;
 		}
 
 		if (empty($this->request->data['OrderDetail'])) {
 			$this->Session->setFlash('Oops! You do not have any items in your shopping cart.', 'default', array('class' => 'error'));
-			$this->redirect(array('controller' => 'cart', 'action' => 'view'));
+			$this->redirect(array('controller' => 'Cart', 'action' => 'view'));
 			return;
 		}
 
@@ -112,7 +112,7 @@ class CartController extends AppController {
 
 		if ($processAction == 'checkoout' && empty($orderDetails)) {
 			$this->Session->setFlash('Oops! You do not have any items in your shopping cart.', 'default', array('class' => 'error'));
-			$this->redirect(array('controller' => 'cart', 'action' => 'view'));
+			$this->redirect(array('controller' => 'Cart', 'action' => 'view'));
 			return;
 		}
 
@@ -120,7 +120,7 @@ class CartController extends AppController {
 
 		if ($processAction == 'update') {
 			$this->Session->setFlash('Your cart has been updated.', 'default', array('class' => 'success'));
-			$this->redirect(array('controller' => 'cart', 'action' => 'view'));
+			$this->redirect(array('controller' => 'Cart', 'action' => 'view'));
 			return;
 		}
 

@@ -120,13 +120,13 @@ class UsersController extends AppController {
 			'activities' => $activities,
 			'currencyMult' => Configure::read('Store.CurrencyMultiplier'),
 			'cashStackSize' => Configure::read('Store.CashStackSize'),
-			'pageLocation' => array('controller' => 'users', 'action' => 'activity', 'id' => $steamid)
+			'pageLocation' => array('controller' => 'Users', 'action' => 'activity', 'id' => $steamid)
 		));
 	}
 
 	public function impersonate($steamid) {
 		$this->AccountUtility->login($steamid);
-		$this->redirect(array('controller' => 'users', 'action' => 'profile', 'id' => $steamid));
+		$this->redirect(array('controller' => 'Users', 'action' => 'profile', 'id' => $steamid));
 	}
 
 	public function login() {
