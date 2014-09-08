@@ -279,7 +279,7 @@ class AccountUtilityComponent extends Component {
 		$aco = $this->Acl->Aco;
 		$aro = $this->Acl->Aro;
 
-		$aro->query('ALTER TABLE Aros auto_increment = 1');
+		$aro->query('ALTER TABLE aros auto_increment = 1');
 
 		$objects = array(
 			array('alias' => 'Cache'),

@@ -110,7 +110,7 @@ class ConversionComponent extends Component {
 			} else if ($row['TYPE'] == 'CASH') {
 
 				$paypalorder = array(
-					'PayPalOrder' => array(
+					'PaypalOrder' => array(
 						'paypal_order_id' => $this->Activity->getNewId('PaypalOrder'),
 						'user_id' => $this->AccountUtility->AccountIDFromSteamID64($row['STEAM']),
 						'date' => $row['DATE'],
@@ -123,8 +123,8 @@ class ConversionComponent extends Component {
 
 				//print_r($paypalorder);
 
-				$this->PayPalOrder->saveAssociated($paypalorder, array('atomic' => false));
-				$this->PayPalOrder->clear();
+				$this->PaypalOrder->saveAssociated($paypalorder, array('atomic' => false));
+				$this->PaypalOrder->clear();
 			}
 
 
