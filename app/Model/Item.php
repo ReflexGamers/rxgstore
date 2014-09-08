@@ -98,6 +98,7 @@ class Item extends AppModel {
 			'joins' => array(
 				array(
 					'table' => 'order',
+					'alias' => 'Order',
 					'conditions' => array(
 						'OrderDetail.order_id = Order.order_id',
 						'OrderDetail.item_id' => $item_id
