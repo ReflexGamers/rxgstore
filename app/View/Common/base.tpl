@@ -1,0 +1,1 @@
+{% extends isAjax ? 'Common/ajax.tpl' : 'Common/layout.tpl' %}

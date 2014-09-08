@@ -1,0 +1,45 @@
+{% extends isAjax ? 'Common/ajax.tpl' : 'Common/layout.tpl' %}
+
+{% set jquery = true %}
+{% set title = 'Steam Data Cache' %}
+{% set hideTitle = true %}
+{% set headerImage = false %}
+
+{% set scripts = ['admin-cache'] %}
+
+
+{% block content %}
+
+	<h1 class="page_heading">Steam Data Cache</h1>
+
+	<p>When a part of the site attempts to get Steam data about players, it calls the Steam API to get their information. We automatically cache that information for up to <strong>{{ cacheDuration }}</strong> hours per player.</p>
+
+	<p>If a player's cached information has expired by the time their information is requested, it will be fetched again and updated in the cache for later use. Expired player information is automatically deleted when any part of the cache is updated.</p>
+
+	<p>Depending on your permissions, this page will allow you to not only view cached player data, but to also manually refresh or delete any individual player or all players.</p>
+
+	<p>If you clear players from the cache manually, then when their information is requested, the Steam API will be called, resulting in a longer page load time for the first attempt.</p>
+
+	<p>This page is mostly just for cache debugging purposes. There is no reason to manually refresh a player from the cache unless you know that person's steam profile name or avatar has changed since it was last fetched.</p>
+
+	{% if cache %}
+		<div id="cache_batch_actions">
+			{% if access.check('Cache', 'update') %}
+				<input type="button" id="cache_refreshall" class="btn-success" value="Refresh All Players" data-href="{{ html.url({'action': 'refresh_all'}) }}" />
+			{% endif %}
+
+			{% if access.check('Cache', 'delete') %}
+				<input type="button" id="cache_clearall" class="btn-danger" value="Clear Entire Cache" data-href="{{ html.url({'action': 'clear_all'}) }}" />
+			{% endif %}
+			{{ html.image(
+				'misc/ajax-loader.gif',
+				{'class': 'ajax-loader', 'id': 'cache_loading'}
+			) }}
+		</div>
+	{% endif %}
+
+	<div id="cache_data">
+		{% include '/SteamPlayerCache/list.inc.tpl' %}
+	</div>
+
+{% endblock %}
