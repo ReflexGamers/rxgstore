@@ -7,7 +7,7 @@ App::uses('AppModel', 'Model');
  */
 class Server extends AppModel {
 
-	public $actsAs = array('containable');
+	public $actsAs = array('Containable');
 
 	public $useTable = 'server';
 	public $primaryKey = 'server_id';
