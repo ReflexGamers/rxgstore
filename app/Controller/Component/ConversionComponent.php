@@ -9,7 +9,7 @@ class ConversionComponent extends Component {
 		$this->User = ClassRegistry::init('User');
 		$this->UserItem = ClassRegistry::init('UserItem');
 		$this->Order = ClassRegistry::init('Order');
-		$this->PayPalOrder = ClassRegistry::init('PayPalOrder');
+		$this->PaypalOrder = ClassRegistry::init('PaypalOrder');
 	}
 
 	public function convertAll() {
