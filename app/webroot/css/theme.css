@@ -158,7 +158,7 @@ input.pokemanlookup {
 }
 
 #cart_link {
-    background: rgba(0, 0, 0, 0.15) url('/img/misc/cart.png') no-repeat 2px center;
+    background: rgba(0, 0, 0, 0.15) url('/store2/img/misc/cart.png') no-repeat 2px center;
     /*border: none;*/
     padding-left: 38px;
 }
@@ -436,7 +436,7 @@ table.buylist input.itemamount {
 
 .receipt {
 	/*background: #fdfdfd;*/
-	background: transparent url( '/img/misc/receiptpaper.png' ) repeat-y left top;
+	background: transparent url( '/store2/img/misc/receiptpaper.png' ) repeat-y left top;
 	width: 320px;
 	font-family:pt mono;
 	font-size: 12px;
@@ -455,13 +455,13 @@ table.buylist input.itemamount {
 }
 
 .receipt_top {
-	background: transparent url( '/img/misc/receipt1.png' ) repeat-x left bottom;
+	background: transparent url( '/store2/img/misc/receipt1.png' ) repeat-x left bottom;
 	width:320px;
 	height:44px;
 }
 
 .receipt_bottom {
-	background: transparent url( '/img/misc/receipt2.png' ) repeat-x left top;
+	background: transparent url( '/store2/img/misc/receipt2.png' ) repeat-x left top;
 	width:320px;
 	height:44px;
 }
@@ -572,13 +572,13 @@ table.addfunds td {
 }
 
 .currency {
-    background: url('/img/misc/cash.png') no-repeat;
+    background: url('/store2/img/misc/cash.png') no-repeat;
     background-size: 24px 24px; /* Steam ingame browser */
     padding-left: 28px;
 }
 
 .currency-big {
-    background: url('/img/misc/cash.png') no-repeat;
+    background: url('/store2/img/misc/cash.png') no-repeat;
     background-size: 32px 32px; /* Steam ingame browser */
     padding-left: 34px;
     font-size: 24px;
@@ -1034,8 +1034,8 @@ input.cart_quantity_input:focus {
 
 
 #cart_add {
-    background: url('/img/misc/cart.png') no-repeat 5px center #a00; /* Steam in-game browser */
-    background: url('/img/misc/cart.png') no-repeat 5px center, linear-gradient(#c00, #900) #a00;
+    background: url('/store2/img/misc/cart.png') no-repeat 5px center #a00; /* Steam in-game browser */
+    background: url('/store2/img/misc/cart.png') no-repeat 5px center, linear-gradient(#c00, #900) #a00;
     color: #fff;
     border: none;
     border-radius: 0 5px 5px 0;
@@ -1050,16 +1050,16 @@ input.cart_quantity_input:focus {
 }
 
 #content #cart_add.disabled {
-    background: url('/img/misc/cart.png') no-repeat 5px center #a66;
-    background: url('/img/misc/cart.png') no-repeat 5px center, linear-gradient(#c66, #966) #a66;
+    background: url('/store2/img/misc/cart.png') no-repeat 5px center #a66;
+    background: url('/store2/img/misc/cart.png') no-repeat 5px center, linear-gradient(#c66, #966) #a66;
     color: #ccc;
     border-color: #bbb;
     cursor: default;
 }
 
 #cart_add:hover {
-    background: url('/img/misc/cart.png') no-repeat 5px center #c00; /* Steam in-game browser */
-    background: url('/img/misc/cart.png') no-repeat 5px center, linear-gradient(#d00, #a00);
+    background: url('/store2/img/misc/cart.png') no-repeat 5px center #c00; /* Steam in-game browser */
+    background: url('/store2/img/misc/cart.png') no-repeat 5px center, linear-gradient(#d00, #a00);
 }
 
 #cart_added {
@@ -1357,12 +1357,12 @@ input[type="checkbox"].item_edit_input {
 
 .icon-pencil {
     padding-left: 20px;
-    background: url('/img/misc/pencil-16.png') no-repeat left center;
+    background: url('/store2/img/misc/pencil-16.png') no-repeat left center;
 }
 
 .icon-trash {
     padding-left: 20px;
-    background: url('/img/misc/trash-16.png') no-repeat left center;
+    background: url('/store2/img/misc/trash-16.png') no-repeat left center;
 }
 
 
