@@ -41,7 +41,7 @@ class PaypalOrdersController extends AppController {
 			'activities' => $paypalOrders,
 			'currencyMult' => Configure::read('Store.CurrencyMultiplier'),
 			'cashStackSize' => Configure::read('Store.CashStackSize'),
-			'pageLocation' => array('controller' => 'paypalorders', 'action' => 'activity')
+			'pageLocation' => array('controller' => 'PaypalOrders', 'action' => 'activity')
 		));
 
 		if ($doRender) {
@@ -55,7 +55,7 @@ class PaypalOrdersController extends AppController {
 
 		if (empty($this->request->data['PaypalOrder'])) {
 			$this->Session->setFlash('You did not specify an amount.', 'default', array('class' => 'error'));
-			$this->redirect(array('controller' => 'paypalorders', 'action' => 'addfunds'));
+			$this->redirect(array('controller' => 'PaypalOrders', 'action' => 'addfunds'));
 			return;
 		}
 
@@ -77,7 +77,7 @@ class PaypalOrdersController extends AppController {
 
 			if ($price < max($optPrices)) {
 				$this->Session->setFlash('An error occurred.', 'default', array('class' => 'error'));
-				$this->redirect(array('controller' => 'paypalorders', 'action' => 'addfunds'));
+				$this->redirect(array('controller' => 'PaypalOrders', 'action' => 'addfunds'));
 				return;
 			}
 
@@ -90,8 +90,8 @@ class PaypalOrdersController extends AppController {
 		try {
 
 			$payment = $this->Paypal->createPayment(
-				Router::url(array('controller' => 'paypalorders', 'action' => 'confirm', 'challenge' => $challenge), true),
-				Router::url(array('controller' => 'paypalorders', 'action' => 'cancel'), true),
+				Router::url(array('controller' => 'PaypalOrders', 'action' => 'confirm', 'challenge' => $challenge), true),
+				Router::url(array('controller' => 'PaypalOrders', 'action' => 'cancel'), true),
 				$price
 			);
 

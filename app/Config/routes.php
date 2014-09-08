@@ -47,9 +47,9 @@
 			'server' => '[a-z0-9]+'
 	));
 
-	Router::connect('/paypal/:action/*', array('controller' => 'paypalorders'));
+	Router::connect('/paypal/:action/*', array('controller' => 'PaypalOrders'));
 	Router::connect('/paypal/confirm/:challenge', array(
-			'controller' => 'paypalorders',
+			'controller' => 'PaypalOrders',
 			'action' => 'confirm'
 		), array(
 			'pass' => array('challenge'),
