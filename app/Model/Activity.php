@@ -207,9 +207,11 @@ class Activity extends AppModel {
 			'table' => $db->fullTableName($this->Gift),
 			'alias' => 'Gift',
 			'conditions' => array(
-				'anonymous = 0',
 				'OR' => array(
-					'sender_id' => $user_id,
+					'AND' => array(
+						'sender_id' => $user_id,
+						'anonymous = 0'
+					),
 					'recipient_id' => $user_id
 				)
 			)
