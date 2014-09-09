@@ -37,7 +37,7 @@
 					'label': false
 				},
 				'url': {
-					'controller': 'paypalorders',
+					'controller': 'PaypalOrders',
 					'action': 'begin'
 				}
 			}) }}

@@ -15,7 +15,7 @@
 				<div class="item_pic" title="{{ 'CASH' }}">
 					{{ html.image("items/money.png", {
 						'url': {
-							'controller': 'paypalorders',
+							'controller': 'PaypalOrders',
 							'action': 'addfunds'
 						}
 					}) }}

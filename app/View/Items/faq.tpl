@@ -19,7 +19,7 @@
 
 	<div class="faq_item">
 		<div class="faq_question">How do I earn <i class="currency-big"></i>CASH?</div>
-		<div class="faq_answer">CASH occasionally spawns when players are killed. In TF2, you simply have to run over it to pick it up but in CS:GO you have to press the <code>+use</code> key (default: E) while looking at it. You can also {{ html.link('buy CASH with PayPal', {'controller': 'paypalorders', 'action': 'addfunds'}) }}.</div>
+		<div class="faq_answer">CASH occasionally spawns when players are killed. In TF2, you simply have to run over it to pick it up but in CS:GO you have to press the <code>+use</code> key (default: E) while looking at it. You can also {{ html.link('buy CASH with PayPal', {'controller': 'PaypalOrders', 'action': 'addfunds'}) }}.</div>
 	</div>
 
 	<div class="faq_item">

@@ -1,6 +1,6 @@
 {% import 'Common/functions.tpl' as fn %}
 
-<input type="hidden" id="shoutbox_updateurl" value="{{ html.url({'controller': 'shoutboxmessages', 'action': 'view', 'time': theTime}) }}">
+<input type="hidden" id="shoutbox_updateurl" value="{{ html.url({'controller': 'ShoutboxMessages', 'action': 'view', 'time': theTime}) }}">
 <input type="hidden" id="shoutbox_post_cooldown" value="{{ shoutPostCooldown ?: 60 }}">
 <input type="hidden" id="shoutbox_update_interval" value="{{ shoutUpdateInterval ?: 60 }}">
 
@@ -10,7 +10,7 @@
 		{% if access.check('Chats', 'delete') %}
 			<span class="shoutbox_actions">
 				{{ html.link('remove', {
-					'controller': 'shoutboxmessages',
+					'controller': 'ShoutboxMessages',
 					'action': 'delete',
 					'id': message.shoutbox_message_id
 				}, {

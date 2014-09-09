@@ -10,7 +10,7 @@
 			}) }}
 			{{ form.create('ShoutboxMessage', {
 				'url': {
-					'controller': 'shoutboxmessages',
+					'controller': 'ShoutboxMessages',
 					'action': 'add'
 				}
 			}) }}
