@@ -2570,3 +2570,18 @@ code {
     border-radius: 2px;
     border: 1px dashed rgba(0, 128, 255, 0.25);
 }
+
+
+.member-tag {
+    /*font-variant: small-caps;*/
+    /*font-size: 32px;*/
+    /*line-height: 24px;*/
+    /*height: 20px;*/
+    /*font-weight: bold;*/
+    /*background: rgba(0, 128, 255, 0.2);*/
+    /*padding: 0 5px 0;*/
+    /*border-radius: 8px;*/
+    /*border: 1px dashed rgba(0, 128, 255, 0.25);*/
+    /*display: inline-block;*/
+    color: #ad0000;
+}

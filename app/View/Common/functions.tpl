@@ -9,14 +9,21 @@
 {% endmacro %}
 
 {% macro profile(_, player) %}
+	{% if player.member %}
+		<span class="member-tag">#rxg</span>
+	{% endif %}
 	{{- _.html.link(player.name, {
 		'controller': 'Users',
 		'action': 'profile',
 		'id': player.steamid
 	}, {
-		'class': player.member ? 'member' : ''
+
 	}) -}}
 {% endmacro %}
+
+{#
+'class': player.member ? 'member' : ''
+#}
 
 {% macro player(_, player) %}
 	{% import _self as fn %}
