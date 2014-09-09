@@ -123,7 +123,7 @@
 		}) }}
 
 		{{ form.button('Empty Cart', {
-			'class': 'btn-danger',
+			'class': 'btn-warning',
 			'id': 'cart_empty_button',
 			'name': 'ProcessAction',
 			'value': 'empty',

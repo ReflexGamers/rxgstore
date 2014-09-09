@@ -88,8 +88,8 @@ input.pokemanlookup {
 }
 
 .content a {
-    /*color: #24f;*/
-    color: #24c;
+    color: #24f;
+    /*color: #24c;*/
 }
 
 .content a:visited {
@@ -746,7 +746,7 @@ input.cart_quantity_input:focus {
 }
 
 .player_info {
-    width: 440px;
+    /*width: 440px;*/
 }
 
 .player_member {
@@ -754,8 +754,8 @@ input.cart_quantity_input:focus {
     font-weight: bold;
     font-size: 16px;
     text-align: center;
-    /*background-color: #090;*/
-    background: #3a3;
+    /*background: #3a3;*/
+    background-color: #ad0000;
     border-radius: 5px;
 }
 
