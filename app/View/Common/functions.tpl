@@ -15,8 +15,6 @@
 		'controller': 'Users',
 		'action': 'profile',
 		'id': player.steamid
-	}, {
-
 	}) -}}
 {% endmacro %}
 
@@ -27,7 +25,7 @@
 {% endmacro %}
 
 {% macro stripTag(player) %}
-	{{ player.member ? player.name|preg_replace('/^\\s*rxg\\s*\\|\\s*/', '') : player.name }}
+	{{- player.member ? player.name|preg_replace('/^\\s*rxg\\s*\\|\\s*/', '') : player.name -}}
 {% endmacro %}
 
 {% macro player(_, player) %}
