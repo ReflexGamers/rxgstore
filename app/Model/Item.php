@@ -45,7 +45,7 @@ class Item extends AppModel {
 				array(
 					'table' => 'server_item',
 					'conditions' => array(
-						'item.item_id = server_item.item_id'
+						'Item.item_id = server_item.item_id'
 					)
 				),
 				array(
