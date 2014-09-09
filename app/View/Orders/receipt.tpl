@@ -3,7 +3,7 @@
 {% set jquery = true %}
 {% set title = false %}
 {% set headerImage = 'receipts.png' %}
-{% set backLink = {'controller': 'users', 'action': 'profile', 'id': steam.id64(data.Order.user_id)} %}
+{% set backLink = {'controller': 'Users', 'action': 'profile', 'id': steam.id64(data.Order.user_id)} %}
 
 {% block content %}
 

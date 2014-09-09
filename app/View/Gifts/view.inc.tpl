@@ -18,7 +18,7 @@
 					{% else %}
 						<img src="{{ sender.avatar }}">
 						{{ html.link(sender.name, {
-							'controller': 'users',
+							'controller': 'Users',
 							'action': 'profile',
 							'id': sender.steamid
 						}) }}

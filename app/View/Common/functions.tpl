@@ -2,7 +2,7 @@
 {% macro avatar(_, player) %}
 	{{- _.html.image(player.avatar, {
 		'url': {
-			'controller': 'users',
+			'controller': 'Users',
 			'action': 'profile',
 			'id': player.steamid
 	}}) -}}
@@ -10,7 +10,7 @@
 
 {% macro profile(_, player) %}
 	{{- _.html.link(player.name, {
-		'controller': 'users',
+		'controller': 'Users',
 		'action': 'profile',
 		'id': player.steamid
 	}, {

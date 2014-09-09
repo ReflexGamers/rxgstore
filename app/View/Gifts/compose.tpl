@@ -18,13 +18,13 @@
 			<p>Please choose items from your inventory below to give to the specified recipient. When the gift is sent, the items you include will be removed from your inventory. If you are in-game in a store-enabled server, it will temporarily unload your inventory to prevent abuse.</p>
 
 			<p>If you choose to send your gift anonymously, your identity will be hidden and the gift will not be counted in the statistics shown on your {{ html.link('profile', {
-					'controller': 'users',
+					'controller': 'Users',
 					'action': 'profile',
 					'id': user.steamid
 				}) }}. If you write a message with your gift, it will be displayed publicly so please keep it appropriate.</p>
 
 			{% if access.check('Rewards') %}
-				<p>Want to send a reward from leadership instead? {{ html.link('Click here', {'controller': 'rewards', 'action': 'compose'}) }}.</p>
+				<p>Want to send a reward from leadership instead? {{ html.link('Click here', {'controller': 'Rewards', 'action': 'compose'}) }}.</p>
 			{% endif %}
 		{% endif %}
 	{% endif %}
@@ -39,7 +39,7 @@
 				'controller': isReward ? 'rewards' : 'gifts',
 				'action': data ? 'send' : 'package'
 			} : {
-				'controller': 'gifts',
+				'controller': 'Gifts',
 				'action': data ? 'send' : 'package',
 				'id': player.steamid
 		})
@@ -75,13 +75,13 @@
 				<div class="gift_recipient">
 					<div class="gift_recipient_avatar">
 						{{ html.image(player.avatarmedium, {
-							'url': {'controller': 'users', 'action': 'profile', 'id': player.steamid}
+							'url': {'controller': 'Users', 'action': 'profile', 'id': player.steamid}
 						}) }}
 					</div>
 					<div class="gift_recipient_name">
 						{{ html.link(
 							player.personaname ?: player.name,
-							{'controller': 'users', 'action': 'profile', 'id': player.steamid}
+							{'controller': 'Users', 'action': 'profile', 'id': player.steamid}
 						) }}
 					</div>
 				</div>
@@ -103,13 +103,13 @@
 		<div class="gift_recipient">
 			<div class="gift_recipient_avatar">
 				{{ html.image(player.avatarmedium, {
-					'url': {'controller': 'users', 'action': 'profile', 'id': player.steamid}
+					'url': {'controller': 'Users', 'action': 'profile', 'id': player.steamid}
 				}) }}
 			</div>
 			<div class="gift_recipient_name">
 				{{ html.link(
 					player.personaname,
-					{'controller': 'users', 'action': 'profile', 'id': player.steamid}
+					{'controller': 'Users', 'action': 'profile', 'id': player.steamid}
 				) }}
 			</div>
 		</div>

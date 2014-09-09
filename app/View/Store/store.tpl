@@ -82,7 +82,7 @@
 
 		{% if user %}
 			{{ form.create('checkout', {'url': {
-				'controller': 'orders',
+				'controller': 'Orders',
 				'action': 'checkout'
 			} }) }}
 		{% endif %}

@@ -26,13 +26,13 @@
 		<li class="admin_entry">
 			<div class="admin_avatar">
 				{{ html.image(player.avatar, {
-					'url': {'controller': 'users', 'action': 'profile', 'id': player.steamid}
+					'url': {'controller': 'Users', 'action': 'profile', 'id': player.steamid}
 				}) }}
 			</div>
 			<div class="admin_player">
 				{{ html.link(
 					playerName,
-					{'controller': 'users', 'action': 'profile', 'id': player.steamid}
+					{'controller': 'Users', 'action': 'profile', 'id': player.steamid}
 				) }} {{ admin.name|lower() in playerName|lower() or playerName|lower() in admin.name|lower() ? '' : "(#{admin.name})" }}
 			</div>
 		</li>

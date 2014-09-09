@@ -33,7 +33,7 @@ class UsersController extends AppController {
 					array(
 						'table' => 'order_detail',
 						'conditions' => array(
-							'order.order_id = order_detail.order_id'
+							'Order.order_id = order_detail.order_id'
 						)
 					)
 				),

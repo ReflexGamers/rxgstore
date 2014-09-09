@@ -24,7 +24,7 @@
 			<div class="player_links">
 				<a href="{{ player.profileurl }}">view steam profile</a>
 				{% if user and user.user_id != player.user_id %}
-					<br>{{ html.link('send a gift', {'controller': 'gifts', 'action': 'compose', 'id': player.steamid}) }}
+					<br>{{ html.link('send a gift', {'controller': 'Gifts', 'action': 'compose', 'id': player.steamid}) }}
 				{% endif %}
 			</div>
 		</div>
@@ -113,7 +113,7 @@
 
 								{{ js.link(
 									'View Receipt',
-									{'controller': 'orders', 'action': 'receipt', 'id': trans.order_id}, {
+									{'controller': 'Orders', 'action': 'receipt', 'id': trans.order_id}, {
 										'async': true,
 										'update': "#receipt_#{trans.order_id}",
 										'htmlAttributes': {
