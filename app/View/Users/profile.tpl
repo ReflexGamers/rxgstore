@@ -15,14 +15,14 @@
 	{% if not isAjax %}
 
 		<div class="player_avatar">
-			<a href="{{ player.profileurl }}"><img src="{{ player.avatarfull }}"></a>
+			<a href="{{ player.profile }}"><img src="{{ player.avatarfull }}"></a>
 			{% if player.member %}
 				<div class="player_member">
 					RXG Member
 				</div>
 			{% endif %}
 			<div class="player_links">
-				<a href="{{ player.profileurl }}">view steam profile</a>
+				<a href="{{ player.profile }}">view steam profile</a>
 				{% if user and user.user_id != player.user_id %}
 					<br>{{ html.link('send a gift', {'controller': 'Gifts', 'action': 'compose', 'id': player.steamid}) }}
 				{% endif %}
