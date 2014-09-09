@@ -23,7 +23,10 @@
  */
 
 // Setup a 'default' cache configuration for use in the application.
-Cache::config('default', array('engine' => 'File'));
+Cache::config('default', array(
+	'engine' => 'File',
+	'duration' => '+1 day'
+));
 Cache::config('paypal', array(
 	'engine' => 'File',
 	'duration' => '+10 minutes'
