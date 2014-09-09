@@ -20,7 +20,6 @@
  */
 
 App::uses('Controller', 'Controller');
-App::import('Vendor', 'AccountUtility');
 
 /**
  * Application Controller

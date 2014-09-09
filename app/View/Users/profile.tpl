@@ -14,26 +14,27 @@
 
 	{% if not isAjax %}
 
-		<div class="player_avatar">
-			<a href="{{ player.profile }}"><img src="{{ player.avatarfull }}"></a>
-			{% if player.member %}
-				<div class="player_member">
-					RXG Member
-				</div>
-			{% endif %}
-			<div class="player_links">
-				<a href="{{ player.profile }}">view steam profile</a>
-				{% if user and user.user_id != user_id %}
-					<br>{{ html.link('send a gift', {'controller': 'Gifts', 'action': 'compose', 'id': player.steamid}) }}
-				{% endif %}
-			</div>
-		</div>
-
 		<div class="player_info">
 
 			<h2 class="player_heading">
-				{{ player.name|e }}
+				{{ fn.memberTag(player) }}
+				{{ fn.stripTag(player)|e }}
 			</h2>
+
+			<div class="player_avatar">
+				<a href="{{ player.profile }}"><img src="{{ player.avatarfull }}"></a>
+				{% if player.member %}
+					<div class="player_member">
+						RXG Member
+					</div>
+				{% endif %}
+				<div class="player_links">
+					<a href="{{ player.profile }}">view steam profile</a>
+					{% if user and user.user_id != user_id %}
+						<br>{{ html.link('send a gift', {'controller': 'Gifts', 'action': 'compose', 'id': player.steamid}) }}
+					{% endif %}
+				</div>
+			</div>
 
 			<p class="player_credit">CASH: {{ fn.currency(credit, {'big': true, 'wrap': true}) }} <span class="cash_spent">({{- fn.currency(totalSpent, {'big': true, 'hideIcon': true}) }} spent)</span></p>
 

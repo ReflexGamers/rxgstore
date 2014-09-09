@@ -9,10 +9,9 @@
 {% endmacro %}
 
 {% macro profile(_, player) %}
-	{% if player.member %}
-		<span class="member-tag">#rxg</span>
-	{% endif %}
-	{{- _.html.link(player.name, {
+	{% import _self as fn %}
+	{{ fn.memberTag(player) }}
+	{{- _.html.link(fn.stripTag(player), {
 		'controller': 'Users',
 		'action': 'profile',
 		'id': player.steamid
@@ -21,9 +20,15 @@
 	}) -}}
 {% endmacro %}
 
-{#
-'class': player.member ? 'member' : ''
-#}
+{% macro memberTag(player) %}
+	{% if player.member %}
+		<span class="member-tag">#rxg</span>
+	{% endif %}
+{% endmacro %}
+
+{% macro stripTag(player) %}
+	{{ player.member ? player.name|preg_replace('/^\\s*rxg\\s*\\|\\s*/', '') : player.name }}
+{% endmacro %}
 
 {% macro player(_, player) %}
 	{% import _self as fn %}

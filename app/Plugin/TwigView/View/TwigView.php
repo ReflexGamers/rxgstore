@@ -95,6 +95,10 @@ class TwigView extends View {
 		$this->Twig->addExtension(new Twig_Extension_Basic);
 		$this->Twig->addExtension(new Twig_Extension_Number);
 		
+		$this->Twig->addFilter(new Twig_SimpleFilter('preg_replace', function($string, $pattern, $replacement) {
+			return preg_replace($pattern, $replacement, $string);
+		}));
+		
 		parent::__construct($Controller);
 		
 		if (isset($Controller->theme)) {

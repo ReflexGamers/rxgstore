@@ -32,10 +32,10 @@
 		<div class="faq_answer">Submit your feedback on our forums at <a href="http://reflex-gamers.com">www.reflex-gamers.com</a>. You may also review an item on its respective listing page after purchasing it, but if you think an item is imbalanced, that feedback would be best heard on our forums.</div>
 	</div>
 
-	<div class="faq_item">
-		<div class="faq_question">Why do some people have <span class="member">green</span> names on this site?</div>
-		<div class="faq_answer">Those are official RXG members. To become a member, register at <a href="http://reflex-gamers.com">www.reflex-gamers.com</a> and then apply in the <a href="http://reflex-gamers.com/forums/forumdisplay.php?f=15">Member Applications</a> forum. For the Store to recognize you as a member, your Steam account must be linked on the forums.</div>
-	</div>
+	{#<div class="faq_item">#}
+		{#<div class="faq_question">Why do some people have <span class="member">green</span> names on this site?</div>#}
+		{#<div class="faq_answer">Those are official RXG members. To become a member, register at <a href="http://reflex-gamers.com">www.reflex-gamers.com</a> and then apply in the <a href="http://reflex-gamers.com/forums/forumdisplay.php?f=15">Member Applications</a> forum. For the Store to recognize you as a member, your Steam account must be linked on the forums.</div>#}
+	{#</div>#}
 
 	<div class="faq_item">
 		<div class="faq_question">How do I make a key or mouse button use a certain item?</div>
