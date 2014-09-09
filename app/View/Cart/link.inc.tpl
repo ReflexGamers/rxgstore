@@ -1,1 +1,1 @@
-{{ html.link("<span id=\"cart_items\">#{cartItems}</span>", {'controller': 'cart', 'action': 'view'}, {'escape': false, 'id': 'cart_link'}) }}
+{{ html.link("<span id=\"cart_items\">#{cartItems}</span>", {'controller': 'Cart', 'action': 'view'}, {'escape': false, 'id': 'cart_link'}) }}

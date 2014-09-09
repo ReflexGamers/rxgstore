@@ -18,7 +18,7 @@
 
 		<div class="back_link">
 			{{ html.link('< Return to Cart',
-				{'controller': 'cart', 'action': 'view'}
+				{'controller': 'Cart', 'action': 'view'}
 			) }}
 		</div>
 
@@ -82,7 +82,7 @@
 
 		{{ form.create('checkout', {
 			'url': {
-				'controller': 'orders',
+				'controller': 'Orders',
 				'action': 'buy',
 		}}) }}
 

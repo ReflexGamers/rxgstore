@@ -30,13 +30,13 @@
 						{% include 'Cart/link.inc.tpl' %}
 					{% endif %}
 				</span>
-				<input type="hidden" id="cart_update_location" value="{{ html.url({'controller': 'cart', 'action': 'link'}) }}">
+				<input type="hidden" id="cart_update_location" value="{{ html.url({'controller': 'Cart', 'action': 'link'}) }}">
 			</td>
 			<td class="header_right">
 				{% if user %}
 					<span class="login_name">
 						{{ html.link(user.name, {
-							'controller': 'users',
+							'controller': 'Users',
 							'action': 'profile',
 							'id': user.steamid
 						}, {
@@ -45,7 +45,7 @@
 					</span>
 					<img class="user_avatar" src="{{ user.avatar }}" />
 					{{ html.link('log out', {
-						'controller': 'users',
+						'controller': 'Users',
 						'action': 'logout'
 					}, {
 						'class': 'logout'
@@ -53,7 +53,7 @@
 				{% else %}
 					{{ form.create('login', {
 						'url': {
-							'controller': 'users',
+							'controller': 'Users',
 							'action': 'login'
 						},
 						'id': 'steam_signin'

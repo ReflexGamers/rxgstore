@@ -14,7 +14,7 @@
 				 data-rateit-starwidth="24" data-rateit-starheight="24"
 				 data-rateit-resetable="false"
 				 data-rateit-readonly="true"
-				 data-href="{{ html.url({'controller': 'ratings', 'action': 'rate', 'id': item.item_id}) }}"></div>
+				 data-href="{{ html.url({'controller': 'Ratings', 'action': 'rate', 'id': item.item_id}) }}"></div>
 				<div class="item_browse_rating_count">
 					{% if rating %}
 						<strong>{{ rating.average/2|round(1) }}</strong>/5 ({{ "#{rating.count} rating" ~ (rating.count > 1 ? 's' : '') }})

@@ -21,7 +21,7 @@
 
 		{{ form.create('OrderDetail', {
 			'url': {
-				'controller': 'cart',
+				'controller': 'Cart',
 				'action': 'process'
 			},
 			'id': 'CartForm'
@@ -74,7 +74,7 @@
 							'max': stock[item.item_id]
 						}) }}
 						{{ html.image('misc/remove.png', {
-							'url': {'controller': 'cart', 'action': 'remove', 'id': item.item_id},
+							'url': {'controller': 'Cart', 'action': 'remove', 'id': item.item_id},
 							'class': 'cart_remove',
 							'title': 'remove',
 							'height': 20,

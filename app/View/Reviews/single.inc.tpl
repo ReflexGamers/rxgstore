@@ -10,7 +10,7 @@
 	{% else %}
 
 		{{ html.image(player.avatarmedium, {
-			'url': {'controller': 'users', 'action': 'profile', 'id': player.steamid}
+			'url': {'controller': 'Users', 'action': 'profile', 'id': player.steamid}
 		}) }}
 
 	{% endif %}
@@ -39,7 +39,7 @@
 		<div class="review_actions">
 			<i class="icon-pencil"></i>
 			<a class="review_edit" href="{{ html.url({
-				'controller': 'reviews',
+				'controller': 'Reviews',
 				'action': 'edit',
 				'type': displayType,
 				'id': review.review_id
@@ -50,7 +50,7 @@
 				<br/>
 				<i class="icon-trash"></i>
 				<a class="review_delete" href="{{ html.url({
-					'controller': 'reviews',
+					'controller': 'Reviews',
 					'action': 'delete',
 					'type': displayType,
 					'id': review.review_id
@@ -76,7 +76,7 @@
 
 			{{ html.link(
 				player.name,
-				{'controller': 'users', 'action': 'profile', 'id': player.steamid}
+				{'controller': 'Users', 'action': 'profile', 'id': player.steamid}
 			) }}
 
 		{% endif %}
@@ -89,13 +89,13 @@
 			 data-rateit-starwidth="24" data-rateit-starheight="24"
 			 data-rateit-resetable="false"
 			 data-rateit-readonly="{{ enableReviewRating ? '' : 'true' }}"
-			 data-href="{{ html.url({'controller': 'ratings', 'action': 'rate', 'id': item.item_id}) }}"></div>
+			 data-href="{{ html.url({'controller': 'Ratings', 'action': 'rate', 'id': item.item_id}) }}"></div>
 	</div>
 
 	{% if isEditMode %}
 
 		{{ form.create('Review', {'url': {
-			'controller': 'reviews',
+			'controller': 'Reviews',
 			'action': 'save',
 			'type': displayType,
 			'id': item.item_id
@@ -121,7 +121,7 @@
 
 		{% if not isCreateMode %}
 			<input type="button" class="review_cancel btn-secondary" value="Cancel" data-href="{{ html.url({
-				'controller': 'reviews',
+				'controller': 'Reviews',
 				'action': 'view',
 				'type': displayType,
 				'id': review.review_id

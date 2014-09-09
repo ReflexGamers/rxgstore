@@ -36,7 +36,7 @@
 			{% spaceless %}
 				{{ form.create('Cart', {
 					'url': {
-						'controller': 'cart',
+						'controller': 'Cart',
 						'action': 'add',
 						'id': item.item_id
 					},
@@ -61,7 +61,7 @@
 					'label': 'Add to cart',
 					'id': 'cart_add',
 					'data-href': html.url({
-						'controller': 'cart',
+						'controller': 'Cart',
 						'action': 'add',
 						'id': item.item_id
 					}),
