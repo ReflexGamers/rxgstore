@@ -31,10 +31,10 @@
 	Router::connect('/login', array('controller' => 'Users', 'action' => 'login'));
 	Router::connect('/logout', array('controller' => 'Users', 'action' => 'logout'));
 
-	Router::connect('/checkout', array('controller' => 'Orders', 'action' => 'checkout'));
-	Router::connect('/buy', array('controller' => 'Orders', 'action' => 'buy'));
+	Router::connect('/checkout', array('controller' => 'orders', 'action' => 'checkout'));
+	Router::connect('/buy', array('controller' => 'orders', 'action' => 'buy'));
 
-	Router::connect('/recent/*', array('controller' => 'Orders', 'action' => 'recent'));
+	Router::connect('/recent/*', array('controller' => 'orders', 'action' => 'recent'));
 
 	Router::connect('/store/:action', array('controller' => 'Store'));
 
@@ -48,14 +48,6 @@
 	));
 
 	Router::connect('/paypal/:action/*', array('controller' => 'PaypalOrders'));
-	Router::connect('/paypal/confirm/:challenge', array(
-			'controller' => 'PaypalOrders',
-			'action' => 'confirm'
-		), array(
-			'pass' => array('challenge'),
-			'challenge' => '[0-9]+'
-		)
-	);
 
 	Router::connect('/server', array('controller' => 'Items', 'action' => 'server'));
 	Router::connect('/server/:server', array(
@@ -141,7 +133,7 @@
 	));
 
 	Router::connect('/receipt/:id', array(
-			'controller' => 'Orders', 'action' => 'receipt'
+			'controller' => 'orders', 'action' => 'receipt'
 		), array(
 			'pass' => array('id'),
 			'id' => '[0-9]+'

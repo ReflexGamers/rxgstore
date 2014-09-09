@@ -90,7 +90,7 @@ class PaypalOrdersController extends AppController {
 		try {
 
 			$payment = $this->Paypal->createPayment(
-				Router::url(array('controller' => 'PaypalOrders', 'action' => 'confirm', 'challenge' => $challenge), true),
+				Router::url(array('controller' => 'PaypalOrders', 'action' => 'confirm', '?' => array('challenge' => $challenge)), true),
 				Router::url(array('controller' => 'PaypalOrders', 'action' => 'cancel'), true),
 				$price
 			);
@@ -119,11 +119,12 @@ class PaypalOrdersController extends AppController {
 		}
 	}
 
-	public function confirm($challenge) {
+	public function confirm() {
 
 		$data = $this->Session->read('buycash');
+		$query = $this->request->query;
 
-		if (empty($data) || empty($challenge) || $challenge != $data['challenge'] || empty($this->request->query['PayerID'])) {
+		if (empty($data) || empty($query['challenge']) || $query['challenge'] != $data['challenge'] || empty($query['PayerID'])) {
 			$this->Session->setFlash('Oops! An error occurred. Your PAYPAL has not been charged.', 'default', array('class' => 'error'));
 			$this->redirect(array('action' => 'addfunds'));
 			return;
@@ -155,13 +156,14 @@ class PaypalOrdersController extends AppController {
 			$this->Session->setFlash('The CASH has been added to your account.', 'default', array('class' => 'success'));
 		}
 
-		$this->render('addfunds');
+		//$this->render('addfunds');
+		$this->redirect(array('controller' => 'PaypalOrders', 'action' => 'addfunds'));
 	}
 
 	public function cancel() {
 
 		$this->Session->setFlash('Your transaction was cancelled and your PAYPAL was not charged.', 'default', array('class' => 'error'));
-		$this->redirect(array('action' => 'addfunds'));
+		$this->redirect(array('controller' => 'PaypalOrders', 'action' => 'addfunds'));
 		return;
 
 	}
