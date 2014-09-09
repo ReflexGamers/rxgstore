@@ -41,7 +41,7 @@
 
 				<div class="item_browse_gift_actions">
 					<input type="button" value="Click to Accept" class="item_browse_gift_accept btn-primary" data-href="{{ html.url({
-						'controller': isReward ? 'rewards' : 'gifts',
+						'controller': isReward ? 'Rewards' : 'Gifts',
 						'action': 'accept',
 						'id': isReward ? gift.reward_id : gift.gift_id
 					}) }}">
