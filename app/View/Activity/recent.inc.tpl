@@ -39,7 +39,7 @@
 					{% if gift.anonymous %}
 						<span class="activity_gift_anonymous">Anonymous</span>
 						{% if access.check('Rewards') %}
-							({{ fn.player(_context, sender) }})
+							<br>({{ fn.player(_context, sender) }})
 						{% endif %}
 					{% else %}
 						{{ fn.player(_context, sender) }}
