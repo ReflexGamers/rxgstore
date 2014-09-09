@@ -29,7 +29,7 @@
 				{{ form.hidden(loop.index0 ~ '.item_id', {'value': item.item_id}) }}
 				<div class="item_sort_image">
 					{{ html.image("items/#{item.short_name}.png", {
-						'url': {'controller': 'items', 'action': 'view', 'name': item.short_name}
+						'url': {'controller': 'Items', 'action': 'view', 'name': item.short_name}
 					}) }}
 				</div>
 				<div class="item_sort_name">

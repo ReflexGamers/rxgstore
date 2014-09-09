@@ -52,7 +52,7 @@
 					<td class="image">
 						{{ html.image("items/#{item.short_name}.png", {
 							'class': 'image',
-							'url': {'controller': 'items', 'action': 'view', 'name': item.short_name}
+							'url': {'controller': 'Items', 'action': 'view', 'name': item.short_name}
 						}) }}
 					</td>
 					<td class="desc">

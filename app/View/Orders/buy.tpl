@@ -15,7 +15,7 @@
 
 		<div class="back_link">
 			{{ html.link('< Continue Shopping',
-				{'controller': 'items', 'action': 'index'}
+				{'controller': 'Items', 'action': 'index'}
 			) }}
 		</div>
 

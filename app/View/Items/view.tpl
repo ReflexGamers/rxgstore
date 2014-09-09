@@ -164,7 +164,7 @@
 
 		<div id="activity">
 			{% include 'Activity/recent.inc.tpl' with {
-				'pageLocation': {'controller': 'items', 'action': 'activity', 'name': item.short_name}
+				'pageLocation': {'controller': 'Items', 'action': 'activity', 'name': item.short_name}
 			} %}
 		</div>
 

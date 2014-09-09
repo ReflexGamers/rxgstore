@@ -139,13 +139,13 @@
 				<div class="activity_review">
 					{{ html.image("items/#{item.short_name}.png", {
 						'url': {
-							'controller': 'items',
+							'controller': 'Items',
 							'action': 'view',
 							'name': item.short_name
 						}
 					}) }}
 					{{ html.link(item.name, {
-						'controller': 'items',
+						'controller': 'Items',
 						'action': 'view',
 						'name': item.short_name,
 					}, {

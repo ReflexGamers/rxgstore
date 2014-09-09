@@ -143,10 +143,10 @@
 			<tr>
 				<td class="gift_item_name">
 					{{ html.image("items/#{item.short_name}.png", {
-						'url': {'controller': 'items', 'action': 'view', 'name': item.short_name},
+						'url': {'controller': 'Items', 'action': 'view', 'name': item.short_name},
 						'class': 'gift_item_image'
 					}) }}
-					{{ html.link(item.name, {'controller': 'items', 'action': 'view', 'name': item.short_name}) }}
+					{{ html.link(item.name, {'controller': 'Items', 'action': 'view', 'name': item.short_name}) }}
 				</td>
 				{% if gift is empty and not isReward %}
 					<td class="gift_item_available">

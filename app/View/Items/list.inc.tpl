@@ -14,7 +14,7 @@
 				<div class="item_pic" title="{{ item.name }}">
 					{{ html.image("items/#{item.short_name}.png", {
 						'url': {
-							'controller': 'items',
+							'controller': 'Items',
 							'action': 'view',
 							'name': item.short_name
 						}
@@ -41,7 +41,7 @@
 			<div class="item_pic" title="{{ item.name }}">
 				{{ html.image("items/#{item.short_name}.png", {
 					'url': {
-						'controller': 'items',
+						'controller': 'Items',
 						'action': 'view',
 						'name': item.short_name
 					}

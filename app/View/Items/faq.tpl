@@ -14,7 +14,7 @@
 
 	<div class="faq_item">
 		<div class="faq_question">Some of my items don't show up... what's wrong?</div>
-		<div class="faq_answer">Some of the items in the Store are only available in specific games or servers that we host. For instance, the {{ html.link('chicken', {'controller': 'items', 'action': 'view', 'name': 'chicken'}) }} is not available in our TF2 servers. Look at an item's listing page to see where it can be used, or select a server on the main {{ html.link('store page', {'controller': 'items', 'action': 'index'}) }} to narrow down the list to only items available in that server.</div>
+		<div class="faq_answer">Some of the items in the Store are only available in specific games or servers that we host. For instance, the {{ html.link('chicken', {'controller': 'Items', 'action': 'view', 'name': 'chicken'}) }} is not available in our TF2 servers. Look at an item's listing page to see where it can be used, or select a server on the main {{ html.link('store page', {'controller': 'Items', 'action': 'index'}) }} to narrow down the list to only items available in that server.</div>
 	</div>
 
 	<div class="faq_item">
@@ -39,7 +39,7 @@
 
 	<div class="faq_item">
 		<div class="faq_question">How do I make a key or mouse button use a certain item?</div>
-		<div class="faq_answer">To bind an item to a key, enter <code>bind KEY "useitem ITEM"</code> in console; replace <code>KEY</code> with the key you want to bind and <code>ITEM</code> with the abbreviated name of the item found on this site. For example, <code>bind x "useitem cookie"</code> would bind the {{ html.link('cookie', {'controller': 'items', 'action': 'view', 'name': 'cookie'}) }} item to the <code>x</code> key. You can also find the short name of an item in your inventory by typing <code>!items</code> in chat.</div>
+		<div class="faq_answer">To bind an item to a key, enter <code>bind KEY "useitem ITEM"</code> in console; replace <code>KEY</code> with the key you want to bind and <code>ITEM</code> with the abbreviated name of the item found on this site. For example, <code>bind x "useitem cookie"</code> would bind the {{ html.link('cookie', {'controller': 'Items', 'action': 'view', 'name': 'cookie'}) }} item to the <code>x</code> key. You can also find the short name of an item in your inventory by typing <code>!items</code> in chat.</div>
 	</div>
 
 	<div class="faq_item">

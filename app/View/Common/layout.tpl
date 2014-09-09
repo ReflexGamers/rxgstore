@@ -23,8 +23,8 @@
 	<table class="headert">
 		<tr>
 			<td class="header_left">
-				{{ html.link('SHOP', {'controller': 'items', 'action': 'index'}) }}
-				{{ html.link('FAQ', {'controller': 'items', 'action': 'faq'}) }}
+				{{ html.link('SHOP', {'controller': 'Items', 'action': 'index'}) }}
+				{{ html.link('FAQ', {'controller': 'Items', 'action': 'faq'}) }}
 				<span id="cart_link_content">
 					{% if cartItems %}
 						{% include 'Cart/link.inc.tpl' %}

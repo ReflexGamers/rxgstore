@@ -72,7 +72,7 @@
 
 	</div>
 
-	<ul id="item_browse_list" data-href="{{ html.url({'controller': 'items', 'action': 'server'}) }}">
+	<ul id="item_browse_list" data-href="{{ html.url({'controller': 'Items', 'action': 'server'}) }}">
 		{% include 'Items/server.tpl' %}
 	</ul>
 
