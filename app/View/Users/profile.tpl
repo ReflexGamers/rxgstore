@@ -23,7 +23,7 @@
 			{% endif %}
 			<div class="player_links">
 				<a href="{{ player.profile }}">view steam profile</a>
-				{% if user and user.user_id != player.user_id %}
+				{% if user and user.user_id != user_id %}
 					<br>{{ html.link('send a gift', {'controller': 'Gifts', 'action': 'compose', 'id': player.steamid}) }}
 				{% endif %}
 			</div>
