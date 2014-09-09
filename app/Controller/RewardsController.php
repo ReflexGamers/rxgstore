@@ -31,7 +31,7 @@ class RewardsController extends AppController {
 		$this->loadModel('UserItem');
 		$this->loadModel('Item');
 
-		if (empty($reward)) {
+		if (!empty($reward)) {
 
 			$this->UserItem->query('LOCK TABLES user_item WRITE, user_item as UserItem WRITE');
 
