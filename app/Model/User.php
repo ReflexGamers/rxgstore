@@ -216,7 +216,7 @@ class User extends AppModel {
 					'table' => 'order',
 					'conditions' => array(
 						'order_detail.order_id = order.order_id',
-						'Order.user_id' => $user_id
+						'order.user_id' => $user_id
 					)
 				)
 			),
