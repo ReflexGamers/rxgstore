@@ -2468,12 +2468,20 @@ button::-moz-focus-inner {
     padding: 5px 0;
 }
 
+#content .activity_gift_anonymous_sender {
+    opacity: 0.5;
+}
+
 #content .activity_gift_anonymous_sender a {
-    color: rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 1);
+}
+
+#content .activity_gift_anonymous_sender .member-tag {
+    /*color: rgba(173, 0, 0, 0.5);*/
 }
 
 #content .activity_gift_anonymous_sender img {
-    opacity: 0.5
+    /*opacity: 0.5*/
 }
 
 .activity_player.recipient {
