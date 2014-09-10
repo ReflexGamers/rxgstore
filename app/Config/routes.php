@@ -168,7 +168,8 @@
 	);
 
 	Router::connect('/admin/sort', array('controller' => 'Items', 'action' => 'sort'));
-	Router::connect('/admin/stock', array('controller' => 'Stock', 'action' => 'edit'));
+	Router::connect('/stock', array('controller' => 'Stock', 'action' => 'edit'));
+	Router::connect('/stock/activity/*', array('controller' => 'Stock', 'action' => 'activity'));
 
 	Router::connect('/admin/cache', array('controller' => 'SteamPlayerCache', 'action' => 'view'));
 	Router::connect('/admin/cache/:action', array('controller' => 'SteamPlayerCache'));

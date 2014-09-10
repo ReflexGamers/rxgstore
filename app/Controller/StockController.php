@@ -102,18 +102,17 @@ class StockController extends AppController {
 
 		$this->addPlayers(Hash::extract($shipments, '{n}.Shipment.user_id'));
 
-		$this->loadModel('Item');
-		$items = $this->Item->getAll();
+		$this->loadItems();
 
 		$this->set(array(
+			'pageModel' => 'Shipment',
 			'activities' => $shipments,
-			'items' => $items,
-			'itemsIndexed' => Hash::combine($items, '{n}.item_id', '{n}'),
-			'pageLocation' => array('controller' => 'Stock', 'action' => 'activity')
+			'activityPageLocation' => array('controller' => 'Stock', 'action' => 'activity')
 		));
 
 		if ($doRender) {
-			$this->render('/Activity/recent');
+			$this->set('title', 'Shipment Activity');
+			$this->render('/Activity/list');
 		}
 	}
 }
