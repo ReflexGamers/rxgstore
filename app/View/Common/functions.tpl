@@ -20,7 +20,7 @@
 
 {% macro memberTag(player) %}
 	{% if player.member %}
-		<span class="member-tag">#rxg</span>
+		<span class="member-tag">rxg</span>
 	{% endif %}
 {% endmacro %}
 
