@@ -59,7 +59,7 @@ class AccountUtilityComponent extends Component {
 			'avatar' => $steaminfo['avatar'],
 			'avatarmedium' => $steaminfo['avatarmedium'],
 			'avatarfull' => $steaminfo['avatarfull'],
-			'profileurl' => $steaminfo['profileurl']
+			'profile' => $steaminfo['profileurl']
 		));
 
 		if ($save) {
@@ -136,6 +136,7 @@ class AccountUtilityComponent extends Component {
 
 		$player = $steamPlayer[0];
 		$player['name'] = $player['personaname'];
+		$player['member'] = $this->Access->checkIsMember($isSteamid ? $this->AccountIDFromSteamID64($id) : $id);
 
 		return $player;
 	}
