@@ -71,7 +71,7 @@ input.pokemanlookup {
 	box-shadow: 4px 4px 8px rgba(0,0,0,0.15), inset 0px 0px 32px rgba(0,0,0,0.35);
 	/*border:1px solid #333;*/
 	margin:auto;
-	border-radius:7px;
+	border-radius: 7px;
 	clear:both;
     min-height: 400px;
     font-size: 18px;
@@ -81,23 +81,17 @@ input.pokemanlookup {
 	/*text-align:center;*/
 }
 
-.header a,
-.content a {
+a {
+    color: #24f;
     text-decoration: none;
     cursor: pointer;
 }
 
-.content a {
-    color: #24f;
-    /*color: #24c;*/
-}
-
-.content a:visited {
+a:visited {
     /*color: #249;*/
 }
 
-.header a:hover,
-.content a:hover {
+a:hover {
     text-decoration: underline;
 }
 
@@ -745,7 +739,7 @@ input.cart_quantity_input:focus {
     border-radius: 10px;
 }
 
-.player_info {
+.player_details {
     /*width: 440px;*/
 }
 
@@ -907,7 +901,8 @@ input.cart_quantity_input:focus {
     right: 0;
 }
 
-.pagination_bounds {
+.pagination_bounds,
+.pagination_nextprev {
     position: relative;
     z-index: 101;
 }
@@ -921,29 +916,28 @@ input.cart_quantity_input:focus {
 
 
 
-.page_heading {
-    text-align: left;
+.page_heading,
+.page_subheading {
+    text-align: center;
     font-weight: bold;
     background: rgba(0, 0, 0, 0.05);
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1) inset;
+    border: 1px solid #ccc;
     border-radius: 8px;
     margin: 0 0 10px;
-    padding: 0 5px;
+    padding: 1px 5px;
+}
+
+.page_heading {
     font-size: 32px;
 }
 
 .page_subheading {
     clear: both;
-    background: rgba(0, 0, 0, 0.05);
-    /*box-shadow: 0 0 5px rgba(0, 0, 0, 0.5), 0 0 5px rgba(0, 0, 0, 0.1) inset;*/
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1) inset;
-    border: 1px solid #ccc;
-    text-align: center;
-    padding: 1px 5px;
-    border-radius: 8px;
     margin: 40px 0 10px;
     font-size: 30px;
 }
+
 
 .item_detail {
     font-size: 24px;
@@ -1076,7 +1070,7 @@ input.cart_quantity_input:focus {
 
 
 
-.top_buyers {
+#top_buyers {
     margin-top: 20px;
 }
 
@@ -1700,10 +1694,6 @@ input[type="checkbox"].item_edit_input {
 
 
 
-.shoutbox_container {
-    margin-bottom: 20px;
-}
-
 #shoutbox {
     border: 1px solid #ccc;
     font-size: 16px;
@@ -2049,14 +2039,19 @@ input[type="checkbox"].item_edit_input {
 .gift_subheading {
     margin: 5px 0;
     font-size: 24px;
-    /*border-bottom: 1px dashed #ccc;*/
 }
 
 .gift_recipient {
     height: 32px;
     font-size: 20px;
-    margin-left: 20px;
-    clear: both;
+    line-height: 32px;
+    margin: 8px 0 8px 20px;
+}
+
+.gift_recipient img {
+    vertical-align: bottom;
+    border-radius: 3px;
+    margin-right: 2px;
 }
 
 .gift_recipients_input {
@@ -2067,22 +2062,6 @@ input[type="checkbox"].item_edit_input {
     width: 536px;
     height: 220px;
     margin-bottom: 10px;
-}
-
-.gift_recipient_avatar {
-    float: left;
-    margin-right: 5px;
-}
-
-.gift_recipient_avatar img {
-    width: 32px;
-    height: 32px;
-    border-radius: 3px;
-}
-
-.gift_recipient_name {
-    font-size: 20px;
-    line-height: 32px;
 }
 
 
@@ -2431,10 +2410,6 @@ button::-moz-focus-inner {
 
 
 
-
-.activity_activity {
-
-}
 
 .activity_item {
     font-size: 28px;
