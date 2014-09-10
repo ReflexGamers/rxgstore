@@ -59,18 +59,18 @@
 
 	Router::connect('/faq', array('controller' => 'Items', 'action' => 'faq'));
 
-	Router::connect('/item/:name', array(
+	Router::connect('/item/:id', array(
 			'controller' => 'Items', 'action' => 'view'
 		), array(
-			'pass' => array('name'),
-			'name' => '[a-z_]+'
+			'pass' => array('id'),
+			'name' => '[a-z_0-9]+'
 	));
 
-	Router::connect('/item/:name/:action/*', array(
+	Router::connect('/item/:id/:action/*', array(
 			'controller' => 'Items'
 		), array(
-			'pass' => array('name'),
-			'name' => '[a-z_]+'
+			'pass' => array('id'),
+			'name' => '[a-z_0-9]+'
 	));
 
 	Router::connect('/rate/', array('controller' => 'Ratings', 'action' => 'rate'));
