@@ -19,7 +19,7 @@
 <body>
 <div id="background">&nbsp;</div>
 
-<div class="header">
+<header class="header">
 	<table class="headert">
 		<tr>
 			<td class="header_left">
@@ -65,15 +65,15 @@
 			</td>
 		</tr>
 	</table>
-</div>
+</header>
 
-<div id="content" class="content">
+<article id="content" class="content">
 	{% block content %}{% endblock %}
-</div>
+</article>
 
-<div class="foot">
+<footer class="foot">
 	<a href="http://reflex-gamers.com">reflex gamers</a> | <a href="http://steampowered.com">Powered by Steam</a>
-</div>
+</footer>
 
 {{ js.writeBuffer() }}
 
