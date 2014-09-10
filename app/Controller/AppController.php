@@ -56,9 +56,29 @@ class AppController extends Controller {
 	);
 
 	protected $players = array();
+	protected $itemsLoaded = false;
 
 	public function addPlayers($users) {
 		$this->players = array_merge($this->players, $users);
+	}
+
+	public function loadItems() {
+		if (!$this->itemsLoaded) {
+			$this->loadModel('Item');
+			$items = $this->Item->getAll();
+			$this->set(array(
+				'items' => $items,
+				'itemsIndexed' => Hash::combine($items, '{n}.item_id', '{n}')
+			));
+			$this->itemsFetched = true;
+		}
+	}
+
+	public function loadCashData() {
+		$this->set(array(
+			'currencyMult' => Configure::read('Store.CurrencyMultiplier'),
+			'cashStackSize' => Configure::read('Store.CashStackSize')
+		));
 	}
 
 	public function loadShoutboxData() {
