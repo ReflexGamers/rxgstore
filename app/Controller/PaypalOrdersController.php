@@ -37,15 +37,17 @@ class PaypalOrdersController extends AppController {
 
 		$this->addPlayers(Hash::extract($paypalOrders, '{n}.PaypalOrder.user_id'));
 
+		$this->loadCashData();
+
 		$this->set(array(
+			'pageModel' => 'PaypalOrder',
 			'activities' => $paypalOrders,
-			'currencyMult' => Configure::read('Store.CurrencyMultiplier'),
-			'cashStackSize' => Configure::read('Store.CashStackSize'),
-			'pageLocation' => array('controller' => 'PaypalOrders', 'action' => 'activity')
+			'activityPageLocation' => array('controller' => 'PaypalOrders', 'action' => 'activity')
 		));
 
 		if ($doRender) {
-			$this->render('/Activity/recent');
+			$this->set('title', 'PayPal Activity');
+			$this->render('/Activity/list');
 		}
 	}
 
@@ -113,9 +115,9 @@ class PaypalOrdersController extends AppController {
 
 		} catch (Exception $e) {
 
-			//$this->Session->setFlash('Oops! An error occurred. Your PAYPAL has not been charged.', 'default', array('class' => 'error'));
-			//$this->redirect(array('action' => 'addfunds'));
-			echo $e;
+			$this->Session->setFlash('Oops! An error occurred. Your PAYPAL has not been charged.', 'default', array('class' => 'error'));
+			$this->redirect(array('action' => 'addfunds'));
+			//echo $e;
 		}
 	}
 
@@ -156,7 +158,6 @@ class PaypalOrdersController extends AppController {
 			$this->Session->setFlash('The CASH has been added to your account.', 'default', array('class' => 'success'));
 		}
 
-		//$this->render('addfunds');
 		$this->redirect(array('controller' => 'PaypalOrders', 'action' => 'addfunds'));
 	}
 
@@ -164,7 +165,5 @@ class PaypalOrdersController extends AppController {
 
 		$this->Session->setFlash('Your transaction was cancelled and your PAYPAL was not charged.', 'default', array('class' => 'error'));
 		$this->redirect(array('controller' => 'PaypalOrders', 'action' => 'addfunds'));
-		return;
-
 	}
 }

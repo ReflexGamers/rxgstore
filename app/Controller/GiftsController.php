@@ -130,20 +130,17 @@ class GiftsController extends AppController {
 		$this->addPlayers(Hash::extract($gifts, '{n}.{s}.sender_id'));
 		$this->addPlayers(Hash::extract($gifts, '{n}.{s}.recipient_id'));
 
-		$this->loadModel('Item');
-		$items = $this->Item->getAll();
+		$this->loadItems();
 
 		$this->set(array(
+			'pageModel' => 'Gift',
 			'activities' => $gifts,
-			'items' => $items,
-			'itemsIndexed' => Hash::combine($items, '{n}.item_id', '{n}'),
-			'currencyMult' => Configure::read('Store.CurrencyMultiplier'),
-			'cashStackSize' => Configure::read('Store.CashStackSize'),
-			'pageLocation' => array('controller' => 'Gifts', 'action' => 'activity')
+			'activityPageLocation' => array('controller' => 'Gifts', 'action' => 'activity')
 		));
 
 		if ($doRender) {
-			$this->render('/Activity/recent');
+			$this->set('title', 'Gift Activity');
+			$this->render('/Activity/list');
 		}
 	}
 

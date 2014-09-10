@@ -127,20 +127,17 @@ class RewardsController extends AppController {
 		$this->addPlayers(Hash::extract($rewards, '{n}.{s}.sender_id'));
 		$this->addPlayers(Hash::extract($rewards, '{n}.RewardRecipient.{n}'));
 
-		$this->loadModel('Item');
-		$items = $this->Item->getAll();
+		$this->loadItems();
 
 		$this->set(array(
+			'pageModel' => 'Reward',
 			'activities' => $rewards,
-			'items' => $items,
-			'itemsIndexed' => Hash::combine($items, '{n}.item_id', '{n}'),
-			'currencyMult' => Configure::read('Store.CurrencyMultiplier'),
-			'cashStackSize' => Configure::read('Store.CashStackSize'),
-			'pageLocation' => array('controller' => 'Rewards', 'action' => 'activity')
+			'activityPageLocation' => array('controller' => 'Rewards', 'action' => 'activity')
 		));
 
 		if ($doRender) {
-			$this->render('/Activity/recent');
+			$this->set('title', 'Reward Activity');
+			$this->render('/Activity/list');
 		}
 	}
 

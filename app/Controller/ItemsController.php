@@ -141,65 +141,27 @@ class ItemsController extends AppController {
 		$this->addPlayers(Hash::extract($activities, '{n}.{s}.recipient_id'));
 		$this->addPlayers(Hash::extract($activities, '{n}.RewardRecipient.{n}'));
 
-		$items = $this->Item->getAll();
+		$this->loadItems();
+		$this->loadCashData();
 
 		$this->set(array(
 			'activities' => $activities,
-			'items' => $items,
-			'itemsIndexed' => Hash::combine($items, '{n}.item_id', '{n}'),
-			'currencyMult' => Configure::read('Store.CurrencyMultiplier'),
-			'cashStackSize' => Configure::read('Store.CashStackSize'),
-			'pageLocation' => array('controller' => 'Items', 'action' => 'recent')
+			'activityPageLocation' => array('controller' => 'Items', 'action' => 'recent')
 		));
 
 		if ($doRender) {
-			$this->render('/Activity/recent');
+			$this->render('/Activity/list');
 		}
 	}
 
-
-	public function activity($name = null) {
-
-		$itemData = $this->Item->findByShortName($name);
-
-		if (empty($itemData)) {
-			throw new NotFoundException(__('Invalid item'));
-		}
-
-		$item = $itemData['Item'];
-		$item_id = $item['item_id'];
-
-		$this->loadModel('Activity');
-		$this->Paginator->settings = array(
-			'Activity' => array(
-				'findType' => 'byItem',
-				'item_id' => $item_id,
-				'limit' => 5
-			)
-		);
-
-		$activities = $this->Activity->getRecent($this->Paginator->paginate('Activity'));
-
-		$this->addPlayers(Hash::extract($activities, '{n}.{s}.user_id'));
-		$this->addPlayers(Hash::extract($activities, '{n}.{s}.sender_id'));
-		$this->addPlayers(Hash::extract($activities, '{n}.{s}.recipient_id'));
-		$this->addPlayers(Hash::extract($activities, '{n}.RewardRecipient.{n}'));
-
-		$items = $this->Item->getAll();
-
-		$this->set(array(
-			'items' => $items,
-			'itemsIndexed' => Hash::combine($items, '{n}.item_id', '{n}'),
-			'activities' => $activities,
-			'pageLocation' => array('controller' => 'Items', 'action' => 'activity', 'name' => $name)
-		));
-	}
-
-	public function view($name = null) {
+	public function view($id = null) {
 
 		$itemData = $this->Item->find('first', array(
 			'conditions' => array(
-				'short_name' => $name
+				'OR' => array(
+					'item_id' => $id,
+					'short_name' => $id
+				)
 			),
 			'contain' => array(
 				'Feature' => array(
@@ -244,19 +206,6 @@ class ItemsController extends AppController {
 
 		$this->addPlayers(array_keys($topBuyers));
 
-		$reviews = Hash::map(
-			$this->Item->getReviews($item_id),
-			'{n}', function ($arr){
-				return array_merge(
-					$arr['Rating'],
-					$arr['review'],
-					$arr[0]
-				);
-			}
-		);
-
-		$this->addPlayers(Hash::extract($reviews, '{n}.user_id'));
-
 		if ($this->Auth->user()) {
 
 			$this->loadModel('User');
@@ -268,11 +217,112 @@ class ItemsController extends AppController {
 			));
 		}
 
+		$this->set(array(
+			'item' => $item,
+			'stock' => $this->Item->getStock($item_id),
+			'servers' => $servers,
+			'topBuyers' => $topBuyers,
+			'ratings' => $rating = $this->Item->getTotalRatings($item_id),
+			'features' => $itemData['Feature']
+		));
+
+		$this->loadItems();
+		$this->loadShoutboxData();
+
+		$this->reviews($item, false);
+		$this->activity($item, false);
+	}
+
+	public function reviews($item = null, $doRender = true) {
+
+		if ($doRender) {
+
+			$item = Hash::extract($this->Item->findByItemIdOrShortName($item, $item, array('item_id', 'name', 'short_name')), 'Item');
+
+			if (empty($item)) {
+				throw new NotFoundException(__('Invalid item'));
+			}
+
+			$this->set('item', $item);
+		}
+
+		$this->loadModel('Rating');
+		$this->Paginator->settings = array(
+			'Rating' => array(
+				'fields'  => array(
+					'Rating.user_id', 'Rating.item_id', 'rating', 'review.review_id', 'review.created', 'review.modified', 'review.content', 'SUM(quantity) as quantity'
+				),
+				'joins' => array(
+					array(
+						'table' => 'review',
+						'conditions' => array(
+							'Rating.rating_id = review.rating_id',
+							'Rating.item_id' => $item['item_id']
+						)
+					),
+					array(
+						'table' => 'order_detail',
+						'conditions' => array(
+							'Rating.item_id = order_detail.item_id'
+						)
+					),
+					array(
+						'table' => 'order',
+						'conditions' => array(
+							'order_detail.order_id = order.order_id',
+							'Rating.user_id = order.user_id'
+						)
+					)
+				),
+				'order' => 'quantity desc',
+				'group' => 'order.user_id',
+				'limit' => 2
+			)
+		);
+
+		$reviews = Hash::map(
+			$this->Paginator->paginate('Rating'),
+			'{n}', function ($arr){
+				return array_merge(
+					$arr['Rating'],
+					$arr['review'],
+					$arr[0]
+				);
+			}
+		);
+
+		$this->addPlayers(Hash::extract($reviews, '{n}.user_id'));
+		$this->loadItems();
+
+		$this->set(array(
+			'reviews' => $reviews,
+			'displayType' => 'item',
+			'reviewPageLocation' => array('controller' => 'Items', 'action' => 'reviews', 'id' => $item['short_name'])
+		));
+
+		if ($doRender) {
+			$this->render('/Reviews/list');
+		}
+	}
+
+	public function activity($item = null, $doRender = true) {
+
+		if ($doRender) {
+
+			$item = Hash::extract($this->Item->findByItemIdOrShortName($item, $item, array('item_id', 'name', 'short_name')), 'Item');
+
+			if (empty($item)) {
+				throw new NotFoundException(__('Invalid item'));
+			}
+
+			$this->set('item', $item);
+		}
+
 		$this->loadModel('Activity');
 		$this->Paginator->settings = array(
 			'Activity' => array(
 				'findType' => 'byItem',
-				'item_id' => $item_id,
+				'item_id' => $item['item_id'],
 				'limit' => 5
 			)
 		);
@@ -284,23 +334,16 @@ class ItemsController extends AppController {
 		$this->addPlayers(Hash::extract($activities, '{n}.{s}.recipient_id'));
 		$this->addPlayers(Hash::extract($activities, '{n}.RewardRecipient.{n}'));
 
-		$items = $this->Item->getAll();
+		$this->loadItems();
 
 		$this->set(array(
-			'item' => $item,
-			'items' => $items,
-			'itemsIndexed' => Hash::combine($items, '{n}.item_id', '{n}'),
-			'stock' => $this->Item->getStock($item_id),
-			'servers' => $servers,
-			'topBuyers' => $topBuyers,
-			'reviews' => $reviews,
-			'ratings' => $rating = $this->Item->getTotalRatings($item_id),
-			'displayType' => 'item',
-			'features' => $itemData['Feature'],
-			'activities' => $activities
+			'activities' => $activities,
+			'activityPageLocation' => array('controller' => 'Items', 'action' => 'activity', 'id' => $item['short_name'])
 		));
 
-		$this->loadShoutboxData();
+		if ($doRender) {
+			$this->render('/Activity/list');
+		}
 	}
 
 
