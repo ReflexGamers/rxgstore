@@ -1,7 +1,14 @@
 
+{% set loader = '#activity_page_loading' %}
+{% if not pageModel %}
+	{% set pageModel = 'Activity' %}
+{% endif %}
+
 {{ paginator.options({
-	'update': '#activity',
-	'url': pageLocation
+	'update': '#activity_content',
+	'url': activityPageLocation,
+	'before': js.get(loader).effect('fadeIn'),
+	'complete': 'rxg.onActivityPageLoad()'
 }) }}
 
 <div id="activity_list">
@@ -76,7 +83,7 @@
 				{% set num_recipients = recipients|length %}
 
 				<div class="activity_player sender">
-					<span class="item_browse_reward_sender">RXG Leadership</span>
+					<span class="item_browse_reward_sender">Reflex Gamers</span>
 				</div>
 
 				<div class="activity_date">
@@ -147,13 +154,13 @@
 						'url': {
 							'controller': 'Items',
 							'action': 'view',
-							'name': item.short_name
+							'id': item.short_name
 						}
 					}) }}
 					{{ html.link(item.name, {
 						'controller': 'Items',
 						'action': 'view',
-						'name': item.short_name,
+						'id': item.short_name,
 					}, {
 						'class': 'activity_review_item'
 					}) }}
@@ -206,4 +213,4 @@
 
 </div>
 
-{% include 'Common/pagination.inc.tpl' %}
+{% include 'Activity/pagination.inc.tpl' %}
