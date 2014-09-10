@@ -1,14 +1,12 @@
-{% extends isAjax ? 'Common/ajax.tpl' : 'Common/layout.tpl' %}
+{% extends 'Common/base.tpl' %}
 
 {% set jquery = true %}
-{% set title = 'Stock Items' %}
-{% set hideTitle = true %}
-{% set headerImage = false %}
-
+{% set title = 'Receive a Shipment' %}
+{% set scripts = ['common'] %}
 
 {% block content %}
 
-	<h1 class="page_heading">Receive a Shipment</h1>
+	<h1 class="page_heading">{{ title }}</h1>
 
 	{{ session.flash() }}
 
@@ -41,10 +39,10 @@
 				<tr>
 					<td class="item_stock_name">
 						{{ html.image("items/#{item.short_name}.png", {
-							'url': {'controller': 'Items', 'action': 'view', 'name': item.short_name},
+							'url': {'controller': 'Items', 'action': 'view', 'id': item.short_name},
 							'class': 'item_stock_image'
 						}) }}
-						{{ html.link(item.name, {'controller': 'Items', 'action': 'view', 'name': item.short_name}) }}
+						{{ html.link(item.name, {'controller': 'Items', 'action': 'view', 'id': item.short_name}) }}
 					</td>
 					<td class="item_stock_ideal">
 						{{ item.ideal_quantity }}
@@ -74,8 +72,8 @@
 
 	<div class="clear"></div>
 
-	<h2 class="page_subheading">Recent Shipments</h2>
-
-	{% include 'Activity/recent.inc.tpl' %}
+	{% include 'Common/activity.inc.tpl' with {
+		'title': 'Recent Shipments'
+	} %}
 
 {% endblock %}
