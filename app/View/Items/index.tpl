@@ -1,4 +1,4 @@
-{% extends isAjax ? 'Common/ajax.tpl' : 'Common/layout.tpl' %}
+{% extends 'Common/base.tpl' %}
 
 {% set jquery = true %}
 {% set title = 'Browse Items' %}
@@ -9,9 +9,9 @@
 
 	<h1 class="page_heading">RXG Store</h1>
 
-	{{ session.flash() }}
-
 	{% include '/ShoutboxMessages/shoutbox.inc.tpl' %}
+
+	{{ session.flash() }}
 
 	{% if user %}
 
@@ -30,7 +30,7 @@
 
 				{% else %}
 
-					<p>... and no items!<br/>Go buy stuff nerd!</p>
+					<p>... and no items!</p>
 
 				{% endif %}
 
@@ -78,10 +78,15 @@
 
 	<div class="clear"></div>
 
-	<h2 class="page_subheading">Recent Activity</h2>
 
-	<div id="activity">
-		{% include 'Activity/recent.inc.tpl' %}
-	</div>
+	<section id="activity">
+
+		<h2 class="page_subheading player_activity">Recent Activity</h2>
+
+		<div id="activity_content">
+			{% include 'Activity/list.inc.tpl' %}
+		</div>
+
+	</section>
 
 {% endblock %}
