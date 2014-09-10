@@ -12,16 +12,17 @@
 
 				<div class="activity_player sender">
 					{% if isReward %}
-						<span class="item_browse_reward_sender">RXG Leadership</span>
+						<span class="item_browse_reward_sender">Reflex Gamers</span>
 					{% elseif gift.anonymous %}
-						<span class="browse_gift_anonymous">Anonymous</span>
+						{% if access.check('Rewards') %}
+							<div class="activity_gift_anonymous_sender">
+								{{ fn.player(_context, sender) }}
+							</div>
+						{% else %}
+							<span class="activity_gift_anonymous">Anonymous</span>
+						{% endif %}
 					{% else %}
-						<img src="{{ sender.avatar }}">
-						{{ html.link(sender.name, {
-							'controller': 'Users',
-							'action': 'profile',
-							'id': sender.steamid
-						}) }}
+						{{ fn.player(_context, sender) }}
 					{% endif %}
 				</div>
 

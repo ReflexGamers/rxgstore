@@ -7,15 +7,15 @@
 
 {% block content %}
 
-	<h1 class="page_heading">Composing {{ isReward ? 'Reward' : 'Gift' }}</h1>
+	<h1 class="page_heading">Compose {{ isReward ? 'Reward' : 'Gift' }}</h1>
 
 	{{ session.flash() }}
 
 	{% if data is empty %}
 		{% if isReward %}
-			<p>Please choose items to give to the specified recipient(s). Please list one recipient per line. You may also paste in a status print-out. If you want to send a reward to yourself, you need simply use the "me" keyword.</p>
+			<p>Please provide a list of recipients (one per line) and then choose which items they should receive. Multiple formats are allowed and you can even paste in a status print-out. If you want to send a reward to yourself, you need simply use the "me" keyword.</p>
 		{% else %}
-			<p>Please choose items from your inventory below to give to the specified recipient. When the gift is sent, the items you include will be removed from your inventory. If you are in-game in a store-enabled server, it will temporarily unload your inventory to prevent abuse.</p>
+			<p>Please choose items from your inventory below to give to the specified recipient. When the gift is sent, the items you include will be removed from your inventory. If you are in-game in a store-enabled server, it will temporarily unload your inventory and then reload it immediately after the gift is successfully sent.</p>
 
 			<p>If you choose to send your gift anonymously, your identity will be hidden and the gift will not be counted in the statistics shown on your {{ html.link('profile', {
 					'controller': 'Users',
@@ -24,7 +24,7 @@
 				}) }}. If you write a message with your gift, it will be displayed publicly so please keep it appropriate.</p>
 
 			{% if access.check('Rewards') %}
-				<p>Want to send a reward from leadership instead? {{ html.link('Click here', {'controller': 'Rewards', 'action': 'compose'}) }}.</p>
+				<p>Want to send a reward from Reflex Gamers instead? {{ html.link('Click here', {'controller': 'Rewards', 'action': 'compose'}) }}.</p>
 			{% endif %}
 		{% endif %}
 	{% endif %}
@@ -70,20 +70,8 @@
 
 			{% for recipient in recipients %}
 
-				{% set player = players[recipient] %}
-
 				<div class="gift_recipient">
-					<div class="gift_recipient_avatar">
-						{{ html.image(player.avatarmedium, {
-							'url': {'controller': 'Users', 'action': 'profile', 'id': player.steamid}
-						}) }}
-					</div>
-					<div class="gift_recipient_name">
-						{{ html.link(
-							player.personaname ?: player.name,
-							{'controller': 'Users', 'action': 'profile', 'id': player.steamid}
-						) }}
-					</div>
+					{{ fn.player(_context, players[recipient]) }}
 				</div>
 
 			{% endfor %}
@@ -101,17 +89,7 @@
 	{% else %}
 
 		<div class="gift_recipient">
-			<div class="gift_recipient_avatar">
-				{{ html.image(player.avatarmedium, {
-					'url': {'controller': 'Users', 'action': 'profile', 'id': player.steamid}
-				}) }}
-			</div>
-			<div class="gift_recipient_name">
-				{{ html.link(
-					player.personaname,
-					{'controller': 'Users', 'action': 'profile', 'id': player.steamid}
-				) }}
-			</div>
+			{{ fn.player(_context, player) }}
 		</div>
 
 	{% endif %}
@@ -143,10 +121,10 @@
 			<tr>
 				<td class="gift_item_name">
 					{{ html.image("items/#{item.short_name}.png", {
-						'url': {'controller': 'Items', 'action': 'view', 'name': item.short_name},
+						'url': {'controller': 'Items', 'action': 'view', 'id': item.short_name},
 						'class': 'gift_item_image'
 					}) }}
-					{{ html.link(item.name, {'controller': 'Items', 'action': 'view', 'name': item.short_name}) }}
+					{{ html.link(item.name, {'controller': 'Items', 'action': 'view', 'id': item.short_name}) }}
 				</td>
 				{% if gift is empty and not isReward %}
 					<td class="gift_item_available">
@@ -204,14 +182,8 @@
 
 	<div class="clear"></div>
 
-	{% if activities %}
-
-		<h2 class="page_subheading">Recent {{ isReward ? 'Rewards' : 'Gifts' }}</h2>
-
-		<div id="activity">
-			{% include 'Activity/recent.inc.tpl' %}
-		</div>
-
-	{% endif %}
+	{% include 'Common/activity.inc.tpl' with {
+		'title': 'Recent ' ~ (isReward ? 'Rewards' : 'Gifts')
+	} %}
 
 {% endblock %}
