@@ -1,21 +1,18 @@
-{% extends isAjax ? 'Common/ajax.tpl' : 'Common/layout.tpl' %}
+{% extends 'Common/base.tpl' %}
 
 {% set jquery = true %}
-{% set title = "Add Funds From PayPal" %}
-{% set hideTitle = true %}
-{% set headerImage = false %}
-
+{% set title = "Buy CASH With PayPal" %}
 {% set scripts = ['addfunds', 'common'] %}
 
 {% block content %}
 
-	<h1 class="page_heading">Add Funds From PayPal</h1>
+	<h1 class="page_heading">{{ title }}</h1>
 
 	{{ session.flash() }}
 
 	<div class="addfunds">
 
-		<p>Add funds to your rxg CASH with PayPal™. Every dollar of real money is equivalent to about <strong>{{ fn.currency(100 * currencyMult) }} CASH</strong>. Depending on how much you give, you may receive a bonus.</p>
+		<p>Add funds to your rxg CASH with PayPal™. Every dollar of real money is equivalent to a minimum of <strong>{{ fn.currency(100 * currencyMult) }} CASH</strong>. Depending on how much you give, you may receive a bonus.</p>
 
 		<div class="addfunds_options">
 
@@ -66,11 +63,13 @@
 
 		<p>100% of dollar bills obtained is put back into the community; feel confident while giving us your money!</p>
 
-		<h2 class="page_subheading">Recent PayPal Activity</h2>
+		{% if activities %}
 
-		<div id="activity">
-			{% include 'Activity/recent.inc.tpl' %}
-		</div>
+			{% include 'Common/activity.inc.tpl' with {
+				'title': 'Recent PayPal Activity'
+			} %}
+
+		{% endif %}
 
 	</div>
 
