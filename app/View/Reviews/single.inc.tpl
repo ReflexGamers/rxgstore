@@ -4,7 +4,7 @@
 	{% if displayType == 'user' %}
 
 		{{ html.image("items/#{item.short_name}.png", {
-			'url': {'controller': 'Items', 'action': 'view', 'name': item.short_name}
+			'url': {'controller': 'Items', 'action': 'view', 'id': item.short_name}
 		}) }}
 
 	{% else %}
@@ -69,7 +69,7 @@
 
 			{{ html.link(
 				item.name,
-				{'controller': 'Items', 'action': 'view', 'name': item.short_name}
+				{'controller': 'Items', 'action': 'view', 'id': item.short_name}
 			) }}
 
 		{% else %}

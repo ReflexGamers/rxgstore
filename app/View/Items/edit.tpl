@@ -1,10 +1,7 @@
-{% extends isAjax ? 'Common/ajax.tpl' : 'Common/layout.tpl' %}
+{% extends 'Common/base.tpl' %}
 
 {% set jquery = true %}
 {% set title = "Editing: #{item.name}" %}
-{% set hideTitle = true %}
-{% set headerImage = false %}
-
 {% set scripts = ['item-edit'] %}
 
 
@@ -40,13 +37,13 @@
 	{{ session.flash() }}
 
 	{{ html.image("items/#{item.short_name}.png", {
-		'url': {'action': 'view', 'name': item.short_name},
+		'url': {'action': 'view', 'id': item.short_name},
 		'class': 'item_edit_image'
 	}) }}
 
 	<div class="back_link">
 		{{ html.link('< Return to Item',
-			{'action': 'view', 'name': item.short_name}
+			{'action': 'view', 'id': item.short_name}
 		) }}
 	</div>
 

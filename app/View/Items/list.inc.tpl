@@ -16,7 +16,7 @@
 						'url': {
 							'controller': 'Items',
 							'action': 'view',
-							'name': item.short_name
+							'id': item.short_name
 						}
 					}) }}
 					<div class="item_amt">
@@ -43,7 +43,7 @@
 					'url': {
 						'controller': 'Items',
 						'action': 'view',
-						'name': item.short_name
+						'id': item.short_name
 					}
 				}) }}
 				<div class="item_amt">

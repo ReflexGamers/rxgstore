@@ -24,11 +24,11 @@
 				</div>
 		</div>
 		{{ html.image("items/#{item.short_name}.png", {
-			'url': {'action': 'view', 'name': item.short_name},
+			'url': {'action': 'view', 'id': item.short_name},
 			'class': 'item_browse_image'
 		}) }}
 		<div class="item_browse_name">
-			{{ html.link(item.name, {'action': 'view', 'name': item.short_name}, {'class': 'item_browse_link'}) }}
+			{{ html.link(item.name, {'action': 'view', 'id': item.short_name}, {'class': 'item_browse_link'}) }}
 		</div>
 	</li>
 
