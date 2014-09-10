@@ -147,11 +147,17 @@
 
 	window.rxg = window.rxg || {};
 
-	window.rxg.onActivityLoad = function() {
+	window.rxg.onActivityPageLoad = function() {
 		var content = $('#activity');
 		if ($.rateit) {
 			content.find('.rateit').rateit();
 		}
+		$('html, body').animate({scrollTop: content.offset().top}, 250);
+	};
+
+	window.rxg.onReviewPageLoad = function() {
+		var content = $('#reviews');
+		content.find('.rateit').rateit();
 		$('html, body').animate({scrollTop: content.offset().top}, 250);
 	};
 

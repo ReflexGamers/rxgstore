@@ -1,25 +1,41 @@
 
-{% if userCanRate and not review.content %}
+{% set loader = '#review_page_loading' %}
+{% set pageModel = 'Rating' %}
 
-	<div class="review" id="review_compose">
-		{% include 'Reviews/compose.inc.tpl' %}
-	</div>
+{{ paginator.options({
+	'update': '#reviews_content',
+	'url': reviewPageLocation,
+	'before': js.get(loader).effect('fadeIn'),
+	'complete': 'rxg.onReviewPageLoad()'
+}) }}
 
-{% endif %}
+<div class="review_list">
 
+	{% if userCanRate and not review.content %}
 
-{% for review in reviews if review.content %}
-
-	{% if displayType == 'user' %}
-
-		{% set item = itemsIndexed[review.item_id] %}
+		<div class="review" id="review_compose">
+			{% include 'Reviews/compose.inc.tpl' %}
+		</div>
 
 	{% endif %}
 
-	{% set player = user.user_id == review.user_id ? user : players[review.user_id] %}
 
-	<div class="review" id="{{ user.user_id == review.user_id ? 'review_compose' : '' }}">
-		{% include 'Reviews/single.inc.tpl' %}
-	</div>
+	{% for review in reviews if review.content %}
 
-{% endfor %}
+		{% if displayType == 'user' %}
+
+			{% set item = itemsIndexed[review.item_id] %}
+
+		{% endif %}
+
+		{% set player = user.user_id == review.user_id ? user : players[review.user_id] %}
+
+		<div class="review">
+			{% include 'Reviews/single.inc.tpl' %}
+		</div>
+
+	{% endfor %}
+
+</div>
+
+{% include 'Reviews/pagination.inc.tpl' %}
