@@ -12,6 +12,8 @@
 
 	<p>Below, you may receive a shipment and add items to stock.</p>
 
+	<p><strong>Please do not order shipments more than 1-2 times per week.</strong> Shipments are public information so we want to space them out somewhat evenly. Be sure to check the recent shipments at the bottom of this page before proceeding.</p>
+
 	<p>Note that due to warehousing limitations, we are only able to store a certain amount of each item. If you attempt to stock more items than we can hold, it will not work.</p>
 
 	<p>When an item has at least the "ideal" amount in stock, the item's listing page will show as simply "In Stock" and not list the number of items available.</p>

@@ -195,7 +195,7 @@
 				</div>
 
 				{% if showShipmentHandler %}
-					<div class="activity_player recipient">
+					<div class="activity_player handler">
 						{{ fn.player(_context, players[shipment.user_id]) }}
 					</div>
 				{% endif %}

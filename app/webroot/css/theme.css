@@ -2460,10 +2460,19 @@ button::-moz-focus-inner {
     /*opacity: 0.5*/
 }
 
-.activity_player.recipient {
+.activity_player.recipient,
+.activity_player.handler {
     font-size: 24px;
     line-height: 28px;
     padding-bottom: 5px;
+}
+
+.activity_player.handler {
+    opacity: 0.5;
+}
+
+.activity_player.handler a {
+    color: rgba(0, 0, 0, 1);
 }
 
 .activity_player.recipient a {
@@ -2475,7 +2484,8 @@ button::-moz-focus-inner {
     border-radius: 3px;
 }
 
-.activity_player.recipient img {
+.activity_player.recipient img,
+.activity_player.handler img {
     width: 28px;
     height: 28px;
 }
