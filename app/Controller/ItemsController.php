@@ -350,7 +350,7 @@ class ItemsController extends AppController {
 	public function edit($name = null) {
 
 		if (!$this->Access->check('Items', 'update')) {
-			$this->redirect(array('action' => 'view', 'name' => $name));
+			$this->redirect(array('controller' => 'items', 'action' => 'view', 'id' => $name));
 		}
 
 		$itemData = $this->Item->find('first', array(
@@ -475,7 +475,7 @@ class ItemsController extends AppController {
 
 			if ($itemSaveSuccess && $stockSaveSuccess && $insertServerSuccess && $deleteServerSuccess && $saveFeatureSuccess && $deleteFeatureSuccess) {
 				$this->Session->setFlash('The item has been saved.', 'default', array('class' => 'success'));
-				$this->redirect(array('action' => 'edit', 'name' => $item['short_name']));
+				$this->redirect(array('action' => 'edit', 'id' => $item['short_name']));
 				return;
 			} else {
 				$this->Session->setFlash('Something went wrong. The item could not be fully saved.', 'default', array('class' => 'error'));
