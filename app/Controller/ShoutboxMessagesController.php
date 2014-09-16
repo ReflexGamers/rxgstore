@@ -61,13 +61,24 @@ class ShoutboxMessagesController extends AppController {
 	public function delete($id) {
 
 		$this->request->allowMethod('post');
+		$this->autoRender = false;
 
 		if (!$this->Access->check('Chats', 'delete')) {
-			$this->redirect($this->referer());
 			return;
 		}
 
-		$this->ShoutboxMessage->delete($id);
-		$this->autoRender = false;
+		$this->ShoutboxMessage->id = $id;
+		$message = Hash::extract($this->ShoutboxMessage->read(), 'ShoutboxMessage');
+		print_r($message);
+
+		if (empty($message) || $message['removed'] == 1) {
+			return;
+		}
+
+		$admin_steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
+		$poster_steamid = $this->AccountUtility->SteamID64FromAccountID($message['user_id']);
+
+		$this->ShoutboxMessage->saveField('removed', 1);
+		CakeLog::write('admin', "$admin_steamid removed chat message #$id '{$message['content']}' from $poster_steamid");
 	}
 }
