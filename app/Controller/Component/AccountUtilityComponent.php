@@ -148,9 +148,12 @@ class AccountUtilityComponent extends Component {
 		$accounts = array_unique($accounts);
 		$user = $this->Auth->user();
 
-		if (count($accounts) == 1 && $accounts[0] == $user['user_id']) {
+		if (count($accounts) == 1 && !empty($user) && $accounts[0] == $user['user_id']) {
+			$user_id = $user['user_id'];
+			$members = $this->Access->getMembers($user_id);
 			return array($user['user_id'] => array_merge($user, array(
-				'member' => $this->Access->checkIsMember($user['user_id'])
+				'member' => !empty($members[$user_id]),
+				'division' => !empty($members[$user_id]['division']) ? $members[$user_id]['division'] : ''
 			)));
 		}
 
@@ -167,7 +170,7 @@ class AccountUtilityComponent extends Component {
 			$steamPlayers = array_merge($steamPlayers, $this->SteamPlayer->getByIds($batch));
 		}
 
-		$members = $this->Access->getMemberStatus($accounts);
+		$members = $this->Access->getMembers($accounts);
 		$players = array();
 
 		foreach ($steamPlayers as $player) {
@@ -179,7 +182,8 @@ class AccountUtilityComponent extends Component {
 				'avatarmedium' => $player['avatarmedium'],
 				'avatarfull' => $player['avatarfull'],
 				'profile' => $player['profileurl'],
-				'member' => $members[$user_id]
+				'member' => !empty($members[$user_id]),
+				'division' => !empty($members[$user_id]['division']) ? $members[$user_id]['division'] : ''
 			);
 		}
 
@@ -190,88 +194,275 @@ class AccountUtilityComponent extends Component {
 
 		$aro = $this->Acl->Aro;
 
-		$groupIds = $aro->find('list', array(
+		//Group ids indexed by name
+		$groupNames = $aro->find('list', array(
 			'fields' => array(
-				'alias', 'id'
+				'id', 'alias'
 			),
 			'conditions' => array(
 				'foreign_key is null'
-			)
+			),
+			'recursive' => -1
 		));
 
-		$savedAdminIds = $aro->find('list', array(
+		$groupIds = array_flip($groupNames);
+		$memberGroupId = $groupIds['Member'];
+
+		//Currently saved admins indexed by user_id
+		$savedMembers = Hash::combine($aro->find('all', array(
 			'fields' => array(
-				'foreign_key', 'id'
+				'id', 'foreign_key', 'parent_id', 'alias', 'division'
 			),
 			'conditions' => array(
 				'foreign_key is not null'
-			)
-		));
+			),
+			'recursive' => -1
+		)), '{n}.Aro.foreign_key', '{n}.Aro');
 
+
+		//Get sourcebans data
 		$db = ConnectionManager::getDataSource('sourcebans');
 		$result = $db->rawQuery("SELECT authid, user, srv_group FROM rxg__admins where srv_group is not null");
 
-		$newAdmins = array();
+		//Sourcebans admins indexed by user_id
+		$sbAdmins = array();
 
-		while($row = $result->fetch()) {
+		while ($row = $result->fetch()) {
 
 			$user_id = $this->AccountIDFromSteamID32($row['authid']);
-			$groupName = Inflector::singularize($row['srv_group']);
+			$groupName = $row['srv_group'];
 
-			if (empty($groupIds[$groupName])) {
+			if (empty($groupName) || empty($groupIds[$groupName])) {
 				$groupName = 'Member';
 			}
 
-			$group_id = $groupIds[$groupName];
-
-			$data = array(
-				'parent_id' => $group_id,
-				'model' => 'User',
-				'foreign_key' => $user_id,
-				'alias' => $row['user']
+			$sbAdmins[$user_id] = array(
+				'alias' => $row['user'],
+				'parent_id' => $groupIds[$groupName]
 			);
+		}
 
-			$isNewAdmin = false;
 
-			if (isset($savedAdminIds[$user_id])) {
-				$data['id'] = $savedAdminIds[$user_id];
+		//Get forum data
+		$db = ConnectionManager::getDataSource('forums');
+		$config = Configure::read('Store.Forums');
+
+		$groups = implode(',', $config['MemberGroups']);
+		$divisions = $config['Divisions'];
+
+		$result = $db->rawQuery("SELECT steamid, user.username, steamuser.steamid, userfield.field5 FROM steamuser JOIN user ON steamuser.userid = user.userid JOIN userfield on userfield.userid = user.userid WHERE user.usergroupid IN ($groups)");
+
+		//Linked members/admins indexed by user_id
+		$forumMembers = array();
+
+		while ($row = $result->fetch()) {
+			$user_id = $this->AccountIDFromSteamID64($row['steamid']);
+			$division = empty($divisions[$row['field5']]) ? '' : $divisions[$row['field5']];
+			$forumMembers[$user_id] = array(
+				'alias' => $row['username'],
+				'division' => $division
+			);
+		}
+
+		$insertAdmins = array_diff_key($sbAdmins, $savedMembers);
+		$insertMembers = array_diff_key($forumMembers, $savedMembers, $insertAdmins);
+
+		$results = array(
+			'added' => array(),
+			'updated' => array(),
+			'removed' => array()
+		);
+
+		CakeLog::write('permsync', 'Performed Sync.');
+
+		//Update/remove existing records
+		foreach ($savedMembers as $user_id => $data) {
+
+			$forumData = !empty($forumMembers[$user_id]) ? $forumMembers[$user_id] : '';
+			$division = !empty($forumData['division']) ? $forumData['division'] : '';
+
+			if (empty($sbAdmins[$user_id])) {
+
+				//not in sourcebans db
+				if (empty($forumData)) {
+
+					//Not a linked member either so remove
+					$steamid = $this->SteamID64FromAccountID($data['foreign_key']);
+					$division = !empty($data['division']) ? $data['division'] : 'No Division';
+					CakeLog::write('permsync', " - deleted {$groupNames[$data['parent_id']]}: '{$data['alias']}' / $steamid / $division");
+
+					$aro->clear();
+					$aro->delete($data['id']);
+					$results['removed'][] = $data;
+
+				} else if ($data['parent_id'] != $memberGroupId || $data['alias'] != $forumData['alias'] || $data['division'] != $division) {
+
+					//Linked member, not admin, needs updating/demoting
+					$steamid = $this->SteamID64FromAccountID($data['foreign_key']);
+					CakeLog::write('permsync', " - updated '{$data['alias']}' / $steamid");
+
+					if ($data['parent_id'] != $memberGroupId) {
+						CakeLog::write('permsync', "   - updated rank: {$groupNames[$data['parent_id']]} -> $groupNames[$memberGroupId]");
+					}
+
+					if ($data['alias'] != $forumData['alias']) {
+						CakeLog::write('permsync', "   - updated alias: '{$data['alias']}' -> '{$forumData['alias']}'");
+					}
+
+					if ($data['division'] != $division) {
+						$oldDivision = !empty($data['division']) ? $data['division'] : 'none';
+						CakeLog::write('permsync', "   - updated division: $oldDivision -> $division");
+					}
+
+					$data['parent_id'] = $memberGroupId;
+					$data['alias'] = $forumData['alias'];
+					$data['division'] = $division;
+					$aro->clear();
+					$aro->save($data);
+					$results['updated'][] = $data;
+				}
+
 			} else {
-				$isNewAdmin = true;
+
+				//admin is in sourcebans db
+				$adminData = $sbAdmins[$user_id];
+
+				if ($data['parent_id'] != $adminData['parent_id'] || $data['alias'] != $adminData['alias'] || $data['division'] != $division) {
+
+					//needs updating
+					$steamid = $this->SteamID64FromAccountID($data['foreign_key']);
+					CakeLog::write('permsync', " - updated '{$data['alias']}' / $steamid");
+
+					if ($data['parent_id'] != $adminData['parent_id']) {
+						CakeLog::write('permsync', "   - updated rank: {$groupNames[$data['parent_id']]} -> {$groupNames[$adminData['parent_id']]}");
+					}
+
+					if ($data['alias'] != $adminData['alias']) {
+						CakeLog::write('permsync', "   - updated alias: '{$data['alias']}' -> '{$forumData['alias']}'");
+					}
+
+					if ($data['division'] != $division) {
+						$oldDivision = !empty($data['division']) ? $data['division'] : 'none';
+						CakeLog::write('permsync', "   - updated division: $oldDivision -> $division");
+					}
+
+					$data['alias'] = $adminData['alias'];
+					$data['parent_id'] = $adminData['parent_id'];
+					$data['division'] = $division;
+					$aro->clear();
+					$aro->save($data);
+					$results['updated'][] = $data;
+				}
+			}
+		}
+
+		//Insert new admins
+		foreach ($insertAdmins as $user_id => $data) {
+
+			if (!empty($forumMembers[$user_id])) {
+				$data['division'] = $forumMembers[$user_id]['division'];
 			}
 
-			$aro->create();
-			$aro->save($data);
+			$division = !empty($data['division']) ? $data['division'] : 'No Division';
+			$rank = $groupNames[$data['parent_id']];
 
-			if ($isNewAdmin) {
-				$newAdmins[] = $aro->id;
-			}
+			$steamid = $this->SteamID64FromAccountID($user_id);
+			CakeLog::write('permsync', " - added $rank: '{$data['alias']}' / $steamid / $division");
 
+			$data['model'] = 'User';
+			$data['foreign_key'] = $user_id;
 			$aro->clear();
-
-			unset($savedAdminIds[$user_id]);
+			$aro->save($data);
+			$results['added'][] = $data;
 		}
 
-		$demoteAdmins = array();
+		//Insert new members
+		foreach ($insertMembers as $user_id => $data) {
 
-		if (!empty($savedAdminIds)) {
-			//Demote leftover admins who weren't in sourcebans database
-			$demoteAdmins = Hash::map($savedAdminIds, '{n}', function($id){
-				return array('Aro.id' => $id);
-			});
+			$division = !empty($data['division']) ? $data['division'] : 'No Division';
 
-			$aro->updateAll(
-				array('parent_id' => 1), // Member
-				array('OR' => $demoteAdmins)
-			);
+			$steamid = $this->SteamID64FromAccountID($user_id);
+			CakeLog::write('permsync', " - added Member: '{$data['alias']}' / $steamid / $division");
+
+			$data['model'] = 'User';
+			$data['foreign_key'] = $user_id;
+			$data['parent_id'] = $memberGroupId;
+			$aro->clear();
+			$aro->save($data);
+			$results['added'][] = $data;
 		}
 
-		/*Configure::store('Permissions', 'default', array(
-			'Store.AdminsLastUpdated' => time()
-		));*/
+		return $results;
+	}
+
+	public function syncMembers() {
+
+		$db = ConnectionManager::getDataSource('forums');
+		$config = Configure::read('Store.Forums');
+
+		$groups = implode(',', $config['MemberGroups']);
+		$divisions = $config['Divisions'];
+
+		$result = $db->rawQuery("SELECT steamid FROM steamuser.steamid, userfield.field5 JOIN user ON steamuser.userid = user.userid JOIN userfield on userfield.userid = user.userid WHERE user.usergroupid IN ($groups)");
+
+		$linkedMembers = array();
+
+		while($row = $result->fetch()) {
+			$linkedMembers[] = $this->AccountIDFromSteamID64($row['steamid']);
+		}
+
+		$aro = $this->Acl->Aro;
+
+		$savedMembers = Hash::extract($aro->find('all', array(
+			'fields' => array(
+				'foreign_key'
+			),
+			'conditions' => array(
+				'foreign_key is not null'
+			),
+			'recursive' => -1
+		)), '{n}.Aro.foreign_key');
+
+		$addMembers = array_diff($linkedMembers, $savedMembers);
+		$removeMembers = array_diff($savedMembers, $linkedMembers);
+
+		if (empty($addMembers) && empty($removeMembers)) {
+			return array();
+		}
+
+		$memberGroup = $aro->find('first', array(
+			'fields' => array('id'),
+			'conditions' => array(
+				'alias' => 'Member'
+			),
+			'recursive' => -1
+		));
+
+		if (empty($memberGroup['Aro']['id'])) {
+			return array();
+		}
+
+		$memberGroupId = $memberGroup['Aro']['id'];
+
+		foreach ($addMembers as $user_id) {
+			$aro->clear();
+			$aro->save(array(
+				'parent_id' => $memberGroupId,
+				'model' => 'User',
+				'foreign_key' => $user_id
+			));
+		}
+
+		foreach ($removeMembers as $user_id) {
+			$aro->clear();
+			$aro->delete(array(
+				'foreign_key' => $user_id
+			));
+		}
 
 		return array(
-			'added' => $newAdmins,
-			'demoted' => $demoteAdmins
+			'added' => $addMembers,
+			'removed' => $removeMembers
 		);
 	}
 
