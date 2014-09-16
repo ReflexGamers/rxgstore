@@ -23,7 +23,7 @@
 			<a href="{{ player.profile }}"><img src="{{ player.avatarfull }}"></a>
 			{% if player.member %}
 				<div class="player_member">
-					RXG Member
+					{{ player.division ? "RXG #{player.division} Division" : 'RXG Member' }}
 				</div>
 			{% endif %}
 			<div class="player_links">
@@ -58,10 +58,10 @@
 
 		<section id="lifetime">
 
-			<h2 class="page_subheading player_past">Lifetime Items</h2>
+			<h2 class="page_subheading">Past Items</h2>
 
 			{% include 'Items/list.inc.tpl' with {
-				'quantity': lifetimeItems,
+				'quantity': pastItems,
 				'maxColumns': 7
 			} %}
 
@@ -85,81 +85,11 @@
 	{% endif %}
 
 
-
 	{% if activities %}
 
-		<section id="activity">
-
-			<h2 class="page_subheading player_activity">Recent Activity</h2>
-
-			<div id="activity_content">
-				{% include 'Activity/list.inc.tpl' %}
-			</div>
-
-		</section>
-
-		{#
-		<div id="recent_activity">
-
-			{{ paginator.options({
-				'update': '#recent_activity'
-			}) }}
-
-			{% for data in orders %}
-
-				{% set trans = data.Order %}
-
-				<div class="player_recent_activity">
-
-					<div class="player_recent_heading">
-						<div class="player_recent_info">
-							{{ fn.time(_context, trans.date) }}
-						</div>
-						<span class="player_recent_subheading">
-							Sale ID #{{ trans.order_id }}
-
-							{% if user.user_id == trans.user_id %}
-
-								{{ js.link(
-									'View Receipt',
-									{'controller': 'Orders', 'action': 'receipt', 'id': trans.order_id}, {
-										'async': true,
-										'update': "#receipt_#{trans.order_id}",
-										'htmlAttributes': {
-											'class': 'player_receipt_link',
-											'id': "player_receipt_link_#{trans.order_id}"
-										},
-										'before': js.get("#ajax-loader_#{trans.order_id}").effect('fadeIn'),
-										'complete': js.get("#ajax-loader_#{trans.order_id}").effect('fadeOut')
-									}
-								) }}
-
-							{% endif %}
-						</span>
-					</div>
-
-					<div class="recent_item_list">
-						{% include 'Items/list.inc.tpl' with {
-							'quantity': data.OrderDetail,
-							'maxColumns': 7
-						} %}
-
-						{{ html.image(
-							'misc/ajax-loader.gif',
-							{'class': 'player_receipt_loader ajax-loader', 'id': "ajax-loader_#{trans.order_id}"}
-						) }}
-					</div>
-
-					<div id="receipt_{{ trans.order_id }}" class="receipt_placeholder"></div>
-
-				</div>
-
-			{% endfor %}
-
-			{% include 'Common/pagination.inc.tpl' %}
-
-		</div>
-		#}
+		{% include 'Common/activity.inc.tpl' with {
+			'title': 'Recent Activity'
+		} %}
 
 	{% endif %}
 
