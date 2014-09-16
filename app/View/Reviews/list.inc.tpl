@@ -1,11 +1,11 @@
 
-{% set loader = '#review_page_loading' %}
+{% set loader = 'review_page_loading' %}
 {% set pageModel = 'Rating' %}
 
 {{ paginator.options({
 	'update': '#reviews_content',
 	'url': reviewPageLocation,
-	'before': js.get(loader).effect('fadeIn'),
+	'before': js.get('#' ~ loader).effect('fadeIn'),
 	'complete': 'rxg.onReviewPageLoad()'
 }) }}
 

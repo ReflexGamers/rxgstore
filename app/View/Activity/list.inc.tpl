@@ -1,5 +1,5 @@
 
-{% set loader = '#activity_page_loading' %}
+{% set loader = 'activity_page_loading' %}
 {% if not pageModel %}
 	{% set pageModel = 'Activity' %}
 {% endif %}
@@ -7,7 +7,7 @@
 {{ paginator.options({
 	'update': '#activity_content',
 	'url': activityPageLocation,
-	'before': js.get(loader).effect('fadeIn'),
+	'before': js.get('#' ~ loader).effect('fadeIn'),
 	'complete': 'rxg.onActivityPageLoad()'
 }) }}
 
