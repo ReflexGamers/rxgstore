@@ -68,7 +68,7 @@
 
 	shoutbox.on('click', '.shoutbox_delete', function(){
 
-		if (!confirm('Are you sure you want to delete this message?')) {
+		if (!confirm('Are you sure you want to remove this message?')) {
 			return false;
 		}
 
