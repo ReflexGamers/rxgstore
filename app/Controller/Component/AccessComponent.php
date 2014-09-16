@@ -48,23 +48,17 @@ class AccessComponent extends Component {
 		return !empty($aro);
 	}
 
-	public function getMemberStatus($ids) {
+	public function getMembers($ids) {
 
-		$members = array();
-
-		$data = Hash::combine($this->Acl->Aro->find('all', array(
-			'fields' => 'foreign_key',
+		return Hash::combine($this->Acl->Aro->find('all', array(
+			'fields' => array(
+				'foreign_key', 'division'
+			),
 			'conditions' => array(
 				'foreign_key' => $ids
 			),
 			'recursive' => -1
-		)), '{n}.Aro.foreign_key', '{n}.Aro.foreign_key');
-
-		foreach ($ids as $id) {
-			$members[$id] = isset($data[$id]);
-		}
-
-		return $members;
+		)), '{n}.Aro.foreign_key', '{n}.Aro');
 	}
 
 	public function checkUser($user_id, $aco, $action = '*') {
