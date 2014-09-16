@@ -18,7 +18,12 @@ class ShoutboxMessage extends AppModel {
 
 
 	public function getRecent() {
-		return Hash::extract($this->find('all', array('limit' => 10)), '{n}.ShoutboxMessage');
+		return Hash::extract($this->find('all', array(
+			'limit' => 10,
+			'conditions' => array(
+				'removed = 0'
+			)
+		)), '{n}.ShoutboxMessage');
 	}
 
 	public function canUserPost($user_id) {
