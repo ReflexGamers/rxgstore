@@ -1,8 +1,8 @@
 (function($){
 
-	$('#admin_refreshall').on('click', function(){
+	$('#permissions_sync').on('click', function(){
 
-		if (!confirm('Are you sure you want to synchronize admin permissions with the Sourcebans database?')) {
+		if (!confirm('Are you sure you want to synchronize admin/member permissions with the Sourcebans and forum databases?')) {
 			return false;
 		}
 
