@@ -61,8 +61,13 @@ class PermissionsController extends AppController {
 			return;
 		}
 
-		$this->set('syncResult', $this->AccountUtility->syncSourcebans());
+		$syncResult = $this->AccountUtility->syncSourcebans();
 
-		$this->view('/Permissions/list.inc');
+		$syncResult['added'] = Hash::extract($syncResult, 'added.{n}.alias');
+		$syncResult['updated'] = Hash::extract($syncResult, 'updated.{n}.alias');
+		$syncResult['removed'] = Hash::extract($syncResult, 'removed.{n}.alias');
+
+		$this->set('syncResult', $syncResult);
+		$this->view('list.inc');
 	}
 }
