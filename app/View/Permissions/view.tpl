@@ -19,13 +19,13 @@
 	{% if admins %}
 		<div id="admin_batch_actions">
 			{% if access.check('Permissions', 'update') %}
-				<input type="button" id="admin_refreshall" class="btn-primary" value="Synchronize Now" data-href="{{ html.url({'action': 'synchronize'}) }}" />
+				<input type="button" id="permissions_sync" class="btn-primary" value="Synchronize Now" data-href="{{ html.url({'action': 'synchronize'}) }}" />
 			{% endif %}
 
-			{{ html.image(
-				'misc/ajax-loader.gif',
-				{'class': 'ajax-loader', 'id': 'admin_loading'}
-			) }}
+			{{ html.image('misc/ajax-loader.gif', {
+				'class': 'ajax-loader',
+				'id': 'admin_loading'
+			}) }}
 		</div>
 	{% endif %}
 
