@@ -131,6 +131,23 @@ Configure::write('Store', array(
 			1000 => 1.10,
 			2500 => 1.25
 		)
+	),
+	'Forums' => array(
+		'MemberGroups' => array(
+			28, //Member
+			29, //Basic Admin
+			30, //Full Admin
+			37, //Advisor
+			38, //Captain
+			39, //Cabinet
+			40, //Director
+			48 //Founder
+		),
+		'Divisions' => array(
+			'Counter-Strike: Global Offensive' => 'CS:GO',
+			'Team Fortress 2' => 'TF2',
+			'Minecraft' => 'MC'
+		)
 	)
 ));
 
@@ -138,6 +155,9 @@ Configure::write('Store', array(
  * Configures default file logging options
  */
 App::uses('CakeLog', 'Log');
+CakeLog::config('default', array(
+	'engine' => 'File'
+));
 CakeLog::config('debug', array(
 	'engine' => 'File',
 	'types' => array('notice', 'info', 'debug'),
