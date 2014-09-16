@@ -2,7 +2,13 @@
 
 {% if syncResult %}
 
-	<p class="admin_updated">All admins updated: {{ syncResult.added|length }} added, {{ syncResult.demoted|length }} removed.</p>
+	<p class="admin_updated">
+		Sync Complete<br>
+		{{ syncResult.added|length }} added{{ syncResult.added|length > 0 ? ': ' ~ syncResult.added|join(', ') }}<br>
+		{{ syncResult.updated|length }} updated{{ syncResult.updated|length > 0 ? ': ' ~ syncResult.updated|join(', ') }}<br>
+		{{ syncResult.removed|length }} removed{{ syncResult.removed|length > 0 ? ': ' ~ syncResult.removed|join(', ') }}
+
+	</p>
 
 {% endif %}
 
@@ -21,20 +27,12 @@
 		{% endif %}
 
 		{% set previousRank = admin.rank %}
-		{% set playerName = player.name|replace({'rxg | ': ''}) %}
 
 		<li class="admin_entry">
-			<div class="admin_avatar">
-				{{ html.image(player.avatar, {
-					'url': {'controller': 'Users', 'action': 'profile', 'id': player.steamid}
-				}) }}
-			</div>
-			<div class="admin_player">
-				{{ html.link(
-					playerName,
-					{'controller': 'Users', 'action': 'profile', 'id': player.steamid}
-				) }} {{ admin.name|lower() in playerName|lower() or playerName|lower() in admin.name|lower() ? '' : "(#{admin.name})" }}
-			</div>
+			{{ fn.player(_context, player) }}
+			{% set adminName = admin.name|lower() %}
+			{% set playerName = fn.stripTag(player)|lower() %}
+			{{ adminName in playerName or playerName in adminName ? '' : "(#{admin.name})" }}
 		</li>
 
 	{% endfor %}
