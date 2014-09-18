@@ -15,7 +15,7 @@ class ShoutboxMessagesController extends AppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->allow();
-		$this->Auth->deny('add');
+		$this->Auth->deny('add', 'delete');
 	}
 
 	public function view($time = null) {
@@ -69,7 +69,6 @@ class ShoutboxMessagesController extends AppController {
 
 		$this->ShoutboxMessage->id = $id;
 		$message = Hash::extract($this->ShoutboxMessage->read(), 'ShoutboxMessage');
-		print_r($message);
 
 		if (empty($message) || $message['removed'] == 1) {
 			return;
