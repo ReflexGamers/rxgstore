@@ -3,36 +3,38 @@
 {% if syncResult %}
 
 	<p class="admin_updated">
-		Sync Complete<br>
-		{{ syncResult.added|length }} added{{ syncResult.added|length > 0 ? ': ' ~ syncResult.added|join(', ') }}<br>
-		{{ syncResult.updated|length }} updated{{ syncResult.updated|length > 0 ? ': ' ~ syncResult.updated|join(', ') }}<br>
-		{{ syncResult.removed|length }} removed{{ syncResult.removed|length > 0 ? ': ' ~ syncResult.removed|join(', ') }}
+		Sync Complete: {{ syncResult.added|length }} added, {{ syncResult.updated|length }} updated, {{ syncResult.removed|length }} removed.
 
 	</p>
 
 {% endif %}
 
+{% if permSyncLog %}
+	Sync log:<br>
+	<textarea class="log_output">{{ permSyncLog }}</textarea>
+{% endif %}
+
 <ul class="admin_list">
 
-	{% for admin in admins %}
+	{% for member in members %}
 
-		{% set player = players[admin.user_id] %}
+		{% set player = players[member.user_id] %}
 
-		{% if previousRank is empty or previousRank != admin.rank %}
+		{% if previousRank is empty or previousRank != member.rank %}
 			</ul>
-			<div class="admin_group">
-				{{ admin.rank }}
-			</div>
+			<h2 class="page_subheading">
+				{{ member.rank }}
+			</h2>
 			<ul class="admin_list">
 		{% endif %}
 
-		{% set previousRank = admin.rank %}
+		{% set previousRank = member.rank %}
 
 		<li class="admin_entry">
 			{{ fn.player(_context, player) }}
-			{% set adminName = admin.name|lower() %}
+			{% set memberName = member.name|lower() %}
 			{% set playerName = fn.stripTag(player)|lower() %}
-			{{ adminName in playerName or playerName in adminName ? '' : "(#{admin.name})" }}
+			{{ memberName in playerName or playerName in memberName ? '' : "(#{member.name})" }}
 		</li>
 
 	{% endfor %}

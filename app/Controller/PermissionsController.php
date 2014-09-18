@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+App::uses('File', 'Utility');
 
 class PermissionsController extends AppController {
 	public $components = array('RequestHandler');
@@ -44,10 +45,10 @@ class PermissionsController extends AppController {
 		$this->addPlayers(Hash::extract($admins, '{n}.user_id'));
 
 		$this->set(array(
-			'admins' => $admins
+			'members' => $admins
 		));
 
-		if (isset($view)) {
+		if (!empty($view)) {
 			$this->render($view);
 		}
 	}
@@ -69,5 +70,21 @@ class PermissionsController extends AppController {
 
 		$this->set('syncResult', $syncResult);
 		$this->view('list.inc');
+	}
+
+	public function viewlog() {
+
+		if (!$this->Access->check('Permissions', 'read')) {
+			$this->redirect($this->referer());
+			return;
+		}
+
+		$logFile = new File('../tmp/logs/permsync.log', false);
+		$log = $logFile->read();
+		$logFile->close();
+
+		$this->response->type('text/plain');
+		$this->response->body($log);
+		$this->autoRender = false;
 	}
 }
