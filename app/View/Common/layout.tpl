@@ -10,11 +10,7 @@
 		'http://fonts.googleapis.com/css?family=Roboto:400,300,700,400italic',
 		'http://fonts.googleapis.com/css?family=PT+Mono',
 		'theme'
-	]|merge(styles ?: [])) }}
-
-	{% if jquery %}
-		{{ html.script('jquery-1.10.2.min') }}
-	{% endif %}
+	]|merge(styles ? (styles is iterable ? styles : [styles]) : [])) }}
 </head>
 <body>
 <div id="background">&nbsp;</div>
@@ -67,7 +63,7 @@
 	</table>
 </header>
 
-<article id="content" class="content">
+<article id="content" class="content cf">
 	{% block content %}{% endblock %}
 </article>
 
@@ -78,7 +74,7 @@
 {{ js.writeBuffer() }}
 
 {% if scripts %}
-	{{ html.script(scripts) }}
+	{{ html.script(['jquery-1.10.2.min']|merge(scripts is iterable ? scripts : [scripts])) }}
 {% endif %}
 
 </body>
