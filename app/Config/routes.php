@@ -34,7 +34,7 @@
 	Router::connect('/checkout', array('controller' => 'orders', 'action' => 'checkout'));
 	Router::connect('/buy', array('controller' => 'orders', 'action' => 'buy'));
 
-	Router::connect('/recent/*', array('controller' => 'orders', 'action' => 'recent'));
+	Router::connect('/recent/*', array('controller' => 'Items', 'action' => 'recent'));
 
 	Router::connect('/store/:action', array('controller' => 'Store'));
 
