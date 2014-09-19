@@ -72,18 +72,12 @@
 
 	</div>
 
-	<ul id="item_browse_list" class="cf" data-href="{{ html.url({'controller': 'Items', 'action': 'server'}) }}">
+	<ul id="browse_item_list" class="cf" data-href="{{ html.url({'controller': 'Items', 'action': 'server'}) }}">
 		{% include 'Items/server.tpl' %}
 	</ul>
 
-
-
-	{% if activities %}
-
-		{% include 'Common/activity.inc.tpl' with {
-			'title': 'Recent Activity'
-		} %}
-
-	{% endif %}
+	{% include 'Common/activity.inc.tpl' with {
+		'title': 'Recent Activity'
+	} %}
 
 {% endblock %}

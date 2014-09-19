@@ -169,18 +169,9 @@
 
 	{% endif %}
 
-	{% if activities %}
 
-		<section id="activity">
-
-			<h2 class="page_subheading">Recent Activity</h2>
-
-			<div id="activity_content">
-				{% include 'Activity/list.inc.tpl' %}
-			</div>
-
-		</section>
-
-	{% endif %}
+	{% include 'Common/activity.inc.tpl' with {
+		'title': 'Recent Activity'
+	} %}
 
 {% endblock %}

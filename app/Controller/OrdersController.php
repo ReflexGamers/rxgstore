@@ -52,8 +52,6 @@ class OrdersController extends AppController {
 		$this->loadModel('Item');
 		$this->loadModel('Order');
 
-		$items = $this->Item->getAllIndexed();
-
 		$order = $this->Order->find('first', array(
 			'conditions' => array(
 				'order_id' => $order_id,
@@ -74,9 +72,12 @@ class OrdersController extends AppController {
 
 		$steamid = $this->AccountUtility->SteamID64FromAccountID($user_id);
 
-		$this->set('items', $items);
-		$this->set('data', $order);
-		$this->set('steamid', $steamid);
+		$this->loadItems();
+
+		$this->set(array(
+			'data' => $order,
+			'steamid' => $steamid
+		));
 	}
 
 	public function checkout()  {
@@ -100,7 +101,7 @@ class OrdersController extends AppController {
 		$this->loadModel('User');
 
 		$stock = $this->Stock->find('list');
-		$items = $this->Item->getAllIndexed();
+		$items = $this->loadItems();
 		$userCredit = $this->User->read('credit', $user_id)['User']['credit'];
 
 		$subTotal = 0;
@@ -169,7 +170,6 @@ class OrdersController extends AppController {
 		));
 
 		$this->set(array(
-			'items' => $items,
 			'cart' => $orderDetails,
 			'subTotal' => $subTotal,
 			'shipping' => $shipping,
@@ -196,7 +196,7 @@ class OrdersController extends AppController {
 		$this->loadModel('User');
 		$this->loadModel('UserItem');
 
-		$items = $this->Item->getAllIndexed();
+		$items = $this->loadItems();
 
 		$this->Stock->query('LOCK TABLES stock WRITE, user WRITE, user_item WRITE, user_item as UserItem WRITE');
 
@@ -269,7 +269,6 @@ class OrdersController extends AppController {
 			$this->ServerUtility->exec($server, "sm_reload_user_inventory $user_id; sm_broadcast_user_purchase $user_id");
 		}
 
-		$this->set('items', $items);
 		$this->set('order', $order);
 		$this->set('steamid', $this->Auth->user('steamid'));
 

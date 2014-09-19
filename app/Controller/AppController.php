@@ -56,22 +56,29 @@ class AppController extends Controller {
 	);
 
 	protected $players = array();
-	protected $itemsLoaded = false;
+	protected $items = null;
 
 	public function addPlayers($users) {
 		$this->players = array_merge($this->players, $users);
 	}
 
 	public function loadItems() {
-		if (!$this->itemsLoaded) {
+
+		if (empty($this->items)) {
+
 			$this->loadModel('Item');
-			$items = $this->Item->getAll();
+			$sortedItems = $this->Item->getAllSorted();
+			$items = Hash::combine($sortedItems, '{n}.item_id', '{n}');
+
 			$this->set(array(
-				'items' => $items,
-				'itemsIndexed' => Hash::combine($items, '{n}.item_id', '{n}')
+				'sortedItems' => $sortedItems,
+				'items' => $items
 			));
-			$this->itemsFetched = true;
+
+			$this->items = $items;
 		}
+
+		return $this->items;
 	}
 
 	public function loadCashData() {

@@ -222,7 +222,7 @@ class ItemsController extends AppController {
 			'stock' => $this->Item->getStock($item_id),
 			'servers' => $servers,
 			'topBuyers' => $topBuyers,
-			'ratings' => $rating = $this->Item->getTotalRatings($item_id),
+			'ratings' => $this->Item->getTotalRatings($item_id),
 			'features' => $itemData['Feature']
 		));
 
@@ -276,7 +276,7 @@ class ItemsController extends AppController {
 				),
 				'order' => 'quantity desc',
 				'group' => 'order.user_id',
-				'limit' => 2
+				'limit' => 3
 			)
 		);
 

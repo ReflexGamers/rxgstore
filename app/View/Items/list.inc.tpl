@@ -9,7 +9,7 @@
 <div class="item_list_group">
 
 	<ul class="item_list">
-		{% for item in items if quantity[item.item_id] > 0 %}
+		{% for item in sortedItems if quantity[item.item_id] > 0 %}
 			<li class="item_list_entry" data-item_id="{{ item.item_id }}">
 				<div class="item_pic" title="{{ item.name }}">
 					{{ html.image("items/#{item.short_name}.png", {

@@ -26,12 +26,8 @@ class Item extends AppModel {
 	public $order = 'display_index';
 
 
-	public function getAll() {
+	public function getAllSorted() {
 		return Hash::extract($this->find('all'), '{n}.Item');
-	}
-
-	public function getAllIndexed() {
-		return Hash::combine($this->find('all', array('order' => 'item_id')), '{n}.Item.item_id', '{n}.Item');
 	}
 
 	public function getByServer($server) {
@@ -57,6 +53,11 @@ class Item extends AppModel {
 							'server_item.server_id = server.parent_id'
 						)
 					)
+				),
+			),
+			'contain' => array(
+				'Feature' => array(
+					'fields' => array('description')
 				)
 			)
 		));
@@ -72,10 +73,19 @@ class Item extends AppModel {
 		);
 
 		if (isset($opt) && is_array($opt)) {
-			$options = array_merge($options, $opt);
+			$options = array_merge_recursive($options, $opt);
 		}
 
-		return Hash::extract($this->find('all', $options), '{n}.Item');
+		$data = $this->find('all', $options);
+
+		$items = Hash::map($data, '{n}', function($item){
+			if (!empty($item['Feature'])) {
+				$item['Item']['features'] = Hash::extract($item['Feature'], '{n}.description');
+			}
+			return $item['Item'];
+		});
+
+		return $items;
 	}
 
 	public function getStock($item_id = null) {

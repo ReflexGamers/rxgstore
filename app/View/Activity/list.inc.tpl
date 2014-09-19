@@ -139,7 +139,7 @@
 
 				{% set review = activity.Review %}
 				{% set rating = activity.Rating %}
-				{% set item = itemsIndexed[rating.item_id] %}
+				{% set item = items[rating.item_id] %}
 
 				<div class="activity_player">
 					{{ fn.player(_context,  players[rating.user_id]) }}

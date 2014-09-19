@@ -82,7 +82,8 @@ input.pokemanlookup {
 }
 
 a {
-    color: #24f;
+    /*color: #24f;*/
+    color: #24c;
     text-decoration: none;
     cursor: pointer;
 }
@@ -1575,43 +1576,53 @@ input[type="checkbox"].item_edit_input {
 
 
 
-#item_browse_list {
+#browse_item_list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-#item_browse_list li {
-    clear: left;
+.browse_item {
+    display: block;
     font-size: 24px;
-    padding: 0;
-    margin: 0;
-    font-weight: 400;
 }
 
-#item_browse_list li img {
-    width: 56px;
-    height: 56px;
+.browse_item {
+    /*clear: left;*/
+    font-size: 24px;
+    padding: 0 0 15px 0;
+    margin: 0 0 15px 0;
+    font-weight: 400;
+    border-bottom: 1px dotted #ccc;
+}
+
+.browse_item:last-child {
+    border-bottom: none;
+}
+
+.browse_item_details {
+    margin-left: 72px;
+}
+
+.browse_item_image {
+    float: left;
+    /*width: 56px;*/
+    /*height: 56px;*/
     vertical-align: middle;
     padding: 0 10px;
 }
 
-.item_browse_image {
-    float: left;
+.browse_item_link {
+    /*line-height: 48px;*/
+    padding-top: 30px;
 }
 
-.item_browse_link {
-    position: relative;
-    bottom: -12px;
-    line-height: 20px;
-}
-
-.item_browse_price {
+.browse_price {
     font-size: 20px;
     /*margin-left: 75px;*/
 }
 
-.item_browse_rating {
+.browse_rating {
     display: table;
     line-height: 20px;
     float: right;
@@ -1621,19 +1632,29 @@ input[type="checkbox"].item_edit_input {
     bottom: -8px;
 }
 
-.item_browse_rating .rateit {
+.browse_rating .rateit {
     vertical-align: top;
 }
 
-.item_browse_rating img {
+.browse_rating img {
 
 }
 
-.item_browse_rating_count {
+.browse_rating_count {
     font-size: 15px;
     line-height: 15px;
     text-align: right;
 }
+
+.browse_feature_list {
+    font-size: 18px;
+    list-style-type: disc;
+    padding: 0 0 0 40px;
+    margin: 0;
+}
+
+
+
 
 
 .server_select {
@@ -2032,7 +2053,6 @@ th.gift_item_heading {
 
 .gift_item_table .quantity {
     text-align: right;
-    /*padding-right: 0;*/
 }
 
 .gift_preview .quantity {
@@ -2130,11 +2150,6 @@ th.gift_item_heading {
     margin: 10px auto;
 }
 
-.item_browse_gift .item_list_entry {
-    /*box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.5);*/
-    /*border: 1px solid rgba(64, 0, 0, 0.5);*/
-}
-
 .item_browse_gift .item_list:first-child {
     margin-top: 15px;
 }
@@ -2185,7 +2200,6 @@ th.gift_item_heading {
 }
 
 .item_browse_gift_loading {
-    /*vertical-align: middle;*/
     position: absolute;
     top: 4px;
 }
@@ -2330,6 +2344,7 @@ button::-moz-focus-inner {
 
 .addfunds_btn {
     float: right;
+    margin: 0;
 }
 
 #addfunds_more {

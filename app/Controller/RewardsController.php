@@ -71,8 +71,9 @@ class RewardsController extends AppController {
 			}
 		}
 
+		$this->loadItems();
+
 		$this->set(array(
-			'items' => $this->Item->getAll(),
 			'quantity' => $this->UserItem->getByUser($user_id)
 		));
 
@@ -168,7 +169,7 @@ class RewardsController extends AppController {
 		$user_id = $this->Auth->user('user_id');
 
 		$this->loadModel('Item');
-		$items = $this->Item->getAllIndexed();
+		$items = $this->loadItems();
 		$totalValue = 0;
 
 		foreach ($rewardDetails as $key => $detail) {
@@ -212,7 +213,6 @@ class RewardsController extends AppController {
 			'data' => $rewardDetails,
 			'message' => $message,
 			'totalValue' => $totalValue,
-			'items' => $items,
 			'isReward' => true
 		));
 

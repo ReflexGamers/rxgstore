@@ -109,7 +109,7 @@
 			<th class="quantity">Quantity</th>
 		</tr>
 
-		{% for item in (data ?: items) if isReward or userItems[item.item_id] > 0 or item.quantity > 0 %}
+		{% for item in (data ?: sortedItems) if isReward or userItems[item.item_id] > 0 or item.quantity > 0 %}
 
 			{% set userQuantity = userItems[item.item_id] %}
 

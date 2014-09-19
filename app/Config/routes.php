@@ -47,6 +47,7 @@
 			'server' => '[a-z0-9]+'
 	));
 
+	Router::connect('/paypal', array('controller' => 'PaypalOrders', 'action' => 'addfunds'));
 	Router::connect('/paypal/:action/*', array('controller' => 'PaypalOrders'));
 
 	Router::connect('/server', array('controller' => 'Items', 'action' => 'server'));

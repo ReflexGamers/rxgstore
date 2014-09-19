@@ -17,15 +17,15 @@ class CartController extends AppController {
 		$this->loadModel('User');
 
 		$cart = $this->Session->read('cart');
-		$items = Hash::extract($this->Item->find('all'), '{n}.Item');
 		$this->User->id = $this->Auth->user('user_id');
 		$stock = $this->Stock->find('list');
+
+		$this->loadItems();
 
 		$config = Configure::Read('Store.Shipping');
 
 		$this->set(array(
 			'cart' => $cart,
-			'items' => $items,
 			'stock' => $stock,
 			'credit' => $this->User->field('credit'),
 			'shippingCost' => $config['Cost'],
@@ -67,7 +67,7 @@ class CartController extends AppController {
 		$this->loadModel('User');
 
 		$stock = $this->Stock->find('list');
-		$items = $this->Item->getAllIndexed();
+		$items = $this->loadItems();
 		$userCredit = $this->User->read('credit', $user_id)['User']['credit'];
 
 		$subTotal = 0;
@@ -148,7 +148,6 @@ class CartController extends AppController {
 		));
 
 		$this->set(array(
-			'items' => $items,
 			'cart' => $orderDetails,
 			'subTotal' => $subTotal,
 			'shipping' => $shipping,

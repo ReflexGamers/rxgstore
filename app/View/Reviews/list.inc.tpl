@@ -24,7 +24,7 @@
 
 		{% if displayType == 'user' %}
 
-			{% set item = itemsIndexed[review.item_id] %}
+			{% set item = items[review.item_id] %}
 
 		{% endif %}
 

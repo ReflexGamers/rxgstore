@@ -42,7 +42,7 @@
 
 			{% set subTotal = 0 %}
 
-			{% for item in items if cart[item.item_id].quantity > 0 %}
+			{% for item in sortedItems if cart[item.item_id].quantity > 0 %}
 
 				{% set cartItem = cart[item.item_id] %}
 				{% set itemTotal = cartItem.price * cartItem.quantity %}

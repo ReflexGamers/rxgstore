@@ -67,8 +67,9 @@ class GiftsController extends AppController {
 
 		}
 
+		$this->loadItems();
+
 		$this->set(array(
-			'items' => $this->Item->getAll(),
 			'quantity' => $this->UserItem->getByUser($user_id)
 		));
 
@@ -175,7 +176,7 @@ class GiftsController extends AppController {
 		$this->loadModel('UserItem');
 
 		$userItems = $this->UserItem->getByUser($user_id);
-		$items = $this->Item->getAllIndexed();
+		$items = $this->loadItems();
 		$totalValue = 0;
 
 		foreach ($giftDetails as $key => $detail) {
@@ -219,8 +220,7 @@ class GiftsController extends AppController {
 			'data' => $giftDetails,
 			'message' => $message,
 			'anonymous' => $anonymous,
-			'totalValue' => $totalValue,
-			'items' => $items
+			'totalValue' => $totalValue
 		));
 
 		$this->Session->setFlash('Please confirm the contents of your gift below and then click send.');
@@ -262,7 +262,7 @@ class GiftsController extends AppController {
 			};
 		}
 
-		$items = $this->Item->getAllIndexed();
+		$items = $this->loadItems();
 
 		$this->UserItem->query('LOCK TABLES user_item WRITE, user_item as UserItem WRITE, activity as Activity WRITE, gift as Gift WRITE, gift_detail WRITE, gift_detail as GiftDetail WRITE');
 
