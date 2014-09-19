@@ -77,7 +77,7 @@
 			//Dumb bug where it calls onSelected on initialization
 			if (initializing) return;
 
-			var url = $('#item_browse_list').data('href');
+			var url = $('#browse_item_list').data('href');
 			var val = data.selectedData.value;
 
 			$.ajax(url + '/' + val, {
