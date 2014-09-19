@@ -12,12 +12,12 @@
 
 			type: 'post',
 			beforeSend: function(){
-				$('#admin_loading').fadeIn();
+				$('#permissions_loading').fadeIn();
 			},
 
 			success: function(data, textStatus) {
-				$('#admin_data').html(data);
-				$('#admin_loading').fadeOut();
+				$('#permissions_data').html(data);
+				$('#permissions_loading').fadeOut();
 			}
 		});
 
