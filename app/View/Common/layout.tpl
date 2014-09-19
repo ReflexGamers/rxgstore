@@ -11,6 +11,10 @@
 		'http://fonts.googleapis.com/css?family=PT+Mono',
 		'theme'
 	]|merge(styles ? (styles is iterable ? styles : [styles]) : [])) }}
+
+	{% if scripts %}
+		{{ html.script(['jquery-1.10.2.min']) }}
+	{% endif %}
 </head>
 <body>
 <div id="background">&nbsp;</div>
@@ -74,7 +78,7 @@
 {{ js.writeBuffer() }}
 
 {% if scripts %}
-	{{ html.script(['jquery-1.10.2.min']|merge(scripts is iterable ? scripts : [scripts])) }}
+	{{ html.script(scripts is iterable ? scripts : [scripts]) }}
 {% endif %}
 
 </body>
