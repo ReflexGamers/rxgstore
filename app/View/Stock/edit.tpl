@@ -25,7 +25,9 @@
 			'label': false,
 			'div': false,
 			'required': false
-	}}) }}
+		},
+		'class': 'cf'
+	}) }}
 
 		<table class="item_stock_table">
 
@@ -71,8 +73,6 @@
 		'class': 'btn-primary',
 		'id': 'item_stock_button'
 	}) }}
-
-	<div class="clear"></div>
 
 	{% include 'Common/activity.inc.tpl' with {
 		'title': 'Recent Shipments'

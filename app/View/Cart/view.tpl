@@ -139,8 +139,6 @@
 
 		{{ form.end() }}
 
-		<div class="clear"></div>
-
 	{% else %}
 
 		<p>Your cart is empty! Go pick out some items and then return here to complete your purchase.</p>

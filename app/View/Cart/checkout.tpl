@@ -93,8 +93,6 @@
 			'id': 'cart_checkout_button'
 		}) }}
 
-		<div class="clear"></div>
-
 	{% endif %}
 
 {% endblock %}

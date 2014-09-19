@@ -1,4 +1,4 @@
-<div class="pagination_links">
+<div class="pagination_links cf">
 
 	<div class="pagination_loader">
 		{{ html.image('misc/ajax-loader.gif', {
@@ -18,7 +18,6 @@
 			'model': pageModel
 		}) }}
 	</div>
-	<div class="clear"></div>
 </div>
 
 {{ js.writeBuffer() }}

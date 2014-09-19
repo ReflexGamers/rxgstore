@@ -42,7 +42,8 @@
 				'controller': 'Gifts',
 				'action': data ? 'send' : 'package',
 				'id': player.steamid
-		})
+		}),
+		'class': 'cf'
 	}) }}
 
 	{% if data %}
@@ -94,7 +95,6 @@
 
 	{% endif %}
 
-	<div class="clear"></div>
 
 
 	<h2 class="gift_subheading">Contents</h2>
@@ -179,8 +179,6 @@
 	}) }}
 
 	{{ form.end() }}
-
-	<div class="clear"></div>
 
 	{% include 'Common/activity.inc.tpl' with {
 		'title': 'Recent ' ~ (isReward ? 'Rewards' : 'Gifts')

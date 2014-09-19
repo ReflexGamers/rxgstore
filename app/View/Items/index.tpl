@@ -72,11 +72,10 @@
 
 	</div>
 
-	<ul id="item_browse_list" data-href="{{ html.url({'controller': 'Items', 'action': 'server'}) }}">
+	<ul id="item_browse_list" class="cf" data-href="{{ html.url({'controller': 'Items', 'action': 'server'}) }}">
 		{% include 'Items/server.tpl' %}
 	</ul>
 
-	<div class="clear"></div>
 
 
 	<section id="activity">
