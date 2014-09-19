@@ -19,7 +19,7 @@
 
 	<section class="player_details">
 
-		<div class="player_avatar">
+		<div class="player_avatar_full">
 			<a href="{{ player.profile }}"><img src="{{ player.avatarfull }}"></a>
 			{% if player.member %}
 				<div class="player_member">
