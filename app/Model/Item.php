@@ -33,7 +33,13 @@ class Item extends AppModel {
 	public function getByServer($server) {
 
 		if ($server == 'all') {
-			return $this->getBuyable();
+			return $this->getBuyable(array(
+				'contain' => array(
+					'Feature' => array(
+						'fields' => array('description')
+					)
+				)
+			));
 		}
 
 		return $this->getBuyable(array(
