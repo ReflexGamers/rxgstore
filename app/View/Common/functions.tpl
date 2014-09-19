@@ -5,7 +5,9 @@
 			'controller': 'Users',
 			'action': 'profile',
 			'id': player.steamid
-	}}) -}}
+		},
+		'class': 'player_avatar'
+	}) -}}
 {% endmacro %}
 
 {% macro profile(_, player) %}
@@ -15,6 +17,8 @@
 		'controller': 'Users',
 		'action': 'profile',
 		'id': player.steamid
+	}, {
+		'class': 'player_link'
 	}) -}}
 {% endmacro %}
 
