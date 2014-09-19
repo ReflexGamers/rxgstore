@@ -2,11 +2,11 @@
 
 	<p class="cache_total">{{ cache|length }} players in cache</p>
 
-	<ul class="cache_list">
+	<ul class="player_list striped">
 
 		{% for player in cache %}
 
-			<li class="cache_entry">
+			<li class="player_list_item cache_entry">
 				{% include 'SteamPlayerCache/single.inc.tpl' %}
 			</li>
 
