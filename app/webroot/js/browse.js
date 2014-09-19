@@ -88,11 +88,11 @@
 
 				success: function(data, textStatus){
 					$('#server_select_loading').fadeOut();
-					$('#item_browse_list').html(data);
+					$('#browse_item_list').html(data);
 				},
 
 				complete: function(){
-					$('#item_browse_list').find('.rateit').rateit();
+					$('#browse_item_list').find('.rateit').rateit();
 				}
 			});
 		}
