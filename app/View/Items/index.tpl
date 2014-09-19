@@ -78,14 +78,12 @@
 
 
 
-	<section id="activity">
+	{% if activities %}
 
-		<h2 class="page_subheading player_activity">Recent Activity</h2>
+		{% include 'Common/activity.inc.tpl' with {
+			'title': 'Recent Activity'
+		} %}
 
-		<div id="activity_content">
-			{% include 'Activity/list.inc.tpl' %}
-		</div>
-
-	</section>
+	{% endif %}
 
 {% endblock %}
