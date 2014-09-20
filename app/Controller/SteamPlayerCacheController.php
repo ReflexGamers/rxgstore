@@ -5,9 +5,10 @@ App::uses('AppController', 'Controller');
  * SteamPlayerCache Controller
  *
  * @property SteamPlayerCache $SteamPlayerCache
+ * @property PaginatorComponent $Paginator
  */
 class SteamPlayerCacheController extends AppController {
-	public $components = array('RequestHandler');
+	public $components = array('RequestHandler', 'Paginator');
 	public $helpers = array('Html', 'Form', 'Session', 'Js', 'Time');
 
 	public function beforeFilter() {
@@ -23,7 +24,48 @@ class SteamPlayerCacheController extends AppController {
 		}
 
 		$this->set('cacheDuration', Configure::read('Store.SteamCacheDuration') / 3600);
-		$this->set('cache', $this->SteamPlayerCache->getAll());
+
+		$this->players();
+	}
+
+	public function players() {
+
+		if (!$this->Access->check('Cache', 'read')) {
+			if ($this->request->is('ajax')) {
+				$this->autoRender = false;
+			} else {
+				$this->redirect($this->referer());
+			}
+			return;
+		}
+
+		$this->Paginator->settings = array(
+			'SteamPlayerCache' => array(
+				'limit' => 25,
+			)
+		);
+
+		$players = Hash::extract($this->Paginator->paginate('SteamPlayerCache'), '{n}.SteamPlayerCache');
+
+		$accounts = array();
+		foreach ($players as $player) {
+			$accounts[] = $this->AccountUtility->AccountIDFromSteamID64($player['steamid']);
+		}
+		$members = $this->Access->getMembers($accounts);
+
+		$i = 0;
+		foreach ($players as &$player) {
+			$user_id = $accounts[$i++];
+			$player['name'] = $player['personaname'];
+			$player['member'] = !empty($members[$user_id]);
+			$player['division'] = !empty($members[$user_id]['division']) ? $members[$user_id]['division'] : '';
+		}
+
+		$this->set(array(
+			'cache' => $players,
+			'pageModel' => $this->SteamPlayerCache->name,
+			'pageLocation' => array('controller' => 'SteamPlayerCache', 'action' => 'players')
+		));
 	}
 
 	public function refresh($steamid) {
@@ -34,6 +76,9 @@ class SteamPlayerCacheController extends AppController {
 			$this->redirect($this->referer());
 			return;
 		}
+
+		$admin_steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
+		CakeLog::write('admin', "$admin_steamid force refreshed $steamid in the Steam cache.");
 
 		$this->SteamPlayerCache->refresh(array($steamid));
 
@@ -53,6 +98,9 @@ class SteamPlayerCacheController extends AppController {
 			return;
 		}
 
+		$admin_steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
+		CakeLog::write('admin', "$admin_steamid force refreshed the entire Steam cache.");
+
 		$this->SteamPlayerCache->refreshAll();
 
 		$this->set('cache', $this->SteamPlayerCache->getAll());
@@ -68,6 +116,9 @@ class SteamPlayerCacheController extends AppController {
 			return;
 		}
 
+		$admin_steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
+		CakeLog::write('admin', "$admin_steamid force cleared $steamid in the Steam cache.");
+
 		$this->SteamPlayerCache->delete($steamid);
 		$this->autoRender = false;
 	}
@@ -80,6 +131,9 @@ class SteamPlayerCacheController extends AppController {
 			$this->redirect($this->referer());
 			return;
 		}
+
+		$admin_steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
+		CakeLog::write('admin', "$admin_steamid force cleared the entire Steam cache.");
 
 		$this->SteamPlayerCache->clearAll();
 		$this->render('list.inc');
