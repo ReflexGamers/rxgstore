@@ -28,13 +28,38 @@ class QuickAuthController extends AppController {
 			)
 		)), '{n}.Server.server_ip', '{n}.Server');
 
-		$quickauth = Hash::extract($this->QuickAuth->find('all'), '{n}.QuickAuth');
+		$this->set(array(
+			'tokenExpire' => Configure::read('Store.QuickAuth.TokenExpire'),
+			'servers' => $servers
+		));
+
+		$this->records();
+	}
+
+	public function records() {
+
+		if (!$this->Access->check('QuickAuth', 'read')) {
+			if ($this->request->is('ajax')) {
+				$this->autoRender = false;
+			} else {
+				$this->redirect($this->referer());
+			}
+			return;
+		}
+
+		$this->Paginator->settings = array(
+			'QuickAuth' => array(
+				'limit' => 25,
+			)
+		);
+
+		$quickauth = Hash::extract($this->Paginator->paginate('QuickAuth'), '{n}.QuickAuth');
 		$this->addPlayers(Hash::extract($quickauth, '{n}.user_id'));
 
 		$this->set(array(
-			'tokenExpire' => Configure::read('Store.QuickAuth.TokenExpire'),
 			'quickauth' => $quickauth,
-			'servers' => $servers
+			'pageModel' => $this->QuickAuth->name,
+			'pageLocation' => array('controller' => 'QuickAuth', 'action' => 'records')
 		));
 	}
 
