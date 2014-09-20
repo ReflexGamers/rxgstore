@@ -69,16 +69,22 @@
 
 	});
 
+	var serverSelect = $('#server_select_menu');
+	var previousServer = serverSelect.val();
+
 	var initializing = true;
-	$('#server_select_menu').ddslick({
+	serverSelect.ddslick({
 
 		onSelected: function(data){
 
-			//Dumb bug where it calls onSelected on initialization
-			if (initializing) return;
+			var val = data.selectedData.value;
+
+			//Prevent call during initialization or for same value
+			if (initializing || val == previousServer) return;
+
+			previousServer = val;
 
 			var url = $('#browse_item_list').data('href');
-			var val = data.selectedData.value;
 
 			$.ajax(url + '/' + val, {
 
