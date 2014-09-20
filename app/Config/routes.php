@@ -160,28 +160,28 @@
 	));
 
 	Router::connect('/quickauth', array('controller' => 'QuickAuth', 'action' => 'auth'));
-	Router::connect('/quickauth/view', array('controller' => 'QuickAuth', 'action' => 'view'));
-	Router::connect('/quickauth/delete/:id', array(
+	Router::connect('/quickauth/:action/:id', array(
 			'controller' => 'QuickAuth', 'action' => 'delete'
 		), array(
 			'pass' => array('id'),
 			'id' => '[0-9]+'
 		)
 	);
+	Router::connect('/quickauth/:action/*', array('controller' => 'QuickAuth', 'action' => 'view'));
 
 	Router::connect('/sort', array('controller' => 'Items', 'action' => 'sort'));
 	Router::connect('/stock', array('controller' => 'Stock', 'action' => 'edit'));
 	Router::connect('/stock/activity/*', array('controller' => 'Stock', 'action' => 'activity'));
 
 	Router::connect('/cache', array('controller' => 'SteamPlayerCache', 'action' => 'view'));
-	Router::connect('/cache/:action', array('controller' => 'SteamPlayerCache'));
-	Router::connect('/cache/:action/:id', array(
+	Router::connect('/cache/:action/:id/*', array(
 			'controller' => 'SteamPlayerCache'
 		), array(
 			'pass' => array('id'),
 			'id' => '[0-9]+'
 		)
 	);
+	Router::connect('/cache/:action/*', array('controller' => 'SteamPlayerCache'));
 
 	Router::connect('/permissions', array('controller' => 'Permissions', 'action' => 'view'));
 	Router::connect('/permissions/:action', array('controller' => 'Permissions'));
