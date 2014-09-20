@@ -32,6 +32,7 @@ class QuickAuthController extends AppController {
 		$this->addPlayers(Hash::extract($quickauth, '{n}.user_id'));
 
 		$this->set(array(
+			'tokenExpire' => Configure::read('Store.QuickAuth.TokenExpire'),
 			'quickauth' => $quickauth,
 			'servers' => $servers
 		));
