@@ -103,6 +103,20 @@ class AppController extends Controller {
 		));
 	}
 
+	public function renderLog($name = null) {
+
+		if ($name != null) {
+
+			$logFile = new File("../tmp/logs/$name.log", false);
+			$log = $logFile->read();
+			$logFile->close();
+
+			$this->response->type('text/plain');
+			$this->response->body($log);
+			$this->autoRender = false;
+		}
+	}
+
 	public function beforeFilter() {
 		$this->Auth->allow();
 
@@ -129,19 +143,19 @@ class AppController extends Controller {
 //		debug($log);
 
 		/*
-		$this->Acl->allow('Captain', 'QuickAuth');
-		$this->Acl->allow('Captain', 'Rewards');
-		$this->Acl->allow('Captain', 'Permissions', 'read');
-		$this->Acl->allow('Captain', 'Permissions', 'update');
-		$this->Acl->allow('Captain', 'Cache', 'read');
-		$this->Acl->allow('Captain', 'Cache', 'update');
-		$this->Acl->allow('Captain', 'Cache', 'delete');
-		$this->Acl->allow('Captain', 'Chats', 'delete');
-		$this->Acl->allow('Captain', 'Items', 'create');
-		$this->Acl->allow('Captain', 'Items', 'update');
-		$this->Acl->allow('Captain', 'Reviews', 'update');
-		$this->Acl->allow('Captain', 'Reviews', 'delete');
-		$this->Acl->allow('Captain', 'Receipts', 'read');
+		$this->Acl->allow('Advisor', 'QuickAuth');
+		$this->Acl->allow('Advisor', 'Rewards');
+		$this->Acl->allow('Advisor', 'Permissions', 'read');
+		$this->Acl->allow('Advisor', 'Permissions', 'update');
+		$this->Acl->allow('Advisor', 'Cache', 'read');
+		$this->Acl->allow('Advisor', 'Cache', 'update');
+		$this->Acl->allow('Advisor', 'Cache', 'delete');
+		$this->Acl->allow('Advisor', 'Chats', 'delete');
+		$this->Acl->allow('Advisor', 'Items', 'create');
+		$this->Acl->allow('Advisor', 'Items', 'update');
+		$this->Acl->allow('Advisor', 'Reviews', 'update');
+		$this->Acl->allow('Advisor', 'Reviews', 'delete');
+		$this->Acl->allow('Advisor', 'Receipts', 'read');
 
 		$this->Acl->allow('Advisor', 'Stock', 'update');
 		$this->Acl->allow('Advisor', 'Users', 'update');

@@ -79,12 +79,6 @@ class PermissionsController extends AppController {
 			return;
 		}
 
-		$logFile = new File('../tmp/logs/permsync.log', false);
-		$log = $logFile->read();
-		$logFile->close();
-
-		$this->response->type('text/plain');
-		$this->response->body($log);
-		$this->autoRender = false;
+		$this->renderLog('permsync');
 	}
 }
