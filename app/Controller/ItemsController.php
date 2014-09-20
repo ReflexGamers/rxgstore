@@ -10,7 +10,7 @@ App::import('Vendor', 'Parsedown');
  * @property AccountUtilityComponent $AccountUtility
  */
 class ItemsController extends AppController {
-	public $components = array('Paginator', 'AccountUtility', 'RequestHandler');
+	public $components = array('Paginator', 'RequestHandler');
 	public $helpers = array('Html', 'Form', 'Js', 'Time', 'Session');
 
 	public function beforeFilter() {
