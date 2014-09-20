@@ -57,7 +57,7 @@
 
 	<div class="server_select" data-child-servers="{{ childServers }}">
 
-		{{ form.select('short_name', {'all': 'All Game Servers'}|merge(servers), {
+		{{ form.select('short_name', {'all': 'All Items'}|merge(servers), {
 			'class': 'server_select_options',
 			'id': 'server_select_menu',
 			'value': server,
