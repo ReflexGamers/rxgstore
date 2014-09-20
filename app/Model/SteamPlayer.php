@@ -23,12 +23,17 @@ class SteamPlayer extends AppModel {
 			)
 		));
 
-		if (!empty($cache) && count($cache) == count($steamids)) {
+		$countDesired = count($steamids);
+		$countFound = count($cache);
 
+		if (!empty($cache) && $countFound == $countDesired) {
+
+			CakeLog::write('steam', "Fetched $countDesired players from the Steam cache.");
 			return Hash::extract($cache, '{n}.SteamPlayerCache');
 
 		} else {
 
+			CakeLog::write('steam', "Tried to fetch $countDesired players from the Steam cache but found only $countFound. Steam API used.");
 			$steamPlayers = $this->SteamPlayerCache->refresh($steamids);
 
 			//Prune expired records
