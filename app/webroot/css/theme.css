@@ -1601,7 +1601,7 @@ input[type="checkbox"].item_edit_input {
 }
 
 .browse_item_details {
-    margin-left: 72px;
+    margin-left: 88px;
 }
 
 .browse_item_image {
@@ -1614,7 +1614,6 @@ input[type="checkbox"].item_edit_input {
 
 .browse_item_link {
     /*line-height: 48px;*/
-    padding-top: 30px;
 }
 
 .browse_price {
@@ -1649,10 +1648,9 @@ input[type="checkbox"].item_edit_input {
 .browse_feature_list {
     font-size: 18px;
     list-style-type: disc;
-    padding: 0 0 0 40px;
+    padding: 3px 0 3px 30px;
     margin: 0;
 }
-
 
 
 
