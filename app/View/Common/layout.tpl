@@ -72,7 +72,13 @@
 </article>
 
 <footer class="foot">
-	<a href="http://reflex-gamers.com">reflex gamers</a> | <a href="http://steampowered.com">Powered by Steam</a>
+	<a href="http://reflex-gamers.com">Reflex Gamers</a> | <a href="http://steampowered.com">Powered by Steam</a>
+	{% if access.check('Stock', 'update') %}
+		| {{ html.link('Admin Control Panel', {
+			'controller': 'Items',
+			'action': 'admin'
+		}) }}
+	{% endif %}
 </footer>
 
 {{ js.writeBuffer() }}
