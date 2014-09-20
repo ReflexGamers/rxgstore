@@ -19,10 +19,18 @@ class ItemsController extends AppController {
 		$this->Auth->deny('add', 'edit', 'sort', 'preview');
 	}
 
+	/**
+	 * FAQ page
+	 */
 	public function faq() {
 
 	}
 
+	/**
+	 * Home page of site. Shows item list, inventory, activity, etc.
+	 *
+	 * @param null $server
+	 */
 	public function index($server = null) {
 
 		$user_id = $this->Auth->user('user_id');
@@ -69,6 +77,11 @@ class ItemsController extends AppController {
 		$this->recent(false);
 	}
 
+	/**
+	 * Retrieves all the items for a specific server.
+	 *
+	 * @param null $server short_name of server to see items for
+	 */
 	public function server($server = null) {
 
 		$this->loadModel('User');
@@ -124,6 +137,11 @@ class ItemsController extends AppController {
 		));
 	}
 
+	/**
+	 * Used for global activity. Called from the index action or via ajax directly.
+	 *
+	 * @param bool $doRender whether to force render. set to false if calling from another action
+	 */
 	public function recent($doRender = true) {
 
 		$this->loadModel('Activity');
@@ -154,6 +172,11 @@ class ItemsController extends AppController {
 		}
 	}
 
+	/**
+	 * Item view page. Shows product information, reviews, activity, etc.
+	 *
+	 * @param null $id id or name of item to view
+	 */
 	public function view($id = null) {
 
 		$itemData = $this->Item->find('first', array(
@@ -233,6 +256,12 @@ class ItemsController extends AppController {
 		$this->activity($item, false);
 	}
 
+	/**
+	 * Reviews for a specific item. Called by the view action or via ajax directly.
+	 *
+	 * @param null $item item data passed from another action or id/name if called via ajax
+	 * @param bool $doRender whether to force render. set to false if calling from another action
+	 */
 	public function reviews($item = null, $doRender = true) {
 
 		if ($doRender) {
@@ -305,6 +334,12 @@ class ItemsController extends AppController {
 		}
 	}
 
+	/**
+	 * Activity for a specific item. Called by the view action or via ajax directly.
+	 *
+	 * @param null $item item data passed from another action or id/name if called via ajax
+	 * @param bool $doRender whether to force render. set to false if calling from another action
+	 */
 	public function activity($item = null, $doRender = true) {
 
 		if ($doRender) {
@@ -347,15 +382,23 @@ class ItemsController extends AppController {
 	}
 
 
-	public function edit($name = null) {
+	/**
+	 * Item edit page
+	 *
+	 * @param null $id id or name of item to edit
+	 */
+	public function edit($id = null) {
 
 		if (!$this->Access->check('Items', 'update')) {
-			$this->redirect(array('controller' => 'items', 'action' => 'view', 'id' => $name));
+			$this->redirect(array('controller' => 'items', 'action' => 'view', 'id' => $id));
 		}
 
 		$itemData = $this->Item->find('first', array(
 			'conditions' => array(
-				'short_name' => $name
+				'OR' => array(
+					'item_id' => $id,
+					'short_name' => $id
+				)
 			),
 			'contain' => 'Feature'
 		));
@@ -541,28 +584,22 @@ class ItemsController extends AppController {
 		}
 	}
 
+	/**
+	 * Preview page called via ajax while editing items. Used for markdown preview only.
+	 */
 	public function preview() {
-
-		/*
-		if (isset($this->request->data['description'])) {
-			$parsedown = new Parsedown();
-			$this->set('content', $parsedown->text($this->request->data['description']));
-			$this->set('_serialize', 'content');
-		}*/
-
-		//$item = $this->request->data['Item'];
-		//echo $this->request->data['description'];
 
 		$this->request->allowMethod('post');
 
 		$parsedown = new Parsedown();
 		$this->set('content', $parsedown->text($this->request->data['description']));
 
-		//$this->autoRender = false;
-		//return $this->view($item['short_name'], $item);
 		$this->render('/Common/empty');
 	}
 
+	/**
+	 * Item sort page for admins. Allows ordering of items.
+	 */
 	public function sort() {
 
 		if (!$this->Access->check('Items', 'update')) {
@@ -579,8 +616,6 @@ class ItemsController extends AppController {
 			$this->Session->setFlash('The item display order you provided has been saved!', 'default', array('class' => 'success'));
 		}
 
-		$this->set(array(
-			'items' => Hash::extract($this->Item->find('all'), '{n}.Item')
-		));
+		$this->loadItems();
 	}
 }
