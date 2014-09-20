@@ -18,6 +18,8 @@
 
 	<p>This page is mostly just for cache debugging purposes. There is no reason to manually refresh a player from the cache unless you know that person's steam profile name or avatar has changed since it was last fetched.</p>
 
+	<p>{{ html.link('Click here', {'controller': 'Admin', 'action': 'viewlog', 'name': 'steam'}) }} to view the Steam cache log.</p>
+
 	{% if cache %}
 		<div id="cache_batch_actions">
 			{% if access.check('Cache', 'update') %}

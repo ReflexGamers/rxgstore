@@ -21,13 +21,18 @@ class AdminController extends AppController {
 		}
 	}
 
-	public function viewlog() {
+	/**
+	 * View log by name
+	 *
+	 * @param string $name name of log to view
+	 */
+	public function viewlog($name) {
 
 		if (!$this->Access->check('Stock', 'update')) {
 			$this->redirect($this->referer());
 			return;
 		}
 
-		$this->renderLog('admin');
+		$this->renderLog($name);
 	}
 }

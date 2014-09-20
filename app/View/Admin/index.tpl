@@ -8,7 +8,7 @@
 
 	<p>This is the admin control panel where you can do special things.</p>
 
-	<p>{{ html.link('Click here', {'controller': 'Admin', 'action': 'viewlog'}) }} to view the admin log.</p>
+	<p>{{ html.link('Click here', {'controller': 'Admin', 'action': 'viewlog', 'name': 'admin'}) }} to view the admin log.</p>
 
 	<ul class="business_list">
 		{% if access.check('Rewards') %}
