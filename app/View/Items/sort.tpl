@@ -16,7 +16,7 @@
 
 	<p>Click and drag the items below to change their display order.</p>
 
-	<p>This order will be used for nearly every place lists of items are displayed. This includes the main browse page, player inventories, purchase histories, etc.</p>
+	<p>This order will be used for nearly every place lists of items are displayed. This includes the main browse page, player inventories, player histories, etc.</p>
 
 	{{ form.create('Item') }}
 
