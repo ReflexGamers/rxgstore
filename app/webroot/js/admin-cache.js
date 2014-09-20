@@ -46,7 +46,7 @@
 	});
 
 
-	$('.cache_list').on('click', '.cache_refresh', function(){
+	$('#cache_content').on('click', '.cache_refresh', function(){
 
 		if (!confirm('Are you sure you want to refresh this player in the cache?')) {
 			return false;
