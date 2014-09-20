@@ -101,7 +101,7 @@ class ItemsController extends AppController {
 				$serverItems = $this->Item->getByServer($preferredServer);
 				$server = $preferredServer;
 			} else {
-				$serverItems = $this->Item->getBuyable();
+				$serverItems = $this->Item->getByServer('all');
 			}
 
 		} else {
