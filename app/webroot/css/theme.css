@@ -176,8 +176,9 @@ a:hover {
 
 .foot {
 	margin-top: 8px;
-	text-align:center;
-	font-size:12px;
+	text-align: center;
+	font-size: 16px;
+    font-weight: 400;
 	color: #fff;
 	padding-bottom:16px;
 }
@@ -185,20 +186,27 @@ a:hover {
 	color: #fff;
 }
 
-.business {
-    display:block;
-	background-color: #ccc;
-	border-radius:5px;
-	padding: 10px;
-	color:#000;
-	box-shadow: 4px 4px 8px rgba(0,0,0,0.10), inset 0px 0px 32px rgba(0,0,0,0.15);
-	width:250px;
-	text-align: center;
-	margin:0 auto 20px;
+.business_list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
-.business:hover {
-	background-color: #aaa;
-	
+
+.business_list > li > a {
+    display:block;
+	background-color: #e0e0e0;
+    border: 1px solid #ccc;
+	border-radius: 8px;
+	padding: 10px;
+	color: #000;
+	box-shadow: inset 0px 0px 5px rgba(0,0,0,0.15);
+	width: 250px;
+	text-align: center;
+	margin: 0 auto 20px;
+}
+.business_list > li > a:hover {
+    background: #eee;
+    text-decoration: none;
 }
 
 td.pmname {
@@ -221,7 +229,7 @@ td.pmname2 {
 #dexborder {
 	background-color: #911;
 	padding: 6px 6px 6px 6px;
-	//border: 6px solid #911;
+	/*border: 6px solid #911;*/
 	box-shadow: 0px 0px 8px #000, inset 0px 0px 4px rgba(0,0,0,0.45);
 	border: 1px solid #611;
 	border-radius: 4px;
@@ -1514,6 +1522,37 @@ input[type="checkbox"].item_edit_input {
 
 
 
+.player_list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.player_list_item {
+    font-size: 20px;
+    line-height: 32px;
+    padding: 5px;
+    height: 32px;
+    clear: both;
+}
+
+.player_avatar {
+    vertical-align: top;
+    width: 32px;
+    height: 32px;
+    border-radius: 3px;
+}
+
+.player_link {
+}
+
+.player_list.striped .player_list_item:nth-child(odd) {
+    background: rgba(0, 0, 0, 0.07);
+}
+
+
+
+
 .item_list {
     border-spacing: 8px;
     list-style: none;
@@ -2276,10 +2315,6 @@ button::-moz-focus-inner {
     background: #c00;
 }
 
-.quickauth_entry:nth-child(odd) {
-    background: rgba(0, 0, 0, 0.07);
-}
-
 .quickauth_time {
     float: right;
     font-size: 16px;
@@ -2299,6 +2334,7 @@ button::-moz-focus-inner {
 
 .quickauth_server {
     font-weight: 400;
+    font-size: 18px;
 }
 
 .quickauth_server_unknown {
@@ -2526,37 +2562,6 @@ code {
     clear:both;
 }
 
-
-
-
-
-.player_list {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-}
-
-.player_list_item {
-    font-size: 20px;
-    line-height: 32px;
-    padding: 5px;
-    height: 32px;
-    clear: both;
-}
-
-.player_avatar {
-    vertical-align: top;
-    width: 32px;
-    height: 32px;
-    border-radius: 3px;
-}
-
-.player_link {
-}
-
-.player_list.striped .player_list_item:nth-child(odd) {
-    background: rgba(0, 0, 0, 0.07);
-}
 
 
 .permissions_actions {
