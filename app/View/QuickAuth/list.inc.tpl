@@ -1,52 +1,39 @@
-{% import 'Common/functions.tpl' as fn %}
 
-<table class="player_list striped quickauth_list">
+{% set loader = 'quickauth_page_loading' %}
 
-	<tr>
-		<th>Player</th>
-		<th>Server</th>
-		<th>Date</th>
-	</tr>
+{{ paginator.options({
+	'update': '#quickauth_content',
+	'url': pageLocation,
+	'before': js.get('#' ~ loader).effect('fadeIn'),
+	'complete': "rxg.scrollTo($('#quickauth_content'), 250)"
+}) }}
 
-	{% for entry in quickauth %}
+{% if quickauth %}
 
-		<tr class="player_list_item quickauth_entry">
+	<p class="list_total">{{ paginator.counter('{:count}') }} total records</p>
 
-		{% set player = players[entry.user_id] %}
+	<table class="player_list striped quickauth_list">
 
-			<td class="quickauth_player">
-				<div class="quickauth_flags">
-					<div class="quickauth_flag {{ entry.redeemed ? 'redeemed' : 'unredeemed' }}" title="Token {{ entry.redeemed ? 'redeemed' : 'never redeemed' }}">
-					{% if entry.is_member %}
-						<span class="quickauth_member" title="Authenticated as a Member">M</span>
-					{% endif %}
-					</div>
-				</div>
-				{{ fn.player(_context, player) }}
-			</td>
-
-			<td class="quickauth_server">
-				{% set server = servers[entry.server] %}
-				{% if server %}
-					{#{{ html.link(server.name, {#}
-						{#'controller': 'servers',#}
-						{#'action': 'view',#}
-						{#'name': server.short_name#}
-					{#}) }}#}
-					{{ server.name }}
-				{% else %}
-					<span class="quickauth_server_unknown">
-						{{ entry.server }}
-					</span>
-				{% endif %}
-			</td>
-
-			<td class="quickauth_time">
-				{{ fn.time(_context, entry.date) }}
-			</td>
-
+		<tr>
+			<th>Player</th>
+			<th>Server</th>
+			<th>Date</th>
 		</tr>
 
-	{% endfor %}
+		{% for entry in quickauth %}
 
-</table>
+			<tr class="player_list_item quickauth_entry">
+				{% include 'QuickAuth/single.inc.tpl' %}
+			</tr>
+
+		{% endfor %}
+
+	</table>
+
+{% else %}
+
+	<p>No records yet!</p>
+
+{% endif %}
+
+{% include 'Common/pagination.inc.tpl' %}
