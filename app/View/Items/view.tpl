@@ -36,42 +36,39 @@
 			{% set inStock = stock and stock.quantity > 0 %}
 
 			{% if user and inStock and item.buyable %}
-				{% spaceless %}
-					{{ form.create('Cart', {
-						'url': {
-							'controller': 'Cart',
-							'action': 'add',
-							'id': item.item_id
-						},
-						'id': 'CartForm',
-						'novalidate': 'novalidate'
-					}) }}
-					{{ html.image(
-						'misc/ajax-loader.gif',
-						{'class': 'ajax-loader', 'id': 'cart_add_loading'}
-					) }}
-					{{ form.input('quantity', {
-						'type': 'number',
-						'id': 'cart_add_qty',
-						'maxlength': 3,
-						'value': 1,
-						'label': false,
-						'div': false,
-						'min': 1,
-						'max': stock.quantity
-					}) }}
-					{{ form.end({
-						'label': 'Add to cart',
-						'id': 'cart_add',
-						'data-href': html.url({
-							'controller': 'Cart',
-							'action': 'add',
-							'id': item.item_id
-						}),
-						'div': false
-					}) }}
-				{% endspaceless %}
-
+				{{ form.create('Cart', {
+					'url': {
+						'controller': 'Cart',
+						'action': 'add',
+						'id': item.item_id
+					},
+					'id': 'CartForm',
+					'novalidate': 'novalidate'
+				}) }}
+				{{ html.image(
+					'misc/ajax-loader.gif',
+					{'class': 'ajax-loader', 'id': 'cart_add_loading'}
+				) }}
+				{{ form.input('quantity', {
+					'type': 'number',
+					'id': 'cart_add_qty',
+					'maxlength': 3,
+					'value': 1,
+					'label': false,
+					'div': false,
+					'min': 1,
+					'max': stock.quantity
+				}) -}}
+				{{ form.end({
+					'label': 'Add to cart',
+					'id': 'cart_add',
+					'data-href': html.url({
+						'controller': 'Cart',
+						'action': 'add',
+						'id': item.item_id
+					}),
+					'div': false
+				}) }}
 			{% endif %}
 
 			<div id="rating">
