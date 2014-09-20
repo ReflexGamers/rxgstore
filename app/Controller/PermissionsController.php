@@ -71,14 +71,4 @@ class PermissionsController extends AppController {
 		$this->set('syncResult', $syncResult);
 		$this->view('list.inc');
 	}
-
-	public function viewlog() {
-
-		if (!$this->Access->check('Permissions', 'read')) {
-			$this->redirect($this->referer());
-			return;
-		}
-
-		$this->renderLog('permsync');
-	}
 }

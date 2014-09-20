@@ -13,8 +13,9 @@
 	<p>Synchronization should happen automatically twice daily, and depending on your permissions, you may see a button on this page to manually perform a sync.</p>
 
 	<p>{{ html.link('Click here', {
-			'controller': 'permissions',
-			'action': 'viewlog'
+			'controller': 'Admin',
+			'action': 'viewlog',
+			'name': 'permsync'
 		}) }} to view the sync log.</p>
 
 	{% if members %}
