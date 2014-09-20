@@ -1,6 +1,6 @@
 {% import 'Common/functions.tpl' as fn %}
 
-<table class="quickauth_list">
+<table class="player_list striped quickauth_list">
 
 	<tr>
 		<th>Player</th>
@@ -10,7 +10,7 @@
 
 	{% for entry in quickauth %}
 
-		<tr class="quickauth_entry">
+		<tr class="player_list_item quickauth_entry">
 
 		{% set player = players[entry.user_id] %}
 
@@ -28,11 +28,12 @@
 			<td class="quickauth_server">
 				{% set server = servers[entry.server] %}
 				{% if server %}
-					{{ html.link(server.name, {
-						'controller': 'servers',
-						'action': 'view',
-						'name': server.short_name
-					}) }}
+					{#{{ html.link(server.name, {#}
+						{#'controller': 'servers',#}
+						{#'action': 'view',#}
+						{#'name': server.short_name#}
+					{#}) }}#}
+					{{ server.name }}
 				{% else %}
 					<span class="quickauth_server_unknown">
 						{{ entry.server }}
@@ -40,23 +41,12 @@
 				{% endif %}
 			</td>
 
-			{#
-			<td>
-				{% if access.check('QuickAuth', 'delete') %}
-					<a class="quickauth_delete" href="{{ html.url({'action': 'delete', 'id': player.steamid}) }}">Remove</a>
-				{% endif %}
-			</td>
-			#}
-
-			<td>
+			<td class="quickauth_time">
 				{{ fn.time(_context, entry.date) }}
 			</td>
-
 
 		</tr>
 
 	{% endfor %}
 
 </table>
-
-</ul>
