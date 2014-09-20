@@ -16,7 +16,7 @@
 			},
 
 			success: function(data, textStatus) {
-				$('#cache_data').html(data);
+				$('#cache_content').html(data);
 				$('#cache_loading').fadeOut();
 			}
 		});
@@ -38,7 +38,7 @@
 			type: 'post',
 			success: function(data, textStatus) {
 				$('#cache_batch_actions').remove();
-				$('#cache_data').html(data);
+				$('#cache_content').html(data);
 			}
 		});
 

@@ -1861,10 +1861,19 @@ input[type="checkbox"].item_edit_input {
 
 
 
-.cache_total {
+.list_heading {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.list_total {
     font-weight: 400;
     font-size: 24px;
     margin: 15px 0;
+}
+
+.list_heading .cache_time {
+    font-size: 20px;
 }
 
 .cache_time {
@@ -2267,17 +2276,21 @@ button::-moz-focus-inner {
     font-size: 20px;
 }
 
+.quickauth_list th:last-child {
+    text-align: right;
+}
+
 .quickauth_list td {
     padding: 5px;
     line-height: 32px;
 }
 
 .quickauth_entry {
-
 }
 
 .quickauth_player {
     font-size: 20px;
+    min-width: 350px;
 }
 
 .quickauth_player img {

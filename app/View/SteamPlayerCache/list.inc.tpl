@@ -1,8 +1,23 @@
+
+{% set loader = 'cache_page_loading' %}
+
+{{ paginator.options({
+	'update': '#cache_content',
+	'url': pageLocation,
+	'before': js.get('#' ~ loader).effect('fadeIn'),
+	'complete': "rxg.scrollTo($('#cache_content'), 250)"
+}) }}
+
 {% if cache %}
 
-	<p class="cache_total">{{ cache|length }} players in cache</p>
+	<p class="list_total">{{ paginator.counter('{:count}') }} players in cache</p>
 
 	<ul class="player_list striped">
+
+		<li class="list_heading">
+			<div class="cache_time">Date Cached</div>
+			Player
+		</li>
 
 		{% for player in cache %}
 
@@ -19,3 +34,5 @@
 	<p><strong>The cache is currently empty!</strong></p>
 
 {% endif %}
+
+{% include 'Common/pagination.inc.tpl' %}

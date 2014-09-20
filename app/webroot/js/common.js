@@ -152,13 +152,17 @@
 		if ($.rateit) {
 			content.find('.rateit').rateit();
 		}
-		$('html, body').animate({scrollTop: content.offset().top}, 250);
+		rxg.scrollTo(content, 250);
 	};
 
 	window.rxg.onReviewPageLoad = function() {
 		var content = $('#reviews');
 		content.find('.rateit').rateit();
-		$('html, body').animate({scrollTop: content.offset().top}, 250);
+		rxg.scrollTo(content, 250);
+	};
+
+	window.rxg.scrollTo = function(el, duration) {
+		$('html, body').animate({scrollTop: $(el).offset().top}, typeof duration == 'undefined' ? 250 : duration);
 	};
 
 	window.rxg.updateCartLink = function(remove) {

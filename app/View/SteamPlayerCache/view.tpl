@@ -1,18 +1,14 @@
-{% extends isAjax ? 'Common/ajax.tpl' : 'Common/layout.tpl' %}
+{% extends 'Common/base.tpl' %}
 
-{% set jquery = true %}
 {% set title = 'Steam Data Cache' %}
-{% set hideTitle = true %}
-{% set headerImage = false %}
-
-{% set scripts = ['admin-cache'] %}
+{% set scripts = ['common', 'admin-cache'] %}
 
 
 {% block content %}
 
-	<h1 class="page_heading">Steam Data Cache</h1>
+	<h1 class="page_heading">{{ title }}</h1>
 
-	<p>When a part of the site attempts to get Steam data about players, it calls the Steam API to get their information. We automatically cache that information for up to <strong>{{ cacheDuration }}</strong> hours per player.</p>
+	<p>When a part of this site attempts to get Steam data about players, it calls the Steam API to get their information. We automatically cache that information for up to <strong>{{ cacheDuration }}</strong> hours per player.</p>
 
 	<p>If a player's cached information has expired by the time their information is requested, it will be fetched again and updated in the cache for later use. Expired player information is automatically deleted when any part of the cache is updated.</p>
 
@@ -38,8 +34,8 @@
 		</div>
 	{% endif %}
 
-	<div id="cache_data">
-		{% include '/SteamPlayerCache/list.inc.tpl' %}
+	<div id="cache_content">
+		{% include 'SteamPlayerCache/list.inc.tpl' %}
 	</div>
 
 {% endblock %}

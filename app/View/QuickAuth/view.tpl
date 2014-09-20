@@ -1,16 +1,11 @@
 {% extends isAjax ? 'Common/ajax.tpl' : 'Common/layout.tpl' %}
 
-{% set jquery = true %}
 {% set title = 'QuickAuth Records' %}
-{% set hideTitle = true %}
-{% set headerImage = false %}
-
-{% set scripts = ['admin-cache'] %}
-
+{% set scripts = 'common' %}
 
 {% block content %}
 
-	<h1 class="page_heading">QuickAuth Records</h1>
+	<h1 class="page_heading">{{ title }}</h1>
 
 	<p>QuickAuth is our system for logging players in automatically if we know their Steam ID. This happens in RXG servers when players type <code>!store</code> or from other special sources such as Forums.</p>
 
@@ -18,20 +13,8 @@
 
 	<p>All QuickAuth attempts are recorded permanently and will be visible on this page for historical, statistical and diagnostic purposes.</p>
 
-	{% if quickauth %}
-
-		<p class="cache_total">{{ quickauth|length }} total records</p>
-
-		<div id="quickauth_data">
-
-			{% include 'QuickAuth/list.inc.tpl' %}
-
-		</div>
-
-	{% else %}
-
-		<p>No records yet!</p>
-
-	{% endif %}
+	<div id="quickauth_content">
+		{% include 'QuickAuth/list.inc.tpl' %}
+	</div>
 
 {% endblock %}
