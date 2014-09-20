@@ -15,14 +15,6 @@ class SteamPlayerCache extends AppModel {
 
 	public $order = 'SteamPlayerCache.cached desc';
 
-	public function getAll() {
-		$players = Hash::extract($this->find('all'), '{n}.SteamPlayerCache');
-		foreach ($players as &$player) {
-			$player['name'] = $player['personaname'];
-		}
-		return $players;
-	}
-
 	public function clearAll() {
 		$this->query('truncate steam_player_cache');
 	}
