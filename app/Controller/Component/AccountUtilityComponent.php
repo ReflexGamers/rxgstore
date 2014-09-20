@@ -146,7 +146,7 @@ class AccountUtilityComponent extends Component {
 		if (empty($accounts)) return array();
 
 		$accounts = array_unique($accounts);
-		$user = $this->Auth->user();
+		/*$user = $this->Auth->user();
 
 		if (count($accounts) == 1 && !empty($user) && $accounts[0] == $user['user_id']) {
 			$user_id = $user['user_id'];
@@ -155,7 +155,7 @@ class AccountUtilityComponent extends Component {
 				'member' => !empty($members[$user_id]),
 				'division' => !empty($members[$user_id]['division']) ? $members[$user_id]['division'] : ''
 			)));
-		}
+		}*/
 
 		$steamids = array();
 
@@ -163,13 +163,7 @@ class AccountUtilityComponent extends Component {
 			$steamids[] = $this->SteamID64FromAccountID($acc);
 		}
 
-		$i = 0;
-		$steamPlayers = array();
-		//Steam API has 100 player per call limit
-		while ($batch = array_slice($steamids, $i++ * 100, 100)) {
-			$steamPlayers = array_merge($steamPlayers, $this->SteamPlayer->getByIds($batch));
-		}
-
+		$steamPlayers = $this->SteamPlayer->getByIds($steamids);
 		$members = $this->Access->getMembers($accounts);
 		$players = array();
 
