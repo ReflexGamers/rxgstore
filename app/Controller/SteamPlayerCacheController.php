@@ -41,7 +41,7 @@ class SteamPlayerCacheController extends AppController {
 
 		$this->Paginator->settings = array(
 			'SteamPlayerCache' => array(
-				'limit' => 25,
+				'limit' => 50,
 			)
 		);
 
