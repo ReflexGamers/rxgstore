@@ -17,6 +17,8 @@
 		{{ fn.stripTag(player)|e }}
 	</h1>
 
+	{% include '/ShoutboxMessages/shoutbox.inc.tpl' %}
+
 	<section class="player_details">
 
 		<div class="player_avatar_full">

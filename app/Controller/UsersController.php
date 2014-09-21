@@ -68,6 +68,8 @@ class UsersController extends AppController {
 			'totalSpent' => $this->User->getTotalSpent($user_id)
 		));
 
+		$this->loadShoutboxData();
+
 		$this->reviews($steamid, false);
 		$this->activity($steamid, false);
 	}
