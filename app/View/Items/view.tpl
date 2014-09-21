@@ -24,9 +24,7 @@
 
 	<div id="flash_container"></div>
 
-	<div class="shoutbox_container">
-		{% include '/ShoutboxMessages/shoutbox.inc.tpl' %}
-	</div>
+	{% include '/ShoutboxMessages/shoutbox.inc.tpl' %}
 
 
 	<section id="item_details">
