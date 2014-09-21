@@ -13,6 +13,12 @@
 
 	<p>All QuickAuth attempts are recorded permanently and will be visible on this page for historical, statistical and diagnostic purposes.</p>
 
+	<p>{{ html.link('Click here', {
+		'controller': 'Admin',
+		'action': 'viewlog',
+		'name': 'quickauth'
+		}) }} to view the QuickAuth log.</p>
+
 	<div id="quickauth_content">
 		{% include 'QuickAuth/list.inc.tpl' %}
 	</div>
