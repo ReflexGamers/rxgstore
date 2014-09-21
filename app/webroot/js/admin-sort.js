@@ -9,7 +9,7 @@
 		placeholder: 'item_sort_placeholder',
 		update: function(event, ui){
 
-			var currentEl = $(ui.item);
+			//var currentEl = $(ui.item);
 
 			$.each($('.item_sort_draggable'), function(index, el){
 
@@ -19,7 +19,7 @@
 
 				if (index == indexEl.data('original')) {
 					el.removeClass('changed');
-				} else if (currentEl.is(el)) {
+				} else {//else if (currentEl.is(el)) {
 					el.addClass('changed');
 				}
 			});
