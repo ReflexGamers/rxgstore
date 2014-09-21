@@ -90,7 +90,7 @@ class ItemsController extends AppController {
 		if (empty($server)) {
 
 			$preferredServer = $this->Session->read('preferredServer');
-			if (empty($preferredServer)) {
+			if (!empty($user_id) && empty($preferredServer)) {
 				$preferredServer = $this->User->getPreferredServer($user_id);
 				if (!empty($preferredServer)) {
 					$this->Session->write('preferredServer', $preferredServer);
@@ -106,7 +106,7 @@ class ItemsController extends AppController {
 
 		} else {
 
-			if ($server == 'all') {
+			if (!empty($user_id) && $server == 'all') {
 				$this->User->deletePreferredServer($user_id);
 			} else  {
 				$this->User->setPreferredServer($user_id, $server);
@@ -612,6 +612,9 @@ class ItemsController extends AppController {
 				'fields' => array('display_index'),
 				'atomic' => false
 			));
+
+			$admin_steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
+			CakeLog::write('admin', "$admin_steamid updated the item display order.");
 
 			$this->Session->setFlash('The item display order you provided has been saved!', 'default', array('class' => 'success'));
 		}
