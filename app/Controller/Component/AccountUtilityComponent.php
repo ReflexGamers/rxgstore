@@ -14,7 +14,7 @@ App::uses('Component', 'Controller');
  *
  * @property SavedLogin $SavedLogin
  * @property SteamPlayer $SteamPlayer
- * @property User $User
+ * @property Model/User $User
  */
 class AccountUtilityComponent extends Component {
 	public $components = array('Acl', 'Access', 'Auth', 'Cookie', 'RequestHandler');
@@ -26,15 +26,15 @@ class AccountUtilityComponent extends Component {
 		$this->User = ClassRegistry::init('User');
 	}
 
-	public function loginUser($user_id) {
-		return $this->login($this->SteamID64FromAccountID($user_id));
+	public function loginUser($user_id, $options = array()) {
+		return $this->login($this->SteamID64FromAccountID($user_id), $options);
 	}
 
-	public function login($steamid, $save = false) {
+	public function login($steamid, $options = array()) {
 
 		$steaminfo = $this->SteamPlayer->getByIds(array($steamid));
 
-		if (empty($steaminfo)) {
+		if (empty($steaminfo) && (empty($options['force']) || !$options['force'])) {
 			return false;
 		} else {
 			$steaminfo = $steaminfo[0];
@@ -62,7 +62,7 @@ class AccountUtilityComponent extends Component {
 			'profile' => $steaminfo['profileurl']
 		));
 
-		if ($save) {
+		if (!empty($options['save']) && $options['save']) {
 			$this->saveLogin($user_id);
 		}
 

@@ -211,7 +211,7 @@ class UsersController extends AppController {
 				$oid = $openid->identity;
 				$steamid = substr($oid, strrpos($oid, "/") + 1);
 				$save = $this->Session->read('rememberme');
-				$this->AccountUtility->login($steamid, $save);
+				$this->AccountUtility->login($steamid, array('save' => $save));
 			}
 		} catch (ErrorException $e) {
 			echo 'auth error: ' . $e->getMessage();
