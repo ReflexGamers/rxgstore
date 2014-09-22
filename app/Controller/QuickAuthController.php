@@ -69,17 +69,21 @@ class QuickAuthController extends AppController {
 		$redirLoc = array('controller' => 'Items', 'action' => 'index');
 
 		if (empty($params)) {
+			CakeLog::write('quickauth', "QuickAuth attempted with no URL params.");
 			$this->redirect($redirLoc);
 			return;
 		}
 
-		$user = $this->Auth->user();
+		$user_id = $this->Auth->user('user_id');
 		$config = Configure::read('Store.QuickAuth');
+
+		$tokenId = $params['id'];
+		$tokenValue = $params['token'];
 
 		$auth = Hash::extract($this->QuickAuth->find('first', array(
 			'conditions' => array(
-				'quick_auth_id' => $params['id'],
-				'token' => $params['token'],
+				'quick_auth_id' => $tokenId,
+				'token' => $tokenValue,
 				'redeemed = 0'
 			)
 		)), 'QuickAuth');
@@ -89,29 +93,32 @@ class QuickAuthController extends AppController {
 			$this->QuickAuth->id = $auth['quick_auth_id'];
 			$this->QuickAuth->saveField('redeemed', 1);
 
-			$aro = $this->Access->findUser($user['user_id']);
+			$aro = $this->Access->findUser($user_id);
 
 			if (empty($aro)) {
 				//Record user as member
+				CakeLog::write('quickauth', "Promoted user $user_id to member.");
 				$aro->save(array(
 					'parent_id' => 1,
 					'model' => 'User',
-					'foreign_key' => $user['user_id']
+					'foreign_key' => $user_id
 				));
 			}
 
-			if (empty($user)) {
+			if (empty($user_id)) {
 
 				if (strtotime($auth['date']) + $config['TokenExpire'] < time()) {
 
+					CakeLog::write('quickauth', "Attempted usage of expired token $tokenId-$tokenValue by user $user_id.");
 					$this->Session->setFlash(
 						'Your QuickAuth token has expired. Please contact an administrator.',
 						'default',
 						array('class' => 'error')
 					);
 
-				} else if (!$this->AccountUtility->loginUser($auth['user_id'])) {
+				} else if (!$this->AccountUtility->loginUser($auth['user_id'], array('force' => true))) {
 
+					CakeLog::write('quickauth', "Failed to login user $user_id with token $tokenId-$tokenValue.");
 					$this->Session->setFlash(
 						'QuickAuth Login failed. Please contact an administrator.',
 						'default',
@@ -120,8 +127,9 @@ class QuickAuthController extends AppController {
 				}
 			}
 
-		} else if (empty($user)) {
+		} else if (empty($user_id)) {
 
+			CakeLog::write('quickauth', "Requested token $tokenId-$tokenValue for $user_id was not found or already redeemed.");
 			$this->Session->setFlash('Invalid QuickAuth token. Please contact an administrator.', 'default', array('class' => 'error'));
 		}
 
