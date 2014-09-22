@@ -23,6 +23,7 @@ class ServerUtilityComponent extends Component {
 
 		if (empty($this->passwords[$server_ip])) {
 			//trigger_error('No RCON password on file for server.', E_USER_ERROR);
+			CakeLog::write('server', 'No RCON password on file for server.');
 			return false;
 		}
 
@@ -31,11 +32,13 @@ class ServerUtilityComponent extends Component {
 				$server->rconAuth($this->passwords[$server_ip]);
 			}
 			$server->rconExec($command);
-		} catch(SteamCondenser\Exceptions\RCONNoAuthException $e) {
+		} catch (SteamCondenser\Exceptions\RCONNoAuthException $e) {
 			//trigger_error('Could not authenticate with the game server.', E_USER_ERROR);
+			CakeLog::write('server', "Could not authenticate with the game server. $e");
 			return false;
-		} catch(Exception $e) {
+		} catch (Exception $e) {
 			//trigger_error('Unknown RCON-related Error.', E_USER_ERROR);
+			CakeLog::write('server', "Unknown RCON-related Error. $e");
 			return false;
 		}
 
