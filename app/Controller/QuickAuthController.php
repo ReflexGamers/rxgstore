@@ -63,6 +63,13 @@ class QuickAuthController extends AppController {
 		));
 	}
 
+	/**
+	 * Handles quick authentication when the person's steamid is known such as in a game server.
+	 *
+	 * Expects query parameters 'id' and 'token'.
+	 *
+	 * A weird bug in the Source engine causes the page to be requested twice so re-using tokens is silently ignored.
+	 */
 	public function auth() {
 
 		$params = $this->request->query;
@@ -74,7 +81,7 @@ class QuickAuthController extends AppController {
 			return;
 		}
 
-		$user_id = $this->Auth->user('user_id');
+		$user = $this->Auth->user('user_id');
 		$config = Configure::read('Store.QuickAuth');
 
 		$tokenId = $params['id'];
@@ -83,54 +90,63 @@ class QuickAuthController extends AppController {
 		$auth = Hash::extract($this->QuickAuth->find('first', array(
 			'conditions' => array(
 				'quick_auth_id' => $tokenId,
-				'token' => $tokenValue,
-				'redeemed = 0'
+				'token' => $tokenValue
 			)
 		)), 'QuickAuth');
 
 		if (!empty($auth)) {
 
-			$this->QuickAuth->id = $auth['quick_auth_id'];
-			$this->QuickAuth->saveField('redeemed', 1);
+			//Silently ignore if already redeemed (probably double request)
+			if (!$auth['redeemed']) {
 
-			$aro = $this->Access->findUser($user_id);
+				$this->QuickAuth->id = $auth['quick_auth_id'];
+				$this->QuickAuth->saveField('redeemed', 1);
 
-			if (empty($aro)) {
-				//Record user as member
-				CakeLog::write('quickauth', "Promoted user $user_id to member.");
-				$aro->save(array(
-					'parent_id' => 1,
-					'model' => 'User',
-					'foreign_key' => $user_id
-				));
-			}
+				$user_id = $auth['user_id'];
 
-			if (empty($user_id)) {
+				$aro = $this->Access->findUser($user_id);
 
-				if (strtotime($auth['date']) + $config['TokenExpire'] < time()) {
+				if (empty($aro)) {
+					//Record user as member
+					CakeLog::write('quickauth', "Promoted user $user_id to member.");
+					$aro->save(array(
+						'parent_id' => 1,
+						'model' => 'User',
+						'foreign_key' => $user_id
+					));
+				}
 
-					CakeLog::write('quickauth', "Attempted usage of expired token $tokenId-$tokenValue by user $user_id.");
-					$this->Session->setFlash(
-						'Your QuickAuth token has expired. Please contact an administrator.',
-						'default',
-						array('class' => 'error')
-					);
+				if (empty($user)) {
 
-				} else if (!$this->AccountUtility->loginUser($auth['user_id'], array('force' => true))) {
+					//not already logged in
+					$diff = strtotime($auth['date']) + $config['TokenExpire'] - time();
 
-					CakeLog::write('quickauth', "Failed to login user $user_id with token $tokenId-$tokenValue.");
-					$this->Session->setFlash(
-						'QuickAuth Login failed. Please contact an administrator.',
-						'default',
-						array('class' => 'error')
-					);
+					if ($diff < 0) {
+
+						//Expired unredeemed token
+						$diff = abs($diff);
+						CakeLog::write('quickauth', "Attempted usage of token $tokenId-$tokenValue which expired $diff seconds ago.");
+						$this->Session->setFlash('Authentication token expired. Please contact an administrator.', 'default', array('class' => 'error'));
+
+					} else if (!$this->AccountUtility->loginUser($user_id, array('force' => true))) {
+
+						//Failed to login user
+						CakeLog::write('quickauth', "Failed to login user $user_id with token $tokenId-$tokenValue.");
+						$this->Session->setFlash('Login failed. Please contact an administrator.', 'default', array('class' => 'error'));
+					}
+
+				} else {
+
+					//User already logged in
+					CakeLog::write('quickauth', "Authentication for token $tokenId-$tokenValue skipped. User already logged in.");
 				}
 			}
 
-		} else if (empty($user_id)) {
+		} else if (empty($user)) {
 
-			CakeLog::write('quickauth', "Requested token $tokenId-$tokenValue for $user_id was not found or already redeemed.");
-			$this->Session->setFlash('Invalid QuickAuth token. Please contact an administrator.', 'default', array('class' => 'error'));
+			//Token not found in db, not already logged in
+			CakeLog::write('quickauth', "Requested token $tokenId-$tokenValue was not found.");
+			$this->Session->setFlash('Invalid Authentication token. Please contact an administrator.', 'default', array('class' => 'error'));
 		}
 
 		$this->Session->write('Auth.user.ingame', true);
@@ -138,17 +154,23 @@ class QuickAuthController extends AppController {
 		if (empty($params['source'])) {
 			//Go straight to store
 			$this->redirect($redirLoc);
+			return;
 		}
 
 		//Find name of server for url
-		$this->loadModel('Server');
-		$server = Hash::extract($this->Server->findByServerIp($auth['server'], array('short_name')), 'Server');
+		if (!empty($auth)) {
+			$this->loadModel('Server');
+			$server = Hash::extract($this->Server->findByServerIp($auth['server'], array('short_name')), 'Server');
+		}
+
+		//if server not found, use source from url
 		$server = !empty($server) ? $server['short_name'] : $params['source'];
 		$redirLoc = array('controller' => 'Items', 'action' => 'index', 'server' => $server);
 
 		if (!in_array($params['source'], $config['PopupFromServers'])) {
 			//Go straight to store
 			$this->redirect($redirLoc);
+			return;
 		}
 
 		//Render page with JS popup
