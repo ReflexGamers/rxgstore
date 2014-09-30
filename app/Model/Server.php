@@ -27,8 +27,10 @@ class Server extends AppModel {
 				array(
 					'table' => 'server_item',
 					'conditions' => array(
-						'server_item.server_id = server.server_id',
-						'server_item.server_id = server.parent_id'
+						'OR' => array(
+							'server_item.server_id = server.server_id',
+							'server_item.server_id = server.parent_id'
+						)
 					)
 				)
 			),
