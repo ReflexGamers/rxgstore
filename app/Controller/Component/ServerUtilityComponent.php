@@ -39,39 +39,46 @@ class ServerUtilityComponent extends Component {
 		$cmd = $command;
 
 		foreach ($args as $arg) {
-			$cmd .= "\"$arg\"";
+			$cmd .= " \"$arg\"";
 		}
 
 		return $cmd;
 	}
 
 	/**
-	 * Build a list of item arguments for the specified server given a list of items. Limit the items to only the ones
-	 * that can be used in that server.
+	 * Build a list of item arguments for the specified server given a user id and list of items. Limit the items to
+	 * only the ones that can be used in that server.
 	 *
 	 * @param string $server_ip
+	 * @param int $user_id
 	 * @param array $list list of arrays that should each have keys for both 'item_id' and 'quantity'
 	 * @return string[] list of arguments that each look like "id name"
 	 */
-	protected function buildItemArgs($server_ip, $list) {
+	protected function buildItemArgs($server_ip, $user_id, $list) {
 
 		$this->loadItemModel();
 
-		$itemNames = $this->Item->find('list', array(
+		$items = Hash::combine($this->Item->find('all', array(
 			'fields' => array(
-				'item_id', 'name'
+				'item_id', 'name', 'plural'
 			)
-		));
+		)), '{n}.Item.item_id', '{n}.Item');
 
 		$serverItems = $this->Item->ServerItem->Server->getUsableItems($server_ip);
 		$args = array();
 
 		foreach ($list as $item) {
 			$item_id = $item['item_id'];
+			$quantity = $item['quantity'];
+			$name = $quantity > 1 ? $items[$item_id]['plural'] : $items[$item_id]['name'];
 			if (in_array($item_id, $serverItems)) {
 				//item is usable in this server
-				$args[] = "{$item['quantity']} {$itemNames[$item_id]}";
+				$args[] = "$quantity $name";
 			}
+		}
+
+		if (!empty($args)) {
+			array_unshift($args, $user_id);
 		}
 
 		return $args;
@@ -83,12 +90,13 @@ class ServerUtilityComponent extends Component {
 	 *
 	 * @param string $server_ip
 	 * @param string $command
+	 * @param int $user_id
 	 * @param array $items list of arrays that should each have keys for both 'item_id' and 'quantity'
 	 * @return string the full command
 	 */
-	protected function buildItemCmd($server_ip, $command, $items) {
+	protected function buildItemCmd($server_ip, $command, $user_id, $items) {
 
-		return $this->buildCmd($command, $this->buildItemArgs($server_ip, $items));
+		return $this->buildCmd($command, $this->buildItemArgs($server_ip, $user_id, $items));
 	}
 
 	/**
@@ -101,10 +109,14 @@ class ServerUtilityComponent extends Component {
 	 */
 	public function broadcastPurchase($server_ip, $user_id, $order) {
 
-		return $this->exec($server_ip, array(
+		$itemCmd = $this->buildItemCmd($server_ip, "sm_store_broadcast_purchase", $user_id, $order['OrderDetail']);
+
+		$commands = empty($itemCmd) ? '' : array(
 			"sm_store_reload_inventory $user_id",
-			$this->buildItemCmd($server_ip, "sm_store_broadcast_purchase", $order['OrderDetail'])
-		));
+			$itemCmd
+		);
+
+		return $this->exec($server_ip, $commands);
 	}
 
 	/**
@@ -132,10 +144,14 @@ class ServerUtilityComponent extends Component {
 	 */
 	public function broadcastGiftSend($server_ip, $user_id, $gift) {
 
-		return $this->exec($server_ip, array(
+		$itemCmd = $this->buildItemCmd($server_ip, "sm_store_broadcast_gift_send", $user_id, $gift['GiftDetail']);
+
+		$commands = empty($itemCmd) ? '' : array(
 			"sm_store_reload_inventory $user_id",
-			$this->buildItemCmd($server_ip, "sm_store_broadcast_gift_send", $gift['GiftDetail'])
-		));
+			$itemCmd
+		);
+
+		return $this->exec($server_ip, $commands);
 	}
 
 	/**
@@ -148,10 +164,14 @@ class ServerUtilityComponent extends Component {
 	 */
 	public function broadcastGiftReceive($server_ip, $user_id, $gift) {
 
-		return $this->exec($server_ip, array(
+		$itemCmd = $this->buildItemCmd($server_ip, "sm_store_broadcast_gift_receive", $user_id, $gift['GiftDetail']);
+
+		$commands = empty($itemCmd) ? '' : array(
 			"sm_store_reload_inventory $user_id",
-			$this->buildItemCmd($server_ip, "sm_store_broadcast_gift_receive", $gift['GiftDetail'])
-		));
+			$itemCmd
+		);
+
+		return $this->exec($server_ip, $commands);
 	}
 
 	/**
@@ -164,10 +184,14 @@ class ServerUtilityComponent extends Component {
 	 */
 	public function broadcastRewardReceive($server_ip, $user_id, $reward) {
 
-		return $this->exec($server_ip, array(
+		$itemCmd = $this->buildItemCmd($server_ip, "sm_store_broadcast_reward_receive", $user_id, $reward['RewardDetail']);
+
+		$commands = empty($itemCmd) ? '' : array(
 			"sm_store_reload_inventory $user_id",
-			$this->buildItemCmd($server_ip, "sm_store_broadcast_reward_receive", $reward['RewardDetail'])
-		));
+			$itemCmd
+		);
+
+		return $this->exec($server_ip, $commands);
 	}
 
 	/**
