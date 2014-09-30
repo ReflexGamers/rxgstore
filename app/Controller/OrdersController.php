@@ -2,6 +2,9 @@
 App::uses('AppController', 'Controller');
 /**
  * Orders Controller
+ *
+ * @property $Order Order
+ * @property $ServerUtility ServerUtility
  */
 class OrdersController extends AppController {
 	public $components = array('Paginator', 'RequestHandler', 'ServerUtility');
@@ -266,7 +269,7 @@ class OrdersController extends AppController {
 		$server = $this->User->getCurrentServer($user_id);
 
 		if (!empty($server)) {
-			$this->ServerUtility->exec($server, "sm_reload_user_inventory $user_id; sm_broadcast_user_purchase $user_id");
+			$this->ServerUtility->broadcastPurchase($server, $user_id, $order);
 		}
 
 		$this->set('order', $order);
