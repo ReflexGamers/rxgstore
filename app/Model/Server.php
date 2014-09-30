@@ -16,6 +16,25 @@ class Server extends AppModel {
 		'ServerItem', 'UserServer'
 	);
 
+	public function getUsableItems($server_ip) {
+
+		return Hash::extract($this->find('all', array(
+			'fields' => 'server_item.item_id',
+			'conditions' => array(
+				'server_ip' => $server_ip
+			),
+			'joins' => array(
+				array(
+					'table' => 'server_item',
+					'conditions' => array(
+						'server_item.server_id = server.server_id',
+						'server_item.server_id = server.parent_id'
+					)
+				)
+			),
+		)), '{n}.server_item.item_id');
+	}
+
 	public function getTree() {
 
 		$servers = Hash::extract($this->find('all', array(
