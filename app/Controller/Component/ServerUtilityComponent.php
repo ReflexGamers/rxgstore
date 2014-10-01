@@ -144,12 +144,13 @@ class ServerUtilityComponent extends Component {
 	 */
 	public function broadcastGiftSend($server_ip, $user_id, $gift) {
 
-		$itemCmd = $this->buildItemCmd($server_ip, "sm_store_broadcast_gift_send", $user_id, $gift['GiftDetail']);
-
-		$commands = empty($itemCmd) ? '' : array(
-			"sm_store_reload_inventory $user_id",
-			$itemCmd
+		$commands = array(
+			"sm_store_reload_inventory $user_id"
 		);
+
+		if (!$gift['Gift']['anonymous']) {
+			$commands[] = $this->buildItemCmd($server_ip, "sm_store_broadcast_gift_send", $user_id, $gift['GiftDetail']);
+		}
 
 		return $this->exec($server_ip, $commands);
 	}
@@ -195,18 +196,6 @@ class ServerUtilityComponent extends Component {
 	}
 
 	/**
-	 * Commands the specified server to unload a specific user's inventory.
-	 *
-	 * @param string $server_ip
-	 * @param int $user_id
-	 * @return bool result of @exec
-	 */
-	public function unloadUserInventory($server_ip, $user_id) {
-
-		return $this->exec($server_ip, "sm_store_unload_inventory $user_id");
-	}
-
-	/**
 	 * Broadcasts to the specified server that a specific user wrote a review about an item.
 	 *
 	 * @param string $server_ip
@@ -219,11 +208,25 @@ class ServerUtilityComponent extends Component {
 		$this->loadItemModel();
 		$serverItems = $this->Item->ServerItem->Server->getUsableItems($server_ip);
 
+		$this->Item->id = $item_id;
+
 		$command = in_array($item_id, $serverItems) ?
-			$this->buildCmd($server_ip, 'sm_store_broadcast_review', array($user_id, $this->Item->read('name', $item_id))) :
+			$this->buildCmd('sm_store_broadcast_review', array($user_id, $this->Item->field('name'))) :
 			'';
 
 		return $this->exec($server_ip, $command);
+	}
+
+	/**
+	 * Commands the specified server to unload a specific user's inventory.
+	 *
+	 * @param string $server_ip
+	 * @param int $user_id
+	 * @return bool result of @exec
+	 */
+	public function unloadUserInventory($server_ip, $user_id) {
+
+		return $this->exec($server_ip, "sm_store_unload_inventory $user_id");
 	}
 
 	/**
@@ -253,7 +256,6 @@ class ServerUtilityComponent extends Component {
 		}
 
 		if (empty($this->passwords[$server_ip])) {
-			//trigger_error('No RCON password on file for server.', E_USER_ERROR);
 			CakeLog::write('server', "No known RCON password for server $server_ip");
 			return false;
 		}
