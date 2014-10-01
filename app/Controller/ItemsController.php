@@ -10,7 +10,7 @@ App::import('Vendor', 'Parsedown');
  * @property AccountUtilityComponent $AccountUtility
  */
 class ItemsController extends AppController {
-	public $components = array('Paginator', 'RequestHandler');
+	public $components = array('Paginator', 'RequestHandler', 'ServerUtility');
 	public $helpers = array('Html', 'Form', 'Js', 'Time', 'Session');
 
 	public function beforeFilter() {
@@ -23,7 +23,6 @@ class ItemsController extends AppController {
 	 * FAQ page
 	 */
 	public function faq() {
-
 	}
 
 	/**
@@ -80,7 +79,7 @@ class ItemsController extends AppController {
 	/**
 	 * Retrieves all the items for a specific server.
 	 *
-	 * @param null $server short_name of server to see items for
+	 * @param string $server short_name of server for which to view items
 	 */
 	public function server($server = null) {
 
@@ -106,10 +105,12 @@ class ItemsController extends AppController {
 
 		} else {
 
-			if (!empty($user_id) && $server == 'all') {
-				$this->User->deletePreferredServer($user_id);
-			} else  {
-				$this->User->setPreferredServer($user_id, $server);
+			if (!empty($user_id)) {
+				if ($server == 'all') {
+					$this->User->deletePreferredServer($user_id);
+				} else {
+					$this->User->setPreferredServer($user_id, $server);
+				}
 			}
 
 			$this->Session->write('preferredServer', $server);
