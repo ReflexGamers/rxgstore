@@ -1,6 +1,11 @@
 <?php
 App::uses('AppController', 'Controller');
 
+/**
+ * Gifts Controller
+ *
+ * @property ServerUtilityComponent $ServerUtility
+ */
 class GiftsController extends AppController {
 	public $components = array('Paginator', 'RequestHandler', 'ServerUtility');
 	public $helpers = array('Html', 'Form', 'Session', 'Js', 'Time');
@@ -60,9 +65,9 @@ class GiftsController extends AppController {
 			$this->loadModel('User');
 			$server = $this->User->getCurrentServer($user_id);
 
-			//Refresh user's inventory
+			//Broadcast & refresh user's inventory
 			if (!empty($server)) {
-				$this->ServerUtility->exec($server, "sm_reload_user_inventory $user_id");
+				$this->ServerUtility->broadcastGiftReceive($server, $user_id, $gift);
 			}
 
 		}
@@ -255,7 +260,7 @@ class GiftsController extends AppController {
 		$server = $this->User->getCurrentServer($user_id);
 
 		if (!empty($server)) {
-			if (!$this->ServerUtility->exec($server, "sm_unload_user_inventory $user_id")) {
+			if (!$this->ServerUtility->unloadUserInventory($server, $user_id)) {
 				$this->Session->setFlash('Oops! Our records show you are connected to a server but we are unable to contact it. You will not be able to send a gift until we can contact your server.', 'default', array('class' => 'error'));
 				$this->User->saveField('locked', 0);
 				$this->redirect(array('action' => 'compose', 'id' => $steamid));
@@ -306,9 +311,9 @@ class GiftsController extends AppController {
 		$this->UserItem->query('UNLOCK TABLES');
 		$this->User->saveField('locked', 0);
 
-		//Refresh user's inventory
+		//Broadcast gift & refresh user's inventory
 		if (!empty($server)) {
-			$this->ServerUtility->exec($server, "sm_reload_user_inventory $user_id");
+			$this->ServerUtility->broadcastGiftSend($server, $user_id, $gift);
 		}
 
 		$this->Session->delete("gift-$steamid");
