@@ -3,8 +3,8 @@ App::uses('AppController', 'Controller');
 /**
  * Orders Controller
  *
- * @property $Order Order
- * @property $ServerUtility ServerUtility
+ * @property Order $Order
+ * @property ServerUtilityComponent $ServerUtility
  */
 class OrdersController extends AppController {
 	public $components = array('Paginator', 'RequestHandler', 'ServerUtility');
