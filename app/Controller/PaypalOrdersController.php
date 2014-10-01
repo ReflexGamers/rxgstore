@@ -1,8 +1,14 @@
 <?php
 App::uses('AppController', 'Controller');
 
+/**
+ * PaypalOrders Controller
+ *
+ * @property PaypalOrder $PaypalOrder
+ * @property ServerUtilityComponent $ServerUtility
+ */
 class PaypalOrdersController extends AppController {
-	public $components = array('Paginator', 'RequestHandler', 'Paypal');
+	public $components = array('Paginator', 'RequestHandler', 'Paypal', 'ServerUtility');
 	public $helpers = array('Html', 'Form', 'Js', 'Time', 'Session');
 
 	public function beforeFilter() {
@@ -154,6 +160,13 @@ class PaypalOrdersController extends AppController {
 				'fee' => isset($data['payment']->transactions->amount->details->fee) ? $data['payment']->transactions->amount->details->fee : 0,
 				'credit' => $data['amount']
 			));
+
+			//Broadcast
+			$server = $this->User->getCurrentServer($user_id);
+
+			if (!empty($server)) {
+				$this->ServerUtility->broadcastPurchaseCash($server, $user_id, $data['amount']);
+			}
 
 			$this->Session->setFlash('The CASH has been added to your account.', 'default', array('class' => 'success'));
 		}
