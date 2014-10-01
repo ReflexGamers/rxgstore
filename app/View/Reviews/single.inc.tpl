@@ -1,5 +1,7 @@
 {% import 'Common/functions.tpl' as fn %}
 
+{% set player = players[review.user_id] %}
+
 <div class="review_image">
 	{% if displayType == 'user' %}
 
