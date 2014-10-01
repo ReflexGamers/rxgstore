@@ -59,7 +59,11 @@ class AppController extends Controller {
 	protected $items = null;
 
 	public function addPlayers($users) {
-		$this->players = array_merge($this->players, $users);
+		if (is_array($users)) {
+			$this->players = array_merge($this->players, $users);
+		} else{
+			$this->players[] = $users;
+		}
 	}
 
 	public function loadItems() {
