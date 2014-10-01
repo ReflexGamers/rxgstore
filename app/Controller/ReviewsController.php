@@ -5,9 +5,10 @@ App::uses('AppController', 'Controller');
  * Reviews Controller
  *
  * @property Review $Review
+ * @property ServerUtilityComponent $ServerUtility
  */
 class ReviewsController extends AppController {
-	public $components = array('RequestHandler');
+	public $components = array('RequestHandler', 'ServerUtility');
 	public $helpers = array('Html', 'Time', 'Js', 'Form');
 
 
@@ -52,16 +53,31 @@ class ReviewsController extends AppController {
 
 			if ($oldReview['content'] != $data['content']) {
 
+				//TODO make this code neater
 				$review = array(
 					'content' => $data['content']
 				);
 
 				if (empty($oldReview['review_id'])) {
+
+					//New review
 					$this->loadModel('Activity');
 					$review['review_id'] = $this->Activity->getNewId('Review');
 					$review['rating_id'] = $oldReview['rating_id'];
 					$review['modified'] = false;
+
+					//Broadcast & refresh user's inventory
+					//TODO prevent spamming new reviews via deletion/creation
+					$this->loadModel('User');
+					$server = $this->User->getCurrentServer($user_id);
+
+					if (!empty($server)) {
+						$this->ServerUtility->broadcastReview($server, $user_id, $item_id);
+					}
+
 				} else {
+
+					//Updating old review
 					$review['review_id'] = $oldReview['review_id'];
 					$review['created'] = $oldReview['created'];
 				}
@@ -73,16 +89,11 @@ class ReviewsController extends AppController {
 			$review['quantity'] = $this->Review->Rating->User->getTotalBoughtByItem($user_id, $item_id);
 		}
 
-		if ($user_id == $this->Auth->user('user_id')) {
-			$player = $this->Auth->user();
-		} else {
-			$player = $this->AccountUtility->getSteamInfo($user_id);
-		}
+		$this->addPlayers($user_id);
 
 		$this->set(array(
 			'item' => $item['Item'],
 			'review' => isset($review) ? $review : $oldReview,
-			'player' => $player,
 			'displayType' => $type
 		));
 
@@ -112,9 +123,16 @@ class ReviewsController extends AppController {
 
 		if ($this->Access->check('Reviews', 'delete')) {
 			$this->Review->delete($review_id, false);
+
+			$this->loadModel('Activity');
+			$this->Activity->delete($review_id, false);
 		}
 
-		if ($type == 'item' && $reviewData['Rating']['user_id'] == $this->Auth->user('user_id')) {
+		$user_id = $this->Auth->user('user_id');
+
+		if ($type == 'item' && $reviewData['Rating']['user_id'] == $user_id) {
+
+			$this->addPlayers($user_id);
 
 			$this->set(array(
 				'item' => $item,
@@ -159,21 +177,16 @@ class ReviewsController extends AppController {
 		$review = array_merge($reviewData['Review'], $reviewData['Rating']);
 		$user_id = $review['user_id'];
 
-		if ($user_id == $this->Auth->user('user_id')) {
-			$player = $this->Auth->user();
-		} else {
-			$player = $this->AccountUtility->getSteamInfo($user_id);
-		}
-
 		if (!$edit) {
 			$review['quantity'] = $this->Review->Rating->User->getTotalBoughtByItem($user_id, $item['item_id']);
 		}
+
+		$this->addPlayers($user_id);
 
 		$this->set(array(
 			'item' => $item,
 			'review' => $review,
 			'isEditMode' => $edit,
-			'player' => $player,
 			'displayType' => $type
 		));
 
