@@ -5,6 +5,7 @@ App::uses('AppController', 'Controller');
  * Rewards Controller
  *
  * @property Reward $Reward
+ * @property ServerUtilityComponent $ServerUtility
  */
 class RewardsController extends AppController {
 	public $components = array('Paginator', 'RequestHandler', 'ServerUtility');
@@ -67,7 +68,7 @@ class RewardsController extends AppController {
 
 			//Refresh user's inventory
 			if (!empty($server)) {
-				$this->ServerUtility->exec($server, "sm_reload_user_inventory $user_id");
+				$this->ServerUtility->broadcastRewardReceive($server, $user_id, $reward['Reward']);
 			}
 		}
 
