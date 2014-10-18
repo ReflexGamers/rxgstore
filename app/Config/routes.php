@@ -72,14 +72,14 @@
 			'controller' => 'Items', 'action' => 'view'
 		), array(
 			'pass' => array('id'),
-			'name' => '[a-z_0-9]+'
+			'id' => '[a-z_0-9]+'
 	));
 
 	Router::connect('/item/:id/:action/*', array(
 			'controller' => 'Items'
 		), array(
 			'pass' => array('id'),
-			'name' => '[a-z_0-9]+'
+			'id' => '[a-z_0-9]+'
 	));
 
 	Router::connect('/rate/', array('controller' => 'Ratings', 'action' => 'rate'));
