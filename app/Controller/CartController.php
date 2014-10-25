@@ -1,6 +1,11 @@
 <?php
 App::uses('AppController', 'Controller');
 
+/**
+ * Class CartController
+ *
+ * Handles cart actions such as viewing the cart, adding or removing items, etc.
+ */
 class CartController extends AppController {
 	public $components = array('RequestHandler');
 	public $helpers = array('Html', 'Form', 'Session', 'Js', 'Time');
@@ -10,6 +15,9 @@ class CartController extends AppController {
 		$this->Auth->deny();
 	}
 
+	/**
+	 * Shows the cart view page.
+	 */
 	public function view() {
 
 		$this->loadModel('Item');
@@ -33,6 +41,14 @@ class CartController extends AppController {
 		));
 	}
 
+	/**
+	 * Processes actions for the entire cart such as 'empty', 'update' and 'checkout' depending on what 'ProcessAction'
+	 * is set to in the request data.
+	 *
+	 * Empty: empties the cart completely and sends to index
+	 * Update: saves new quantities of items in the cart
+	 * Checkout: compiles cart items into a session object called 'order' and shows the confirmation page
+	 */
 	public function process() {
 
 		$this->request->allowMethod('post');
@@ -158,6 +174,11 @@ class CartController extends AppController {
 		$this->render('checkout');
 	}
 
+	/**
+	 * Adds an item to the cart. The quantity added is based on the content of the request.
+	 *
+	 * @param int $item_id the item to add
+	 */
 	public function add($item_id = null) {
 
 		$this->request->allowMethod('post');
@@ -203,10 +224,18 @@ class CartController extends AppController {
 		}
 	}
 
+	/**
+	 * Updates the cart link in the navigation bar that shows the current number of items in the cart.
+	 */
 	public function link() {
 		$this->render('link.inc');
 	}
 
+	/**
+	 * Removes all of a specific item from the cart.
+	 *
+	 * @param int $item_id the item to remove
+	 */
 	public function remove($item_id = null) {
 
 		$this->request->allowMethod('post');
@@ -226,5 +255,4 @@ class CartController extends AppController {
 
 		$this->Session->write('cart', $cart);
 	}
-
 }
