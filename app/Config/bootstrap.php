@@ -108,7 +108,7 @@ Configure::write('Store', array(
 	'SteamCacheDuration' => 86400, //24 hours
 	'MaxTimeToConsiderInGame' => 300, //5 minutes
 	'QuickAuth' => array(
-		'TokenExpire' => 180, //Expires after 60 seconds
+		'TokenExpire' => 180, //expires after 3 minutes
 		'WindowHeight' => 600,
 		'WindowWidth' => 800,
 		'PopupFromServers' => array(
