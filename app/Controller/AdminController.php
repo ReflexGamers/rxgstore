@@ -1,6 +1,9 @@
 <?php
 App::uses('AppController', 'Controller');
 
+/**
+ * Class AdminController
+ */
 class AdminController extends AppController {
 	public $components = array('RequestHandler');
 	public $helpers = array('Html', 'Form', 'Session', 'Js', 'Time');
@@ -26,13 +29,22 @@ class AdminController extends AppController {
 	 *
 	 * @param string $name name of log to view
 	 */
-	public function viewlog($name) {
+	public function viewlog($name = null) {
 
-		if (!$this->Access->check('Stock', 'update')) {
+		if (!$this->Access->check('Logs', 'read')) {
 			$this->redirect($this->referer());
 			return;
 		}
 
-		$this->renderLog($name);
+		if (!empty($name)) {
+
+			$logFile = new File("../tmp/logs/$name.log", false);
+			$log = $logFile->read();
+			$logFile->close();
+
+			$this->response->type('text/plain');
+			$this->response->body($log);
+			$this->autoRender = false;
+		}
 	}
 }
