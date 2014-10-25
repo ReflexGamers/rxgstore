@@ -58,14 +58,39 @@ class AppController extends Controller {
 	protected $players = array();
 	protected $items = null;
 
-	public function addPlayers($users) {
-		if (is_array($users)) {
-			$this->players = array_merge($this->players, $users);
-		} else{
+	/**
+	 * Adds a single player or list of players to the player buffer. The beforeRender() method will pull all players out
+	 * of the buffer and fetch their Steam data to pass to the view. This prevents multiple calls to the Steam API or
+	 * multiple queries to the Steam cache since all the data will be fetched at once as late as possible to ensure all
+	 * the needed players have been added to the buffer.
+	 *
+	 * Make sure to only pass signed 32-bit SteamIDs. If you have SteamIDs in another format, convert them first.
+	 *
+	 * @param array $users list of account ids (aka user_id)
+	 * @param string $extractPath optional path uses to extract ids from a nested array (2nd param of Hash::extract())
+	 */
+	public function addPlayers($users, $extractPath = '') {
+
+		if (!empty($extractPath)) {
+			$users = Hash::extract($users, $extractPath);
+		} else if (!is_array($users)) {
+			// add single player
 			$this->players[] = $users;
+			return;
 		}
+
+		$this->players = array_merge($this->players, $users);
 	}
 
+	/**
+	 * Loads basic Item Data for all items, passes it to the view and also returns the result to the controller that
+	 * called this method. Should be used in most instances where Item Data is needed unless additional data is needed.
+	 *
+	 * Once called, the items are cached in the $items property in case they are called later in the same request which
+	 * can happen when controller actions call each other.
+	 *
+	 * @return array|null the item data
+	 */
 	public function loadItems() {
 
 		if (empty($this->items)) {
@@ -85,6 +110,11 @@ class AppController extends Controller {
 		return $this->items;
 	}
 
+	/**
+	 * Loads constants relating to stacks of CASH which are used anywhere CASH stacks may be visible such as activity
+	 * feeds on the home page, user pages and the PayPal page. Call this from a controller action if you need to display
+	 * stack of CASH.
+	 */
 	public function loadCashData() {
 		$this->set(array(
 			'currencyMult' => Configure::read('Store.CurrencyMultiplier'),
@@ -92,11 +122,15 @@ class AppController extends Controller {
 		));
 	}
 
+	/**
+	 * Loads Shoutbox data and passes it to the view. Call this from any controller action that includes the shoutbox
+	 * partial view which expects this data.
+	 */
 	public function loadShoutboxData() {
 
 		$this->loadModel('ShoutboxMessage');
 		$messages = $this->ShoutboxMessage->getRecent();
-		$this->addPlayers(Hash::extract($messages, '{n}.user_id'));
+		$this->addPlayers($messages, '{n}.user_id');
 		$shoutConfig = Configure::read('Store.Shoutbox');
 
 		$this->set(array(
@@ -107,21 +141,18 @@ class AppController extends Controller {
 		));
 	}
 
-	public function renderLog($name = null) {
-
-		if ($name != null) {
-
-			$logFile = new File("../tmp/logs/$name.log", false);
-			$log = $logFile->read();
-			$logFile->close();
-
-			$this->response->type('text/plain');
-			$this->response->body($log);
-			$this->autoRender = false;
-		}
-	}
-
+	/**
+	 * Runs before controller-specific actions.
+	 *
+	 * 1) Logs the user in if they are not logged in but have a saved login that has not expired yet.
+	 * 2) Updates the user's saved login record and cookie.
+	 * 3) Updates the user's 'last_activity' field to the current time.
+	 * 4) Sets a 'user' variable for the current user.
+	 * 5) Sets an 'access' variable that references the AccessComponent for checking permissions in the view.
+	 */
 	public function beforeFilter() {
+
+		// allow all visitors by default. override this with deny in child controllers to deny unauthenticated users
 		$this->Auth->allow();
 
 		$user = $this->Auth->user();
@@ -157,6 +188,7 @@ class AppController extends Controller {
 		$this->Acl->allow('Advisor', 'Chats', 'delete');
 		$this->Acl->allow('Advisor', 'Items', 'create');
 		$this->Acl->allow('Advisor', 'Items', 'update');
+		$this->Acl->allow('Advisor', 'Logs', 'read');
 		$this->Acl->allow('Advisor', 'Reviews', 'update');
 		$this->Acl->allow('Advisor', 'Reviews', 'delete');
 		$this->Acl->allow('Advisor', 'Receipts', 'read');
@@ -166,6 +198,13 @@ class AppController extends Controller {
 		*/
 	}
 
+	/**
+	 * Called after controller-specific methods are complete but before rendering the view.
+	 *
+	 * 1) Checks for the existence of a cart and passed the corresponding data to the view.
+	 * 2) Checks whether the current request was called by ajax and sets the isAjax variable.
+	 * 3) Fetches player data for all players in $this->players and passes it to the view.
+	 */
 	public function beforeRender() {
 
 		$cart = $this->Session->read('cart');
