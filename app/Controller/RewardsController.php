@@ -126,8 +126,8 @@ class RewardsController extends AppController {
 			}
 		}
 
-		$this->addPlayers(Hash::extract($rewards, '{n}.{s}.sender_id'));
-		$this->addPlayers(Hash::extract($rewards, '{n}.RewardRecipient.{n}'));
+		$this->addPlayers($rewards, '{n}.{s}.sender_id');
+		$this->addPlayers($rewards, '{n}.RewardRecipient.{n}');
 
 		$this->loadItems();
 
