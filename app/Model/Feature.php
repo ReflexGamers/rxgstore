@@ -7,10 +7,10 @@ App::uses('AppModel', 'Model');
  */
 class Feature extends AppModel {
 
-	public $useTable = 'feature';
-	public $primaryKey = 'feature_id';
+    public $useTable = 'feature';
+    public $primaryKey = 'feature_id';
 
-	public $belongsTo = 'Item';
+    public $belongsTo = 'Item';
 
 
 /**
@@ -18,26 +18,26 @@ class Feature extends AppModel {
  *
  * @var array
  */
-	public $validate = array(
-		'item_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'description' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-	);
+    public $validate = array(
+        'item_id' => array(
+            'numeric' => array(
+                'rule' => array('numeric'),
+                //'message' => 'Your custom message here',
+                //'allowEmpty' => false,
+                //'required' => false,
+                //'last' => false, // Stop validation after this rule
+                //'on' => 'create', // Limit validation to 'create' or 'update' operations
+            ),
+        ),
+        'description' => array(
+            'notEmpty' => array(
+                'rule' => array('notEmpty'),
+                //'message' => 'Your custom message here',
+                //'allowEmpty' => false,
+                //'required' => false,
+                //'last' => false, // Stop validation after this rule
+                //'on' => 'create', // Limit validation to 'create' or 'update' operations
+            ),
+        ),
+    );
 }

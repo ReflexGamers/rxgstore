@@ -7,20 +7,20 @@
 
 {% block content %}
 
-	<h1 class="page_heading">Order Completion</h1>
+    <h1 class="page_heading">Order Completion</h1>
 
-	{{ session.flash() }}
+    {{ session.flash() }}
 
-	{% if order %}
+    {% if order %}
 
-		<div class="back_link">
-			{{ html.link('< Continue Shopping',
-				{'controller': 'Items', 'action': 'index'}
-			) }}
-		</div>
+        <div class="back_link">
+            {{ html.link('< Continue Shopping',
+                {'controller': 'Items', 'action': 'index'}
+            ) }}
+        </div>
 
-		{% include 'Orders/receipt.inc.tpl' with {'data': order} %}
+        {% include 'Orders/receipt.inc.tpl' with {'data': order} %}
 
-	{% endif %}
+    {% endif %}
 
 {% endblock %}

@@ -7,16 +7,16 @@
 
 {% block content %}
 
-	{% set flash = session.flash() %}
+    {% set flash = session.flash() %}
 
-	{% if flash %}
+    {% if flash %}
 
-		<p>{{ flash }}</p>
+        <p>{{ flash }}</p>
 
-	{% else %}
+    {% else %}
 
-		{% include 'Orders/receipt.inc.tpl' with {'data': data} %}
+        {% include 'Orders/receipt.inc.tpl' with {'data': data} %}
 
-	{% endif %}
+    {% endif %}
 
 {% endblock %}

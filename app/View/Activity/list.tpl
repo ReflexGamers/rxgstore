@@ -1,41 +1,41 @@
 {% extends 'Common/base.tpl' %}
 
 {% if not isAjax %}
-	{% if not title %}
-		{% if user_id %}
-			{% set title = players[user_id].name ~ '\'s Activity' %}
-		{% elseif item %}
-			{% set title = item.name ~ ' Activity' %}
-		{% else %}
-			{% set title = 'Store Activity' %}
-		{% endif %}
-	{% endif %}
+    {% if not title %}
+        {% if user_id %}
+            {% set title = players[user_id].name ~ '\'s Activity' %}
+        {% elseif item %}
+            {% set title = item.name ~ ' Activity' %}
+        {% else %}
+            {% set title = 'Store Activity' %}
+        {% endif %}
+    {% endif %}
 
-	{% set jquery = true %}
-	{% set styles = ['rateit'] %}
-	{% set scripts = ['jquery.rateit.min', 'items', 'common'] %}
+    {% set jquery = true %}
+    {% set styles = ['rateit'] %}
+    {% set scripts = ['jquery.rateit.min', 'items', 'common'] %}
 {% endif %}
 
 {% block content %}
 
-	{% if isAjax %}
+    {% if isAjax %}
 
-		<div id="activity_content">
-			{% include 'Activity/list.inc.tpl' %}
-		</div>
+        <div id="activity_content">
+            {% include 'Activity/list.inc.tpl' %}
+        </div>
 
-	{% else %}
+    {% else %}
 
-		<section id="activity">
+        <section id="activity">
 
-			<h1 class="page_heading">{{ user_id ? fn.memberTag(players[user_id]) }}{{ title }}</h1>
+            <h1 class="page_heading">{{ user_id ? fn.memberTag(players[user_id]) }}{{ title }}</h1>
 
-			<div id="activity_content">
-				{% include 'Activity/list.inc.tpl' %}
-			</div>
+            <div id="activity_content">
+                {% include 'Activity/list.inc.tpl' %}
+            </div>
 
-		</section>
+        </section>
 
-	{% endif %}
+    {% endif %}
 
 {% endblock %}

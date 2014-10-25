@@ -6,83 +6,83 @@ App::uses('File', 'Utility');
  * Class PermissionsController
  */
 class PermissionsController extends AppController {
-	public $components = array('RequestHandler');
-	public $helpers = array('Html', 'Form', 'Session', 'Js', 'Time');
+    public $components = array('RequestHandler');
+    public $helpers = array('Html', 'Form', 'Session', 'Js', 'Time');
 
-	public function beforeFilter() {
-		parent::beforeFilter();
+    public function beforeFilter() {
+        parent::beforeFilter();
 
-		// allow logged in users only
-		$this->Auth->deny();
-	}
+        // allow logged in users only
+        $this->Auth->deny();
+    }
 
-	/**
-	 * The permissions view page that shows all the admins and members.
-	 *
-	 * @param string $view optional name of view to render instead of the default
-	 */
-	public function view($view = null) {
+    /**
+     * The permissions view page that shows all the admins and members.
+     *
+     * @param string $view optional name of view to render instead of the default
+     */
+    public function view($view = null) {
 
-		if (!$this->Access->check('Permissions', 'read')) {
-			$this->redirect($this->referer());
-			return;
-		}
+        if (!$this->Access->check('Permissions', 'read')) {
+            $this->redirect($this->referer());
+            return;
+        }
 
-		$aro = $this->Acl->Aro;
+        $aro = $this->Acl->Aro;
 
-		$admins = Hash::map($aro->find('all', array(
-			'fields' => array(
-				'Aro.foreign_key as user_id', 'Aro.alias as name', 'AroParent.alias as rank'
-			),
-			'conditions' => array(
-				'Aro.foreign_key is not null'
-			),
-			'joins' => array(
-				array(
-					'table' => 'aros',
-					'alias' => 'AroParent',
-					'conditions' => array(
-						'Aro.parent_id = AroParent.id'
-					)
-				)
-			),
-			'order' => 'AroParent.id desc',
-			'recursive' => -1
-		)), '{n}', function($admin){
-			return array_merge($admin['Aro'], $admin['AroParent']);
-		});
+        $admins = Hash::map($aro->find('all', array(
+            'fields' => array(
+                'Aro.foreign_key as user_id', 'Aro.alias as name', 'AroParent.alias as rank'
+            ),
+            'conditions' => array(
+                'Aro.foreign_key is not null'
+            ),
+            'joins' => array(
+                array(
+                    'table' => 'aros',
+                    'alias' => 'AroParent',
+                    'conditions' => array(
+                        'Aro.parent_id = AroParent.id'
+                    )
+                )
+            ),
+            'order' => 'AroParent.id desc',
+            'recursive' => -1
+        )), '{n}', function($admin){
+            return array_merge($admin['Aro'], $admin['AroParent']);
+        });
 
-		$this->addPlayers($admins, '{n}.user_id');
+        $this->addPlayers($admins, '{n}.user_id');
 
-		$this->set(array(
-			'members' => $admins
-		));
+        $this->set(array(
+            'members' => $admins
+        ));
 
-		if (!empty($view)) {
-			$this->render($view);
-		}
-	}
+        if (!empty($view)) {
+            $this->render($view);
+        }
+    }
 
-	/**
-	 * Used for manual synchronization of permissions. Should be called by ajax and will return the render the player
-	 * list as the response.
-	 */
-	public function synchronize() {
+    /**
+     * Used for manual synchronization of permissions. Should be called by ajax and will return the render the player
+     * list as the response.
+     */
+    public function synchronize() {
 
-		$this->request->allowMethod('post');
+        $this->request->allowMethod('post');
 
-		if (!$this->Access->check('Permissions', 'update')) {
-			$this->redirect($this->referer());
-			return;
-		}
+        if (!$this->Access->check('Permissions', 'update')) {
+            $this->redirect($this->referer());
+            return;
+        }
 
-		$syncResult = $this->AccountUtility->syncPermissions();
+        $syncResult = $this->AccountUtility->syncPermissions();
 
-		$syncResult['added'] = Hash::extract($syncResult, 'added.{n}.alias');
-		$syncResult['updated'] = Hash::extract($syncResult, 'updated.{n}.alias');
-		$syncResult['removed'] = Hash::extract($syncResult, 'removed.{n}.alias');
+        $syncResult['added'] = Hash::extract($syncResult, 'added.{n}.alias');
+        $syncResult['updated'] = Hash::extract($syncResult, 'updated.{n}.alias');
+        $syncResult['removed'] = Hash::extract($syncResult, 'removed.{n}.alias');
 
-		$this->set('syncResult', $syncResult);
-		$this->view('list.inc');
-	}
+        $this->set('syncResult', $syncResult);
+        $this->view('list.inc');
+    }
 }

@@ -15,146 +15,146 @@ App::uses('Component', 'Controller');
  * @property AccountUtilityComponent $AccountUtility
  */
 class ConversionComponent extends Component {
-	public $components = array('AccountUtility');
+    public $components = array('AccountUtility');
 
-	public function initialize(Controller $controller) {
-		$this->Activity = ClassRegistry::init('Activity');
-		$this->Order = ClassRegistry::init('Order');
-		$this->PaypalOrder = ClassRegistry::init('PaypalOrder');
-		$this->User = ClassRegistry::init('User');
-		$this->UserItem = ClassRegistry::init('UserItem');
-	}
+    public function initialize(Controller $controller) {
+        $this->Activity = ClassRegistry::init('Activity');
+        $this->Order = ClassRegistry::init('Order');
+        $this->PaypalOrder = ClassRegistry::init('PaypalOrder');
+        $this->User = ClassRegistry::init('User');
+        $this->UserItem = ClassRegistry::init('UserItem');
+    }
 
-	/**
-	 * Runs all conversion methods in sequence.
-	 */
-	public function convertAll() {
-		set_time_limit(120);
+    /**
+     * Runs all conversion methods in sequence.
+     */
+    public function convertAll() {
+        set_time_limit(120);
 
-		$this->convertUsers();
-		$this->convertInventories();
-		$this->convertOrders();
+        $this->convertUsers();
+        $this->convertInventories();
+        $this->convertOrders();
 
-		$this->AccountUtility->setup_permissions();
-		$this->AccountUtility->syncPermissions();
-	}
+        $this->AccountUtility->setup_permissions();
+        $this->AccountUtility->syncPermissions();
+    }
 
-	/**
-	 * Moves users to the new table and converts their credit to the new multiplier.
-	 */
-	public function convertUsers() {
+    /**
+     * Moves users to the new table and converts their credit to the new multiplier.
+     */
+    public function convertUsers() {
 
-		echo 'beginning conversion';
+        echo 'beginning conversion';
 
-		$db = ConnectionManager::getDataSource('oldStore');
-		$result = $db->rawQuery("SELECT * FROM USER WHERE credit != 0");
+        $db = ConnectionManager::getDataSource('oldStore');
+        $result = $db->rawQuery("SELECT * FROM USER WHERE credit != 0");
 
-		$currencyMultiplier = Configure::read('Store.CurrencyMultiplier');
+        $currencyMultiplier = Configure::read('Store.CurrencyMultiplier');
 
-		while( $row = $result->fetch() ) {
-			$this->User->save(array(
-				'user_id' => $row['ACCOUNT'],
-				'credit' => $row['CREDIT'] * $currencyMultiplier
-			));
-			$this->User->clear();
-		}
+        while( $row = $result->fetch() ) {
+            $this->User->save(array(
+                'user_id' => $row['ACCOUNT'],
+                'credit' => $row['CREDIT'] * $currencyMultiplier
+            ));
+            $this->User->clear();
+        }
 
-		echo 'ending conversion';
-	}
+        echo 'ending conversion';
+    }
 
-	/**
-	 * Moves user inventories to the useritem table.
-	 */
-	public function convertInventories() {
+    /**
+     * Moves user inventories to the useritem table.
+     */
+    public function convertInventories() {
 
-		echo 'beginning conversion';
+        echo 'beginning conversion';
 
-		$db = ConnectionManager::getDataSource('oldStore');
-		$result = $db->rawQuery("SELECT * FROM INVENTORY WHERE amount != 0");
+        $db = ConnectionManager::getDataSource('oldStore');
+        $result = $db->rawQuery("SELECT * FROM INVENTORY WHERE amount != 0");
 
-		while( $row = $result->fetch() ) {
-			$this->UserItem->save(array(
-				'user_id' => $row['ACCOUNT'],
-				'item_id' => $row['ITEMID'],
-				'quantity' => $row['AMOUNT']
-			));
-			$this->UserItem->clear();
-		}
+        while( $row = $result->fetch() ) {
+            $this->UserItem->save(array(
+                'user_id' => $row['ACCOUNT'],
+                'item_id' => $row['ITEMID'],
+                'quantity' => $row['AMOUNT']
+            ));
+            $this->UserItem->clear();
+        }
 
-		echo 'ending conversion';
-	}
+        echo 'ending conversion';
+    }
 
-	/**
-	 * Converts item purchases as well as paypal ones.
-	 */
-	public function convertOrders() {
+    /**
+     * Converts item purchases as well as paypal ones.
+     */
+    public function convertOrders() {
 
-		echo 'beginning conversion';
+        echo 'beginning conversion';
 
-		App::import('Vendor', 'transaction');
-		$db = ConnectionManager::getDataSource('oldStore');
-		$result = $db->rawQuery("SELECT ID,DATE,TYPE,STEAM,TOTAL,PPSALEID,PAYPAL,FEES,CASH,TRANSACTION FROM RECEIPTS WHERE STATE = 'OKAY' ORDER BY DATE");
+        App::import('Vendor', 'transaction');
+        $db = ConnectionManager::getDataSource('oldStore');
+        $result = $db->rawQuery("SELECT ID,DATE,TYPE,STEAM,TOTAL,PPSALEID,PAYPAL,FEES,CASH,TRANSACTION FROM RECEIPTS WHERE STATE = 'OKAY' ORDER BY DATE");
 
-		$currencyMultiplier = Configure::read('Store.CurrencyMultiplier');
+        $currencyMultiplier = Configure::read('Store.CurrencyMultiplier');
 
-		while( $row = $result->fetch() ) {
-			//print_r($row);
-			if ($row['TYPE'] == 'ITEMS') {
+        while( $row = $result->fetch() ) {
+            //print_r($row);
+            if ($row['TYPE'] == 'ITEMS') {
 
-				$date = $row['DATE'];
-				$user_id = $this->AccountUtility->AccountIDFromSteamID64($row['STEAM']);
-				$items = unserialize($row['TRANSACTION'])->items->items;
+                $date = $row['DATE'];
+                $user_id = $this->AccountUtility->AccountIDFromSteamID64($row['STEAM']);
+                $items = unserialize($row['TRANSACTION'])->items->items;
 
-				//print_r($items);
+                //print_r($items);
 
-				$activity_id = $this->Activity->getNewId('Order');
+                $activity_id = $this->Activity->getNewId('Order');
 
-				$order = array(
-					'Order' => array(
-						'order_id' => $activity_id,
-						'user_id' => $user_id,
-						'shipping' => 5 * $currencyMultiplier,
-						'date' => $date
-					),
-					'OrderDetail' => array()
-				);
+                $order = array(
+                    'Order' => array(
+                        'order_id' => $activity_id,
+                        'user_id' => $user_id,
+                        'shipping' => 5 * $currencyMultiplier,
+                        'date' => $date
+                    ),
+                    'OrderDetail' => array()
+                );
 
-				foreach ($items as $item) {
-					$order['OrderDetail'][] = array(
-						'item_id' => $item->id,
-						'quantity' => $item->amount,
-						'price' => $item->price * $currencyMultiplier
-					);
-				}
+                foreach ($items as $item) {
+                    $order['OrderDetail'][] = array(
+                        'item_id' => $item->id,
+                        'quantity' => $item->amount,
+                        'price' => $item->price * $currencyMultiplier
+                    );
+                }
 
-				//print_r($order);
+                //print_r($order);
 
-				$this->Order->saveAssociated($order, array('atomic' => false));
-				$this->Order->clear();
+                $this->Order->saveAssociated($order, array('atomic' => false));
+                $this->Order->clear();
 
-			} else if ($row['TYPE'] == 'CASH') {
+            } else if ($row['TYPE'] == 'CASH') {
 
-				$paypalorder = array(
-					'PaypalOrder' => array(
-						'paypal_order_id' => $this->Activity->getNewId('PaypalOrder'),
-						'user_id' => $this->AccountUtility->AccountIDFromSteamID64($row['STEAM']),
-						'date' => $row['DATE'],
-						'ppsaleid' => $row['PPSALEID'],
-						'amount' => $row['PAYPAL'],
-						'fee' => $row['FEES'],
-						'credit' => $row['CASH'] * $currencyMultiplier
-					)
-				);
+                $paypalorder = array(
+                    'PaypalOrder' => array(
+                        'paypal_order_id' => $this->Activity->getNewId('PaypalOrder'),
+                        'user_id' => $this->AccountUtility->AccountIDFromSteamID64($row['STEAM']),
+                        'date' => $row['DATE'],
+                        'ppsaleid' => $row['PPSALEID'],
+                        'amount' => $row['PAYPAL'],
+                        'fee' => $row['FEES'],
+                        'credit' => $row['CASH'] * $currencyMultiplier
+                    )
+                );
 
-				//print_r($paypalorder);
+                //print_r($paypalorder);
 
-				$this->PaypalOrder->saveAssociated($paypalorder, array('atomic' => false));
-				$this->PaypalOrder->clear();
-			}
+                $this->PaypalOrder->saveAssociated($paypalorder, array('atomic' => false));
+                $this->PaypalOrder->clear();
+            }
 
 
-		}
+        }
 
-		echo 'ending conversion';
-	}
+        echo 'ending conversion';
+    }
 }

@@ -1,25 +1,25 @@
 {% extends 'Common/base.tpl' %}
 
 {% if not isAjax %}
-	{% set scripts = 'common' %}
+    {% set scripts = 'common' %}
 {% endif %}
 
 {% block content %}
 
-	{% if isAjax %}
+    {% if isAjax %}
 
-		<div id="quickauth_content">
-			{% include 'QuickAuth/list.inc.tpl' %}
-		</div>
+        <div id="quickauth_content">
+            {% include 'QuickAuth/list.inc.tpl' %}
+        </div>
 
-	{% else %}
+    {% else %}
 
-		<h1 class="page_heading">QuickAuth Records</h1>
+        <h1 class="page_heading">QuickAuth Records</h1>
 
-		<div id="quickauth_content">
-			{% include 'QuickAuth/list.inc.tpl' %}
-		</div>
+        <div id="quickauth_content">
+            {% include 'QuickAuth/list.inc.tpl' %}
+        </div>
 
-	{% endif %}
+    {% endif %}
 
 {% endblock %}

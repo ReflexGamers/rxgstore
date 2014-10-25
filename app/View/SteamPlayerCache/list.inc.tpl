@@ -2,36 +2,36 @@
 {% set loader = 'cache_page_loading' %}
 
 {{ paginator.options({
-	'update': '#cache_content',
-	'url': pageLocation,
-	'before': js.get('#' ~ loader).effect('fadeIn'),
-	'complete': "rxg.scrollTo($('#cache_content'), 250)"
+    'update': '#cache_content',
+    'url': pageLocation,
+    'before': js.get('#' ~ loader).effect('fadeIn'),
+    'complete': "rxg.scrollTo($('#cache_content'), 250)"
 }) }}
 
 {% if cache %}
 
-	<p class="list_total">{{ paginator.counter('{:count}') }} players in cache</p>
+    <p class="list_total">{{ paginator.counter('{:count}') }} players in cache</p>
 
-	<ul class="player_list striped">
+    <ul class="player_list striped">
 
-		<li class="list_heading">
-			<div class="cache_time">Date Cached</div>
-			Player
-		</li>
+        <li class="list_heading">
+            <div class="cache_time">Date Cached</div>
+            Player
+        </li>
 
-		{% for player in cache %}
+        {% for player in cache %}
 
-			<li class="player_list_item cache_entry">
-				{% include 'SteamPlayerCache/single.inc.tpl' %}
-			</li>
+            <li class="player_list_item cache_entry">
+                {% include 'SteamPlayerCache/single.inc.tpl' %}
+            </li>
 
-		{% endfor %}
+        {% endfor %}
 
-	</ul>
+    </ul>
 
 {% else %}
 
-	<p><strong>The cache is currently empty!</strong></p>
+    <p><strong>The cache is currently empty!</strong></p>
 
 {% endif %}
 

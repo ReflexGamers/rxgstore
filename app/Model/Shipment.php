@@ -9,18 +9,18 @@ App::uses('AppModel', 'Model');
  */
 class Shipment extends AppModel {
 
-	public $actsAs = array('Containable');
+    public $actsAs = array('Containable');
 
-	public $useTable = 'shipment';
-	public $primaryKey = 'shipment_id';
+    public $useTable = 'shipment';
+    public $primaryKey = 'shipment_id';
 
-	public $hasMany = 'ShipmentDetail';
+    public $hasMany = 'ShipmentDetail';
 
-	public $belongsTo = array(
-		'Activity', 'User'
-	);
+    public $belongsTo = array(
+        'Activity', 'User'
+    );
 
-	public $order = 'Shipment.shipment_id DESC';
+    public $order = 'Shipment.shipment_id DESC';
 
 
 /**
@@ -28,16 +28,16 @@ class Shipment extends AppModel {
  *
  * @var array
  */
-	public $validate = array(
-		'user_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-	);
+    public $validate = array(
+        'user_id' => array(
+            'numeric' => array(
+                'rule' => array('numeric'),
+                //'message' => 'Your custom message here',
+                //'allowEmpty' => false,
+                //'required' => false,
+                //'last' => false, // Stop validation after this rule
+                //'on' => 'create', // Limit validation to 'create' or 'update' operations
+            ),
+        ),
+    );
 }
