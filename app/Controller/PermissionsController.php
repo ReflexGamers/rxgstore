@@ -2,15 +2,25 @@
 App::uses('AppController', 'Controller');
 App::uses('File', 'Utility');
 
+/**
+ * Class PermissionsController
+ */
 class PermissionsController extends AppController {
 	public $components = array('RequestHandler');
 	public $helpers = array('Html', 'Form', 'Session', 'Js', 'Time');
 
 	public function beforeFilter() {
 		parent::beforeFilter();
+
+		// allow logged in users only
 		$this->Auth->deny();
 	}
 
+	/**
+	 * The permissions view page that shows all the admins and members.
+	 *
+	 * @param string $view optional name of view to render instead of the default
+	 */
 	public function view($view = null) {
 
 		if (!$this->Access->check('Permissions', 'read')) {
@@ -42,7 +52,7 @@ class PermissionsController extends AppController {
 			return array_merge($admin['Aro'], $admin['AroParent']);
 		});
 
-		$this->addPlayers(Hash::extract($admins, '{n}.user_id'));
+		$this->addPlayers($admins, '{n}.user_id');
 
 		$this->set(array(
 			'members' => $admins
@@ -53,6 +63,10 @@ class PermissionsController extends AppController {
 		}
 	}
 
+	/**
+	 * Used for manual synchronization of permissions. Should be called by ajax and will return the render the player
+	 * list as the response.
+	 */
 	public function synchronize() {
 
 		$this->request->allowMethod('post');
@@ -62,7 +76,7 @@ class PermissionsController extends AppController {
 			return;
 		}
 
-		$syncResult = $this->AccountUtility->syncSourcebans();
+		$syncResult = $this->AccountUtility->syncPermissions();
 
 		$syncResult['added'] = Hash::extract($syncResult, 'added.{n}.alias');
 		$syncResult['updated'] = Hash::extract($syncResult, 'updated.{n}.alias');

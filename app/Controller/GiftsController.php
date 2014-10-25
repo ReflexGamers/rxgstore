@@ -15,6 +15,12 @@ class GiftsController extends AppController {
 		$this->Auth->deny();
 	}
 
+	/**
+	 * Accepts a gift and re-renders the inventory in the response. If the gift was already accepted, it does not update
+	 * the user's inventory but it still re-renders the inventory which can happen if they have multiple tabs open.
+	 *
+	 * @param int $gift_id the id of the gift to accept
+	 */
 	public function accept($gift_id) {
 
 		$user_id = $this->Auth->user('user_id');
@@ -81,6 +87,11 @@ class GiftsController extends AppController {
 		$this->render('/Items/list.inc');
 	}
 
+	/**
+	 * Shows the compose gift page.
+	 *
+	 * @param int $steamid the steamid of the gift recipient
+	 */
 	public function compose($steamid) {
 
 		if (empty($steamid)) {
@@ -114,6 +125,11 @@ class GiftsController extends AppController {
 		$this->activity(false);
 	}
 
+	/**
+	 * Shows the activity data for gifts. This is either included in the compose page or called via ajax for paging.
+	 *
+	 * @param bool $doRender
+	 */
 	public function activity($doRender = true) {
 
 		$this->Paginator->settings = array(
@@ -133,8 +149,8 @@ class GiftsController extends AppController {
 			);
 		}
 
-		$this->addPlayers(Hash::extract($gifts, '{n}.{s}.sender_id'));
-		$this->addPlayers(Hash::extract($gifts, '{n}.{s}.recipient_id'));
+		$this->addPlayers($gifts, '{n}.{s}.sender_id');
+		$this->addPlayers($gifts, '{n}.{s}.recipient_id');
 
 		$this->loadItems();
 
@@ -150,6 +166,11 @@ class GiftsController extends AppController {
 		}
 	}
 
+	/**
+	 * Packages the gift and shows the confirm page to the user.
+	 *
+	 * @param int $steamid
+	 */
 	public function package($steamid) {
 
 		$this->request->allowMethod('post');
@@ -232,6 +253,11 @@ class GiftsController extends AppController {
 		$this->render('compose');
 	}
 
+	/**
+	 * Sends the gift to the specified recipient.
+	 *
+	 * @param int $steamid
+	 */
 	public function send($steamid) {
 
 		$this->request->allowMethod('post');

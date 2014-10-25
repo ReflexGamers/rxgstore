@@ -16,40 +16,11 @@ class OrdersController extends AppController {
 		$this->Auth->deny('receipt', 'checkout', 'buy');
 	}
 
-	public function recent() {
-
-		$this->loadModel('Item');
-
-		$items = $this->Item->getBuyable();
-
-		$this->Paginator->settings = array(
-			'Order' => array(
-				'limit' => 5,
-				'contain' => array(
-					'OrderDetail' => array(
-						'fields' => array('item_id', 'quantity')
-					)
-				)
-			)
-		);
-
-		$orders = $this->Paginator->paginate('Order');
-
-		for ($i = 0, $count = count($orders); $i < $count; $i++) {
-			$orders[$i]['OrderDetail'] = Hash::combine(
-				$orders[$i]['OrderDetail'],
-				'{n}.item_id', '{n}.quantity'
-			);
-		}
-
-		$this->addPlayers(Hash::extract($orders, '{n}.Order.user_id'));
-
-		$this->set(array(
-			'items' => $items,
-			'orders' => $orders
-		));
-	}
-
+	/**
+	 * Shows a receipt for a past order.
+	 *
+	 * @param int $order_id
+	 */
 	public function receipt($order_id) {
 
 		$this->loadModel('Item');
@@ -83,6 +54,9 @@ class OrdersController extends AppController {
 		));
 	}
 
+	/**
+	 * TODO: Remove this since it is being replaced the cart checkout method action
+	 */
 	public function checkout()  {
 
 		$this->request->allowMethod('post');
@@ -181,6 +155,10 @@ class OrdersController extends AppController {
 		));
 	}
 
+	/**
+	 * Completes a purchase and shows a receipt. The order data should be set in the session by a checkout process
+	 * before this is called.
+	 */
 	public function buy() {
 
 		$this->request->allowMethod('post');

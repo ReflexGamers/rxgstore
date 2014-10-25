@@ -6,6 +6,7 @@ App::import('Vendor', 'Parsedown');
  * Items Controller
  *
  * @property Item $Item
+ *
  * @property PaginatorComponent $Paginator
  * @property AccountUtilityComponent $AccountUtility
  */
@@ -20,20 +21,22 @@ class ItemsController extends AppController {
 	}
 
 	/**
-	 * FAQ page
+	 * Shows the FAQ page.
 	 */
 	public function faq() {
+		// no data needed, but method is required for it to work
 	}
 
 	/**
-	 * Home page of site. Shows item list, inventory, activity, etc.
+	 * Home page of store. Shows item list, inventory, activity, etc.
 	 *
-	 * @param null $server
+	 * @param string $server
 	 */
 	public function index($server = null) {
 
 		$user_id = $this->Auth->user('user_id');
 
+		// some data is only for logged-in users like the inventory
 		if (!empty($user_id)) {
 
 			$this->loadModel('User');
@@ -44,7 +47,7 @@ class ItemsController extends AppController {
 			$userItems = $this->UserItem->getByUser($user_id);
 			$gifts = $this->User->getPendingGifts($user_id);
 			$rewards = $this->User->getPendingRewards($user_id);
-			$this->addPlayers(Hash::extract($gifts, '{n}.Gift.sender_id'));
+			$this->addPlayers($gifts, '{n}.Gift.sender_id');
 
 			$this->set(array(
 				'userItems' => $userItems,
@@ -139,7 +142,7 @@ class ItemsController extends AppController {
 	}
 
 	/**
-	 * Used for global activity. Called from the index action or via ajax directly.
+	 * Shows global activity. Called from the index action or via ajax directly.
 	 *
 	 * @param bool $doRender whether to force render. set to false if calling from another action
 	 */
@@ -155,10 +158,10 @@ class ItemsController extends AppController {
 
 		$activities = $this->Activity->getRecent($this->Paginator->paginate('Activity'));
 
-		$this->addPlayers(Hash::extract($activities, '{n}.{s}.user_id'));
-		$this->addPlayers(Hash::extract($activities, '{n}.{s}.sender_id'));
-		$this->addPlayers(Hash::extract($activities, '{n}.{s}.recipient_id'));
-		$this->addPlayers(Hash::extract($activities, '{n}.RewardRecipient.{n}'));
+		$this->addPlayers($activities, '{n}.{s}.user_id');
+		$this->addPlayers($activities, '{n}.{s}.sender_id');
+		$this->addPlayers($activities, '{n}.{s}.recipient_id');
+		$this->addPlayers($activities, '{n}.RewardRecipient.{n}');
 
 		$this->loadItems();
 		$this->loadCashData();
@@ -176,7 +179,7 @@ class ItemsController extends AppController {
 	/**
 	 * Item view page. Shows product information, reviews, activity, etc.
 	 *
-	 * @param null $id id or name of item to view
+	 * @param string $id item_id or short_name of item to view
 	 */
 	public function view($id = null) {
 
@@ -258,9 +261,9 @@ class ItemsController extends AppController {
 	}
 
 	/**
-	 * Reviews for a specific item. Called by the view action or via ajax directly.
+	 * Shows reviews for a specific item. Called by the view action or via ajax directly.
 	 *
-	 * @param null $item item data passed from another action or id/name if called via ajax
+	 * @param array|string|int $item item data passed from another action or item_id/short_name if called via ajax
 	 * @param bool $doRender whether to force render. set to false if calling from another action
 	 */
 	public function reviews($item = null, $doRender = true) {
@@ -321,7 +324,7 @@ class ItemsController extends AppController {
 			}
 		);
 
-		$this->addPlayers(Hash::extract($reviews, '{n}.user_id'));
+		$this->addPlayers($reviews, '{n}.user_id');
 		$this->loadItems();
 
 		$this->set(array(
@@ -336,9 +339,9 @@ class ItemsController extends AppController {
 	}
 
 	/**
-	 * Activity for a specific item. Called by the view action or via ajax directly.
+	 * Shows activity for a specific item. Called by the view action or via ajax directly.
 	 *
-	 * @param null $item item data passed from another action or id/name if called via ajax
+	 * @param array|string|int $item item data passed from another action or item_id/short_name if called via ajax
 	 * @param bool $doRender whether to force render. set to false if calling from another action
 	 */
 	public function activity($item = null, $doRender = true) {
@@ -365,10 +368,10 @@ class ItemsController extends AppController {
 
 		$activities = $this->Activity->getRecent($this->Paginator->paginate('Activity'));
 
-		$this->addPlayers(Hash::extract($activities, '{n}.{s}.user_id'));
-		$this->addPlayers(Hash::extract($activities, '{n}.{s}.sender_id'));
-		$this->addPlayers(Hash::extract($activities, '{n}.{s}.recipient_id'));
-		$this->addPlayers(Hash::extract($activities, '{n}.RewardRecipient.{n}'));
+		$this->addPlayers($activities, '{n}.{s}.user_id');
+		$this->addPlayers($activities, '{n}.{s}.sender_id');
+		$this->addPlayers($activities, '{n}.{s}.recipient_id');
+		$this->addPlayers($activities, '{n}.RewardRecipient.{n}');
 
 		$this->loadItems();
 
@@ -384,9 +387,9 @@ class ItemsController extends AppController {
 
 
 	/**
-	 * Item edit page
+	 * Shows the item edit page. If called with post or put, saves the item instead of just showing the edit form.
 	 *
-	 * @param null $id id or name of item to edit
+	 * @param string|int $id item_id or short_name of item to edit
 	 */
 	public function edit($id = null) {
 
@@ -586,7 +589,7 @@ class ItemsController extends AppController {
 	}
 
 	/**
-	 * Preview page called via ajax while editing items. Used for markdown preview only.
+	 * Shows preview page called via ajax while editing items. Used for markdown preview only.
 	 */
 	public function preview() {
 
@@ -599,7 +602,7 @@ class ItemsController extends AppController {
 	}
 
 	/**
-	 * Item sort page for admins. Allows ordering of items.
+	 * Shows item sort page for admins which allows ordering of items.
 	 */
 	public function sort() {
 
