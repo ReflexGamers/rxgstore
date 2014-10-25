@@ -13,9 +13,14 @@ class PaypalOrdersController extends AppController {
 
 	public function beforeFilter() {
 		parent::beforeFilter();
+
+		// allow logged in users only
 		$this->Auth->deny();
 	}
 
+	/**
+	 * Add Funds page (primary hub for PayPal)
+	 */
 	public function addfunds() {
 
 		$config = Configure::read('Store');
@@ -31,6 +36,11 @@ class PaypalOrdersController extends AppController {
 		$this->activity(false);
 	}
 
+	/**
+	 * Activity page, usually included in the addfunds page at the bottom and called via ajax for paging.
+	 *
+	 * @param bool $doRender whether to force render. set to false if calling from another action
+	 */
 	public function activity($doRender = true) {
 
 		$this->Paginator->settings = array(
@@ -41,7 +51,7 @@ class PaypalOrdersController extends AppController {
 
 		$paypalOrders = $this->Paginator->paginate('PaypalOrder');
 
-		$this->addPlayers(Hash::extract($paypalOrders, '{n}.PaypalOrder.user_id'));
+		$this->addPlayers($paypalOrders, '{n}.PaypalOrder.user_id');
 
 		$this->loadCashData();
 
@@ -57,6 +67,9 @@ class PaypalOrdersController extends AppController {
 		}
 	}
 
+	/**
+	 * Begins a transaction by creating the payment and sending the user to PayPal.
+	 */
 	public function begin() {
 
 		$this->request->allowMethod('post');
@@ -127,13 +140,33 @@ class PaypalOrdersController extends AppController {
 		}
 	}
 
+	/**
+	 * The user is sent back here after confirming the purchase (instead of cancelling).
+	 */
 	public function confirm() {
 
 		$data = $this->Session->read('buycash');
 		$query = $this->request->query;
 
-		if (empty($data) || empty($query['challenge']) || $query['challenge'] != $data['challenge'] || empty($query['PayerID'])) {
-			$this->Session->setFlash('Oops! An error occurred. Your PAYPAL has not been charged.', 'default', array('class' => 'error'));
+		$steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
+		$problemWithRequest = false;
+
+		if (empty($data)) {
+			CakeLog::write('paypal', "$steamid attempted to confirm without any data.");
+			$problemWithRequest = true;
+		} else if (empty($query['challenge'])) {
+			CakeLog::write('paypal', "$steamid attempted to confirm without a challenge token in the URL.");
+			$problemWithRequest = true;
+		} else if ($query['challenge'] != $data['challenge']) {
+			CakeLog::write('paypal', "$steamid attempted to confirm with an incorrect challenge token ({$query['challenge']} != {$data['challenge']}).");
+			$problemWithRequest = true;
+		} else if (empty($query['PayerID'])) {
+			CakeLog::write('paypal', "$steamid attempted to confirm without a PayerID.");
+			$problemWithRequest = true;
+		}
+
+		if ($problemWithRequest) {
+			$this->Session->setFlash('Oops! An error occurred. You have not been charged.', 'default', array('class' => 'error'));
 			$this->redirect(array('action' => 'addfunds'));
 			return;
 		}
@@ -174,7 +207,13 @@ class PaypalOrdersController extends AppController {
 		$this->redirect(array('controller' => 'PaypalOrders', 'action' => 'addfunds'));
 	}
 
+	/**
+	 * The user is sent here after cancelling the transaction (instead of confirming).
+	 */
 	public function cancel() {
+
+		$steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
+		CakeLog::write('paypal', "$steamid cancelled a transaction.");
 
 		$this->Session->setFlash('Your transaction was cancelled and your PAYPAL was not charged.', 'default', array('class' => 'error'));
 		$this->redirect(array('controller' => 'PaypalOrders', 'action' => 'addfunds'));
