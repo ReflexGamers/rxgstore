@@ -1,17 +1,33 @@
 <?php
 App::uses('Component', 'Controller');
 
+/**
+ * Class ConversionComponent
+ *
+ * This class handles the conversions from store 1.0 to 2.0
+ *
+ * @property Activity $Activity
+ * @property Order $Order
+ * @property PaypalOrder $PaypalOrder
+ * @property User $User
+ * @property UserItem $UserItem
+ *
+ * @property AccountUtilityComponent $AccountUtility
+ */
 class ConversionComponent extends Component {
 	public $components = array('AccountUtility');
 
 	public function initialize(Controller $controller) {
 		$this->Activity = ClassRegistry::init('Activity');
-		$this->User = ClassRegistry::init('User');
-		$this->UserItem = ClassRegistry::init('UserItem');
 		$this->Order = ClassRegistry::init('Order');
 		$this->PaypalOrder = ClassRegistry::init('PaypalOrder');
+		$this->User = ClassRegistry::init('User');
+		$this->UserItem = ClassRegistry::init('UserItem');
 	}
 
+	/**
+	 * Runs all conversion methods in sequence.
+	 */
 	public function convertAll() {
 		set_time_limit(120);
 
@@ -19,10 +35,13 @@ class ConversionComponent extends Component {
 		$this->convertInventories();
 		$this->convertOrders();
 
-		$this->AccountUtility->permissions();
-		$this->AccountUtility->syncSourcebans();
+		$this->AccountUtility->setup_permissions();
+		$this->AccountUtility->syncPermissions();
 	}
 
+	/**
+	 * Moves users to the new table and converts their credit to the new multiplier.
+	 */
 	public function convertUsers() {
 
 		echo 'beginning conversion';
@@ -43,6 +62,9 @@ class ConversionComponent extends Component {
 		echo 'ending conversion';
 	}
 
+	/**
+	 * Moves user inventories to the useritem table.
+	 */
 	public function convertInventories() {
 
 		echo 'beginning conversion';
@@ -62,6 +84,9 @@ class ConversionComponent extends Component {
 		echo 'ending conversion';
 	}
 
+	/**
+	 * Converts item purchases as well as paypal ones.
+	 */
 	public function convertOrders() {
 
 		echo 'beginning conversion';
