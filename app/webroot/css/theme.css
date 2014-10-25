@@ -1,29 +1,29 @@
 
 body {
-	margin: 0;
-	
-	font-family: roboto,arial;
-	font-size: 16px;
-	font-weight: 300;
+    margin: 0;
+
+    font-family: roboto,arial;
+    font-size: 16px;
+    font-weight: 300;
 }
 
 
 #background {
 
-	background-color: #ad0000;
-	/*background: linear-gradient(#ad1111, #900000);*/
-	background: linear-gradient(#ad1111, #502020);
-	background-attachment:fixed;
-	background-repeat:no-repeat;
-	box-shadow:  inset 0px 0px 64px rgba(0,0,0,0.35);
-	
-	width:100%;
-	height:100%;
-	position:fixed;
-	z-index:-1;
-	left:0px;
-	top:0px;
-	margin: 0px 0px;
+    background-color: #ad0000;
+    /*background: linear-gradient(#ad1111, #900000);*/
+    background: linear-gradient(#ad1111, #502020);
+    background-attachment:fixed;
+    background-repeat:no-repeat;
+    box-shadow:  inset 0px 0px 64px rgba(0,0,0,0.35);
+
+    width:100%;
+    height:100%;
+    position:fixed;
+    z-index:-1;
+    left:0px;
+    top:0px;
+    margin: 0px 0px;
 }
 
 .header-image {
@@ -31,54 +31,54 @@ body {
 }
 
 input  {
-	font-family:inherit;
-	font-size: 18px;
-	font-weight: inherit;
-	padding:2px;
+    font-family:inherit;
+    font-size: 18px;
+    font-weight: inherit;
+    padding:2px;
 }
 input[type="text"],
 input[type="number"] {
-	background:#fff;
-	border:1px solid rgba(0, 0, 0, 0.2);
+    background:#fff;
+    border:1px solid rgba(0, 0, 0, 0.2);
 }
 
 
 textarea {
-	font-family:inherit;
-	font-size: 16px;
-	font-weight: inherit;
-	padding:2px;
+    font-family:inherit;
+    font-size: 16px;
+    font-weight: inherit;
+    padding:2px;
 }
 
 input.pokemanlookup {
-	font-family:inherit;
-	font-size: 18px;
-	font-weight: inherit;
-	border:none;
-	border-radius:3px;
-	width: 100%;
-	padding:2px;
+    font-family:inherit;
+    font-size: 18px;
+    font-weight: inherit;
+    border:none;
+    border-radius:3px;
+    width: 100%;
+    padding:2px;
 }
 
 .all {
 }
 
 .content {
-	background-color: #eee;
-	color: #333;
-	width:640px;
-	padding:16px;
-	box-shadow: 4px 4px 8px rgba(0,0,0,0.15), inset 0px 0px 32px rgba(0,0,0,0.35);
-	/*border:1px solid #333;*/
-	margin:auto;
-	border-radius: 7px;
-	clear:both;
+    background-color: #eee;
+    color: #333;
+    width:640px;
+    padding:16px;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.15), inset 0px 0px 32px rgba(0,0,0,0.35);
+    /*border:1px solid #333;*/
+    margin:auto;
+    border-radius: 7px;
+    clear:both;
     min-height: 400px;
     font-size: 18px;
 }
 
 .content h1 {
-	/*text-align:center;*/
+    /*text-align:center;*/
 }
 
 a {
@@ -98,41 +98,41 @@ a:hover {
 
 
 .header {
-	margin:auto;
-	width:640px;
-	padding:8px 16px;
-	color: #fff;
-	font-size:10px;
+    margin:auto;
+    width:640px;
+    padding:8px 16px;
+    color: #fff;
+    font-size:10px;
 }
 /*
 .header_right {
-	float:right;
-	padding-bottom:8px;
-	width:300px;
-	text-align:right;
+    float:right;
+    padding-bottom:8px;
+    width:300px;
+    text-align:right;
 }
 
 .header_right img {
 }
 
 .header_left {
-	text-align:left;
-	float:left;
-	padding-bottom:8px;
-	width:300px;
+    text-align:left;
+    float:left;
+    padding-bottom:8px;
+    width:300px;
 }*/
 
 .headert {
-	width:100%;
+    width:100%;
 }
 
 .headert td.header_left{
-	vertical-align:bottom;
-	font-size:24px;
-	
+    vertical-align:bottom;
+    font-size:24px;
+
 }
 .headert td.header_left a{
-	color:#fff;
+    color:#fff;
     margin-right: 10px;
     background: rgba(0, 0, 0, 0.15);
     border-radius: 5px;
@@ -170,20 +170,20 @@ a:hover {
 .headert td.header_left a:last-child {
     margin-right: 0;
 }
-.headert td.header_right{	
-	text-align:right;
+.headert td.header_right{
+    text-align:right;
 }
 
 .foot {
-	margin-top: 8px;
-	text-align: center;
-	font-size: 16px;
+    margin-top: 8px;
+    text-align: center;
+    font-size: 16px;
     font-weight: 400;
-	color: #fff;
-	padding-bottom:16px;
+    color: #fff;
+    padding-bottom:16px;
 }
 .foot a {
-	color: #fff;
+    color: #fff;
 }
 
 .business_list {
@@ -194,15 +194,15 @@ a:hover {
 
 .business_list > li > a {
     display:block;
-	background-color: #e0e0e0;
+    background-color: #e0e0e0;
     border: 1px solid #ccc;
-	border-radius: 8px;
-	padding: 10px;
-	color: #000;
-	box-shadow: inset 0px 0px 5px rgba(0,0,0,0.15);
-	width: 250px;
-	text-align: center;
-	margin: 0 auto 20px;
+    border-radius: 8px;
+    padding: 10px;
+    color: #000;
+    box-shadow: inset 0px 0px 5px rgba(0,0,0,0.15);
+    width: 250px;
+    text-align: center;
+    margin: 0 auto 20px;
 }
 .business_list > li > a:hover {
     background: #eee;
@@ -210,247 +210,247 @@ a:hover {
 }
 
 td.pmname {
-	font-size: 32px;
-	font-weight: 700;
-	padding-left:8px;
-	color: #222;
-	text-shadow: 2px 0px #666;
-	padding-bottom:4px;
+    font-size: 32px;
+    font-weight: 700;
+    padding-left:8px;
+    color: #222;
+    text-shadow: 2px 0px #666;
+    padding-bottom:4px;
 }
 
 td.pmname2 {
-	font-size: 32px;
-	font-weight: 700;
-	padding-left:8px;
-	color: #222;
-	padding-bottom:4px;
+    font-size: 32px;
+    font-weight: 700;
+    padding-left:8px;
+    color: #222;
+    padding-bottom:4px;
 }
 
 #dexborder {
-	background-color: #911;
-	padding: 6px 6px 6px 6px;
-	/*border: 6px solid #911;*/
-	box-shadow: 0px 0px 8px #000, inset 0px 0px 4px rgba(0,0,0,0.45);
-	border: 1px solid #611;
-	border-radius: 4px;
-	color:#eee;
-	text-align:right;
-	text-shadow: 1px 1px 1px #000;
-	font-size: 12px;
+    background-color: #911;
+    padding: 6px 6px 6px 6px;
+    /*border: 6px solid #911;*/
+    box-shadow: 0px 0px 8px #000, inset 0px 0px 4px rgba(0,0,0,0.45);
+    border: 1px solid #611;
+    border-radius: 4px;
+    color:#eee;
+    text-align:right;
+    text-shadow: 1px 1px 1px #000;
+    font-size: 12px;
 }
 
 #dexdisplay {
-	text-shadow: none;
-	text-shadow: -1px 0px #666;
-	text-align:left;
-	background-color:#abed28;
-	background: #abed28 url('dexbg.png') repeat left top;
-	padding: 8px;
-	padding-top:0px;
-	box-shadow: 4px 4px 8px rgba(0,0,0,0.10), inset 2px 2px 2px rgba(0,0,0,0.35) ;
-	color: #333;
-	font-family: courier new, arial, monospace, sans serif;
-	font-size: 19px;
-	border: 3px solid #222;
-	border-radius: 8px;
-	height: 350px;
-	overflow:auto;
+    text-shadow: none;
+    text-shadow: -1px 0px #666;
+    text-align:left;
+    background-color:#abed28;
+    background: #abed28 url('dexbg.png') repeat left top;
+    padding: 8px;
+    padding-top:0px;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.10), inset 2px 2px 2px rgba(0,0,0,0.35) ;
+    color: #333;
+    font-family: courier new, arial, monospace, sans serif;
+    font-size: 19px;
+    border: 3px solid #222;
+    border-radius: 8px;
+    height: 350px;
+    overflow:auto;
 }
 
 #deximg {
-	border: 6px solid #149;
-	
+    border: 6px solid #149;
+
 }
 #deximg2 {
-	border: 6px solid #444;
-	
+    border: 6px solid #444;
+
 }
 
 #pokemandesc {
-	font-size: 14px;
+    font-size: 14px;
 }
 
 b {
-	font-weight:700;
+    font-weight:700;
 }
 
 a.logout {
-	color: #eee;
-	background-color:#444;
-	padding:2px 4px;
-	text-decoration:none;
-	margin-left:4px;
+    color: #eee;
+    background-color:#444;
+    padding:2px 4px;
+    text-decoration:none;
+    margin-left:4px;
 }
 
 a.logout:hover {
-	background-color:#666;
+    background-color:#666;
 }
 
 .pokemanlisting {
-	border-spacing: 4px;
-	width:100%;
+    border-spacing: 4px;
+    width:100%;
 }
 
 .pokemanlisting th {
-	background-color: #aaa;
-	padding: 4px;
+    background-color: #aaa;
+    padding: 4px;
 }
 
 .pokemanlisting td {
-	background-color: #bbb;
-	padding: 4px;
+    background-color: #bbb;
+    padding: 4px;
 }
 
 .pokemanlisting td img {
-	vertical-align:middle;
+    vertical-align:middle;
 }
 .toptrainers {
-	width: 100%;
-	border-spacing: 4px;
-	
+    width: 100%;
+    border-spacing: 4px;
+
 }
 .toptrainers td {
-	background-color: #bbb;
-	padding: 0px 4px;
-	font-size: 20px;
-	vertical-align: middle;
+    background-color: #bbb;
+    padding: 0px 4px;
+    font-size: 20px;
+    vertical-align: middle;
 }
 
 td.ttcount {
-	text-align:center;
-	width: 20%;
+    text-align:center;
+    width: 20%;
 }
 
 td .ttname {
-	vertical-align: top;
-	position: relative;
-	left: 6px;
-	top: 6px;
-	font-weight: 700;
+    vertical-align: top;
+    position: relative;
+    left: 6px;
+    top: 6px;
+    font-weight: 700;
 }
 
 .toptrainers td img {
-	padding-top:4px;
-	
+    padding-top:4px;
+
 }
 
 
 table.confirmpurchase {
-	border-spacing: 0px 0px;
-	width: 50%;
-	border: 1px solid #888;
+    border-spacing: 0px 0px;
+    width: 50%;
+    border: 1px solid #888;
 }
 
 table.confirmpurchase td {
-	background-color: #bbb;
-	border-bottom: 1px dashed #888;
-	padding: 4px;
+    background-color: #bbb;
+    border-bottom: 1px dashed #888;
+    padding: 4px;
 }
 table.confirmpurchase td.quantity {
-	text-align:center;
+    text-align:center;
 }
 table.confirmpurchase td.price {
-	text-align:right;
+    text-align:right;
 }
 
 /* inventory */
 
 table.inventory {
-	border-spacing: 8px;
+    border-spacing: 8px;
 }
 
 table.inventory td {
-	background-color: #AAA;
-	padding: 2px;
-	border: 4px solid #555;
-	width:64px;
-	height:64px;
-	box-shadow:  inset 0px 0px 12px rgba(0,0,0,0.45);
-	border-radius: 12px;
+    background-color: #AAA;
+    padding: 2px;
+    border: 4px solid #555;
+    width:64px;
+    height:64px;
+    box-shadow:  inset 0px 0px 12px rgba(0,0,0,0.45);
+    border-radius: 12px;
 }
 
 table.inventory img {
-	vertical-align:middle;
+    vertical-align:middle;
 }
 table.inventory .item_pic {
-	position:relative; 
+    position:relative;
 }
 
 table.inventory .item_amt {
-	font-size: 20px;
-	font-weight: bold;
-	color:#fff;
-	text-shadow: 1px 1px 2px #000,2px 1px 2px #000 ;
-	position:absolute;
-	right: 4px;
-	bottom: 0px;
-	text-align:right;
-	
+    font-size: 20px;
+    font-weight: bold;
+    color:#fff;
+    text-shadow: 1px 1px 2px #000,2px 1px 2px #000 ;
+    position:absolute;
+    right: 4px;
+    bottom: 0px;
+    text-align:right;
+
 }
 
 /* buylist */
 table.buylist {
-	border-spacing: 4px;
+    border-spacing: 4px;
     width:100%;
 }
 
 table.buylist td, table.buylist th {
-	background-color: #ccc;
-	padding: 2px 4px;
+    background-color: #ccc;
+    padding: 2px 4px;
 }
 table.buylist td.desc {
-	min-width: 250px;
-	cursor: help;
+    min-width: 250px;
+    cursor: help;
 }
 
 table.buylist td.prices {
-	width:150px;
-	font-size: 24px;
-	font-weight: 400;
-	text-align:center;
+    width:150px;
+    font-size: 24px;
+    font-weight: 400;
+    text-align:center;
 }
 
 table.buylist td.image {
-	width:32px;
-	height: 32px;
-	cursor: help;
+    width:32px;
+    height: 32px;
+    cursor: help;
 }
 table.buylist td.image img {
-	vertical-align: middle;
-	width: 32px;
-	height: 32px;
+    vertical-align: middle;
+    width: 32px;
+    height: 32px;
 }
 table.buylist td.itemamount {
-	width:64px;
-	text-align:center;
+    width:64px;
+    text-align:center;
 }
 
 table.buylist input.itemamount {
-	width: 48px;
+    width: 48px;
 }
 
 /* receipt */
 
 .receipt_container {
-	width: 320px;
-	margin:auto;
+    width: 320px;
+    margin:auto;
 }
 
 
 .receipt {
-	/*background: #fdfdfd;*/
-	background: transparent url( '/store2/img/misc/receiptpaper.png' ) repeat-y left top;
-	width: 320px;
-	font-family:pt mono;
-	font-size: 12px;
-	color: #777;
+    /*background: #fdfdfd;*/
+    background: transparent url( '/store2/img/misc/receiptpaper.png' ) repeat-y left top;
+    width: 320px;
+    font-family:pt mono;
+    font-size: 12px;
+    color: #777;
 
 }
 
 .receipt_contents {
-	
-	width: 250px;
-	margin:auto;
+
+    width: 250px;
+    margin:auto;
 }
 
 .receipt_contents_img {
@@ -458,20 +458,20 @@ table.buylist input.itemamount {
 }
 
 .receipt_top {
-	background: transparent url( '/store2/img/misc/receipt1.png' ) repeat-x left bottom;
-	width:320px;
-	height:44px;
+    background: transparent url( '/store2/img/misc/receipt1.png' ) repeat-x left bottom;
+    width:320px;
+    height:44px;
 }
 
 .receipt_bottom {
-	background: transparent url( '/store2/img/misc/receipt2.png' ) repeat-x left top;
-	width:320px;
-	height:44px;
+    background: transparent url( '/store2/img/misc/receipt2.png' ) repeat-x left top;
+    width:320px;
+    height:44px;
 }
 
 .receipt_footer {
-	padding: 12px 4px 4px 4px;
-	text-align:center;
+    padding: 12px 4px 4px 4px;
+    text-align:center;
 }
 
 .receipt_sale_info {
@@ -483,91 +483,91 @@ table.buylist input.itemamount {
 }
 
 .receipt table {
-	border-spacing: 2px 0px;
-	border-collapse:collapse;
-	width: 100%;
+    border-spacing: 2px 0px;
+    border-collapse:collapse;
+    width: 100%;
 }
 .receipt table td {
-	vertical-align:top;
+    vertical-align:top;
 }
 .receipt table td.itemcol {
-	text-align:left;
-	padding-left: 8px;
-	vertical-align:top;
-	/*width: 130px;*/
+    text-align:left;
+    padding-left: 8px;
+    vertical-align:top;
+    /*width: 130px;*/
 }
 .receipt table td.qtycol {
-	text-align:center;
-	width: 20px;
+    text-align:center;
+    width: 20px;
 }
 .receipt table td.right {
-	text-align:right;
-	padding-right: 8px;
+    text-align:right;
+    padding-right: 8px;
 }
 
 .receipt table tr.toprow td {
-	border-bottom: 1px dotted #777;
+    border-bottom: 1px dotted #777;
 }
 
 .receipt table tr.itemrow.border  td {
-	border-bottom: 1px dotted #777;
-	/*width: 130px;*/
+    border-bottom: 1px dotted #777;
+    /*width: 130px;*/
 }
 
 table.addfunds {
-	border-spacing: 4px;
+    border-spacing: 4px;
 }
 
 
 table.addfunds td {
-	padding: 4px;
-	background-color:#bbb;
+    padding: 4px;
+    background-color:#bbb;
 }
 
 .bbs_content table {
-	border-spacing: 3px;
-	font-size: 11px;
-	width:100%;
+    border-spacing: 3px;
+    font-size: 11px;
+    width:100%;
 }
 
 .bbs_content table tr {
-	background-color: #dde;
+    background-color: #dde;
 }
 .bbs_content table tr:nth-child(even) {
-	background-color: #cdc;
+    background-color: #cdc;
 }
 
 .bbs_content table td {
-	padding: 4px;
+    padding: 4px;
 }
 
 .topcash {
-	margin: auto;
-	width: 500px;
-	border-spacing: 4px;
+    margin: auto;
+    width: 500px;
+    border-spacing: 4px;
 }
 
 .topcash  td {
-	background-color: #ccc;
+    background-color: #ccc;
 }
 
 .topcash td.topcash_avatar {
-	
-	width: 32px;
+
+    width: 32px;
 }
 
 .topcash  td.topcash_position {
-	text-align:center;
-	padding: 0px 6px;
+    text-align:center;
+    padding: 0px 6px;
 }
 
 .topcash  tr.topcash_top10 td {
-	
-	background-color: #cdc;
+
+    background-color: #cdc;
 }
 
 .topcash  td img {
-	vertical-align:bottom;
+    vertical-align:bottom;
 }
 
 .cartimg {

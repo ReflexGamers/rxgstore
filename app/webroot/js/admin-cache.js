@@ -1,90 +1,90 @@
 (function($){
 
-	$('#cache_refreshall').on('click', function(){
+    $('#cache_refreshall').on('click', function(){
 
-		if (!confirm('Are you sure you want to refresh the entire cache?')) {
-			return false;
-		}
+        if (!confirm('Are you sure you want to refresh the entire cache?')) {
+            return false;
+        }
 
-		var el = $(this);
+        var el = $(this);
 
-		$.ajax(el.attr('href') || el.data('href'), {
+        $.ajax(el.attr('href') || el.data('href'), {
 
-			type: 'post',
-			beforeSend: function(){
-				$('#cache_loading').fadeIn();
-			},
+            type: 'post',
+            beforeSend: function(){
+                $('#cache_loading').fadeIn();
+            },
 
-			success: function(data, textStatus) {
-				$('#cache_content').html(data);
-				$('#cache_loading').fadeOut();
-			}
-		});
+            success: function(data, textStatus) {
+                $('#cache_content').html(data);
+                $('#cache_loading').fadeOut();
+            }
+        });
 
-		return false;
-	});
-
-
-	$('#cache_clearall').on('click', function(){
-
-		if (!confirm('Are you sure you clear the entire cache?')) {
-			return false;
-		}
-
-		var el = $(this);
-
-		$.ajax(el.attr('href') || el.data('href'), {
-
-			type: 'post',
-			success: function(data, textStatus) {
-				$('#cache_batch_actions').remove();
-				$('#cache_content').html(data);
-			}
-		});
-
-		return false;
-	});
+        return false;
+    });
 
 
-	$('#cache_content').on('click', '.cache_refresh', function(){
+    $('#cache_clearall').on('click', function(){
 
-		if (!confirm('Are you sure you want to refresh this player in the cache?')) {
-			return false;
-		}
+        if (!confirm('Are you sure you clear the entire cache?')) {
+            return false;
+        }
 
-		var el = $(this);
-		var entry = el.closest('.cache_entry');
+        var el = $(this);
 
-		$.ajax(el.attr('href') || el.data('href'), {
+        $.ajax(el.attr('href') || el.data('href'), {
 
-			type: 'post',
-			success: function(data, textStatus) {
-				entry.html(data);
-			}
-		});
+            type: 'post',
+            success: function(data, textStatus) {
+                $('#cache_batch_actions').remove();
+                $('#cache_content').html(data);
+            }
+        });
 
-		return false;
+        return false;
+    });
 
-	}).on('click', '.cache_clear', function(){
 
-		if (!confirm('Are you sure you want to delete this player from the cache?')) {
-			return false;
-		}
+    $('#cache_content').on('click', '.cache_refresh', function(){
 
-		var el = $(this);
-		var entry = el.closest('.cache_entry');
+        if (!confirm('Are you sure you want to refresh this player in the cache?')) {
+            return false;
+        }
 
-		$.ajax(el.attr('href') || el.data('href'), {
+        var el = $(this);
+        var entry = el.closest('.cache_entry');
 
-			type: 'post',
-			success: function(data, textStatus) {
-				entry.slideUp(function(){
-					$(this).remove();
-				});
-			}
-		});
+        $.ajax(el.attr('href') || el.data('href'), {
 
-		return false;
-	});
+            type: 'post',
+            success: function(data, textStatus) {
+                entry.html(data);
+            }
+        });
+
+        return false;
+
+    }).on('click', '.cache_clear', function(){
+
+        if (!confirm('Are you sure you want to delete this player from the cache?')) {
+            return false;
+        }
+
+        var el = $(this);
+        var entry = el.closest('.cache_entry');
+
+        $.ajax(el.attr('href') || el.data('href'), {
+
+            type: 'post',
+            success: function(data, textStatus) {
+                entry.slideUp(function(){
+                    $(this).remove();
+                });
+            }
+        });
+
+        return false;
+    });
 
 })(jQuery);
