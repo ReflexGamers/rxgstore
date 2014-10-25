@@ -14,9 +14,12 @@ App::uses('Component', 'Controller');
  *
  * @property SavedLogin $SavedLogin
  * @property SteamPlayer $SteamPlayer
- * @property Model/User $User
+ * @property User $User
  */
 class AccountUtilityComponent extends Component {
+	const LOGIN_FORCE = 1;
+	const LOGIN_SAVE = 2;
+
 	public $components = array('Acl', 'Access', 'Auth', 'Cookie', 'RequestHandler');
 
 	public function initialize(Controller $controller) {
@@ -26,21 +29,36 @@ class AccountUtilityComponent extends Component {
 		$this->User = ClassRegistry::init('User');
 	}
 
-	public function loginUser($user_id, $options = array()) {
-		return $this->login($this->SteamID64FromAccountID($user_id), $options);
+	/**
+	 * Logs in the current user to the account specified by user_id. Different from login(), it uses user_id instead of
+	 * steamid. This is used by QuickAuth.
+	 *
+	 * @param $user_id
+	 * @param int $flags
+	 * @return bool success of login attempt
+	 */
+	public function loginUser($user_id, $flags = 0) {
+		return $this->login($this->SteamID64FromAccountID($user_id), $flags);
 	}
 
-	public function login($steamid, $options = array()) {
+	/**
+	 * Logs in a player by steamid.
+	 *
+	 * @param $steamid
+	 * @param int $flags
+	 * @return bool success of login attempt
+	 */
+	public function login($steamid, $flags = 0) {
 
 		$steaminfo = $this->SteamPlayer->getByIds(array($steamid));
 
-		if (empty($steaminfo) && (empty($options['force']) || !$options['force'])) {
+		if (empty($steaminfo) && !($flags & self::LOGIN_FORCE)) {
 			return false;
 		} else {
 			$steaminfo = $steaminfo[0];
 		}
 
-		//csgo clanid: 103582791434658915
+		//rxg csgo clanid: 103582791434658915
 
 		$user_id = $this->AccountIDFromSteamID64($steamid);
 
@@ -62,13 +80,18 @@ class AccountUtilityComponent extends Component {
 			'profile' => $steaminfo['profileurl']
 		));
 
-		if (!empty($options['save']) && $options['save']) {
+		if ($flags & self::LOGIN_SAVE) {
 			$this->saveLogin($user_id);
 		}
 
 		return true;
 	}
 
+	/**
+	 * Saves the user's login in the database and give them a cookie.
+	 *
+	 * @param $user_id
+	 */
 	public function saveLogin($user_id) {
 
 		$code = mt_rand(1,999999);
@@ -87,6 +110,13 @@ class AccountUtilityComponent extends Component {
 		$this->Cookie->write('saved_login', sprintf("%016d%016d", $id, $code), true, '30 days');
 	}
 
+	/**
+	 * Checks for a saved login in the database and tries to match it with the user's cookie to log them in. If already
+	 * logged in, it just updates the record and sends them a new cookie.
+	 *
+	 * @param bool $updateOnly
+	 * @return bool success of attempt (false if expired cookie or no cookie found)
+	 */
 	public function trySavedLogin($updateOnly = false) {
 
 		$cookie = $this->Cookie->read('saved_login');
@@ -108,7 +138,6 @@ class AccountUtilityComponent extends Component {
 		));
 
 		if (empty($loginInfo)) {
-			//echo 'deleting cookie';
 			//Cleanup
 			$this->SavedLogin->deleteAll(array('expires <= ' => $time), false);
 			$this->Cookie->delete('saved_login');
@@ -127,6 +156,13 @@ class AccountUtilityComponent extends Component {
 		return true;
 	}
 
+	/**
+	 * Gets steam info for a player by user_id or steamid.
+	 *
+	 * @param string $id user_id or steamid depending on $isSteamid param
+	 * @param bool $isSteamid whether the id is a steamid or a user_id
+	 * @return array player data
+	 */
 	public function getSteamInfo($id, $isSteamid = false) {
 
 		$steamid = $isSteamid ? $id : $this->SteamID64FromAccountID($id);
@@ -141,6 +177,15 @@ class AccountUtilityComponent extends Component {
 		return $player;
 	}
 
+	/**
+	 * Gets player data for all of the players specified by their account ids (user_id). Result is an indexed array of
+	 * players' data where each player's user_id the key for their corresponding info.
+	 *
+	 * If all the players have recent data in the cache, it will be pulled from there instead of through an API call.
+	 *
+	 * @param array $accounts an array of account ids (aka user_id)
+	 * @return array player data indexed by user_id
+	 */
 	public function getIndexedSteamInfo($accounts) {
 
 		if (empty($accounts)) return array();
@@ -184,7 +229,12 @@ class AccountUtilityComponent extends Component {
 		return $players;
 	}
 
-	public function syncSourcebans() {
+	/**
+	 * Synchronizes the permission tables with Sourcebans and the forums.
+	 *
+	 * @return array result of sync with keys 'added', 'updated' and 'removed' as sub-arrays with the changed admin data
+	 */
+	public function syncPermissions() {
 
 		$aro = $this->Acl->Aro;
 
@@ -389,78 +439,10 @@ class AccountUtilityComponent extends Component {
 		return $results;
 	}
 
-	public function syncMembers() {
-
-		$db = ConnectionManager::getDataSource('forums');
-		$config = Configure::read('Store.Forums');
-
-		$groups = implode(',', $config['MemberGroups']);
-		$divisions = $config['Divisions'];
-
-		$result = $db->rawQuery("SELECT steamid FROM steamuser.steamid, userfield.field5 JOIN user ON steamuser.userid = user.userid JOIN userfield on userfield.userid = user.userid WHERE user.usergroupid IN ($groups)");
-
-		$linkedMembers = array();
-
-		while($row = $result->fetch()) {
-			$linkedMembers[] = $this->AccountIDFromSteamID64($row['steamid']);
-		}
-
-		$aro = $this->Acl->Aro;
-
-		$savedMembers = Hash::extract($aro->find('all', array(
-			'fields' => array(
-				'foreign_key'
-			),
-			'conditions' => array(
-				'foreign_key is not null'
-			),
-			'recursive' => -1
-		)), '{n}.Aro.foreign_key');
-
-		$addMembers = array_diff($linkedMembers, $savedMembers);
-		$removeMembers = array_diff($savedMembers, $linkedMembers);
-
-		if (empty($addMembers) && empty($removeMembers)) {
-			return array();
-		}
-
-		$memberGroup = $aro->find('first', array(
-			'fields' => array('id'),
-			'conditions' => array(
-				'alias' => 'Member'
-			),
-			'recursive' => -1
-		));
-
-		if (empty($memberGroup['Aro']['id'])) {
-			return array();
-		}
-
-		$memberGroupId = $memberGroup['Aro']['id'];
-
-		foreach ($addMembers as $user_id) {
-			$aro->clear();
-			$aro->save(array(
-				'parent_id' => $memberGroupId,
-				'model' => 'User',
-				'foreign_key' => $user_id
-			));
-		}
-
-		foreach ($removeMembers as $user_id) {
-			$aro->clear();
-			$aro->delete(array(
-				'foreign_key' => $user_id
-			));
-		}
-
-		return array(
-			'added' => $addMembers,
-			'removed' => $removeMembers
-		);
-	}
-
-	public function permissions() {
+	/**
+	 * Initializes permissions. Empty the acos, aros and acos_aros tables before running.
+	 */
+	public function initPermissions() {
 
 		$aco = $this->Acl->Aco;
 		$aro = $this->Acl->Aro;
@@ -471,6 +453,7 @@ class AccountUtilityComponent extends Component {
 			array('alias' => 'Cache'),
 			array('alias' => 'Chats'),
 			array('alias' => 'Items'),
+			array('alias' => 'Logs'),
 			array('alias' => 'Permissions'),
 			array('alias' => 'QuickAuth'),
 			array('alias' => 'Receipts'),
@@ -521,90 +504,70 @@ class AccountUtilityComponent extends Component {
 		}
 	}
 
-	public function AccountIDFromSteamID64( $steamid64 ) {
-		$steamid64 = bcsub( $steamid64, "76561197960265728" );
-		if( bccomp( $steamid64, "2147483648" ) >= 0 ) {
-			$steamid64 = bcsub( $steamid64, "4294967296" );
-		}
-		return (int)$steamid64;
+	/**
+	 * Converts a 64-bit SteamID to the signed 32-bit format.
+	 *
+	 * @param $steamid64
+	 * @return false|string
+	 */
+	public function AccountIDFromSteamID64($steamid64) {
+		return SteamID::Parse($steamid64, SteamID::FORMAT_STEAMID64)->Format(SteamID::FORMAT_S32);
 	}
 
-	public function SteamID64FromAccountID( $accountid ) {
-		$num = (string)$accountid;
-		if( $accountid < 0 ) {
-			$num = bcadd( $num, "4294967296" );
-		}
-		$num = bcadd( $num, "76561197960265728", 0 );
-		//$accountid += 0x0110000100000000 ;
-		return $num;
+	/**
+	 * Converts a signed 32-bit SteamID to the 64-bit format.
+	 *
+	 * @param $accountid
+	 * @return false|string
+	 */
+	public function SteamID64FromAccountID($accountid) {
+		return SteamID::Parse($accountid, SteamID::FORMAT_S32)->Format(SteamID::FORMAT_STEAMID64);
 	}
 
-	public function AccountIDFromSteamID32( $steamid32 ) {
-
-		return preg_replace_callback( '/STEAM_[0-1]:([0-1]):([0-9]+)/', function($matches){
-			return (int)($matches[2]) * 2 + (int)($matches[1]);
-		}, $steamid32 );
+	/**
+	 * Converts a 32-bit SteamID (string) to the signed 32-bit format.
+	 *
+	 * @param $steamid32
+	 * @return false|string
+	 */
+	public function AccountIDFromSteamID32($steamid32) {
+		return SteamID::Parse($steamid32, SteamID::FORMAT_STEAMID32)->Format(SteamID::FORMAT_S32);
 	}
 
-	public function getContents($url) {
-
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch,CURLOPT_FOLLOWLOCATION,1);
-
-		$data = curl_exec($ch);
-		curl_close($ch);
-
-		return $data;
-	}
-
-	public function resolveVanityUrl( $vanityurl ) {
-
+	/**
+	 * Converts a player's vanity URL to a signed 32-bit SteamID.
+	 *
+	 * @param $vanityUrl
+	 */
+	public function AccountIDFromVanityUrl($vanityUrl) {
 		$apiKey = ConnectionManager::enumConnectionObjects()['steam']['apikey'];
-		$url = "http://api.steampowered.com/ISteamUser/ResolveVanityUrl/v0001/?key={$apiKey}&vanityurl={$vanityurl}&format=json";
-
-		$response = json_decode($this->getContents($url), true);
-
-		return empty($response) ? '' : $response['response']['steamid'];
+		SteamID::SetSteamAPIKey($apiKey);
+		SteamID::Parse($vanityUrl, SteamID::FORMAT_VANITY)->Format(SteamID::FORMAT_S32);
 	}
 
-	public function resolveAccountIDs( $ids ) {
+	/**
+	 * Parses a list of SteamIDs and returns an array of account ids (aka user_id). Supports status printouts as long as
+	 * the SteamIDs are in the SteamID32 or SteamID3 formats.
+	 *
+	 * @param array $ids list of SteamIDs or lines to parse them from
+	 * @return array of account ids (aka user_id)
+	 */
+	public function resolveAccountIDs($ids) {
 
 		$accounts = array();
 
-		foreach ( $ids as $str ) {
+		foreach ($ids as $id) {
 
-			if ( $str == 'me') {
-
+			if ($id == 'me') {
 				$accounts[] = $this->Auth->user('user_id');
+			} else {
 
-			} else if ( preg_match( '/(STEAM_[0-1]:[0-1]:[0-9]+)/', $str, $matches ) ) {
+				// parse steamid32 or steamid3 out of line first
+				if (preg_match('/(\[U:1:[0-9]+\])/', $id, $matches) || preg_match('/(STEAM_[0-1]:[0-1]:[0-9]+)/', $id, $matches)) {
+					$id = $matches[1];
+				}
 
-				//searches entire line (works with status2)
-				//steamid 32 match
-				$accounts[] = $this->AccountIDFromSteamID32( $matches[1] );
-
-			} else if ( preg_match( '/\[U:[0-1]:([0-9]+)\]/', $str, $matches ) ) {
-
-				$accounts[] = $matches[1];
-
-			} else if ( preg_match( '/^765(?P<idmatch>[0-9]+)\/?$/', $str, $matches ) == 1 ) {
-
-				//steamid 64 match
-				$accounts[] = $this->AccountIDFromSteamID64( $matches['idmatch'] );
-
-			} else if ( preg_match( '/^(http:\/\/)*(www.)*steamcommunity.com\/profiles\/(?P<idmatch>[0-9]+)\/?$/', $str, $matches ) == 1 ) {
-
-				//community url match (steamid 64)
-				$accounts[] = $this->AccountIDFromSteamID64( $matches['idmatch']);
-
-			} else if ( preg_match( '/^((http:\/\/)*(www.)*steamcommunity.com\/id\/)*(?P<idmatch>[a-zA-Z0-9_]+)\/?$/', $str, $matches ) == 1 ) {
-
-				//vanity url match
-				$acc = $this->resolveVanityUrl( $matches['idmatch'] );
-				$accounts[] = empty($acc) ? "NOT FOUND: $str" : $this->AccountIDFromSteamID64( $acc );
-
+				$accounts[] = SteamID::Parse($id, SteamID::FORMAT_AUTO)->Format(SteamID::FORMAT_S32);
 			}
 		}
 
