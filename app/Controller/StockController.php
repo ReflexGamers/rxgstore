@@ -100,7 +100,7 @@ class StockController extends AppController {
 			);
 		}
 
-		$this->addPlayers(Hash::extract($shipments, '{n}.Shipment.user_id'));
+		$this->addPlayers($shipments, '{n}.Shipment.user_id');
 
 		$this->loadItems();
 

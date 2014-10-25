@@ -59,7 +59,7 @@ class UsersController extends AppController {
 			$this->set('credit', $user['User']['credit']);
 		}
 
-		$this->addPlayers(array($user_id));
+		$this->addPlayers($user_id);
 
 		$this->set(array(
 			'user_id' => $user_id,
@@ -125,7 +125,7 @@ class UsersController extends AppController {
 			}
 		);
 
-		$this->addPlayers(array($user_id));
+		$this->addPlayers($user_id);
 		$this->loadItems();
 
 		$this->set(array(
@@ -155,10 +155,10 @@ class UsersController extends AppController {
 
 		$activities = $this->Activity->getRecent($this->Paginator->paginate('Activity'));
 
-		$this->addPlayers(Hash::extract($activities, '{n}.{s}.user_id'));
-		$this->addPlayers(Hash::extract($activities, '{n}.{s}.sender_id'));
-		$this->addPlayers(Hash::extract($activities, '{n}.{s}.recipient_id'));
-		$this->addPlayers(Hash::extract($activities, '{n}.RewardRecipient.{n}'));
+		$this->addPlayers($activities, '{n}.{s}.user_id');
+		$this->addPlayers($activities, '{n}.{s}.sender_id');
+		$this->addPlayers($activities, '{n}.{s}.recipient_id');
+		$this->addPlayers($activities, '{n}.RewardRecipient.{n}');
 
 		$this->loadItems();
 		$this->loadCashData();
@@ -211,7 +211,7 @@ class UsersController extends AppController {
 				$oid = $openid->identity;
 				$steamid = substr($oid, strrpos($oid, "/") + 1);
 				$save = $this->Session->read('rememberme');
-				$this->AccountUtility->login($steamid, array('save' => $save));
+				$this->AccountUtility->login($steamid, AccountUtilityComponent::LOGIN_SAVE);
 			}
 		} catch (ErrorException $e) {
 			echo 'auth error: ' . $e->getMessage();
