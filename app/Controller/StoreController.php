@@ -62,8 +62,8 @@ class StoreController extends AppController {
 
 		$this->autoRender = false;
 
-		$this->AccountUtility->permissions();
-		$this->AccountUtility->syncSourcebans();
+		$this->AccountUtility->initPermissions();
+		$this->AccountUtility->syncPermissions();
 
 	}
 }
