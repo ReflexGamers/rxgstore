@@ -1,8 +1,7 @@
 {% extends 'Common/base.tpl' %}
 
-{% set jquery = true %}
 {% set title = 'Receive a Shipment' %}
-{% set scripts = ['common'] %}
+{% set scripts = 'common' %}
 
 {% block content %}
 
@@ -10,7 +9,7 @@
 
     {{ session.flash() }}
 
-    <p>Below, you may receive a shipment and add items to stock.</p>
+    <p>Below, you may receive a shipment to add items to stock.</p>
 
     <p><strong>Please do not order shipments more than 1-2 times per week.</strong> Shipments are public information so we want to space them out somewhat evenly. Be sure to check the recent shipments at the bottom of this page before proceeding.</p>
 
@@ -20,7 +19,7 @@
 
     <p>On this page: Items with less than "ideal" stock will show in orange. Items with less than half of "ideal" stock will show in red.</p>
 
-    {{ form.create('Stock', {
+    {{ form.create('Shipment', {
         'inputDefaults': {
             'label': false,
             'div': false,
@@ -52,7 +51,7 @@
                         {{ item.ideal_quantity }}
                     </td>
                     <td class="item_stock_quantity">
-                        <span class="item_stock_current {{ item.quantity < item.ideal_quantity / 2 ? 'stock_danger' : item.quantity < item.ideal_quantity ? 'stock_warning' : '' }}">{{ item.quantity }}</span> / {{ item.maximum }}
+                        <span class="item_stock_current {{ (item.quantity < item.ideal_quantity / 2 )? 'stock_danger' : (item.quantity < item.ideal_quantity) ? 'stock_warning' : '' }}">{{ item.quantity }}</span> / {{ item.maximum }}
                     </td>
                     <td class="item_stock_input">
                         {{ form.hidden(loop.index0 ~ '.item_id', {'value': item.item_id}) }}

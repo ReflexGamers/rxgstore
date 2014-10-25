@@ -15,7 +15,7 @@
             <li>{{ html.link('Send a Reward', {'controller': 'Rewards', 'action': 'compose'}) }}</li>
         {% endif %}
         {% if access.check('Stock', 'update') %}
-            <li>{{ html.link('Receive a Shipment', {'controller': 'Stock', 'action': 'edit'}) }}</li>
+            <li>{{ html.link('Receive a Shipment', {'controller': 'Shipments', 'action': 'edit'}) }}</li>
         {% endif %}
         {% if access.check('Items', 'update') %}
             <li>{{ html.link('Change Item Display Order', {'controller': 'Items', 'action': 'sort'}) }}</li>
