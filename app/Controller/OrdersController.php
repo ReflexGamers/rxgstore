@@ -158,6 +158,8 @@ class OrdersController extends AppController {
     /**
      * Completes a purchase and shows a receipt. The order data should be set in the session by a checkout process
      * before this is called.
+     *
+     * @broadcast order contents
      */
     public function buy() {
 
