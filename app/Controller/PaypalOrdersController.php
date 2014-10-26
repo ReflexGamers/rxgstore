@@ -5,6 +5,8 @@ App::uses('AppController', 'Controller');
  * PaypalOrders Controller
  *
  * @property PaypalOrder $PaypalOrder
+ *
+ * @property PaypalComponent $Paypal
  * @property ServerUtilityComponent $ServerUtility
  */
 class PaypalOrdersController extends AppController {
@@ -39,9 +41,9 @@ class PaypalOrdersController extends AppController {
     /**
      * Activity page, usually included in the addfunds page at the bottom and called via ajax for paging.
      *
-     * @param bool $doRender whether to force render. set to false if calling from another action
+     * @param bool $forceRender whether to force render. set to false if calling from another action
      */
-    public function activity($doRender = true) {
+    public function activity($forceRender = true) {
 
         $this->Paginator->settings = array(
             'PaypalOrder' => array(
@@ -61,7 +63,7 @@ class PaypalOrdersController extends AppController {
             'activityPageLocation' => array('controller' => 'PaypalOrders', 'action' => 'activity')
         ));
 
-        if ($doRender) {
+        if ($forceRender) {
             $this->set('title', 'PayPal Activity');
             $this->render('/Activity/list');
         }
@@ -136,12 +138,13 @@ class PaypalOrdersController extends AppController {
 
             $this->Session->setFlash('Oops! An error occurred. Your PAYPAL has not been charged.', 'default', array('class' => 'error'));
             $this->redirect(array('action' => 'addfunds'));
-            //echo $e;
         }
     }
 
     /**
      * The user is sent back here after confirming the purchase (instead of cancelling).
+     *
+     * @broadcast amount purchased
      */
     public function confirm() {
 
@@ -149,19 +152,21 @@ class PaypalOrdersController extends AppController {
         $query = $this->request->query;
 
         $steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
+
+        // check for bad data
         $problemWithRequest = false;
 
         if (empty($data)) {
-            CakeLog::write('paypal', "$steamid attempted to confirm without any data.");
+            CakeLog::write('paypal_error', "$steamid attempted to confirm without any data.");
             $problemWithRequest = true;
         } else if (empty($query['challenge'])) {
-            CakeLog::write('paypal', "$steamid attempted to confirm without a challenge token in the URL.");
+            CakeLog::write('paypal_error', "$steamid attempted to confirm without a challenge token in the URL.");
             $problemWithRequest = true;
         } else if ($query['challenge'] != $data['challenge']) {
-            CakeLog::write('paypal', "$steamid attempted to confirm with an incorrect challenge token ({$query['challenge']} != {$data['challenge']}).");
+            CakeLog::write('paypal_error', "$steamid attempted to confirm with an incorrect challenge token ({$query['challenge']} != {$data['challenge']}).");
             $problemWithRequest = true;
         } else if (empty($query['PayerID'])) {
-            CakeLog::write('paypal', "$steamid attempted to confirm without a PayerID.");
+            CakeLog::write('paypal_error', "$steamid attempted to confirm without a PayerID.");
             $problemWithRequest = true;
         }
 
@@ -194,7 +199,7 @@ class PaypalOrdersController extends AppController {
                 'credit' => $data['amount']
             ));
 
-            //Broadcast
+            // broadcast
             $server = $this->User->getCurrentServer($user_id);
 
             if (!empty($server)) {
