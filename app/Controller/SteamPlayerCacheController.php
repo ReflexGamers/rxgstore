@@ -16,6 +16,9 @@ class SteamPlayerCacheController extends AppController {
         $this->Auth->deny();
     }
 
+    /**
+     * Shows the view page for cached Steam Players.
+     */
     public function view() {
 
         if (!$this->Access->check('Cache', 'read')) {
@@ -25,10 +28,16 @@ class SteamPlayerCacheController extends AppController {
 
         $this->set('cacheDuration', Configure::read('Store.SteamCacheDuration') / 3600);
 
-        $this->players();
+        $this->players(false);
     }
 
-    public function players() {
+    /**
+     * Shows a page of cached players. This is usually included in the view page or called via ajax for paging, but
+     * sometimes it's used as the whole response such as when refreshing the entire cache.
+     *
+     * @param bool $forceRender whether to force render. set to false if calling from another action
+     */
+    public function players($forceRender = true) {
 
         if (!$this->Access->check('Cache', 'read')) {
             if ($this->request->is('ajax')) {
@@ -47,6 +56,7 @@ class SteamPlayerCacheController extends AppController {
 
         $players = Hash::extract($this->Paginator->paginate('SteamPlayerCache'), '{n}.SteamPlayerCache');
 
+        // convert steamids to get member status
         $accounts = array();
         foreach ($players as $player) {
             $accounts[] = $this->AccountUtility->AccountIDFromSteamID64($player['steamid']);
@@ -66,8 +76,18 @@ class SteamPlayerCacheController extends AppController {
             'pageModel' => $this->SteamPlayerCache->name,
             'pageLocation' => array('controller' => 'SteamPlayerCache', 'action' => 'players')
         ));
+
+        if ($forceRender) {
+            $this->render('players');
+        }
     }
 
+    /**
+     * Refreshes a player in the cache and renders that player's row in the response.
+     *
+     * @log [admin.log] the admin id, player id
+     * @param int $steamid 64-bit steamid of the cached player to refresh
+     */
     public function refresh($steamid) {
 
         $this->request->allowMethod('post');
@@ -89,6 +109,11 @@ class SteamPlayerCacheController extends AppController {
         $this->render('single.inc');
     }
 
+    /**
+     * Refreshes all players in the cache and renders a page of them in the response.
+     *
+     * @log [admin.log] the admin id
+     */
     public function refresh_all() {
 
         $this->request->allowMethod('post');
@@ -102,11 +127,15 @@ class SteamPlayerCacheController extends AppController {
         CakeLog::write('admin', "$admin_steamid force refreshed the entire Steam cache.");
 
         $this->SteamPlayerCache->refreshAll();
-
-        $this->set('cache', $this->SteamPlayerCache->getAll());
-        $this->render('list.inc');
+        $this->players();
     }
 
+    /**
+     * Removes a player from the cache.
+     *
+     * @log [admin.log] the admin id, player id
+     * @param int $steamid the 64-bit steamid of the player to remove
+     */
     public function clear($steamid) {
 
         $this->request->allowMethod('post');
@@ -123,6 +152,11 @@ class SteamPlayerCacheController extends AppController {
         $this->autoRender = false;
     }
 
+    /**
+     * Removes all players from the cache and renders an empty list in the response.
+     *
+     * @log [admin.log] the admin id
+     */
     public function clear_all() {
 
         $this->request->allowMethod('post');

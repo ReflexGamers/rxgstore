@@ -16,10 +16,20 @@ class RewardsController extends AppController {
         $this->Auth->deny();
     }
 
+    /**
+     * Accepts a reward and re-renders the inventory in response.
+     *
+     * Only users listed as recipients of a reward may accept it, and only once for each person. If a user tries to
+     * accept it again, it will re-render their inventory but not update their items in the database.
+     *
+     * @param int $reward_id the id of the reward to accept
+     * @broadcast reward contents
+     */
     public function accept($reward_id) {
 
         $user_id = $this->Auth->user('user_id');
 
+        // find the reward
         $reward = $this->Reward->RewardRecipient->find('first', array(
             'conditions' => array(
                 'RewardRecipient.reward_id' => $reward_id,
@@ -32,6 +42,7 @@ class RewardsController extends AppController {
         $this->loadModel('UserItem');
         $this->loadModel('Item');
 
+        // make sure valid reward exists
         if (!empty($reward)) {
 
             $this->UserItem->query('LOCK TABLES user_item WRITE, user_item as UserItem WRITE');
@@ -66,12 +77,13 @@ class RewardsController extends AppController {
             $this->loadModel('User');
             $server = $this->User->getCurrentServer($user_id);
 
-            //Refresh user's inventory
+            // refresh user's inventory in-game
             if (!empty($server)) {
                 $this->ServerUtility->broadcastRewardReceive($server, $user_id, $reward['Reward']);
             }
         }
 
+        // re-render inventory as response
         $this->loadItems();
 
         $this->set(array(
@@ -81,6 +93,9 @@ class RewardsController extends AppController {
         $this->render('/Items/list.inc');
     }
 
+    /**
+     * Shows the compose reward page.
+     */
     public function compose() {
 
         if (!$this->Access->check('Rewards')) {
@@ -98,7 +113,12 @@ class RewardsController extends AppController {
         $this->render('/Gifts/compose');
     }
 
-    public function activity($doRender = true) {
+    /**
+     * Shows the activity data for rewards. This is either included in the compose page or called via ajax for paging.
+     *
+     * @param bool $forceRender whether to force render. set to false if calling from another action
+     */
+    public function activity($forceRender = true) {
 
         $this->Paginator->settings = array(
             'Reward' => array(
@@ -112,6 +132,7 @@ class RewardsController extends AppController {
 
         $rewards = $this->Paginator->paginate('Reward');
 
+        // organize results
         foreach ($rewards as &$reward) {
 
             $reward['RewardDetail'] = Hash::combine(
@@ -137,12 +158,15 @@ class RewardsController extends AppController {
             'activityPageLocation' => array('controller' => 'Rewards', 'action' => 'activity')
         ));
 
-        if ($doRender) {
+        if ($forceRender) {
             $this->set('title', 'Reward Activity');
             $this->render('/Activity/list');
         }
     }
 
+    /**
+     * Packages the reward and shows the confirmation page.
+     */
     public function package() {
 
         $this->request->allowMethod('post');
@@ -221,6 +245,9 @@ class RewardsController extends AppController {
         $this->render('/Gifts/compose');
     }
 
+    /**
+     * Sends the reward to the recipients.
+     */
     public function send()  {
 
         $this->request->allowMethod('post');

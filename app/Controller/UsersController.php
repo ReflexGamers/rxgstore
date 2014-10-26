@@ -11,6 +11,11 @@ class UsersController extends AppController {
     public $components = array('Paginator', 'RequestHandler');
     public $helpers = array('Html', 'Form', 'Js', 'Time');
 
+    /**
+     * Shows a user's profile.
+     *
+     * @param int $steamid the user's 64-bit steamid
+     */
     public function profile($steamid) {
 
         $user_id = $this->AccountUtility->AccountIDFromSteamID64($steamid);
@@ -74,7 +79,14 @@ class UsersController extends AppController {
         $this->activity($steamid, false);
     }
 
-    public function reviews($steamid, $doRender = true) {
+    /**
+     * Shows a page of reviews written by a specific user. This is usually included in the profile action or called
+     * via ajax directly for pagination.
+     *
+     * @param int $steamid the user's 64-bit steamid
+     * @param bool $forceRender whether to force render. set to false if calling from another action
+     */
+    public function reviews($steamid, $forceRender = true) {
 
         $user_id = $this->AccountUtility->AccountIDFromSteamID64($steamid);
 
@@ -135,12 +147,19 @@ class UsersController extends AppController {
             'reviewPageLocation' => array('controller' => 'Users', 'action' => 'reviews', 'id' => $steamid)
         ));
 
-        if ($doRender) {
+        if ($forceRender) {
             $this->render('/Reviews/list');
         }
     }
 
-    public function activity($steamid, $doRender = true) {
+    /**
+     * Shows activity data for a specific user. This is usually included in the profile action or called via ajax
+     * directly for pagination.
+     *
+     * @param int $steamid the user's 64-bit steamid
+     * @param bool $forceRender whether to force render. set to false if calling from another action
+     */
+    public function activity($steamid, $forceRender = true) {
 
         $user_id = $this->AccountUtility->AccountIDFromSteamID64($steamid);
 
@@ -169,16 +188,28 @@ class UsersController extends AppController {
             'activityPageLocation' => array('controller' => 'Users', 'action' => 'activity', 'id' => $steamid)
         ));
 
-        if ($doRender) {
+        if ($forceRender) {
             $this->render('/Activity/list');
         }
     }
 
+    /**
+     * Allows a high-level admin to login as a specific user for debugging purposes.
+     *
+     * @param int $steamid the user's 64-bit steamid
+     */
     public function impersonate($steamid) {
-        $this->AccountUtility->login($steamid);
+        if ($this->Access->check('Debug')) {
+            $this->AccountUtility->login($steamid);
+        }
         $this->redirect(array('controller' => 'Users', 'action' => 'profile', 'id' => $steamid));
     }
 
+    /**
+     * Redirects the user to Steam for authentication. This is also the return URL for when returning from Steam. If an
+     * anonymous user tries to access a page that requires authentication, they will be redirected here as per the value
+     * of Auth.loginAction in the components array within AppController.php.
+     */
     public function login() {
 
         if ($this->Auth->user()) {
@@ -193,7 +224,7 @@ class UsersController extends AppController {
 
             if (!$openid->mode) {
 
-                //Begin authentication
+                // begin authentication
                 $this->Session->write('rememberme', isset($this->request->data['rememberme']));
 
                 $openid->identity = 'http://steamcommunity.com/openid';
@@ -202,16 +233,16 @@ class UsersController extends AppController {
 
             } else if ($openid->mode == 'cancel') {
 
-                //User cancelled authentication
-                //Redirect at end of function
+                // user cancelled authentication
+                // redirect at end of function
 
             } else if ($openid->validate()) {
 
-                //Authentication successful
+                // authentication successful
                 $oid = $openid->identity;
                 $steamid = substr($oid, strrpos($oid, "/") + 1);
-                $save = $this->Session->read('rememberme');
-                $this->AccountUtility->login($steamid, AccountUtilityComponent::LOGIN_SAVE);
+                $loginFlags = ($this->Session->read('rememberme')) ? AccountUtilityComponent::LOGIN_SAVE : 0;
+                $this->AccountUtility->login($steamid, $loginFlags);
             }
         } catch (ErrorException $e) {
             echo 'auth error: ' . $e->getMessage();
@@ -220,6 +251,10 @@ class UsersController extends AppController {
         $this->redirect($this->Auth->redirectUrl());
     }
 
+    /**
+     * Logs the user out and redirects them to the default logout page as specified by Auth.logoutRedirect in the
+     * components array within AppController.php.
+     */
     public function logout() {
         $this->Cookie->delete('saved_login');
         $this->redirect($this->Auth->logout());

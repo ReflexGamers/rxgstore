@@ -18,6 +18,12 @@ class ShoutboxMessagesController extends AppController {
         $this->Auth->deny('add', 'delete');
     }
 
+    /**
+     * Checks to see if there are new shoutbox messages since $time then either re-renders the shoutbox content in the
+     * response or sends back 304 Not Modified.
+     *
+     * @param int $time the last time the user got a new message
+     */
     public function view($time = null) {
 
         if (!empty($time)) {
@@ -34,6 +40,11 @@ class ShoutboxMessagesController extends AppController {
         $this->render('view.inc');
     }
 
+    /**
+     * Adds a new shoutbox message and renders the entire shoutbox content in the response. This happens when the user
+     * submits their desired chat message. If the user recently posted a message, it will respond an inline error.
+     * Configure the allowed time between messages in Store.Shoutbox.PostCooldown in bootstrap.php.
+     */
     public function add() {
 
         $this->request->allowMethod('post');
@@ -58,6 +69,12 @@ class ShoutboxMessagesController extends AppController {
         $this->view();
     }
 
+    /**
+     * Deletes a shoutbox message by id if the current user has sufficient permissions to do so.
+     *
+     * @logs [admin.log] the deleted message, admin id, poster id
+     * @param int $id the id of the message to delete.
+     */
     public function delete($id) {
 
         $this->request->allowMethod('post');

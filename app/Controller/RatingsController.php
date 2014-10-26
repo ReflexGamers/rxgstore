@@ -15,6 +15,12 @@ class RatingsController extends AppController {
         $this->Auth->deny();
     }
 
+    /**
+     * Rates the item specified by item_id, then returns partial view of summed ratings for that item. If the user is
+     * unable to rate the item for some reason, it will simply render the view.
+     *
+     * @param int $item_id the item to rate
+     */
     public function rate($item_id = null) {
 
         $this->request->allowMethod('post');
