@@ -16,10 +16,13 @@ class GiftsController extends AppController {
     }
 
     /**
-     * Accepts a gift and re-renders the inventory in the response. If the gift was already accepted, it does not update
-     * the user's inventory but it still re-renders the inventory which can happen if they have multiple tabs open.
+     * Accepts a gift and re-renders the inventory in the response.
+     *
+     * Only the valid recipient of the gift may accept the gift, and only once. If the user tries to accept it again, it
+     * will re-render their inventory but not update their items in the database.
      *
      * @param int $gift_id the id of the gift to accept
+     * @broadcast gift contents
      */
     public function accept($gift_id) {
 
@@ -71,7 +74,7 @@ class GiftsController extends AppController {
             $this->loadModel('User');
             $server = $this->User->getCurrentServer($user_id);
 
-            //Broadcast & refresh user's inventory
+            // broadcast & refresh user's inventory
             if (!empty($server)) {
                 $this->ServerUtility->broadcastGiftReceive($server, $user_id, $gift);
             }
@@ -128,9 +131,9 @@ class GiftsController extends AppController {
     /**
      * Shows the activity data for gifts. This is either included in the compose page or called via ajax for paging.
      *
-     * @param bool $doRender
+     * @param bool $forceRender whether to force render. set to false if calling from another action
      */
-    public function activity($doRender = true) {
+    public function activity($forceRender = true) {
 
         $this->Paginator->settings = array(
             'Gift' => array(
@@ -160,16 +163,16 @@ class GiftsController extends AppController {
             'activityPageLocation' => array('controller' => 'Gifts', 'action' => 'activity')
         ));
 
-        if ($doRender) {
+        if ($forceRender) {
             $this->set('title', 'Gift Activity');
             $this->render('/Activity/list');
         }
     }
 
     /**
-     * Packages the gift and shows the confirm page to the user.
+     * Packages the gift and shows the confirmation page.
      *
-     * @param int $steamid
+     * @param int $steamid of the recipient
      */
     public function package($steamid) {
 
@@ -256,7 +259,8 @@ class GiftsController extends AppController {
     /**
      * Sends the gift to the specified recipient.
      *
-     * @param int $steamid
+     * @param int $steamid of the recipient
+     * @broadcast gift contents
      */
     public function send($steamid) {
 
