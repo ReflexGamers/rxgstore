@@ -1,8 +1,6 @@
-{% extends isAjax ? 'Common/ajax.tpl' : 'Common/layout.tpl' %}
+{% extends 'Common/base.tpl' %}
 
-{% set jquery = true %}
-{% set title = false %}
-{% set headerImage = 'receipts.png' %}
+{% set title = 'View Receipt' %}
 {% set backLink = {'controller': 'Users', 'action': 'profile', 'id': steam.id64(data.Order.user_id)} %}
 
 {% block content %}

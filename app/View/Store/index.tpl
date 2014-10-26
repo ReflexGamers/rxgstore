@@ -1,6 +1,5 @@
 {% extends 'Common/layout.tpl' %}
 
-{% set jquery = true %}
 {% set title = 'RXG CENTER' %}
 {% set headerImage = 'pokeman_center.png' %}
 

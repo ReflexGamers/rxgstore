@@ -13,7 +13,7 @@
 
     {% set jquery = true %}
     {% set styles = ['rateit'] %}
-    {% set scripts = ['jquery.rateit.min', 'items', 'common'] %}
+    {% set scripts = ['jquery.rateit.min', 'items'] %}
 {% endif %}
 
 {% block content %}

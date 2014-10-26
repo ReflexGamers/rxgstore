@@ -1,4 +1,4 @@
-{% extends isAjax ? 'Common/ajax.tpl' : 'Common/layout.tpl' %}
+{% extends 'Common/base.tpl' %}
 
 {% set title = 'Checkout' %}
 

@@ -1,9 +1,7 @@
-{% extends isAjax ? 'Common/ajax.tpl' : 'Common/layout.tpl' %}
+{% extends 'Common/base.tpl' %}
 
-{% set jquery = true %}
 {% set title = 'Composing ' ~ (isReward ? 'Reward' : 'Gift') %}
-
-{% set scripts = ['common', 'gifts'] %}
+{% set scripts = 'gifts' %}
 
 {% block content %}
 

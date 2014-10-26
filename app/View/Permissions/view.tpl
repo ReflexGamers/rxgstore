@@ -1,8 +1,7 @@
-{% extends isAjax ? 'Common/ajax.tpl' : 'Common/layout.tpl' %}
+{% extends 'Common/base.tpl' %}
 
 {% set title = 'Admin Permissions' %}
 {% set scripts = 'admin-perms' %}
-
 
 {% block content %}
 

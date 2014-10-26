@@ -1,10 +1,6 @@
-{% extends isAjax ? 'Common/ajax.tpl' : 'Common/layout.tpl' %}
+{% extends 'Common/base.tpl' %}
 
-{% set jquery = true %}
 {% set title = 'Item Sorting' %}
-{% set hideTitle = true %}
-{% set headerImage = false %}
-
 {% set scripts = ['jquery-ui.min', 'admin-sort'] %}
 
 

@@ -1,11 +1,10 @@
 {% extends 'Common/base.tpl' %}
 
-{% set jquery = true %}
 {% set title = 'Player Profile' %}
 
 {% if activities or reviews %}
     {% set styles = ['rateit'] %}
-    {% set scripts = ['jquery.rateit.min', 'items', 'common'] %}
+    {% set scripts = ['jquery.rateit.min', 'items'] %}
 {% endif %}
 
 {% block content %}

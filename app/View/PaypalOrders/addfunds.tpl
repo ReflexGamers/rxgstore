@@ -1,8 +1,7 @@
 {% extends 'Common/base.tpl' %}
 
-{% set jquery = true %}
 {% set title = "Buy CASH With PayPal" %}
-{% set scripts = ['addfunds', 'common'] %}
+{% set scripts = 'addfunds' %}
 
 {% block content %}
 

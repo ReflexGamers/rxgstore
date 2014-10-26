@@ -1,7 +1,6 @@
 {% extends 'Common/base.tpl' %}
 
 {% set title = 'Receive a Shipment' %}
-{% set scripts = 'common' %}
 
 {% block content %}
 

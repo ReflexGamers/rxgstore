@@ -1,9 +1,5 @@
 {% extends 'Common/base.tpl' %}
 
-{% if not isAjax %}
-    {% set scripts = 'common' %}
-{% endif %}
-
 {% block content %}
 
     {% if isAjax %}

@@ -1,6 +1,5 @@
 {% extends 'Common/base.tpl' %}
 
-{% set jquery = true %}
 {% set title = 'RXG Store FAQ' %}
 
 {% block content %}

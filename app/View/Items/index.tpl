@@ -1,9 +1,8 @@
 {% extends 'Common/base.tpl' %}
 
-{% set jquery = true %}
 {% set title = 'Browse Items' %}
 {% set styles = ['rateit'] %}
-{% set scripts = ['jquery.ddslick.min', 'jquery.rateit.min', 'browse', 'common'] %}
+{% set scripts = ['jquery.ddslick.min', 'jquery.rateit.min', 'browse'] %}
 
 {% block content %}
 

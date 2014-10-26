@@ -1,12 +1,8 @@
-{% extends isAjax ? 'Common/ajax.tpl' : 'Common/layout.tpl' %}
+{% extends 'Common/base.tpl' %}
 
-{% set jquery = true %}
 {% set title = item.name %}
-{% set hideTitle = true %}
-{% set headerImage = false %}
-
-{% set styles = ['rateit'] %}
-{% set scripts = ['jquery.rateit.min', 'items', 'common'] %}
+{% set styles = 'rateit' %}
+{% set scripts = ['jquery.rateit.min', 'items'] %}
 
 
 {% block content %}

@@ -1,8 +1,6 @@
 {% extends 'Common/layout.tpl' %}
 
 {% set title = 'CHECKOUT' %}
-{% set headerImage = false %}
-{% set hideTitle = true %}
 {% set backLink = {'controller': 'store', 'action': 'store'} %}
 
 {% block content %}

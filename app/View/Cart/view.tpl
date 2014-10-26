@@ -1,8 +1,7 @@
-{% extends isAjax ? 'Common/ajax.tpl' : 'Common/layout.tpl' %}
+{% extends 'Common/base.tpl' %}
 
-{% set jquery = true %}
 {% set title = 'Shopping Cart' %}
-{% set scripts = ['common', 'cart'] %}
+{% set scripts = 'cart' %}
 
 {% block content %}
 

@@ -12,9 +12,8 @@
         'theme'
     ]|merge(styles ? (styles is iterable ? styles : [styles]) : [])) }}
 
-    {% if scripts %}
-        {{ html.script(['jquery-1.10.2.min']) }}
-    {% endif %}
+    {# jQuery included here for Cake JS Helper #}
+    {{ html.script(['jquery-1.10.2.min']) }}
 </head>
 <body>
 <div id="background">&nbsp;</div>
@@ -84,7 +83,7 @@
 {{ js.writeBuffer() }}
 
 {% if scripts %}
-    {{ html.script(scripts is iterable ? scripts : [scripts]) }}
+    {{ html.script(( (scripts is iterable) ? scripts : [scripts] )|merge('common')) }}
 {% endif %}
 
 </body>

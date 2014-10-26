@@ -1,8 +1,7 @@
 {% extends 'Common/base.tpl' %}
 
-{% set jquery = true %}
 {% set title = "Editing: #{item.name}" %}
-{% set scripts = ['item-edit'] %}
+{% set scripts = 'item-edit' %}
 
 
 {% macro label(_, name, label) %}
