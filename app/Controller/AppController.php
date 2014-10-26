@@ -178,6 +178,7 @@ class AppController extends Controller {
 //        debug($log);
 
         /*
+        $this->Acl->allow('Captain', 'Debug');
         $this->Acl->allow('Advisor', 'QuickAuth');
         $this->Acl->allow('Advisor', 'Rewards');
         $this->Acl->allow('Advisor', 'Permissions', 'read');

@@ -452,6 +452,7 @@ class AccountUtilityComponent extends Component {
         $objects = array(
             array('alias' => 'Cache'),
             array('alias' => 'Chats'),
+            array('alias' => 'Debug'),
             array('alias' => 'Items'),
             array('alias' => 'Logs'),
             array('alias' => 'Permissions'),
