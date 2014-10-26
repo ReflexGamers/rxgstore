@@ -144,9 +144,9 @@ class ItemsController extends AppController {
     /**
      * Shows global activity. Called from the index action or via ajax directly.
      *
-     * @param bool $doRender whether to force render. set to false if calling from another action
+     * @param bool $forceRender whether to force render. set to false if calling from another action
      */
-    public function recent($doRender = true) {
+    public function recent($forceRender = true) {
 
         $this->loadModel('Activity');
 
@@ -171,7 +171,7 @@ class ItemsController extends AppController {
             'activityPageLocation' => array('controller' => 'Items', 'action' => 'recent')
         ));
 
-        if ($doRender) {
+        if ($forceRender) {
             $this->render('/Activity/list');
         }
     }
@@ -264,11 +264,11 @@ class ItemsController extends AppController {
      * Shows reviews for a specific item. Called by the view action or via ajax directly.
      *
      * @param array|string|int $item item data passed from another action or item_id/short_name if called via ajax
-     * @param bool $doRender whether to force render. set to false if calling from another action
+     * @param bool $forceRender whether to force render. set to false if calling from another action
      */
-    public function reviews($item = null, $doRender = true) {
+    public function reviews($item = null, $forceRender = true) {
 
-        if ($doRender) {
+        if ($forceRender) {
 
             $item = Hash::extract($this->Item->findByItemIdOrShortName($item, $item, array('item_id', 'name', 'short_name')), 'Item');
 
@@ -333,7 +333,7 @@ class ItemsController extends AppController {
             'reviewPageLocation' => array('controller' => 'Items', 'action' => 'reviews', 'id' => $item['short_name'])
         ));
 
-        if ($doRender) {
+        if ($forceRender) {
             $this->render('/Reviews/list');
         }
     }
@@ -342,11 +342,11 @@ class ItemsController extends AppController {
      * Shows activity for a specific item. Called by the view action or via ajax directly.
      *
      * @param array|string|int $item item data passed from another action or item_id/short_name if called via ajax
-     * @param bool $doRender whether to force render. set to false if calling from another action
+     * @param bool $forceRender whether to force render. set to false if calling from another action
      */
-    public function activity($item = null, $doRender = true) {
+    public function activity($item = null, $forceRender = true) {
 
-        if ($doRender) {
+        if ($forceRender) {
 
             $item = Hash::extract($this->Item->findByItemIdOrShortName($item, $item, array('item_id', 'name', 'short_name')), 'Item');
 
@@ -380,7 +380,7 @@ class ItemsController extends AppController {
             'activityPageLocation' => array('controller' => 'Items', 'action' => 'activity', 'id' => $item['short_name'])
         ));
 
-        if ($doRender) {
+        if ($forceRender) {
             $this->render('/Activity/list');
         }
     }
