@@ -177,8 +177,8 @@
 	Router::connect('/quickauth/:action/*', array('controller' => 'QuickAuth', 'action' => 'view'));
 
 	Router::connect('/sort', array('controller' => 'Items', 'action' => 'sort'));
-	Router::connect('/stock', array('controller' => 'Stock', 'action' => 'edit'));
-	Router::connect('/stock/activity/*', array('controller' => 'Stock', 'action' => 'activity'));
+	Router::connect('/stock', array('controller' => 'Shipments', 'action' => 'edit'));
+	Router::connect('/stock/activity/*', array('controller' => 'Shipments', 'action' => 'activity'));
 
 	Router::connect('/cache', array('controller' => 'SteamPlayerCache', 'action' => 'view'));
 	Router::connect('/cache/:action/:id/*', array(

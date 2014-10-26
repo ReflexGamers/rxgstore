@@ -1,7 +1,10 @@
 <?php
 App::uses('AppController', 'Controller');
 
-class StockController extends AppController {
+/**
+ * Class ShipmentsController
+ */
+class ShipmentsController extends AppController {
     public $components = array('RequestHandler', 'Paginator');
     public $helpers = array('Html', 'Form', 'Js', 'Session', 'Time');
 
@@ -10,6 +13,9 @@ class StockController extends AppController {
         $this->Auth->deny();
     }
 
+    /**
+     * Shows the main page for receiving shipments. Also works as the save page when submitting the shipment.
+     */
     public function edit() {
 
         if (!$this->Access->check('Stock', 'update')) {
@@ -17,9 +23,11 @@ class StockController extends AppController {
             return;
         }
 
-        if (isset($this->request->data['Stock'])) {
+        $this->loadModel('Stock');
 
-            $newStock = $this->request->data['Stock'];
+        if (isset($this->request->data['Shipment'])) {
+
+            $newStock = $this->request->data['Shipment'];
             $stock = Hash::combine($this->Stock->find('all'), '{n}.Stock.item_id', '{n}.Stock');
             $shipmentDetail = array();
 
@@ -48,7 +56,6 @@ class StockController extends AppController {
                 ));
 
                 $this->loadModel('Activity');
-                $this->loadModel('Shipment');
                 $this->Shipment->saveAssociated(array(
                     'Shipment' => array(
                         'shipment_id' => $this->Activity->getNewId('Shipment'),
@@ -78,8 +85,12 @@ class StockController extends AppController {
         $this->activity(false);
     }
 
-
-    public function activity($doRender = true) {
+    /**
+     * Shows recent shipments. This is usually included in the main edit/view page or called via ajax directly.
+     *
+     * @param bool $forceRender whether to force render. set to false if calling from another action
+     */
+    public function activity($forceRender = true) {
 
         $this->loadModel('Shipment');
 
@@ -107,10 +118,10 @@ class StockController extends AppController {
         $this->set(array(
             'pageModel' => 'Shipment',
             'activities' => $shipments,
-            'activityPageLocation' => array('controller' => 'Stock', 'action' => 'activity')
+            'activityPageLocation' => array('controller' => 'Shipments', 'action' => 'activity')
         ));
 
-        if ($doRender) {
+        if ($forceRender) {
             $this->set('title', 'Shipment Activity');
             $this->render('/Activity/list');
         }
