@@ -127,17 +127,10 @@ class ItemsController extends AppController {
 
         $this->set('serverItems', $serverItems);
 
-        $ratings = Hash::combine(Hash::map(
-            $this->Item->getAllTotalRatings(),
-            '{n}', function($arr){
-                return array_merge($arr['Rating'], $arr[0]);
-            }
-        ), '{n}.item_id', '{n}');
-
         $this->set(array(
             'server' => $server,
             'serverItems' => $serverItems,
-            'ratings' => $ratings
+            'ratings' => $this->Item->getAllRatings()
         ));
     }
 
@@ -249,7 +242,7 @@ class ItemsController extends AppController {
             'stock' => $this->Item->getStock($item_id),
             'servers' => $servers,
             'topBuyers' => $topBuyers,
-            'ratings' => $this->Item->getTotalRatings($item_id),
+            'ratings' => $this->Item->getRating($item_id),
             'features' => $itemData['Feature']
         ));
 
@@ -270,6 +263,7 @@ class ItemsController extends AppController {
 
         if ($forceRender) {
 
+            // this was probably called standalone, so item data needs to be fetched ($item refers to the name)
             $item = Hash::extract($this->Item->findByItemIdOrShortName($item, $item, array('item_id', 'name', 'short_name')), 'Item');
 
             if (empty($item)) {

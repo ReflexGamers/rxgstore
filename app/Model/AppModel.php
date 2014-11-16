@@ -30,5 +30,6 @@ App::uses('Model', 'Model');
  * @package       app.Model
  */
 class AppModel extends Model {
+    // disable automatic joins by default
     public $recursive = -1;
 }
