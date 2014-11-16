@@ -10,6 +10,7 @@
 /dist
 /tags
 /.idea
+/app/webroot/deploy.php
 
 # OS generated files #
 ######################
@@ -21,7 +22,3 @@
 Icon?
 ehthumbs.db
 Thumbs.db
-
-### Stuff ###
-
-/app/webroot/deploy.php
