@@ -33,7 +33,7 @@
 
     <div class="faq_item">
         <div class="faq_question">How do I get that cool <span class="member-tag">rxg</span> tag next to my name?</div>
-        <div class="faq_answer">That is the official member tag. To become a member, register at <a href="http://reflex-gamers.com">www.reflex-gamers.com</a> and then apply in the <a href="http://reflex-gamers.com/forums/forumdisplay.php?f=15">Member Applications</a> forum. For the Store to recognize you as a member, your Steam account must be linked on the forums.</div>
+        <div class="faq_answer">That is the official member tag. To become a member, register at <a href="http://reflex-gamers.com">www.reflex-gamers.com</a> and then apply in the <a href="http://reflex-gamers.com/forumdisplay.php?f=15">Member Applications</a> forum. For the Store to recognize you as a member, your Steam account must be linked on the forums.</div>
     </div>
 
     <div class="faq_item">
