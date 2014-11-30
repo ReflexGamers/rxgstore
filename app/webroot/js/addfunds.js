@@ -9,7 +9,7 @@
 
     var currencyMult = $('#addfunds_receive').data('currency-mult');
 
-    $('#addfunds_input').on('keyup', function(){
+    $('#addfunds_input').on('keyup change', function(){
 
         var el = $(this);
         var val = el.val();
