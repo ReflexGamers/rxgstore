@@ -9,6 +9,9 @@ App::uses('AppModel', 'Model');
  * @property OrderDetail $OrderDetail
  * @property ServerItem $ServerItem
  * @property UserItem $UserItem
+ *
+ * Magic Methods (for inspection):
+ * @method findByItemIdOrShortName
  */
 class Item extends AppModel {
 
@@ -65,11 +68,19 @@ class Item extends AppModel {
                 array(
                     'table' => 'server',
                     'conditions' => array(
-                        'server.short_name' => $server,
-                        'server.server_ip' => $server,
-                        'OR' => array(
-                            'server_item.server_id = server.server_id',
-                            'server_item.server_id = server.parent_id'
+                        'AND' => array(
+                            array(
+                                'OR' => array(
+                                    'server.short_name' => $server,
+                                    'server.server_ip' => $server,
+                                )
+                            ),
+                            array(
+                                'OR' => array(
+                                    'server_item.server_id = server.server_id',
+                                    'server_item.server_id = server.parent_id'
+                                )
+                            )
                         )
                     )
                 ),
