@@ -213,7 +213,7 @@ class CartController extends AppController {
             $this->Session->write('cart', $cart);
 
             $name = $quantity > 1 ? $item['plural'] : $item['name'];
-            $this->Session->setFlash("$quantity $name added to cart!", 'default', array('class' => 'success'));
+            $this->Session->setFlash("$quantity $name added to cart!", 'flash_cart', array('class' => 'success'));
 
         } else {
 
