@@ -5,6 +5,11 @@ App::uses('AppController', 'Controller');
  * Gifts Controller
  *
  * @property ServerUtilityComponent $ServerUtility
+ *
+ * Magic Properties (for inspection):
+ * @property Activity $Activity
+ * @property Gift $Gift
+ * @property UserItem $UserItem
  */
 class GiftsController extends AppController {
     public $components = array('Paginator', 'RequestHandler', 'ServerUtility');

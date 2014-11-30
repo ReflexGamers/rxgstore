@@ -5,6 +5,9 @@ App::uses('AppModel', 'Model');
  *
  * @property User $User
  * @property Item $Item
+ *
+ * Magic Methods (for inspection):
+ * @method findAllByUserId
  */
 class UserItem extends AppModel {
 

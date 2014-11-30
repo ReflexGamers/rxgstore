@@ -4,6 +4,9 @@ App::uses('AppModel', 'Model');
  * Server Model
  *
  * @property ServerItem $ServerItem
+ *
+ * Magic Methods (for inspection):
+ * @method findByServerIp
  */
 class Server extends AppModel {
 

@@ -5,6 +5,9 @@ App::uses('AppModel', 'Model');
  * SteamPlayerCache Model
  *
  * @property SteamPlayer $SteamPlayer
+ *
+ * Magic Methods (for inspection):
+ * @method findBySteamid
  */
 class SteamPlayerCache extends AppModel {
 

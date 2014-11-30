@@ -6,6 +6,9 @@ App::uses('AppController', 'Controller');
  *
  * @property QuickAuth $QuickAuth
  * @property PaginatorComponent $Paginator
+ *
+ * Magic Properties (for inspection):
+ * @property Server $Server
  */
 class QuickAuthController extends AppController {
     public $components = array('Paginator', 'RequestHandler');

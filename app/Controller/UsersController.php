@@ -6,6 +6,11 @@ App::uses('AppController', 'Controller');
  *
  * @property User $User
  * @property PaginatorComponent $Paginator
+ *
+ * Magic Properties (for inspection):
+ * @property Activity $Activity
+ * @property Order $Order
+ * @property UserItem $UserItem
  */
 class UsersController extends AppController {
     public $components = array('Paginator', 'RequestHandler');

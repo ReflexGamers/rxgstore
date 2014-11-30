@@ -8,6 +8,9 @@ App::uses('AppController', 'Controller');
  *
  * @property PaypalComponent $Paypal
  * @property ServerUtilityComponent $ServerUtility
+ *
+ * Magic Properties (for inspection):
+ * @property Activity $Activity
  */
 class PaypalOrdersController extends AppController {
     public $components = array('Paginator', 'RequestHandler', 'Paypal', 'ServerUtility');
@@ -185,7 +188,7 @@ class PaypalOrdersController extends AppController {
             $this->loadModel('User');
             $this->User->query('LOCK TABLES user WRITE');
             $this->User->id = $user_id;
-            $this->User->saveField('credit', $this->User->field('credit') + $data['amount']);
+            $this->User->saveField('credit', (int)$this->User->field('credit') + $data['amount']);
             $this->User->query('UNLOCK TABLES');
 
             $this->loadModel('Activity');

@@ -3,6 +3,13 @@ App::uses('AppController', 'Controller');
 
 /**
  * Class ShipmentsController
+ *
+ * @property Shipment $Shipment
+ *
+ * Magic Properties (for inspection):
+ * @property Activity $Activity
+ * @property Stock $Stock
+ * @property UserItem $UserItem
  */
 class ShipmentsController extends AppController {
     public $components = array('RequestHandler', 'Paginator');

@@ -1,10 +1,16 @@
 <?php
 App::uses('AppController', 'Controller');
+
 /**
  * Orders Controller
  *
  * @property Order $Order
  * @property ServerUtilityComponent $ServerUtility
+ *
+ * Magic Properties (for inspection):
+ * @property Activity $Activity
+ * @property Stock $Stock
+ * @property UserItem $UserItem
  */
 class OrdersController extends AppController {
     public $components = array('Paginator', 'RequestHandler', 'ServerUtility');
@@ -51,107 +57,6 @@ class OrdersController extends AppController {
         $this->set(array(
             'data' => $order,
             'steamid' => $steamid
-        ));
-    }
-
-    /**
-     * TODO: Remove this since it is being replaced the cart checkout method action
-     */
-    public function checkout()  {
-
-        $this->request->allowMethod('post');
-
-        if (empty($this->request->data['OrderDetail'])) {
-            $this->Session->setFlash('Oops! You do not have any items in your shopping cart.', 'default', array('class' => 'error'));
-            return;
-        }
-
-        $orderDetails = $this->request->data['OrderDetail'];
-
-        $user_id = $this->Auth->user('user_id');
-
-        //Get cart for original prices
-        $cart = $this->Session->read('cart');
-
-        $this->loadModel('Stock');
-        $this->loadModel('Item');
-        $this->loadModel('User');
-
-        $stock = $this->Stock->find('list');
-        $items = $this->loadItems();
-        $userCredit = $this->User->read('credit', $user_id)['User']['credit'];
-
-        $subTotal = 0;
-
-        foreach ($orderDetails as $key => &$detail) {
-
-            $item_id = $detail['item_id'];
-            $quantity = $detail['quantity'];
-
-            if ($quantity < 1) {
-                unset($orderDetails[$key]);
-                unset($cart[$item_id]);
-                continue;
-            }
-
-            if (isset($cart[$item_id])) {
-                //Update cart quantity in case they go back
-                $cart[$item_id]['quantity'] = $quantity;
-            } else {
-                //Add cart entry if not there (unlikely)
-                $cart[$item_id] = array(
-                    'quantity' => $quantity,
-                    'price' => $items[$item_id]['price']
-                );
-            }
-
-            $detail['price'] = $cart[$item_id]['price'];
-
-            if ($stock[$item_id] < $quantity) {
-                $this->Session->setFlash("There are no longer enough {$items[$item_id]['plural']} in stock to complete your purchase.", 'default', array('class' => 'error'));
-                return;
-            }
-
-            $subTotal += $detail['price'] * $quantity;
-        }
-
-        if (empty($orderDetails)) {
-            $this->Session->setFlash('Oops! You do not have any items in your shopping cart.', 'default', array('class' => 'error'));
-            $this->redirect(array('controller' => 'Cart', 'action' => 'view'));
-            return;
-        }
-
-        //Save cart quantities in case they return
-        $this->Session->write('cart', $cart);
-
-        $config = Configure::Read('Store.Shipping');
-
-        $shipping = $subTotal >= $config['FreeThreshold'] ? 0 : $config['Cost'];
-        $total = $subTotal + $shipping;
-
-        if ($total > $userCredit) {
-            $this->Session->setFlash('You do not have enough CASH to complete this purchase!', 'default', array('class' => 'error'));
-            return;
-        }
-
-        $this->Session->write('order', array(
-            'total' => $total,
-            'subtotal' => $subTotal,
-            'models' =>  array(
-                'Order' => array(
-                    'user_id' => $user_id,
-                    'shipping' => $shipping
-                ),
-                'OrderDetail' => $orderDetails
-            )
-        ));
-
-        $this->set(array(
-            'cart' => $orderDetails,
-            'subTotal' => $subTotal,
-            'shipping' => $shipping,
-            'total' => $total,
-            'credit' => $userCredit
         ));
     }
 

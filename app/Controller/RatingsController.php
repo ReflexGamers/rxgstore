@@ -56,7 +56,7 @@ class RatingsController extends AppController {
             $this->set(array(
                 'item' => array('item_id' => $item_id),
                 'userCanRate' => $userCanRate,
-                'ratings' => $this->Rating->Item->getTotalRatings($item_id)
+                'ratings' => $this->Rating->Item->getRating($item_id)
             ));
         }
 

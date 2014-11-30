@@ -5,6 +5,9 @@ App::uses('AppModel', 'Model');
  *
  * @property Item $Item
  * @property User $User
+ *
+ * Magic Methods (for inspection):
+ * @method findByItemIdAndUserId
  */
 class Rating extends AppModel {
 

@@ -5,6 +5,9 @@ App::uses('AppController', 'Controller');
  * Class CartController
  *
  * Handles cart actions such as viewing the cart, adding or removing items, etc.
+ *
+ * Magic Properties (for inspection):
+ * @property Stock $Stock
  */
 class CartController extends AppController {
     public $components = array('RequestHandler');

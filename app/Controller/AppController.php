@@ -32,6 +32,11 @@ App::uses('Controller', 'Controller');
  *
  * @property AccessComponent $Access
  * @property AccountUtilityComponent $AccountUtility
+ *
+ * Magic Properties (for inspection):
+ * @property Item $Item
+ * @property ShoutboxMessage $ShoutboxMessage
+ * @property User $User
  */
 class AppController extends Controller {
     public $viewClass = 'TwigView.Twig';

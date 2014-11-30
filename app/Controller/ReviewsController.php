@@ -6,6 +6,9 @@ App::uses('AppController', 'Controller');
  *
  * @property Review $Review
  * @property ServerUtilityComponent $ServerUtility
+ *
+ * Magic Properties (for inspection):
+ * @property Activity $Activity
  */
 class ReviewsController extends AppController {
     public $components = array('RequestHandler', 'ServerUtility');

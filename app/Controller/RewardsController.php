@@ -6,6 +6,10 @@ App::uses('AppController', 'Controller');
  *
  * @property Reward $Reward
  * @property ServerUtilityComponent $ServerUtility
+ *
+ * Magic Properties (for inspection):
+ * @property Activity $Activity
+ * @property UserItem $UserItem
  */
 class RewardsController extends AppController {
     public $components = array('Paginator', 'RequestHandler', 'ServerUtility');
