@@ -447,7 +447,7 @@ class AccountUtilityComponent extends Component {
         $aco = $this->Acl->Aco;
         $aro = $this->Acl->Aro;
 
-        $aro->query('ALTER TABLE aros auto_increment = 1');
+        $aro->query('TRUNCATE aros; TRUNCATE acos; TRUNCATE aros_acos');
 
         $objects = array(
             array('alias' => 'Cache'),
@@ -503,6 +503,25 @@ class AccountUtilityComponent extends Component {
             $aro->create();
             $aro->save(array_merge($group, array('model' => null)));
         }
+
+        $this->Acl->allow('Captain', 'Debug');
+        $this->Acl->allow('Advisor', 'QuickAuth');
+        $this->Acl->allow('Advisor', 'Rewards');
+        $this->Acl->allow('Advisor', 'Permissions', 'read');
+        $this->Acl->allow('Advisor', 'Permissions', 'update');
+        $this->Acl->allow('Advisor', 'Cache', 'read');
+        $this->Acl->allow('Advisor', 'Cache', 'update');
+        $this->Acl->allow('Advisor', 'Cache', 'delete');
+        $this->Acl->allow('Advisor', 'Chats', 'delete');
+        $this->Acl->allow('Advisor', 'Items', 'create');
+        $this->Acl->allow('Advisor', 'Items', 'update');
+        $this->Acl->allow('Advisor', 'Logs', 'read');
+        $this->Acl->allow('Advisor', 'Reviews', 'update');
+        $this->Acl->allow('Advisor', 'Reviews', 'delete');
+        $this->Acl->allow('Advisor', 'Receipts', 'read');
+
+        $this->Acl->allow('Advisor', 'Stock', 'update');
+        $this->Acl->allow('Advisor', 'Users', 'update');
     }
 
     /**
