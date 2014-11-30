@@ -4,6 +4,9 @@ App::uses('AppModel', 'Model');
  * Feature Model
  *
  * @property Item $Item
+ *
+ * Magic Methods (for inspection):
+ * @method findAllByItemId
  */
 class Feature extends AppModel {
 

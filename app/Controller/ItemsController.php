@@ -8,7 +8,14 @@ App::import('Vendor', 'Parsedown');
  * @property Item $Item
  *
  * @property PaginatorComponent $Paginator
- * @property AccountUtilityComponent $AccountUtility
+ *
+ * Magic Properties (for inspection):
+ * @property Activity $Activity
+ * @property Feature $Feature
+ * @property Server $Server
+ * @property ServerItem $ServerItem
+ * @property User $User
+ * @property UserItem $UserItem
  */
 class ItemsController extends AppController {
     public $components = array('Paginator', 'RequestHandler', 'ServerUtility');
@@ -119,7 +126,7 @@ class ItemsController extends AppController {
             $this->Session->write('preferredServer', $server);
             $serverItems = $this->Item->getByServer($server);
 
-            //Redirect on unrecognized game
+            //Redirect on unrecognized game if not ajax
             if (empty($serverItems) && !$this->request->is('ajax')) {
                 $this->redirect(array('controller' => 'Items', 'action' => 'index'));
             }

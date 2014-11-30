@@ -4,6 +4,9 @@ App::uses('AppModel', 'Model');
  * Stock Model
  *
  * @property Item $Item
+ *
+ * Magic Methods (for inspection):
+ * @method findByItemId
  */
 class Stock extends AppModel {
 
