@@ -1,6 +1,6 @@
 {% extends 'Common/base.tpl' %}
 
-{% set title = "Buy CASH With PayPal" %}
+{% set title = "Buy CASH" %}
 {% set scripts = 'addfunds' %}
 
 {% block content %}
@@ -11,7 +11,7 @@
 
     <div class="addfunds">
 
-        <p>Add funds to your rxg CASH with PayPal™. Every dollar of real money is equivalent to a minimum of <strong>{{ fn.currency(100 * currencyMult) }} CASH</strong>. Depending on how much you give, you may receive a bonus.</p>
+        <p>Add funds to your rxg CASH through PayPal™. If you do not have a PayPal™ account, you can use a credit card to pay once directed to their site. Every dollar of real money is equivalent to a minimum of <strong>{{ fn.currency(100 * currencyMult) }} CASH</strong>. Depending on how much you give, you may receive a bonus.</p>
 
         <div class="addfunds_options">
 
