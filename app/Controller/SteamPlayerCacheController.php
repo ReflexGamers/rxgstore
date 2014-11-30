@@ -104,6 +104,7 @@ class SteamPlayerCacheController extends AppController {
 
         $player = $this->SteamPlayerCache->findBySteamid($steamid)['SteamPlayerCache'];
         $player['name'] = $player['personaname'];
+        $player['member'] = $this->Access->checkIsMember($this->AccountUtility->AccountIDFromSteamID64($steamid));
 
         $this->set('player', $player);
         $this->render('single.inc');
