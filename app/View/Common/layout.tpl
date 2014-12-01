@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width">
     <title>{{ title }}</title>
     {{ html.css([
+        'http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css',
         'http://fonts.googleapis.com/css?family=Roboto:400,300,700,400italic',
         'http://fonts.googleapis.com/css?family=PT+Mono',
         'theme'

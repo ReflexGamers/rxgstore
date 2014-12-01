@@ -46,7 +46,7 @@ class OrdersController extends AppController {
         $user_id = $order['Order']['user_id'];
 
         if ($user_id != $this->Auth->user('user_id')) {
-            $this->Session->setFlash('You do not have permission to view this receipt.', 'default', array('class' => 'error'));
+            $this->Session->setFlash('You do not have permission to view this receipt.', 'flash_closable', array('class' => 'error'));
             return;
         }
 
@@ -73,7 +73,7 @@ class OrdersController extends AppController {
         $order = $this->Session->read('order');
 
         if (empty($order)) {
-            $this->Session->setFlash('Oops! Your cart appears to be empty.', 'default', array('class' => 'error'));
+            $this->Session->setFlash('Oops! Your cart appears to be empty.', 'flash_closable', array('class' => 'error'));
             return;
         }
 
@@ -108,7 +108,7 @@ class OrdersController extends AppController {
 
             if ($stock[$item_id]['quantity'] < $quantity) {
 
-                $this->Session->setFlash("Oops! There are no longer sufficient {$items[$item_id]['plural']} in stock to complete your purchase.", 'default', array('class' => 'error'));
+                $this->Session->setFlash("Oops! There are no longer sufficient {$items[$item_id]['plural']} in stock to complete your purchase.", 'flash_closable', array('class' => 'error'));
                 $this->Session->delete('order');
 
                 $this->Stock->query('UNLOCK TABLES');
@@ -132,7 +132,7 @@ class OrdersController extends AppController {
         $credit = $this->User->read('credit', $user_id)['User']['credit'];
 
         if ($total > $credit) {
-            $this->Session->setFlash('You no longer have sufficient CASH to complete this purchase!', 'default', array('class' => 'error'));
+            $this->Session->setFlash('You no longer have sufficient CASH to complete this purchase!', 'flash_closable', array('class' => 'error'));
             return;
         }
 
@@ -160,6 +160,6 @@ class OrdersController extends AppController {
         $this->set('order', $order);
         $this->set('steamid', $this->Auth->user('steamid'));
 
-        $this->Session->setFlash('Your purchase is complete. Here is your receipt.', 'default', array('class' => 'success'));
+        $this->Session->setFlash('Your purchase is complete. Here is your receipt.', 'flash_closable', array('class' => 'success'));
     }
 }

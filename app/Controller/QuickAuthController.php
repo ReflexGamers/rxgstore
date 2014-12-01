@@ -174,13 +174,13 @@ class QuickAuthController extends AppController {
                         // token expired
                         $diff = abs($diff);
                         CakeLog::write('quickauth', "Attempted usage of token $tokenId-$tokenValue which expired $diff seconds ago.");
-                        $this->Session->setFlash('Authentication token expired. Please contact an administrator.', 'default', array('class' => 'error'));
+                        $this->Session->setFlash('Authentication token expired. Please contact an administrator.', 'flash_closable', array('class' => 'error'));
 
                     } else if (!$this->AccountUtility->loginUser($user_id, AccountUtilityComponent::LOGIN_FORCE)) {
 
                         // failed to login user
                         CakeLog::write('quickauth', "Failed to login user $user_id with token $tokenId-$tokenValue.");
-                        $this->Session->setFlash('Login failed. Please contact an administrator.', 'default', array('class' => 'error'));
+                        $this->Session->setFlash('Login failed. Please contact an administrator.', 'flash_closable', array('class' => 'error'));
                     }
 
                 } else {
@@ -194,7 +194,7 @@ class QuickAuthController extends AppController {
 
             // token not found in db, nor is used logged in already
             CakeLog::write('quickauth', "Requested token $tokenId-$tokenValue was not found.");
-            $this->Session->setFlash('Invalid Authentication token. Please contact an administrator.', 'default', array('class' => 'error'));
+            $this->Session->setFlash('Invalid Authentication token. Please contact an administrator.', 'flash_closable', array('class' => 'error'));
         }
 
         $this->Session->write('Auth.user.ingame', true);

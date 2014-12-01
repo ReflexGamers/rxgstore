@@ -23,6 +23,7 @@
             <div class="item_sort_draggable">
                 {{ form.hidden(loop.index0 ~ '.display_index', {'value': loop.index0, 'data-original': loop.index0, 'class': 'item_sort_index'}) }}
                 {{ form.hidden(loop.index0 ~ '.item_id', {'value': item.item_id}) }}
+                <div class="item_sort_movable"><i class="fa fa-arrows-v"></i></div>
                 <div class="item_sort_image">
                     {{ html.image("items/#{item.short_name}.png", {
                         'url': {'controller': 'Items', 'action': 'view', 'id': item.short_name}

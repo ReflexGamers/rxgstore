@@ -41,7 +41,8 @@
     }) }}
 
     <div class="back_link">
-        {{ html.link('< Return to Item',
+        <i class="fa fa-arrow-circle-left"></i>
+        {{ html.link('Return to Item',
             {'action': 'view', 'id': item.short_name}
         ) }}
     </div>
@@ -92,12 +93,7 @@
                         'value': feature.description,
                         'required': false
                     }) }}
-                    {{ html.image('misc/remove.png', {
-                        'class': 'feature_remove',
-                        'title': 'remove',
-                        'height': 20,
-                        'width': 20
-                    }) }}
+                    <i class="fa fa-trash feature_remove" title="remove"></i>
                 </div>
             {% endfor %}
 

@@ -9,10 +9,11 @@
 
     {% if access.check('Items', 'update') %}
         <div class="item_edit_link">
-            <i class="icon-pencil"></i>
-            {{ html.link('edit',
-                {'action': 'edit', 'id': item.short_name}
-            ) }}
+            <i class="fa fa-pencil"></i>
+            {{ html.link('edit', {
+                'action': 'edit',
+                'id': item.short_name
+            }) }}
         </div>
     {% endif %}
 
@@ -70,7 +71,13 @@
             </div>
 
             <div class="item_stock {{ inStock ? '' : 'out' }}">
-                {{ not inStock ? 'Out of Stock' : stock.quantity < stock.ideal_quantity ? "#{stock.quantity} In Stock" : 'In Stock' }}
+                {% if not inStock %}
+                    <i class="fa fa-ban"></i> Out of Stock
+                {% elseif stock.quantity < stock.ideal_quantity %}
+                    {{stock.quantity}} In Stock
+                {% else %}
+                    In Stock
+                {% endif %}
             </div>
 
         </div>

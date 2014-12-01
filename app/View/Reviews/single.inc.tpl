@@ -39,7 +39,7 @@
     {% if (user.user_id == review.user_id or access.check('Reviews', 'update')) and not isEditMode %}
 
         <div class="review_actions">
-            <i class="icon-pencil"></i>
+            <i class="fa fa-pencil"></i>
             <a class="review_edit" href="{{ html.url({
                 'controller': 'Reviews',
                 'action': 'edit',
@@ -50,7 +50,7 @@
             {% if access.check('Reviews', 'update') and not isEditMode %}
 
                 <br/>
-                <i class="icon-trash"></i>
+                <i class="fa fa-trash"></i>
                 <a class="review_delete" href="{{ html.url({
                     'controller': 'Reviews',
                     'action': 'delete',

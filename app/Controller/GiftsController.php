@@ -117,7 +117,7 @@ class GiftsController extends AppController {
         $recipient_id = $this->AccountUtility->AccountIDFromSteamID64($steamid);
 
         if ($user_id == $recipient_id) {
-            $this->Session->setFlash('You cannot send a gift to yourself.', 'default', array('class' => 'error'));
+            $this->Session->setFlash('You cannot send a gift to yourself.', 'flash_closable', array('class' => 'error'));
             $this->redirect(array('controller' => 'Items', 'action' => 'index'));
             return;
         }
@@ -201,7 +201,7 @@ class GiftsController extends AppController {
         $recipient_id = $this->AccountUtility->AccountIDFromSteamID64($steamid);
 
         if ($user_id == $recipient_id) {
-            $this->Session->setFlash('You cannot send a gift to yourself.', 'default', array('class' => 'error'));
+            $this->Session->setFlash('You cannot send a gift to yourself.', 'flash_closable', array('class' => 'error'));
             $this->redirect(array('controller' => 'Items', 'action' => 'index'));
             return;
         }
@@ -224,7 +224,7 @@ class GiftsController extends AppController {
             }
 
             if (empty($userItems[$item_id]) || $userItems[$item_id] < $quantity) {
-                $this->Session->setFlash("There are no longer enough {$items[$item_id]['plural']} in your inventory to package this gift.", 'default', array('class' => 'error'));
+                $this->Session->setFlash("There are no longer enough {$items[$item_id]['plural']} in your inventory to package this gift.", 'flash_closable', array('class' => 'error'));
                 $this->redirect(array('action' => 'compose', 'id' => $steamid));
                 return;
             }
@@ -279,7 +279,7 @@ class GiftsController extends AppController {
         $gift = $this->Session->read("gift-$steamid");
 
         if (empty($gift)) {
-            $this->Session->setFlash('Oops! It appears you have not prepared a gift for this recipient.', 'default', array('class' => 'error'));
+            $this->Session->setFlash('Oops! It appears you have not prepared a gift for this recipient.', 'flash_closable', array('class' => 'error'));
             $this->redirect(array('action' => 'compose', 'id' => $steamid));
             return;
         }
@@ -296,7 +296,7 @@ class GiftsController extends AppController {
 
         if (!empty($server)) {
             if (!$this->ServerUtility->unloadUserInventory($server, $user_id)) {
-                $this->Session->setFlash('Oops! Our records show you are connected to a server but we are unable to contact it. You will not be able to send a gift until we can contact your server.', 'default', array('class' => 'error'));
+                $this->Session->setFlash('Oops! Our records show you are connected to a server but we are unable to contact it. You will not be able to send a gift until we can contact your server.', 'flash_closable', array('class' => 'error'));
                 $this->User->saveField('locked', 0);
                 $this->redirect(array('action' => 'compose', 'id' => $steamid));
             };
@@ -317,7 +317,7 @@ class GiftsController extends AppController {
             $quantity = $detail['quantity'];
 
             if (empty($userItems[$item_id]) || $userItems[$item_id]['quantity'] < $quantity) {
-                $this->Session->setFlash("There are no longer enough {$items[$item_id]['plural']} in your inventory to package this gift.", 'default', array('class' => 'error'));
+                $this->Session->setFlash("There are no longer enough {$items[$item_id]['plural']} in your inventory to package this gift.", 'flash_closable', array('class' => 'error'));
                 $this->Session->delete("gift-$steamid");
                 $this->UserItem->query('UNLOCK TABLES');
                 $this->User->saveField('locked', 0);
@@ -335,7 +335,7 @@ class GiftsController extends AppController {
         $result = $this->Gift->saveAssociated($gift, array('atomic' => false));
 
         if (!$result['Gift'] || in_array(false, $result['GiftDetail'])) {
-            $this->Session->setFlash('There was an error sending the gift. Please contact an administrator', 'default', array('class' => 'error'));
+            $this->Session->setFlash('There was an error sending the gift. Please contact an administrator', 'flash_closable', array('class' => 'error'));
             $this->UserItem->query('UNLOCK TABLES');
             $this->User->saveField('locked', 0);
             $this->redirect(array('action' => 'compose', 'id' => $steamid));
@@ -353,7 +353,7 @@ class GiftsController extends AppController {
 
         $this->Session->delete("gift-$steamid");
 
-        $this->Session->setFlash("Your gift has been sent! Gift number - #{$this->Gift->id}", 'default', array('class' => 'success'));
+        $this->Session->setFlash("Your gift has been sent! Gift number - #{$this->Gift->id}", 'flash_closable', array('class' => 'success'));
         $this->redirect(array('action' => 'compose', 'id' => $steamid));
     }
 }

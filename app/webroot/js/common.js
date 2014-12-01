@@ -18,6 +18,10 @@
         });
     };
 
+    $('#content').on('click', '.flash_remove', function () {
+        $(this).parent().slideUp();
+    });
+
     $('#activity').on('click', '.recipient_expand', function(){
         $(this).closest('.activity_item').find('.activity_reward_recipients').slideToggle(1000);
     });
