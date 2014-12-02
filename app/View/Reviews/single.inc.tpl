@@ -1,6 +1,8 @@
 {% import 'Common/functions.tpl' as fn %}
 
-{% set player = players[review.user_id] %}
+{% if not player %}
+    {% set player = players[review.user_id] %}
+{% endif %}
 
 <div class="review_image">
     {% if displayType == 'user' %}
