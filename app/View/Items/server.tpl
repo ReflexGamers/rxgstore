@@ -22,7 +22,7 @@
                      data-href="{{ html.url({'controller': 'Ratings', 'action': 'rate', 'id': item.item_id}) }}"></div>
                     <div class="browse_rating_count">
                         {% if rating %}
-                            <strong>{{ rating.average/2|round(1) }}</strong>/5 ({{ "#{rating.count} rating" ~ (rating.count > 1 ? 's' : '') }})
+                            <strong>{{ (rating.average/2)|round(1) }}</strong>/5 ({{ "#{rating.count} rating" ~ (rating.count > 1 ? 's' : '') }})
                         {% else %}
                             not yet rated
                         {% endif %}
