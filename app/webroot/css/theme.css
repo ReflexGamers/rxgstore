@@ -1294,6 +1294,7 @@ input.cart_quantity_input:focus {
     cursor: pointer;
     vertical-align: middle;
     padding-bottom: 5px;
+    font-size: 20px;
 }
 
 
@@ -1314,6 +1315,11 @@ input[type="checkbox"].item_edit_input {
 .item_edit_description_label {
     font-size: 20px;
     margin-top: 20px;
+}
+
+
+.flash_remove {
+    cursor: pointer;
 }
 
 #flashMessage,
@@ -1339,7 +1345,12 @@ input[type="checkbox"].item_edit_input {
     float: right;
 }
 
+#flashMessage .flash_view_cart {
+
+}
+
 #flashMessage .flash_view_cart a {
+    text-decoration: underline;
     color: #fff;
 }
 
@@ -1365,16 +1376,6 @@ input[type="checkbox"].item_edit_input {
     float: right;
     font-size: 20px;
     padding: 8px 15px 8px 0;
-}
-
-.icon-pencil {
-    padding-left: 20px;
-    background: url('/store2/img/misc/pencil-16.png') no-repeat left center;
-}
-
-.icon-trash {
-    padding-left: 20px;
-    background: url('/store2/img/misc/trash-16.png') no-repeat left center;
 }
 
 
@@ -1948,6 +1949,11 @@ input[type="checkbox"].item_edit_input {
 
 .item_sort_placeholder:last-child {
     margin-bottom: 10px;
+}
+
+.item_sort_movable {
+    float: right;
+    margin: 0 6px 0 3px;
 }
 
 .item_sort_image {
