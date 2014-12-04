@@ -17,7 +17,8 @@
         <div class="flashMessage">Please confirm the contents of your order below.</div>
 
         <div class="back_link">
-            {{ html.link('< Return to Cart',
+            <i class="fa fa-arrow-circle-left"></i>
+            {{ html.link('Return to Cart',
                 {'controller': 'Cart', 'action': 'view'}
             ) }}
         </div>
