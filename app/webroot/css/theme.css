@@ -1399,6 +1399,16 @@ input[type="checkbox"].item_edit_input {
     background: #08e;
 }
 
+.btn-browse-addfunds {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 20px;
+}
+
+.btn-browse-addfunds:hover {
+    text-decoration: none;
+}
+
 .btn-success {
     background: linear-gradient(#0b5, #082);
     background-color: #0c2; /* Steam in-game browser */
@@ -1521,6 +1531,10 @@ input[type="checkbox"].item_edit_input {
     /*margin-bottom: 5px;*/
 }
 
+.browse_addfunds {
+    margin: 10px 0;
+    text-align: center;
+}
 
 
 .player_list {

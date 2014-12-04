@@ -37,6 +37,15 @@
 
         </div>
 
+        <div class="browse_addfunds">
+            {{ html.link('Buy more CASH', {
+                'controller': 'PaypalOrders',
+                'action': 'addfunds'
+            }, {
+                'class': 'btn-primary btn-browse-addfunds'
+            }) }}
+        </div>
+
         {% if gifts %}
 
             {% include 'Gifts/view.inc.tpl' %}
