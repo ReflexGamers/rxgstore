@@ -42,7 +42,7 @@
                 'controller': 'PaypalOrders',
                 'action': 'addfunds'
             }, {
-                'class': 'btn-primary btn-browse-addfunds'
+                'class': 'btn-primary btn-addfunds'
             }) }}
         </div>
 

@@ -1397,16 +1397,13 @@ input[type="checkbox"].item_edit_input {
 
 .btn-primary:hover {
     background: #08e;
+    text-decoration: none;
 }
 
-.btn-browse-addfunds {
+.btn-addfunds {
     display: inline-block;
     padding: 10px 20px;
     font-size: 20px;
-}
-
-.btn-browse-addfunds:hover {
-    text-decoration: none;
 }
 
 .btn-success {
@@ -1426,6 +1423,7 @@ input[type="checkbox"].item_edit_input {
 
 .btn-success:hover {
     background: #0a4;
+    text-decoration: none;
 }
 
 .btn-danger {
@@ -1445,6 +1443,7 @@ input[type="checkbox"].item_edit_input {
 
 .btn-danger:hover {
     background: #e22;
+    text-decoration: none;
 }
 
 .btn-warning {
@@ -1464,6 +1463,7 @@ input[type="checkbox"].item_edit_input {
 
 .btn-warning:hover {
     background: #e80;
+    text-decoration: none;
 }
 
 .btn-secondary {
@@ -1487,6 +1487,7 @@ input[type="checkbox"].item_edit_input {
 
 .btn-secondary:active {
     background: #eee;
+    text-decoration: none;
 }
 
 #cart_checkout_button {
