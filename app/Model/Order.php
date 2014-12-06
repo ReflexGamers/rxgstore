@@ -6,6 +6,9 @@ App::uses('AppModel', 'Model');
  * @property Activity $Activity
  * @property OrderDetail $OrderDetail
  * @property User $User
+ *
+ * Magic Methods (for inspection):
+ * @method findAllByUserId
  */
 class Order extends AppModel {
 
