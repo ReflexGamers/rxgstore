@@ -2,6 +2,11 @@
 App::uses('Component', 'Controller');
 App::uses('ConnectionManager', 'Model');
 
+/**
+ * Class ServerUtilityComponent
+ *
+ * @property Item $Item
+ */
 class ServerUtilityComponent extends Component {
 
     protected $servers = array();
@@ -105,7 +110,7 @@ class ServerUtilityComponent extends Component {
      * @param string $server_ip
      * @param int $user_id
      * @param array $order the details of the order used to build the command
-     * @return bool result of @exec
+     * @return bool result of exec()
      */
     public function broadcastPurchase($server_ip, $user_id, $order) {
 
@@ -125,7 +130,7 @@ class ServerUtilityComponent extends Component {
      * @param string $server_ip
      * @param int $user_id
      * @param int $amount the amount of CASH purchased
-     * @return bool result of @exec
+     * @return bool result of exec()
      */
     public function broadcastPurchaseCash($server_ip, $user_id, $amount) {
 
@@ -140,7 +145,7 @@ class ServerUtilityComponent extends Component {
      * @param string $server_ip
      * @param int $user_id
      * @param array $gift the details of the gift used to build the command
-     * @return bool result of @exec
+     * @return bool result of exec()
      */
     public function broadcastGiftSend($server_ip, $user_id, $gift) {
 
@@ -161,7 +166,7 @@ class ServerUtilityComponent extends Component {
      * @param string $server_ip
      * @param int $user_id
      * @param array $gift the details of the gift used to build the command
-     * @return bool result of @exec
+     * @return bool result of exec()
      */
     public function broadcastGiftReceive($server_ip, $user_id, $gift) {
 
@@ -181,7 +186,7 @@ class ServerUtilityComponent extends Component {
      * @param string $server_ip
      * @param int $user_id
      * @param array $reward the details of the reward used to build the command
-     * @return bool result of @exec
+     * @return bool result of exec()
      */
     public function broadcastRewardReceive($server_ip, $user_id, $reward) {
 
@@ -201,7 +206,7 @@ class ServerUtilityComponent extends Component {
      * @param string $server_ip
      * @param int $user_id
      * @param int $item_id
-     * @return bool result of @exec
+     * @return bool result of exec()
      */
     public function broadcastReview($server_ip, $user_id, $item_id) {
 
@@ -222,7 +227,7 @@ class ServerUtilityComponent extends Component {
      *
      * @param string $server_ip
      * @param int $user_id
-     * @return bool result of @exec
+     * @return bool result of exec()
      */
     public function unloadUserInventory($server_ip, $user_id) {
 
