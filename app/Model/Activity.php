@@ -408,4 +408,59 @@ class Activity extends AppModel {
 
         return $activities;
     }
+
+    /**
+     * Returns a query that can be used to fetch a page of activity for a specific item.
+     *
+     * Note: This does not return data; it simply returns the query as an array.
+     *
+     * @param int $item_id
+     * @param int $limit optional limit for number of events to return
+     * @return array
+     */
+    public function getItemPageQuery($item_id, $limit = 5) {
+
+        return array(
+            'Activity' => array(
+                'findType' => 'byItem',
+                'item_id' => $item_id,
+                'limit' => $limit
+            )
+        );
+    }
+
+    /**
+     * Returns a query that can be used to fetch a page of activity for a specific user.
+     *
+     * Note: This does not return data; it simply returns the query as an array.
+     *
+     * @param int $user_id
+     * @param int $limit optional limit for number of events to return
+     * @return array
+     */
+    public function getUserPageQuery($user_id, $limit = 5) {
+
+        return array(
+            'Activity' => array(
+                'findType' => 'byUser',
+                'user_id' => $user_id,
+                'limit' => $limit
+            )
+        );
+    }
+
+    /**
+     * Returns a query that can be used to fetch a page of global activity.
+     *
+     * @param int $limit optional limit for number of events to return
+     * @return array
+     */
+    public function getGlobalPageQuery($limit = 5) {
+
+        return array(
+            'Activity' => array(
+                'limit' => $limit
+            )
+        );
+    }
 }
