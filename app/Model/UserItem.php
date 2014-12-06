@@ -18,23 +18,6 @@ class UserItem extends AppModel {
         'Item', 'User'
     );
 
-    public function getByUser($user_id, $opt = null) {
-
-        $options = array(
-            'fields' => array('item_id', 'quantity'),
-            'conditions' => array(
-                'user_id' => $user_id,
-                'quantity > 0'
-            )
-        );
-
-        if (isset($opt) && is_array($opt)) {
-            $options = array_merge($options, $opt);
-        }
-
-        return $this->find('list', $options);
-    }
-
 /**
  * Validation rules
  *
