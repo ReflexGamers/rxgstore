@@ -32,64 +32,24 @@ class GiftsController extends AppController {
     public function accept($gift_id) {
 
         $user_id = $this->Auth->user('user_id');
-
-        $gift = $this->Gift->find('first', array(
-            'conditions' => array(
-                'gift_id' => $gift_id,
-                'recipient_id' => $user_id,
-                'accepted = 0'
-            ),
-            'contain' => 'GiftDetail'
-        ));
-
-        $this->loadModel('Item');
-        $this->loadModel('UserItem');
+        $gift = $this->Gift->acceptPendingGift($gift_id, $user_id);
 
         if (!empty($gift)) {
 
-            $this->UserItem->query('LOCK TABLES user_item WRITE, user_item as UserItem WRITE');
-
-            $userItems = Hash::combine(
-                $this->UserItem->findAllByUserId($user_id),
-                '{n}.UserItem.item_id', '{n}.UserItem'
-            );
-
-            foreach ($gift['GiftDetail'] as $detail) {
-
-                $item_id = $detail['item_id'];
-                $quantity = $detail['quantity'];
-
-                if (empty($userItems[$item_id])) {
-                    $userItems[$item_id] = array(
-                        'user_id' => $user_id,
-                        'item_id' => $item_id,
-                        'quantity' => $quantity
-                    );
-                } else {
-                    $userItems[$item_id]['quantity'] += $quantity;
-                }
-            }
-
-            $this->UserItem->saveMany($userItems, array('atomic' => false));
-            $this->UserItem->query('UNLOCK TABLES');
-
-            $this->Gift->id = $gift_id;
-            $this->Gift->saveField('accepted', 1);
-
+            // broadcast & refresh user's inventory
             $this->loadModel('User');
             $server = $this->User->getCurrentServer($user_id);
 
-            // broadcast & refresh user's inventory
-            if (!empty($server)) {
+            if ($server) {
                 $this->ServerUtility->broadcastGiftReceive($server, $user_id, $gift);
             }
-
         }
 
         $this->loadItems();
+        $this->loadModel('User');
 
         $this->set(array(
-            'quantity' => $this->UserItem->getByUser($user_id)
+            'quantity' => $this->User->getItems($user_id)
         ));
 
         $this->render('/Items/list.inc');
@@ -123,11 +83,11 @@ class GiftsController extends AppController {
         }
 
         $this->loadModel('Item');
-        $this->loadModel('UserItem');
+        $this->loadModel('User');
 
         $this->set(array(
             'player' => $player,
-            'userItems' => $this->UserItem->getByUser($user_id)
+            'userItems' => $this->User->getItems($user_id)
         ));
 
         $this->activity(false);
@@ -140,13 +100,7 @@ class GiftsController extends AppController {
      */
     public function activity($forceRender = true) {
 
-        $this->Paginator->settings = array(
-            'Gift' => array(
-                'contain' => 'GiftDetail',
-                'limit' => 5
-            )
-        );
-
+        $this->Paginator->settings = $this->Gift->getActivityQuery(5);
         $gifts = $this->Paginator->paginate('Gift');
 
         foreach ($gifts as &$gift) {
@@ -207,9 +161,9 @@ class GiftsController extends AppController {
         }
 
         $this->loadModel('Item');
-        $this->loadModel('UserItem');
+        $this->loadModel('User');
 
-        $userItems = $this->UserItem->getByUser($user_id);
+        $userItems = $this->User->getItems($user_id);
         $items = $this->loadItems();
         $totalValue = 0;
 
@@ -294,7 +248,7 @@ class GiftsController extends AppController {
 
         $server = $this->User->getCurrentServer($user_id);
 
-        if (!empty($server)) {
+        if ($server) {
             if (!$this->ServerUtility->unloadUserInventory($server, $user_id)) {
                 $this->Session->setFlash('Oops! Our records show you are connected to a server but we are unable to contact it. You will not be able to send a gift until we can contact your server.', 'flash_closable', array('class' => 'error'));
                 $this->User->saveField('locked', 0);
