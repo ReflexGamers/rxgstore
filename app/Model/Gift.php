@@ -54,7 +54,7 @@ class Gift extends AppModel {
             'contain' => 'GiftDetail'
         ));
 
-        // check if matching gift was found
+        // make sure valid gift exists
         if (!empty($gift)) {
 
             // lock user inventory
@@ -66,7 +66,7 @@ class Gift extends AppModel {
                 '{n}.UserItem.item_id', '{n}.UserItem'
             );
 
-            // add gift details to user items array
+            // add gift details to user inventory
             foreach ($gift['GiftDetail'] as $detail) {
 
                 $item_id = $detail['item_id'];
