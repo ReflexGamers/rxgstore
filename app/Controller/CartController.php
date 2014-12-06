@@ -45,12 +45,41 @@ class CartController extends AppController {
     }
 
     /**
+     * Shows the quick buy page.
+     */
+    public function quickbuy() {
+
+        $this->loadModel('Item');
+        $this->loadModel('Stock');
+        $this->loadModel('User');
+
+        $cart = $this->Session->read('cart');
+        $this->User->id = $this->Auth->user('user_id');
+        $stock = $this->Stock->find('list');
+
+        $this->loadItems();
+
+        $config = Configure::Read('Store.Shipping');
+
+        $this->set(array(
+            'isQuickbuy' => true,
+            'cart' => $cart,
+            'stock' => $stock,
+            'credit' => $this->User->field('credit'),
+            'shippingCost' => $config['Cost'],
+            'shippingFreeThreshold' => $config['FreeThreshold']
+        ));
+
+        $this->view('view');
+    }
+
+    /**
      * Processes actions for the entire cart such as 'empty', 'update' and 'checkout' depending on what 'ProcessAction'
      * is set to in the request data.
      *
-     * Empty: empties the cart completely and sends to index
-     * Update: saves new quantities of items in the cart
-     * Checkout: compiles cart items into a session object called 'order' and shows the confirmation page
+     * empty: empties the cart completely and sends to index
+     * update: saves new quantities of items in the cart
+     * checkout: compiles cart items into a session object called 'order' and shows the confirmation page
      */
     public function process() {
 
@@ -96,7 +125,7 @@ class CartController extends AppController {
             $item_id = $detail['item_id'];
             $quantity = $detail['quantity'];
 
-            if ($quantity < 1) {
+            if (empty($quantity) || $quantity < 1) {
                 unset($orderDetails[$key]);
                 unset($cart[$item_id]);
                 continue;
@@ -129,7 +158,7 @@ class CartController extends AppController {
             }
         }
 
-        if ($processAction == 'checkoout' && empty($orderDetails)) {
+        if ($processAction == 'checkout' && empty($orderDetails)) {
             $this->Session->setFlash('Oops! You do not have any items in your shopping cart.', 'flash_closable', array('class' => 'error'));
             $this->redirect(array('controller' => 'Cart', 'action' => 'view'));
             return;
