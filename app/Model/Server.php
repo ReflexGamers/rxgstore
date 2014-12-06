@@ -7,6 +7,7 @@ App::uses('AppModel', 'Model');
  *
  * Magic Methods (for inspection):
  * @method findByServerIp
+ * @method findByShortName
  */
 class Server extends AppModel {
 
@@ -18,6 +19,29 @@ class Server extends AppModel {
     public $hasMany = array(
         'ServerItem', 'UserServer'
     );
+
+    /**
+     * Returns a list of servers or server groups that support the item. If the item is allowed by a server group, that
+     * group's children will not be in the list unless it is directly supported by the child servers as well, but that
+     * should not currently be possible since the logic should remove the child servers if it sees the parent.
+     *
+     * @param int $item_id the id of the item for which to find the servers
+     * @return array
+     */
+    public function getAllByItemId($item_id) {
+
+        return Hash::extract($this->find('all', array(
+            'joins' => array(
+                array(
+                    'table' => 'server_item',
+                    'conditions' => array(
+                        'server_item.server_id = Server.server_id',
+                        'server_item.item_id' => $item_id
+                    )
+                )
+            )
+        )), '{n}.Server');
+    }
 
     public function getUsableItems($server_ip) {
 
