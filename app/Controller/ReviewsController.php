@@ -81,7 +81,7 @@ class ReviewsController extends AppController {
                     $this->loadModel('User');
                     $server = $this->User->getCurrentServer($user_id);
 
-                    if (!empty($server)) {
+                    if ($server) {
                         $this->ServerUtility->broadcastReview($server, $user_id, $item_id);
                     }
 
@@ -96,7 +96,7 @@ class ReviewsController extends AppController {
             }
 
             $review = $this->Review->Rating->getByItemAndUser($item_id, $user_id);
-            $review['quantity'] = $this->Review->Rating->User->getTotalBoughtByItem($user_id, $item_id);
+            $review['quantity'] = $this->Review->Rating->User->getTotalBoughtOfItem($user_id, $item_id);
         }
 
         $this->addPlayers($user_id);
@@ -219,7 +219,7 @@ class ReviewsController extends AppController {
         $user_id = $review['user_id'];
 
         if (!$edit) {
-            $review['quantity'] = $this->Review->Rating->User->getTotalBoughtByItem($user_id, $item['item_id']);
+            $review['quantity'] = $this->Review->Rating->User->getTotalBoughtOfItem($user_id, $item['item_id']);
         }
 
         $this->addPlayers($user_id);
