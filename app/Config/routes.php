@@ -105,6 +105,7 @@
 	));
 
 	Router::connect('/cart', array('controller' => 'Cart', 'action' => 'view'));
+    Router::connect('/quickbuy', array('controller' => 'Cart', 'action' => 'quickbuy'));
 	Router::connect('/cart/:action/:id', array(
 			'controller' => 'Cart'
 		), array(
