@@ -19,7 +19,7 @@
     };
 
     $('#content').on('click', '.flash_remove', function () {
-        $(this).parent().slideUp();
+        $(this).closest('.flashMessage').slideUp();
     });
 
     $('#activity').on('click', '.recipient_expand', function(){
