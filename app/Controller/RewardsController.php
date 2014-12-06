@@ -32,66 +32,24 @@ class RewardsController extends AppController {
     public function accept($reward_id) {
 
         $user_id = $this->Auth->user('user_id');
+        $reward = $this->Reward->acceptPendingReward($reward_id, $user_id);
 
-        // find the reward
-        $reward = $this->Reward->RewardRecipient->find('first', array(
-            'conditions' => array(
-                'RewardRecipient.reward_id' => $reward_id,
-                'recipient_id' => $user_id,
-                'accepted = 0'
-            ),
-            'contain' => 'Reward.RewardDetail'
-        ));
-
-        $this->loadModel('UserItem');
-        $this->loadModel('Item');
-
-        // make sure valid reward exists
         if (!empty($reward)) {
 
-            $this->UserItem->query('LOCK TABLES user_item WRITE, user_item as UserItem WRITE');
-
-            $userItems = Hash::combine(
-                $this->UserItem->findAllByUserId($user_id),
-                '{n}.UserItem.item_id', '{n}.UserItem'
-            );
-
-            foreach ($reward['Reward']['RewardDetail'] as $detail) {
-
-                $item_id = $detail['item_id'];
-                $quantity = $detail['quantity'];
-
-                if (empty($userItems[$item_id])) {
-                    $userItems[$item_id] = array(
-                        'user_id' => $user_id,
-                        'item_id' => $item_id,
-                        'quantity' => $quantity
-                    );
-                } else {
-                    $userItems[$item_id]['quantity'] += $quantity;
-                }
-            }
-
-            $this->UserItem->saveMany($userItems, array('atomic' => false));
-            $this->UserItem->query('UNLOCK TABLES');
-
-            $this->Reward->RewardRecipient->id = $reward['RewardRecipient']['reward_recipient_id'];
-            $this->Reward->RewardRecipient->saveField('accepted', 1);
-
+            // broadcast & refresh user's inventory
             $this->loadModel('User');
             $server = $this->User->getCurrentServer($user_id);
 
-            // refresh user's inventory in-game
-            if (!empty($server)) {
+            if ($server) {
                 $this->ServerUtility->broadcastRewardReceive($server, $user_id, $reward['Reward']);
             }
         }
 
-        // re-render inventory as response
         $this->loadItems();
+        $this->loadModel('User');
 
         $this->set(array(
-            'quantity' => $this->UserItem->getByUser($user_id)
+            'quantity' => $this->User->getItems($user_id)
         ));
 
         $this->render('/Items/list.inc');
@@ -124,16 +82,7 @@ class RewardsController extends AppController {
      */
     public function activity($forceRender = true) {
 
-        $this->Paginator->settings = array(
-            'Reward' => array(
-                'contain' => array(
-                    'RewardDetail',
-                    'RewardRecipient'
-                ),
-                'limit' => 5
-            )
-        );
-
+        $this->Paginator->settings = $this->Reward->getActivityQuery(5);
         $rewards = $this->Paginator->paginate('Reward');
 
         // organize results
@@ -144,7 +93,7 @@ class RewardsController extends AppController {
                 '{n}.item_id', '{n}.quantity'
             );
 
-            if (isset($reward['RewardRecipient'])) {
+            if (!empty($reward['RewardRecipient'])) {
                 $reward['RewardRecipient'] = Hash::extract(
                     $reward['RewardRecipient'], '{n}.recipient_id'
                 );
