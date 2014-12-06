@@ -39,6 +39,46 @@ class Item extends AppModel {
     }
 
     /**
+     * Returns an item with all its features specified by the id or short_name of the item.
+     *
+     * @param string|int $id id or short_name of item
+     * @return array
+     */
+    public function getWithFeatures($id) {
+
+        return $this->find('first', array(
+            'conditions' => array(
+                'OR' => array(
+                    'item_id' => $id,
+                    'short_name' => $id
+                )
+            ),
+            'contain' => array(
+                'Feature' => array(
+                    'fields' => array(
+                        'description'
+                    )
+                )
+            )
+        ));
+    }
+
+    /**
+     * Returns basic info about an item, including name and short_name.
+     *
+     * @param string|int $id
+     * @return array
+     */
+    public function getBasicInfo($id) {
+
+        return Hash::extract(
+            $this->findByItemIdOrShortName($id, $id, array(
+                'item_id', 'name', 'short_name'
+            )
+        ), 'Item');
+    }
+
+    /**
      * Returns an array of all items usable in a specific server, sorted by display_index. The result will include items
      * directly associated with the server as well as those associated with the server's parent.
      *
@@ -145,7 +185,7 @@ class Item extends AppModel {
      * Returns the top buyers for a specific item. Top buyers are determined by the quantity bought, not the amount
      * spent.
      *
-     * @param $item_id
+     * @param int $item_id
      * @param int $limit optional limit for number of top buyers to return
      * @return array
      */
@@ -180,7 +220,7 @@ class Item extends AppModel {
      * @param int $limit optional limit for number of reviews to return
      * @return array query to be passed into paginator
      */
-    public function getReviews($item_id, $limit = 3) {
+    public function getReviewPageQuery($item_id, $limit = 3) {
 
         return array(
             'Rating' => array(
