@@ -153,7 +153,7 @@ class OrdersController extends AppController {
         //Broadcast to server if player is in-game
         $server = $this->User->getCurrentServer($user_id);
 
-        if (!empty($server)) {
+        if ($server) {
             $this->ServerUtility->broadcastPurchase($server, $user_id, $order);
         }
 

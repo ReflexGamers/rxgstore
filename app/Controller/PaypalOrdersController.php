@@ -205,7 +205,7 @@ class PaypalOrdersController extends AppController {
             // broadcast
             $server = $this->User->getCurrentServer($user_id);
 
-            if (!empty($server)) {
+            if ($server) {
                 $this->ServerUtility->broadcastPurchaseCash($server, $user_id, $data['amount']);
             }
 
