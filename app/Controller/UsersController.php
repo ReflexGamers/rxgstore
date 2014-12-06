@@ -25,44 +25,7 @@ class UsersController extends AppController {
 
         $user_id = $this->AccountUtility->AccountIDFromSteamID64($steamid);
 
-        $this->loadModel('Order');
-        $this->loadModel('UserItem');
-        $userItems = $this->UserItem->getByUser($user_id);
-
-        $totals = Hash::combine($this->Order->find('all', array(
-            'conditions' => array(
-                'user_id' => $user_id
-            ),
-            'fields' => array(
-                'order_detail.item_id', 'SUM(quantity) as quantity'
-            ),
-            'joins' => array(
-                array(
-                    'table' => 'order_detail',
-                    'conditions' => array(
-                        'Order.order_id = order_detail.order_id'
-                    )
-                )
-            ),
-            'group' => array(
-                'order_detail.item_id'
-            )
-        )), '{n}.order_detail.item_id', '{n}.{n}.quantity' );
-
-        $pastItems = array();
-
-        foreach ($totals as $item_id => $quantity) {
-            if (isset($userItems[$item_id])) {
-                $diff = $totals[$item_id] - $userItems[$item_id];
-
-                if ($diff > 0) {
-                    $pastItems[$item_id] = $diff;
-                }
-            } else {
-                $pastItems[$item_id] = $totals[$item_id];
-            }
-        }
-
+        $itemData = $this->User->getCurrentAndPastItems($user_id);
         $user = $this->User->read('credit', $user_id);
 
         if (!empty($user)) {
@@ -73,8 +36,8 @@ class UsersController extends AppController {
 
         $this->set(array(
             'user_id' => $user_id,
-            'userItems' => $userItems,
-            'pastItems' => $pastItems,
+            'userItems' => $itemData['current'],
+            'pastItems' => $itemData['past'],
             'totalSpent' => $this->User->getTotalSpent($user_id)
         ));
 
@@ -96,40 +59,7 @@ class UsersController extends AppController {
         $user_id = $this->AccountUtility->AccountIDFromSteamID64($steamid);
 
         $this->loadModel('Rating');
-        $this->Paginator->settings = array(
-            'Rating' => array(
-                'fields'  => array(
-                    'Rating.user_id', 'Rating.item_id', 'rating', 'review.review_id', 'review.created', 'review.modified', 'review.content', 'SUM(quantity) as quantity'
-                ),
-                'conditions' => array(
-                    'Rating.user_id' => $user_id
-                ),
-                'joins' => array(
-                    array(
-                        'table' => 'review',
-                        'conditions' => array(
-                            'Rating.rating_id = review.rating_id'
-                        )
-                    ),
-                    array(
-                        'table' => 'order_detail',
-                        'conditions' => array(
-                            'Rating.item_id = order_detail.item_id'
-                        )
-                    ),
-                    array(
-                        'table' => 'order',
-                        'conditions' => array(
-                            'order_detail.order_id = order.order_id',
-                            'Rating.user_id = order.user_id'
-                        )
-                    )
-                ),
-                'order' => 'quantity desc',
-                'group' => 'order_detail.item_id',
-                'limit' => 3
-            )
-        );
+        $this->Paginator->settings = $this->User->getReviewPageQuery($user_id, 3);
 
         $reviews = Hash::map(
             $this->Paginator->paginate('Rating'),
@@ -169,15 +99,11 @@ class UsersController extends AppController {
         $user_id = $this->AccountUtility->AccountIDFromSteamID64($steamid);
 
         $this->loadModel('Activity');
-        $this->Paginator->settings = array(
-            'Activity' => array(
-                'findType' => 'byUser',
-                'user_id' => $user_id,
-                'limit' => 5
-            )
-        );
+        $this->Paginator->settings = $this->Activity->getUserPageQuery($user_id, 5);
 
-        $activities = $this->Activity->getRecent($this->Paginator->paginate('Activity'));
+        $activities = $this->Activity->getRecent(
+            $this->Paginator->paginate('Activity')
+        );
 
         $this->addPlayers($activities, '{n}.{s}.user_id');
         $this->addPlayers($activities, '{n}.{s}.sender_id');
@@ -204,9 +130,11 @@ class UsersController extends AppController {
      * @param int $steamid the user's 64-bit steamid
      */
     public function impersonate($steamid) {
+
         if ($this->Access->check('Debug')) {
             $this->AccountUtility->login($steamid);
         }
+
         $this->redirect(array('controller' => 'Users', 'action' => 'profile', 'id' => $steamid));
     }
 
