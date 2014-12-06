@@ -47,11 +47,10 @@ class ItemsController extends AppController {
         if (!empty($user_id)) {
 
             $this->loadModel('User');
-            $this->loadModel('UserItem');
             $this->loadModel('Gift');
 
             $this->User->id = $user_id;
-            $userItems = $this->UserItem->getByUser($user_id);
+            $userItems = $this->User->getItems($user_id);
             $gifts = $this->User->getPendingGifts($user_id);
             $rewards = $this->User->getPendingRewards($user_id);
             $this->addPlayers($gifts, '{n}.Gift.sender_id');
@@ -149,14 +148,11 @@ class ItemsController extends AppController {
     public function recent($forceRender = true) {
 
         $this->loadModel('Activity');
+        $this->Paginator->settings = $this->Activity->getGlobalPageQuery(5);
 
-        $this->Paginator->settings = array(
-            'Activity' => array(
-                'limit' => 5,
-            )
+        $activities = $this->Activity->getRecent(
+            $this->Paginator->paginate('Activity')
         );
-
-        $activities = $this->Activity->getRecent($this->Paginator->paginate('Activity'));
 
         $this->addPlayers($activities, '{n}.{s}.user_id');
         $this->addPlayers($activities, '{n}.{s}.sender_id');
@@ -179,25 +175,11 @@ class ItemsController extends AppController {
     /**
      * Item view page. Shows product information, reviews, activity, etc.
      *
-     * @param string $id item_id or short_name of item to view
+     * @param string|int $id item_id or short_name of item to view
      */
     public function view($id = null) {
 
-        $itemData = $this->Item->find('first', array(
-            'conditions' => array(
-                'OR' => array(
-                    'item_id' => $id,
-                    'short_name' => $id
-                )
-            ),
-            'contain' => array(
-                'Feature' => array(
-                    'fields' => array(
-                        'description'
-                    )
-                )
-            )
-        ));
+        $itemData = $this->Item->getWithFeatures($id);
 
         if (empty($itemData)) {
             throw new NotFoundException(__('Invalid item'));
@@ -207,21 +189,9 @@ class ItemsController extends AppController {
         $item_id = $item['item_id'];
 
         $this->loadModel('Server');
-
-        $servers = Hash::extract($this->Server->find('all', array(
-            'joins' => array(
-                array(
-                    'table' => 'server_item',
-                    'conditions' => array(
-                        'server_item.server_id = Server.server_id',
-                        'server_item.item_id' => $item_id
-                    )
-                )
-            )
-        )), '{n}.Server');
+        $servers = $this->Server->getAllByItemId($item_id);
 
         $parsedown = new Parsedown();
-
         $item['description'] = $parsedown->text($item['description']);
 
 
@@ -270,8 +240,8 @@ class ItemsController extends AppController {
 
         if ($forceRender) {
 
-            // this was probably called standalone, so item data needs to be fetched ($item refers to the name)
-            $item = Hash::extract($this->Item->findByItemIdOrShortName($item, $item, array('item_id', 'name', 'short_name')), 'Item');
+            // this was probably called standalone, so item data needs to be fetched ($item refers to the id/name)
+            $item = $this->Item->getBasicInfo($item);
 
             if (empty($item)) {
                 throw new NotFoundException(__('Invalid item'));
@@ -280,39 +250,9 @@ class ItemsController extends AppController {
             $this->set('item', $item);
         }
 
+
         $this->loadModel('Rating');
-        $this->Paginator->settings = array(
-            'Rating' => array(
-                'fields'  => array(
-                    'Rating.user_id', 'Rating.item_id', 'rating', 'review.review_id', 'review.created', 'review.modified', 'review.content', 'SUM(quantity) as quantity'
-                ),
-                'joins' => array(
-                    array(
-                        'table' => 'review',
-                        'conditions' => array(
-                            'Rating.rating_id = review.rating_id',
-                            'Rating.item_id' => $item['item_id']
-                        )
-                    ),
-                    array(
-                        'table' => 'order_detail',
-                        'conditions' => array(
-                            'Rating.item_id = order_detail.item_id'
-                        )
-                    ),
-                    array(
-                        'table' => 'order',
-                        'conditions' => array(
-                            'order_detail.order_id = order.order_id',
-                            'Rating.user_id = order.user_id'
-                        )
-                    )
-                ),
-                'order' => 'quantity desc',
-                'group' => 'order.user_id',
-                'limit' => 3
-            )
-        );
+        $this->Paginator->settings = $this->Item->getReviewPageQuery($item['item_id'], 3);
 
         $reviews = Hash::map(
             $this->Paginator->paginate('Rating'),
@@ -349,7 +289,8 @@ class ItemsController extends AppController {
 
         if ($forceRender) {
 
-            $item = Hash::extract($this->Item->findByItemIdOrShortName($item, $item, array('item_id', 'name', 'short_name')), 'Item');
+            // this was probably called standalone, so item data needs to be fetched ($item refers to the id/name)
+            $item = $this->Item->getBasicInfo($item);
 
             if (empty($item)) {
                 throw new NotFoundException(__('Invalid item'));
@@ -359,15 +300,11 @@ class ItemsController extends AppController {
         }
 
         $this->loadModel('Activity');
-        $this->Paginator->settings = array(
-            'Activity' => array(
-                'findType' => 'byItem',
-                'item_id' => $item['item_id'],
-                'limit' => 5
-            )
-        );
+        $this->Paginator->settings = $this->Activity->getItemPageQuery($item['item_id'], 5);
 
-        $activities = $this->Activity->getRecent($this->Paginator->paginate('Activity'));
+        $activities = $this->Activity->getRecent(
+            $this->Paginator->paginate('Activity')
+        );
 
         $this->addPlayers($activities, '{n}.{s}.user_id');
         $this->addPlayers($activities, '{n}.{s}.sender_id');
