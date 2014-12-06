@@ -60,6 +60,8 @@
 
     $('#CartForm').submit(function(event) {
 
+        var container = $('#flash_container');
+
         if (!checkCartQuantity()) {
             return false;
         }
@@ -74,12 +76,39 @@
             },
 
             beforeSend: function(){
-                $('#flash_container').slideUp();
+
+                var isContainerEmpty = !$.trim(container.html());
+
+                if (!isContainerEmpty) {
+                    container.animate({
+                        opacity: 0.5
+                    });
+                } else {
+                    container.css({
+                        opacity: 1
+                    })
+                }
                 $('#cart_add_loading').fadeIn();
             },
 
             success: function(data, textStatus){
-                $('#flash_container').html(data).slideDown();
+
+                var isContainerEmpty = !$.trim(container.html());
+
+                if (isContainerEmpty) {
+                    container.hide();
+                }
+
+                container.html(data);
+
+                if (isContainerEmpty) {
+                    container.slideDown();
+                } else {
+                    container.animate({
+                        opacity: 1
+                    });
+                }
+
                 $('#cart_add_loading').fadeOut();
                 rxg.updateCartLink();
             }

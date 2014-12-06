@@ -19,7 +19,9 @@
     };
 
     $('#content').on('click', '.flash_remove', function () {
-        $(this).closest('.flashMessage').slideUp();
+        $(this).closest('.flashMessage').slideUp(function () {
+            $(this).remove();
+        });
     });
 
     $('#activity').on('click', '.recipient_expand', function(){
