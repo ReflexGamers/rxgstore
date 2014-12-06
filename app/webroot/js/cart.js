@@ -1,7 +1,7 @@
 (function($){
 
-    var shippingCost = parseInt($('#shipping_cost').val());
-    var shippingFreeThreshold = parseInt($('#shipping_free_threshold').val());
+    var shippingCost = parseInt($('#shipping_cost').val(), 10);
+    var shippingFreeThreshold = parseInt($('#shipping_free_threshold').val(), 10);
 
     /**
      * Updates cart prices
@@ -24,16 +24,16 @@
             var el = $(element);
             var val = el.val();
 
-            if (val > parseInt(el.attr('max')) || val < parseInt(el.attr('min')) || val % 1 != 0 || !$.isNumeric(val)) {
+            if (val > parseInt(el.attr('max'), 10) || val < parseInt(el.attr('min'), 10) || val % 1 !== 0 || (val !== "" && !$.isNumeric(val))) {
                 invalidInput = true;
                 el.addClass('input_error');
             } else {
                 el.removeClass('input_error input_warning');
             }
 
-            if (!invalidInput) {
+            if (!invalidInput && val !== "") {
                 var itemTotal = val * el.data('price');
-                el.closest('tr').find('.total').find('.currency_value').first().html(itemTotal.toLocaleString());
+                el.closest('tr').find('.total').find('.currency_value').first().html(itemTotal.toLocaleString('en-IN'));
                 subTotal += itemTotal;
             }
         });
@@ -44,13 +44,13 @@
 
         if (!invalidInput) {
 
-            var insufficientFunds = subTotal > parseInt(cash.html().replace(/,/g, ''));
+            var insufficientFunds = subTotal > parseInt(cash.html().replace(/,/g, ''), 10);
             var shipping = subTotal >= shippingFreeThreshold ? 0 : shippingCost;
             var total = subTotal + shipping;
 
-            $('#cart_subtotal').find('.currency_value').first().html(subTotal.toLocaleString());
-            $('#cart_shipping').find('.currency_value').first().html(shipping.toLocaleString());
-            $('#cart_total').find('.currency_value').first().html(total.toLocaleString());
+            $('#cart_subtotal').find('.currency_value').first().html(subTotal.toLocaleString('en-IN'));
+            $('#cart_shipping').find('.currency_value').first().html(shipping.toLocaleString('en-IN'));
+            $('#cart_total').find('.currency_value').first().html(total.toLocaleString('en-IN'));
 
             if (insufficientFunds) {
                 cash.addClass('cart_cash_insufficient');
