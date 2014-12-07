@@ -133,6 +133,10 @@
 
             <h2 class="page_subheading">Customer Reviews</h2>
 
+            {% if reviews %}
+                <p class="reviews_description">The number next to each review is the quantity of this item the reviewer purchased. Want your review to be seen first? Buy more of this item to push it to the top!</p>
+            {% endif %}
+
             <div id="reviews_content">
                 {% include 'Reviews/list.inc.tpl' %}
             </div>
