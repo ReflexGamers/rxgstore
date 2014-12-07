@@ -18,7 +18,31 @@ class Review extends AppModel {
 
     public $order = 'Review.review_id DESC';
 
-    public function getItemByReviewId($review_id = null) {
+
+    /**
+     * Returns a review specified by $review_id with the associated rating.
+     *
+     * @param int $review_id
+     * @return array
+     */
+    public function getWithRating($review_id) {
+
+        return $this->find('first', array(
+            'conditions' => array(
+                'review_id' => $review_id,
+            ),
+            'contain' => 'Rating'
+        ));
+    }
+
+    /**
+     * Returns the item associated with a given review. The association will look at the review's rating to get to the
+     * item.
+     *
+     * @param int $review_id
+     * @return array the basic item info, including id, name and short_name
+     */
+    public function getItemByReviewId($review_id) {
 
         $item = $this->find('first', array(
             'fields' => array(
