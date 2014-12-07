@@ -32,7 +32,9 @@ class ReviewsController extends AppController {
         $this->request->allowMethod('post');
         $data = $this->request->data['Review'];
 
-        $item = $this->Review->Rating->Item->read(array('item_id', 'name', 'short_name'), $item_id);
+        $item = $this->Review->Rating->Item->read(array(
+            'item_id', 'name', 'short_name'
+        ), $item_id);
 
         if (empty($item)) {
             throw new NotFoundException(__('Invalid item'));
@@ -45,16 +47,14 @@ class ReviewsController extends AppController {
         $user_id = $this->Auth->user('user_id');
 
         if (!empty($data['review_id'])) {
-            // updating
-            $reviewData = $this->Review->find('first', array(
-                'conditions' => array(
-                    'review_id' => $data['review_id']
-                ),
-                'contain' => 'Rating'
-            ));
+
+            // updating existing review
+            $reviewData = $this->Review->getWithRating($data['review_id']);
             $oldReview = array_merge($reviewData['Review'], $reviewData['Rating']);
             $user_id = $oldReview['user_id'];
+
         } else {
+
             // first time submit
             $oldReview = $this->Review->Rating->getByItemAndUser($item_id, $user_id);
         }
@@ -121,12 +121,7 @@ class ReviewsController extends AppController {
 
         $this->request->allowMethod('post');
 
-        $reviewData = $this->Review->find('first', array(
-            'conditions' => array(
-                'review_id' => $review_id,
-            ),
-            'contain' => 'Rating'
-        ));
+        $reviewData = $this->Review->getWithRating($review_id);
 
         if (empty($reviewData['Review'])) {
             throw new NotFoundException(__('Invalid review'));
@@ -208,12 +203,7 @@ class ReviewsController extends AppController {
             $this->redirect($this->referer());
         }
 
-        $reviewData = $this->Review->find('first', array(
-            'conditions' => array(
-                'review_id' => $review_id
-            ),
-            'contain' => 'Rating'
-        ));
+        $reviewData = $this->Review->getWithRating($review_id);
 
         $review = array_merge($reviewData['Review'], $reviewData['Rating']);
         $user_id = $review['user_id'];
