@@ -28,7 +28,7 @@
 
         {% endif %}
 
-        {% set player = user.user_id == review.user_id ? user : players[review.user_id] %}
+        {% set player = (user.user_id == review.user_id) ? user : players[review.user_id] %}
 
         <div class="review">
             {% include 'Reviews/single.inc.tpl' %}
