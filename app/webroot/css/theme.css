@@ -1133,6 +1133,12 @@ input.cart_quantity_input:focus {
 #reviews {
 }
 
+.reviews_description {
+    padding: 0 5px 10px;
+    margin: 0;
+    font-size: 17px;
+}
+
 .review {
     background: #e5e5e5;
     padding: 10px 5px;
