@@ -61,7 +61,7 @@ class SteamPlayerCacheController extends AppController {
         foreach ($players as $player) {
             $accounts[] = $this->AccountUtility->AccountIDFromSteamID64($player['steamid']);
         }
-        $members = $this->Access->getMembers($accounts);
+        $members = $this->Access->getMemberInfo($accounts);
 
         $i = 0;
         foreach ($players as &$player) {
