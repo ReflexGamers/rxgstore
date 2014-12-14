@@ -4,6 +4,7 @@ App::uses('AppController', 'Controller');
 /**
  * QuickAuth Controller
  *
+ * @property AclComponent $Acl
  * @property QuickAuth $QuickAuth
  * @property PaginatorComponent $Paginator
  *
@@ -11,7 +12,7 @@ App::uses('AppController', 'Controller');
  * @property Server $Server
  */
 class QuickAuthController extends AppController {
-    public $components = array('Paginator', 'RequestHandler');
+    public $components = array('Acl', 'Paginator', 'RequestHandler');
     public $helpers = array('Html', 'Form', 'Js', 'Time');
 
     /**
@@ -150,18 +151,14 @@ class QuickAuthController extends AppController {
                 $user_id = $auth['user_id'];
 
                 // if confirmed member, promote to member if not already set
-                if ($auth['is_member']) {
+                if ($auth['is_member'] && !$this->Access->checkIsMember($user_id)) {
 
-                    $aro = $this->Access->findUser($user_id);
-
-                    if (empty($aro)) {
-                        CakeLog::write('quickauth', "Promoted user $user_id to member.");
-                        $aro->save(array(
-                            'parent_id' => 1,
-                            'model' => 'User',
-                            'foreign_key' => $user_id
-                        ));
-                    }
+                    CakeLog::write('quickauth', "Promoted user $user_id to member.");
+                    $this->Acl->Aro->save(array(
+                        'parent_id' => 1,
+                        'model' => 'User',
+                        'foreign_key' => $user_id
+                    ));
                 }
 
                 // do login process if not already logged in
