@@ -80,6 +80,8 @@
 
     </div>
 
+    <p>Click on an item below to view more info about it. From there, you can add it to your cart, as well as rate or review it after purchasing it.</p>
+
     <ul id="browse_item_list" class="cf" data-href="{{ html.url({'controller': 'Items', 'action': 'server'}) }}">
         {% include 'Items/server.tpl' %}
     </ul>
