@@ -51,19 +51,4 @@ class StoreController extends AppController {
         $this->set('items', $this->Item->getBuyable());
         $this->set('gameItems', $serverItems);
     }
-
-
-    public function convert() {
-        $this->Conversion->convertAll();
-        $this->render('index');
-    }
-
-    public function setup_permissions() {
-
-        $this->autoRender = false;
-
-        $this->AccountUtility->initPermissions();
-        $this->AccountUtility->syncPermissions();
-
-    }
 }

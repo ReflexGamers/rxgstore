@@ -203,7 +203,7 @@
 	);
 
 	//Temp
-	Router::connect('/convert', array('controller' => 'Store', 'action' => 'convert'));
+	Router::connect('/convert', array('controller' => 'Admin', 'action' => 'convert'));
 
 
 	//Router::connectNamed(array('page'));

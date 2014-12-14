@@ -26,20 +26,6 @@ class ConversionComponent extends Component {
     }
 
     /**
-     * Runs all conversion methods in sequence.
-     */
-    public function convertAll() {
-        set_time_limit(120);
-
-        $this->convertUsers();
-        $this->convertInventories();
-        $this->convertOrders();
-
-        $this->AccountUtility->setup_permissions();
-        $this->AccountUtility->syncPermissions();
-    }
-
-    /**
      * Moves users to the new table and converts their credit to the new multiplier.
      */
     public function convertUsers() {
@@ -63,7 +49,7 @@ class ConversionComponent extends Component {
     }
 
     /**
-     * Moves user inventories to the useritem table.
+     * Moves user inventories to the user_item table.
      */
     public function convertInventories() {
 

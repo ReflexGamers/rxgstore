@@ -3,9 +3,12 @@ App::uses('AppController', 'Controller');
 
 /**
  * Class AdminController
+ *
+ * @property ConversionComponent $Conversion
+ * @property PermissionsComponent $Permissions
  */
 class AdminController extends AppController {
-    public $components = array('RequestHandler');
+    public $components = array('Conversion', 'Permissions', 'RequestHandler',);
     public $helpers = array('Html', 'Form', 'Session', 'Js', 'Time');
 
     public function beforeFilter() {
@@ -46,5 +49,23 @@ class AdminController extends AppController {
             $this->response->body($log);
             $this->autoRender = false;
         }
+    }
+
+    /**
+     * Copies the old database to the new one with the necessary changes to data format.
+     */
+    public function convert() {
+
+        set_time_limit(300);
+
+        $this->Conversion->convertUsers();
+        $this->Conversion->convertInventories();
+        $this->Conversion->convertOrders();
+
+        $this->Permissions->dumpAll();
+        $this->Permissions->initAll();
+        $this->Permissions->syncAll();
+
+        $this->autoRender = false;
     }
 }
