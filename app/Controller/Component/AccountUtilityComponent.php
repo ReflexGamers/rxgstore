@@ -11,6 +11,7 @@ App::uses('Component', 'Controller');
  * @property AccessComponent $Access
  * @property CookieComponent $Cookie
  * @property RequestHandlerComponent $RequestHandler
+ * @property SessionComponent $Session
  *
  * @property SavedLogin $SavedLogin
  * @property SteamPlayer $SteamPlayer
@@ -20,7 +21,7 @@ class AccountUtilityComponent extends Component {
     const LOGIN_FORCE = 1;
     const LOGIN_SAVE = 2;
 
-    public $components = array('Acl', 'Access', 'Auth', 'Cookie', 'RequestHandler');
+    public $components = array('Acl', 'Access', 'Auth', 'Cookie', 'RequestHandler', 'Session');
 
     public function initialize(Controller $controller) {
         $this->controller = $controller;
@@ -50,6 +51,11 @@ class AccountUtilityComponent extends Component {
      */
     public function login($steamid, $flags = 0) {
 
+        if ($this->isPlayerBanned($steamid)) {
+            $this->Session->setFlash('You are currently banned from our servers and may not use the store.', 'flash_closable', array('class' => 'error'));
+            return false;
+        }
+
         $steaminfo = $this->SteamPlayer->getByIds(array($steamid));
 
         if (empty($steaminfo) && !($flags & self::LOGIN_FORCE)) {
@@ -58,7 +64,7 @@ class AccountUtilityComponent extends Component {
             $steaminfo = $steaminfo[0];
         }
 
-        //rxg csgo clanid: 103582791434658915
+        // rxg csgo clanid: 103582791434658915
 
         $user_id = $this->AccountIDFromSteamID64($steamid);
 
@@ -138,7 +144,7 @@ class AccountUtilityComponent extends Component {
         ));
 
         if (empty($loginInfo)) {
-            //Cleanup
+            // cleanup
             $this->SavedLogin->deleteAll(array('expires <= ' => $time), false);
             $this->Cookie->delete('saved_login');
         } else {
@@ -178,6 +184,32 @@ class AccountUtilityComponent extends Component {
     }
 
     /**
+     * Queries the Sourcebans database to see if the player is banned and returns true/false.
+     *
+     * @param int $steamid the 64-bit steamid of the player
+     * @return bool whether the player is currently banned
+     */
+    public function isPlayerBanned($steamid) {
+
+        $steamid32 = SteamID::Parse($steamid, SteamID::FORMAT_STEAMID64)->Format(SteamID::FORMAT_STEAMID32);
+
+        preg_match('/STEAM_1:([0-1]:[0-9]+)/', $steamid32, $matches);
+        $steamPattern = 'STEAM_[0-1]:' . $matches[1];
+
+        // query sourcebans
+        $db = ConnectionManager::getDataSource('sourcebans');
+        $result = $db->rawQuery(
+            "SELECT * FROM rxg__bans JOIN rxg__admins on rxg__bans.aid = rxg__admins.aid WHERE rxg__bans.authid RLIKE ':steamPattern' AND (ends > ':time' OR length = 0) AND RemovedOn is null ORDER BY ends limit 1",
+            array(
+                'steamPattern' => $steamPattern,
+                'time' => time()
+            )
+        );
+
+        return (bool)$result->fetch();
+    }
+
+    /**
      * Gets player data for all of the players specified by their account ids (user_id). Result is an indexed array of
      * players' data where each player's user_id the key for their corresponding info.
      *
@@ -191,17 +223,6 @@ class AccountUtilityComponent extends Component {
         if (empty($accounts)) return array();
 
         $accounts = array_unique($accounts);
-        /*$user = $this->Auth->user();
-
-        if (count($accounts) == 1 && !empty($user) && $accounts[0] == $user['user_id']) {
-            $user_id = $user['user_id'];
-            $members = $this->Access->getMembers($user_id);
-            return array($user['user_id'] => array_merge($user, array(
-                'member' => !empty($members[$user_id]),
-                'division' => !empty($members[$user_id]['division']) ? $members[$user_id]['division'] : ''
-            )));
-        }*/
-
         $steamids = array();
 
         foreach ($accounts as $acc) {
@@ -209,7 +230,7 @@ class AccountUtilityComponent extends Component {
         }
 
         $steamPlayers = $this->SteamPlayer->getByIds($steamids);
-        $members = $this->Access->getMembers($accounts);
+        $members = $this->Access->getMemberInfo($accounts);
         $players = array();
 
         foreach ($steamPlayers as $player) {
@@ -238,7 +259,7 @@ class AccountUtilityComponent extends Component {
 
         $aro = $this->Acl->Aro;
 
-        //Group ids indexed by name
+        // group ids indexed by name
         $groupNames = $aro->find('list', array(
             'fields' => array(
                 'id', 'alias'
@@ -252,7 +273,7 @@ class AccountUtilityComponent extends Component {
         $groupIds = array_flip($groupNames);
         $memberGroupId = $groupIds['Member'];
 
-        //Currently saved admins indexed by user_id
+        // currently saved admins indexed by user_id
         $savedMembers = Hash::combine($aro->find('all', array(
             'fields' => array(
                 'id', 'foreign_key', 'parent_id', 'alias', 'division'
@@ -264,11 +285,11 @@ class AccountUtilityComponent extends Component {
         )), '{n}.Aro.foreign_key', '{n}.Aro');
 
 
-        //Get sourcebans data
+        // get sourcebans data
         $db = ConnectionManager::getDataSource('sourcebans');
         $result = $db->rawQuery("SELECT authid, user, srv_group FROM rxg__admins where srv_group is not null");
 
-        //Sourcebans admins indexed by user_id
+        // sourcebans admins indexed by user_id
         $sbAdmins = array();
 
         while ($row = $result->fetch()) {
@@ -287,7 +308,7 @@ class AccountUtilityComponent extends Component {
         }
 
 
-        //Get forum data
+        // get forum data
         $db = ConnectionManager::getDataSource('forums');
         $config = Configure::read('Store.Forums');
 
@@ -296,7 +317,7 @@ class AccountUtilityComponent extends Component {
 
         $result = $db->rawQuery("SELECT steamid, user.username, steamuser.steamid, userfield.field5 FROM steamuser JOIN user ON steamuser.userid = user.userid JOIN userfield on userfield.userid = user.userid WHERE user.usergroupid IN ($groups)");
 
-        //Linked members/admins indexed by user_id
+        // linked members/admins indexed by user_id
         $forumMembers = array();
 
         while ($row = $result->fetch()) {
@@ -319,7 +340,7 @@ class AccountUtilityComponent extends Component {
 
         CakeLog::write('permsync', 'Performed Sync.');
 
-        //Update/remove existing records
+        // update/remove existing records
         foreach ($savedMembers as $user_id => $data) {
 
             $forumData = !empty($forumMembers[$user_id]) ? $forumMembers[$user_id] : '';
@@ -327,10 +348,10 @@ class AccountUtilityComponent extends Component {
 
             if (empty($sbAdmins[$user_id])) {
 
-                //not in sourcebans db
+                // not in sourcebans db
                 if (empty($forumData)) {
 
-                    //Not a linked member either so remove
+                    // not a linked member either so remove
                     $steamid = $this->SteamID64FromAccountID($data['foreign_key']);
                     $division = !empty($data['division']) ? $data['division'] : 'No Division';
                     CakeLog::write('permsync', " - deleted {$groupNames[$data['parent_id']]}: '{$data['alias']}' / $steamid / $division");
@@ -341,7 +362,7 @@ class AccountUtilityComponent extends Component {
 
                 } else if ($data['parent_id'] != $memberGroupId || $data['alias'] != $forumData['alias'] || $data['division'] != $division) {
 
-                    //Linked member, not admin, needs updating/demoting
+                    // linked member, not admin, needs updating/demoting
                     $steamid = $this->SteamID64FromAccountID($data['foreign_key']);
                     CakeLog::write('permsync', " - updated '{$data['alias']}' / $steamid");
 
@@ -368,12 +389,12 @@ class AccountUtilityComponent extends Component {
 
             } else {
 
-                //admin is in sourcebans db
+                // admin is in sourcebans db
                 $adminData = $sbAdmins[$user_id];
 
                 if ($data['parent_id'] != $adminData['parent_id'] || $data['alias'] != $adminData['alias'] || $data['division'] != $division) {
 
-                    //needs updating
+                    // needs updating
                     $steamid = $this->SteamID64FromAccountID($data['foreign_key']);
                     CakeLog::write('permsync', " - updated '{$data['alias']}' / $steamid");
 
@@ -400,7 +421,7 @@ class AccountUtilityComponent extends Component {
             }
         }
 
-        //Insert new admins
+        // insert new admins
         foreach ($insertAdmins as $user_id => $data) {
 
             if (!empty($forumMembers[$user_id])) {
@@ -420,7 +441,7 @@ class AccountUtilityComponent extends Component {
             $results['added'][] = $data;
         }
 
-        //Insert new members
+        // insert new members
         foreach ($insertMembers as $user_id => $data) {
 
             $division = !empty($data['division']) ? $data['division'] : 'No Division';
@@ -587,7 +608,15 @@ class AccountUtilityComponent extends Component {
                     $id = $matches[1];
                 }
 
-                $accounts[] = SteamID::Parse($id, SteamID::FORMAT_AUTO)->Format(SteamID::FORMAT_S32);
+                $steamid = SteamID::Parse($id, SteamID::FORMAT_AUTO);
+
+                if ($steamid === false) {
+                    $result = false;
+                } else {
+                    $result = $steamid->Format(SteamID::FORMAT_S32);
+                }
+
+                $accounts[] = $result;
             }
         }
 
