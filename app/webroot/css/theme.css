@@ -2571,7 +2571,6 @@ button::-moz-focus-inner {
 }
 
 .faq_item {
-    margin: 20px 0;
     font-size: 18px;
 }
 
@@ -2579,6 +2578,27 @@ button::-moz-focus-inner {
     font-weight: bold;
     font-size: 22px;
     /*line-height: 28px;*/
+}
+
+.whatsnew_item {
+    margin: 50px 0;
+}
+
+.whatsnew_title {
+    font-size: 28px;
+    text-align: left;
+    margin: 0 0;
+}
+
+.whatsnew_description {
+    padding: 0;
+    margin: 10px 0;
+}
+
+.whatsnew_img {
+    outline: 1px dotted #999;
+    margin: 15px auto;
+    display: block;
 }
 
 code {

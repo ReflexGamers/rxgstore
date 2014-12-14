@@ -35,6 +35,13 @@ class ItemsController extends AppController {
     }
 
     /**
+     * Shows the What's New page.
+     */
+    public function whatsnew() {
+        // no data needed, but method is required for it to work
+    }
+
+    /**
      * Home page of store. Shows item list, inventory, activity, etc.
      *
      * @param string $server
