@@ -12,14 +12,14 @@ App::uses('AppModel', 'Model');
  * @property SavedLogin $SavedLogin
  * @property ShoutboxMessage $ShoutboxMessage
  * @property UserItem $UserItem
- * @property UserServer $UserServer
+ * @property UserPreference $UserPreference
  */
 class User extends AppModel {
 
     public $useTable = 'user';
     public $primaryKey = 'user_id';
 
-    public $hasOne = 'UserServer';
+    public $hasOne = 'UserPreference';
 
     public $hasMany = array(
         'Gift', 'Order', 'PaypalOrder', 'QuickAuth', 'Rating', 'RewardRecipient', 'SavedLogin', 'ShoutboxMessage', 'UserItem'
@@ -31,7 +31,7 @@ class User extends AppModel {
      * @param int $user_id
      */
     public function deletePreferredServer($user_id) {
-        $this->UserServer->delete($user_id);
+        $this->UserPreference->delete($user_id);
     }
 
     /**
@@ -42,9 +42,9 @@ class User extends AppModel {
      */
     public function setPreferredServer($user_id, $server_name) {
 
-        $server = Hash::extract($this->UserServer->Server->findByShortName($server_name, 'server_id'), 'Server');
+        $server = Hash::extract($this->UserPreference->Server->findByShortName($server_name, 'server_id'), 'Server');
         if (!empty($server)) {
-            $this->UserServer->save(array(
+            $this->UserPreference->save(array(
                 'user_id' => $user_id,
                 'server_id' => $server['server_id']
             ));
@@ -59,7 +59,7 @@ class User extends AppModel {
      */
     public function getPreferredServer($user_id) {
 
-        $server = Hash::extract($this->UserServer->find('first', array(
+        $server = Hash::extract($this->UserPreference->find('first', array(
             'fields' => 'Server.short_name',
             'conditions' => array(
                 'user_id' => $user_id
@@ -69,7 +69,7 @@ class User extends AppModel {
                     'table' => 'server',
                     'alias' => 'Server',
                     'conditions' => array(
-                        'Server.server_id = UserServer.server_Id'
+                        'Server.server_id = UserPreference.server_Id'
                     )
                 )
             )

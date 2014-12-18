@@ -17,7 +17,7 @@ class Server extends AppModel {
     public $primaryKey = 'server_id';
 
     public $hasMany = array(
-        'ServerItem', 'UserServer'
+        'ServerItem', 'UserPreference'
     );
 
     /**

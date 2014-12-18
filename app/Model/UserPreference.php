@@ -1,14 +1,14 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * UserServerModel
+ * UserPreferenceModel
  *
  * @property Server $Server
  * @property User $User
  */
-class UserServer extends AppModel {
+class UserPreference extends AppModel {
 
-    public $useTable = 'user_server';
+    public $useTable = 'user_preference';
     public $primaryKey = 'user_id';
 
     public $belongsTo = array(
