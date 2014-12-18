@@ -16,7 +16,7 @@
     position: relative;
     display: -moz-inline-box;
     display: inline-block;
-    background: url(/store2/img/stars/star.gif);
+    background: url(/img/stars/star.gif);
     height: 16px;
     outline: none;
 }
@@ -51,7 +51,7 @@
 
 .rateit .rateit-hover
 {
-    background: url(/store2/img/stars/star.gif) left -16px;
+    background: url(/img/stars/star.gif) left -16px;
 }
 
 .rateit .rateit-hover-rtl
@@ -61,7 +61,7 @@
 
 .rateit .rateit-selected
 {
-    background: url(/store2/img/stars/star.gif) left -32px;
+    background: url(/img/stars/star.gif) left -32px;
 }
 
 .rateit .rateit-selected-rtl
@@ -71,12 +71,12 @@
 
 .rateit .rateit-preset
 {
-    background: url(/store2/img/stars/star.gif) left -48px;
+    background: url(/img/stars/star.gif) left -48px;
 }
 
 .rateit .rateit-preset-rtl
 {
-    background: url(/store2/img/stars/star.gif) left -48px;
+    background: url(/img/stars/star.gif) left -48px;
 }
 
 .rateit button.rateit-reset
@@ -100,23 +100,23 @@
 
 div.bigstars div.rateit-range
 {
-    background: url(/store2/img/stars/star-white32.png);
+    background: url(/img/stars/star-white32.png);
     height: 32px;
 }
 
 div.bigstars div.rateit-hover
 {
-    background: url(/store2/img/stars/star-red32.png);
+    background: url(/img/stars/star-red32.png);
 }
 
 div.bigstars div.rateit-selected
 {
-    background: url(/store2/img/stars/star-gold32.png);
+    background: url(/img/stars/star-gold32.png);
 }
 
 div.bigstars div.rateit-reset
 {
-    background: url(/store2/img/stars/star-black32.png);
+    background: url(/img/stars/star-black32.png);
     width: 32px;
     height: 32px;
 
@@ -124,7 +124,7 @@ div.bigstars div.rateit-reset
 
 div.bigstars div.rateit-reset:hover
 {
-    background: url(/store2/img/stars/star-white32.png);
+    background: url(/img/stars/star-white32.png);
 }
 
 div.bigstars.smaller div

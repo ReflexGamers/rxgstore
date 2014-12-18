@@ -61,10 +61,10 @@
         var server = el.val();
 
         if ($.inArray(server, childServers) == -1) {
-            el.data('imagesrc', '/store2/img/servers/' + server + '.png');
+            el.data('imagesrc', '/img/servers/' + server + '.png');
             //parentServer = server;
         } else {
-            el.data('imagesrc', '/store2/img/servers/' + server + '.png');
+            el.data('imagesrc', '/img/servers/' + server + '.png');
         }
 
     });
