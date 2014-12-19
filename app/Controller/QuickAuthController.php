@@ -99,7 +99,7 @@ class QuickAuthController extends AppController {
      * Once the user is sent to the URL, the rest of the login process will be handled by this action and the user will
      * be sent to the main store page. If the user is coming from a game server that requires a popup to properly show
      * the window (e.g., a CS:GO server), the 'source' query parameter specified in the URL must be equal to one of the
-     * values in the Store.QuickAuth.PopupFromServers array in the bootstrap.php config or it will not work.
+     * values in the Store.QuickAuth.PopupFromSources array in the bootstrap.php config or it will not work.
      *
      * Note: You do not need to worry about timezones and clock synchronization because the date field is set by the
      * database when you insert the token as long as your script does not specify it. To configure the amount of time
@@ -173,11 +173,21 @@ class QuickAuthController extends AppController {
                         CakeLog::write('quickauth', "Attempted usage of token $tokenId-$tokenValue which expired $diff seconds ago.");
                         $this->Session->setFlash('Authentication token expired. Please contact an administrator.', 'flash_closable', array('class' => 'error'));
 
-                    } else if (!$this->AccountUtility->loginUser($user_id, AccountUtilityComponent::LOGIN_FORCE)) {
+                    } else {
 
-                        // failed to login user
-                        CakeLog::write('quickauth', "Failed to login user $user_id with token $tokenId-$tokenValue.");
-                        $this->Session->setFlash('Login failed. Please contact an administrator.', 'flash_closable', array('class' => 'error'));
+                        $flags = AccountUtilityComponent::LOGIN_FORCE;
+
+                        if (in_array($params['source'], $config['SkipBanCheckFromSources'])) {
+                            $flags |= AccountUtilityComponent::LOGIN_SKIP_BAN_CHECK;
+                        }
+
+                        // try to login user
+                        if (!$this->AccountUtility->loginUser($user_id, $flags)) {
+
+                            // failed to login user
+                            CakeLog::write('quickauth', "Failed to login user $user_id with token $tokenId-$tokenValue.");
+                            $this->Session->setFlash('Login failed. Please contact an administrator.', 'flash_closable', array('class' => 'error'));
+                        }
                     }
 
                 } else {
@@ -213,7 +223,7 @@ class QuickAuthController extends AppController {
         $redirLoc = array('controller' => 'Items', 'action' => 'index', 'server' => $server);
 
         // if server is not in the popup list, send user straight to store
-        if (!in_array($params['source'], $config['PopupFromServers'])) {
+        if (!in_array($params['source'], $config['PopupFromSources'])) {
             $this->redirect($redirLoc);
             return;
         }
