@@ -19,6 +19,7 @@ App::uses('Component', 'Controller');
 class AccountUtilityComponent extends Component {
     const LOGIN_FORCE = 1;
     const LOGIN_SAVE = 2;
+    const LOGIN_SKIP_BAN_CHECK = 4;
 
     public $components = array('Access', 'Auth', 'Cookie', 'RequestHandler', 'Session');
 
@@ -33,8 +34,8 @@ class AccountUtilityComponent extends Component {
      * Logs in the current user to the account specified by user_id. Different from login(), it uses user_id instead of
      * steamid. This is used by QuickAuth.
      *
-     * @param $user_id
-     * @param int $flags
+     * @param int $user_id the signed 32-bit steamid of the user to login
+     * @param int $flags login flags
      * @return bool success of login attempt
      */
     public function loginUser($user_id, $flags = 0) {
@@ -44,14 +45,14 @@ class AccountUtilityComponent extends Component {
     /**
      * Logs in a player by steamid.
      *
-     * @param $steamid
-     * @param int $flags
+     * @param int $steamid the 64-bit steamid of the user to login
+     * @param int $flags login flags
      * @return bool success of login attempt
      */
     public function login($steamid, $flags = 0) {
 
-        if ($this->isPlayerBanned($steamid)) {
-            $this->Session->setFlash('You are currently banned from our servers and may not use the store.', 'flash_closable', array('class' => 'error'));
+        if (!($flags & self::LOGIN_SKIP_BAN_CHECK) && $this->isPlayerBanned($steamid)) {
+            $this->Session->setFlash('You are currently banned so you are not allowed to use the store.', 'flash_closable', array('class' => 'error'));
             return false;
         }
 
@@ -63,7 +64,7 @@ class AccountUtilityComponent extends Component {
             $steaminfo = $steaminfo[0];
         }
 
-        // rxg csgo clanid: 103582791434658915
+        // rxg csgo clan id: 103582791434658915
 
         $user_id = $this->AccountIDFromSteamID64($steamid);
 
@@ -93,9 +94,9 @@ class AccountUtilityComponent extends Component {
     }
 
     /**
-     * Saves the user's login in the database and give them a cookie.
+     * Saves the user's login in the database and gives them a browser cookie.
      *
-     * @param $user_id
+     * @param int $user_id
      */
     public function saveLogin($user_id) {
 
@@ -197,15 +198,15 @@ class AccountUtilityComponent extends Component {
 
         // query sourcebans
         $db = ConnectionManager::getDataSource('sourcebans');
-        $result = $db->rawQuery(
-            "SELECT * FROM rxg__bans JOIN rxg__admins on rxg__bans.aid = rxg__admins.aid WHERE rxg__bans.authid RLIKE ':steamPattern' AND (ends > ':time' OR length = 0) AND RemovedOn is null ORDER BY ends limit 1",
+        $result = $db->fetchAll(
+            "SELECT * FROM rxg__bans WHERE (ends > :time OR length = 0) AND RemovedOn is null AND rxg__bans.authid RLIKE :steamPattern ORDER BY ends limit 1",
             array(
-                'steamPattern' => $steamPattern,
-                'time' => time()
+                'time' => time(),
+                'steamPattern' => $steamPattern
             )
         );
 
-        return (bool)$result->fetch();
+        return (bool)$result;
     }
 
     /**
@@ -252,7 +253,7 @@ class AccountUtilityComponent extends Component {
     /**
      * Converts a 64-bit SteamID to the signed 32-bit format.
      *
-     * @param $steamid64
+     * @param int $steamid64
      * @return false|string
      */
     public function AccountIDFromSteamID64($steamid64) {
@@ -262,7 +263,7 @@ class AccountUtilityComponent extends Component {
     /**
      * Converts a signed 32-bit SteamID to the 64-bit format.
      *
-     * @param $accountid
+     * @param int $accountid
      * @return false|string
      */
     public function SteamID64FromAccountID($accountid) {
@@ -272,7 +273,7 @@ class AccountUtilityComponent extends Component {
     /**
      * Converts a 32-bit SteamID (string) to the signed 32-bit format.
      *
-     * @param $steamid32
+     * @param int $steamid32
      * @return false|string
      */
     public function AccountIDFromSteamID32($steamid32) {
@@ -282,7 +283,7 @@ class AccountUtilityComponent extends Component {
     /**
      * Converts a player's vanity URL to a signed 32-bit SteamID.
      *
-     * @param $vanityUrl
+     * @param string $vanityUrl
      */
     public function AccountIDFromVanityUrl($vanityUrl) {
         $apiKey = ConnectionManager::enumConnectionObjects()['steam']['apikey'];
@@ -295,9 +296,10 @@ class AccountUtilityComponent extends Component {
      * the SteamIDs are in the SteamID32 or SteamID3 formats.
      *
      * @param array $ids list of SteamIDs or lines to parse them from
+     * @param array $failed list of SteamIDs or lines that could not be resolved
      * @return array of account ids (aka user_id)
      */
-    public function resolveAccountIDs($ids) {
+    public function resolveAccountIDs($ids, &$failed) {
 
         $accounts = array();
 
@@ -315,12 +317,10 @@ class AccountUtilityComponent extends Component {
                 $steamid = SteamID::Parse($id, SteamID::FORMAT_AUTO);
 
                 if ($steamid === false) {
-                    $result = false;
+                    $failed[] = $id;
                 } else {
-                    $result = $steamid->Format(SteamID::FORMAT_S32);
+                    $accounts[] = $steamid->Format(SteamID::FORMAT_S32);
                 }
-
-                $accounts[] = $result;
             }
         }
 
