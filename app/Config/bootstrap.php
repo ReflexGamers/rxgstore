@@ -111,8 +111,11 @@ Configure::write('Store', array(
 		'TokenExpire' => 180, //expires after 3 minutes
 		'WindowHeight' => 600,
 		'WindowWidth' => 800,
-		'PopupFromServers' => array(
+		'PopupFromSources' => array(
 			'csgo'
+		),
+		'SkipBanCheckFromSources' => array(
+			'csgo', 'tf2'
 		)
 	),
 	'Shipping' => array(
