@@ -138,7 +138,8 @@ class RewardsController extends AppController {
             return;
         }
 
-        $recipients = $this->AccountUtility->resolveAccountIDs($recipientData);
+        $failedRecipients = array();
+        $recipients = $this->AccountUtility->resolveAccountIDs($recipientData, $failedRecipients);
         $this->addPlayers($recipients);
 
         $rewardDetails = $this->request->data['RewardDetail'];
@@ -188,6 +189,7 @@ class RewardsController extends AppController {
 
         $this->set(array(
             'recipients' => $recipients,
+            'failedRecipients' => $failedRecipients,
             'data' => $rewardDetails,
             'message' => $message,
             'totalValue' => $totalValue,
