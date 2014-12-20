@@ -52,7 +52,7 @@ class AccountUtilityComponent extends Component {
     public function login($steamid, $flags = 0) {
 
         if (!($flags & self::LOGIN_SKIP_BAN_CHECK) && $this->isPlayerBanned($steamid)) {
-            $this->Session->setFlash('You are currently banned so you are not allowed to use the store.', 'flash_closable', array('class' => 'error'));
+            $this->Session->setFlash('You are currently banned and may not use the store.', 'flash_closable', array('class' => 'error'));
             return false;
         }
 
@@ -211,7 +211,7 @@ class AccountUtilityComponent extends Component {
 
     /**
      * Gets player data for all of the players specified by their account ids (user_id). Result is an indexed array of
-     * players' data where each player's user_id the key for their corresponding info.
+     * the players' data where each player's user_id is the key for their corresponding info.
      *
      * If all the players have recent data in the cache, it will be pulled from there instead of through an API call.
      *
