@@ -120,7 +120,7 @@ class AccountUtilityComponent extends Component {
      * Checks for a saved login in the database and tries to match it with the user's cookie to log them in. If already
      * logged in, it just updates the record and sends them a new cookie.
      *
-     * @param bool $updateOnly
+     * @param bool $updateOnly whether to attempt to login the user. set false if already logged in for sure
      * @return bool success of attempt (false if expired cookie or no cookie found)
      */
     public function trySavedLogin($updateOnly = false) {
@@ -131,31 +131,25 @@ class AccountUtilityComponent extends Component {
 
         $id = substr($cookie, 0, 16);
         $code = substr($cookie, 16, 16);
-        $time = time();
         $remoteip = $this->controller->request->clientIp();
 
-        $loginInfo = $this->SavedLogin->find('first', array(
-            'conditions' => array(
-                'saved_login_id' => $id,
-                'code' => $code,
-                'remoteip' => $remoteip,
-                'expires >' => $time
-            )
-        ));
+        $loginInfo = $this->SavedLogin->findActive($id, $code, $remoteip);
 
         if (empty($loginInfo)) {
-            // cleanup
-            $this->SavedLogin->deleteAll(array('expires <= ' => $time), false);
-            $this->Cookie->delete('saved_login');
-        } else {
-            $user_id = $loginInfo['SavedLogin']['user_id'];
-            $loginInfo['SavedLogin']['expires'] = $time + Configure::read('Store.SavedLoginDuration');
-            $this->SavedLogin->save($loginInfo, false);
-            $this->Cookie->write('saved_login', sprintf("%016d%016d", $id, $code), true, '30 days');
 
+            // not found or expired
+            $this->SavedLogin->deleteAllExpired();
+            $this->Cookie->delete('saved_login');
+
+        } else {
+
+            // update record and cookie
+            $this->SavedLogin->updateRecord($loginInfo);
+            $this->Cookie->write('saved_login', sprintf('%016d%016d', $id, $code), true, '30 days');
+
+            // log the user in
             if (!$updateOnly) {
-                $steamid = $this->SteamID64FromAccountID($user_id, false);
-                $this->login($steamid);
+                $this->loginUser($loginInfo['SavedLogin']['user_id']);
             }
         }
 

@@ -12,6 +12,49 @@ class SavedLogin extends AppModel {
 
     public $belongsTo = 'User';
 
+
+    /**
+     * Finds a redeemable saved login given the id, code and ip of the user. All must match for it to find a record.
+     *
+     * @param int $id the id of the saved login record
+     * @param int $code the randomly generated code saved
+     * @param string $ip
+     * @return array login info
+     */
+    public function findActive($id, $code, $ip) {
+
+        return $this->find('first', array(
+            'conditions' => array(
+                'saved_login_id' => $id,
+                'code' => $code,
+                'remoteip' => $ip,
+                'expires >' => time()
+            )
+        ));
+    }
+
+    /**
+     * Updates provided record by setting the expire time as if you logged in right now (e.g., a month from now if the
+     * Store.SavedLoginDuration is set to a month in seconds).
+     *
+     * @param array $loginInfo the login record to save, obtained from findRedeemable()
+     */
+    public function updateRecord($loginInfo) {
+
+        $loginInfo['SavedLogin']['expires'] = time() + Configure::read('Store.SavedLoginDuration');
+        $this->save($loginInfo, false);
+    }
+
+    /**
+     * Deletes all expired records in the saved_login table.
+     */
+    public function deleteAllExpired() {
+        $this->deleteAll(array(
+            'expires <= ' => time()
+        ), false);
+    }
+
+
 /**
  * Validation rules
  *
