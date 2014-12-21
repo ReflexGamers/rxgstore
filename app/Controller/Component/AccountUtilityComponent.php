@@ -54,6 +54,7 @@ class AccountUtilityComponent extends Component {
         if (!($flags & self::LOGIN_SKIP_BAN_CHECK) && $this->isPlayerBanned($steamid)) {
             $this->Session->setFlash('You are currently banned and may not use the store.', 'flash_closable', array('class' => 'error'));
             $this->SavedLogin->deleteForUser($this->AccountIDFromSteamID64($steamid));
+            $this->Cookie->delete('saved_login');
             return false;
         }
 
