@@ -62,7 +62,6 @@ class ShoutboxMessagesController extends AppController {
             } else {
 
                 $this->set('userCantPost', true);
-
             }
         }
 
@@ -72,7 +71,6 @@ class ShoutboxMessagesController extends AppController {
     /**
      * Deletes a shoutbox message by id if the current user has sufficient permissions to do so.
      *
-     * @logs [admin.log] the deleted message, admin id, poster id
      * @param int $id the id of the message to delete.
      */
     public function delete($id) {
