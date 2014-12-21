@@ -63,7 +63,7 @@ class SavedLogin extends AppModel {
     public function deleteForUser($user_id) {
 
         $this->deleteAll(array(
-            'user_id' => $user_id
+            'SavedLogin.user_id' => $user_id
         ), false);
     }
 
