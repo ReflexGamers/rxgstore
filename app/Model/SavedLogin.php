@@ -49,8 +49,21 @@ class SavedLogin extends AppModel {
      * Deletes all expired records in the saved_login table.
      */
     public function deleteAllExpired() {
+
         $this->deleteAll(array(
             'expires <= ' => time()
+        ), false);
+    }
+
+    /**
+     * Deletes all saved login records for the specified user.
+     *
+     * @param int $user_id the user for which to delete all saved login records
+     */
+    public function deleteForUser($user_id) {
+
+        $this->delete(array(
+            'user_id' => $user_id
         ), false);
     }
 
