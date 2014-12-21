@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <div class="page_heading">Frequently Asked Questions</div>
+    <div class="page_heading">Help / FAQ</div>
 
     <div class="faq_item">
         <div class="faq_question">How do I use items?</div>
