@@ -2065,15 +2065,21 @@ input[type="checkbox"].item_edit_input {
 
 
 .gift_subheading {
-    margin: 5px 0;
+    margin: 10px 0 5px;
     font-size: 24px;
 }
 
-.gift_recipient {
+.gift_recipient,
+.gift_recipient_failed {
     height: 32px;
     font-size: 20px;
     line-height: 32px;
     margin: 8px 0 8px 20px;
+}
+
+.gift_recipient_failed {
+    color: #ad0000;
+    font-weight: bold;
 }
 
 .gift_recipient img {

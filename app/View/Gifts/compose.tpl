@@ -75,6 +75,20 @@
 
             {% endfor %}
 
+            {% if failedRecipients %}
+
+                <h2 class="gift_subheading">Failed to determine: {{ failedRecipients|length }}</h2>
+
+                {% for recipient in failedRecipients %}
+
+                    <div class="gift_recipient_failed">
+                        {{ recipient }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
         {% else %}
 
             {{ form.input('Reward.recipients', {

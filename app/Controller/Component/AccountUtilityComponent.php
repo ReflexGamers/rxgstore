@@ -301,6 +301,10 @@ class AccountUtilityComponent extends Component {
      */
     public function resolveAccountIDs($ids, &$failed) {
 
+        // api key for vanity URL check if no other tests work
+        $apiKey = ConnectionManager::enumConnectionObjects()['steam']['apikey'];
+        SteamID::SetSteamAPIKey($apiKey);
+
         $accounts = array();
 
         foreach ($ids as $id) {
@@ -314,12 +318,21 @@ class AccountUtilityComponent extends Component {
                     $id = $matches[1];
                 }
 
-                $steamid = SteamID::Parse($id, SteamID::FORMAT_AUTO);
+                try {
+                    $steamid = SteamID::Parse($id, SteamID::FORMAT_AUTO, true);
 
-                if ($steamid === false) {
+                    if ($steamid === false) {
+                        $failed[] = $id;
+                    } else {
+                        $accounts[] = $steamid->Format(SteamID::FORMAT_S32);
+                    }
+
+                } catch (SteamIDResolutionException $e) {
+
+                    // probably not found but could be other failure
                     $failed[] = $id;
-                } else {
-                    $accounts[] = $steamid->Format(SteamID::FORMAT_S32);
+
+                    CakeLog::write('steamid', "{$e->reason} - $id");
                 }
             }
         }
