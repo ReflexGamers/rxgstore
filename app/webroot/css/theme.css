@@ -2578,6 +2578,7 @@ button::-moz-focus-inner {
 
 .faq_item {
     font-size: 18px;
+    margin-top: 15px;
 }
 
 .faq_question {
