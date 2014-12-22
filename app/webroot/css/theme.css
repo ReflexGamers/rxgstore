@@ -1543,6 +1543,10 @@ input[type="checkbox"].item_edit_input {
     text-align: center;
 }
 
+.browse_item_description {
+    margin: 20px 0 25px;
+}
+
 
 .player_list {
     padding: 0;
