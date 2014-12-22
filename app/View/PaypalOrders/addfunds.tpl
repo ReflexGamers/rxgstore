@@ -65,7 +65,7 @@
         {% if activities %}
 
             {% include 'Common/activity.inc.tpl' with {
-                'title': 'Recent PayPal Activity'
+                'title': 'Recent CASH Purchases'
             } %}
 
         {% endif %}
