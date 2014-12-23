@@ -13,10 +13,10 @@
 
         <p>Manage the contents of your cart below. If you edit your cart and want to save your changes for later, click Update Cart before leaving this page.</p>
 
-        <p>Want more CASH? {{ html.link('Buy it with PayPal™', {
+        <p>Want more CASH? {{ html.link('Buy it', {
                 'controller': 'paypal',
                 'action': 'addfunds'
-            }) }}.</p>
+            }) }}!</p>
 
         {{ form.create('OrderDetail', {
             'url': {
