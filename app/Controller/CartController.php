@@ -144,7 +144,7 @@ class CartController extends AppController {
 
             if ($stock[$item_id] < $quantity) {
                 if ($processAction == 'checkout') {
-                    $this->Session->setFlash("There are no longer enough {$items[$item_id]['plural']} in stock to complete your purchase.", 'flash_closable', array('class' => 'error'));
+                    $this->Session->setFlash("There are no longer enough {$items[$item_id]['plural']} in stock to complete your purchase.", 'flash_closable', array('class' => 'error'), 'error');
                     $this->render('checkout');
                     return;
                 } else {
@@ -159,7 +159,7 @@ class CartController extends AppController {
         }
 
         if ($processAction == 'checkout' && empty($orderDetails)) {
-            $this->Session->setFlash('Oops! You do not have any items in your shopping cart.', 'flash_closable', array('class' => 'error'));
+            $this->Session->setFlash('Oops! You do not have any items in your shopping cart.', 'flash_closable', array('class' => 'error'), 'error');
             $this->redirect(array('controller' => 'Cart', 'action' => 'view'));
             return;
         }
@@ -203,6 +203,7 @@ class CartController extends AppController {
             'credit' => $userCredit
         ));
 
+        $this->Session->setFlash('Please confirm the contents of your order below.', 'flash_default');
         $this->render('checkout');
     }
 

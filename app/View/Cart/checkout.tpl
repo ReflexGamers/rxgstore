@@ -6,15 +6,22 @@
 
     <h1 class="page_heading">Order Confirmation</h1>
 
-    {% set flash = session.flash() %}
+    {% set flash = session.flash('error') %}
 
     {% if flash %}
 
-        <p>{{ flash }}</p>
+        {{ flash }}
+
+        <div class="back_link">
+            <i class="fa fa-arrow-circle-left"></i>
+            {{ html.link('Return to Cart',
+            {'controller': 'Cart', 'action': 'view'}
+            ) }}
+        </div>
 
     {% else %}
 
-        <div class="flashMessage">Please confirm the contents of your order below.</div>
+        {{ session.flash() }}
 
         <div class="back_link">
             <i class="fa fa-arrow-circle-left"></i>
