@@ -18,6 +18,32 @@ class PermissionsComponent extends Component {
     }
 
     /**
+     * Queries the Sourcebans database to see if the player is banned and returns true/false.
+     *
+     * @param int $steamid the 64-bit steamid of the player
+     * @return bool whether the player is currently banned
+     */
+    public function isPlayerBanned($steamid) {
+
+        $steamid32 = SteamID::Parse($steamid, SteamID::FORMAT_STEAMID64)->Format(SteamID::FORMAT_STEAMID32);
+
+        preg_match('/STEAM_1:([0-1]:[0-9]+)/', $steamid32, $matches);
+        $steamPattern = 'STEAM_[0-1]:' . $matches[1];
+
+        // query sourcebans
+        $db = ConnectionManager::getDataSource('sourcebans');
+        $result = $db->fetchAll(
+            "SELECT * FROM rxg__bans WHERE (ends > :time OR length = 0) AND RemovedOn is null AND rxg__bans.authid RLIKE :steamPattern ORDER BY ends limit 1",
+            array(
+                'time' => time(),
+                'steamPattern' => $steamPattern
+            )
+        );
+
+        return (bool)$result;
+    }
+
+    /**
      * Initializes permissions. Empties the acos, aros and acos_aros tables before running.
      */
     public function initAll() {

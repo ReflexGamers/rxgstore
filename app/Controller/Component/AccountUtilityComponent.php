@@ -9,6 +9,7 @@ App::uses('Component', 'Controller');
  * @property AuthComponent $Auth
  * @property AccessComponent $Access
  * @property CookieComponent $Cookie
+ * @property PermissionsComponent $Permissions
  * @property RequestHandlerComponent $RequestHandler
  * @property SessionComponent $Session
  *
@@ -21,7 +22,7 @@ class AccountUtilityComponent extends Component {
     const LOGIN_SAVE = 2;
     const LOGIN_SKIP_BAN_CHECK = 4;
 
-    public $components = array('Access', 'Auth', 'Cookie', 'RequestHandler', 'Session');
+    public $components = array('Access', 'Auth', 'Cookie', 'Permissions', 'RequestHandler', 'Session');
 
     public function initialize(Controller $controller) {
         $this->controller = $controller;
@@ -51,7 +52,7 @@ class AccountUtilityComponent extends Component {
      */
     public function login($steamid, $flags = 0) {
 
-        if (!($flags & self::LOGIN_SKIP_BAN_CHECK) && $this->isPlayerBanned($steamid)) {
+        if (!($flags & self::LOGIN_SKIP_BAN_CHECK) && $this->Permissions->isPlayerBanned($steamid)) {
             $this->Session->setFlash('You are currently banned and may not use the store.', 'flash_closable', array('class' => 'error'));
             $this->SavedLogin->deleteForUser($this->AccountIDFromSteamID64($steamid));
             $this->Cookie->delete('saved_login');
@@ -177,32 +178,6 @@ class AccountUtilityComponent extends Component {
         $player['member'] = $this->Access->checkIsMember($isSteamid ? $this->AccountIDFromSteamID64($id) : $id);
 
         return $player;
-    }
-
-    /**
-     * Queries the Sourcebans database to see if the player is banned and returns true/false.
-     *
-     * @param int $steamid the 64-bit steamid of the player
-     * @return bool whether the player is currently banned
-     */
-    public function isPlayerBanned($steamid) {
-
-        $steamid32 = SteamID::Parse($steamid, SteamID::FORMAT_STEAMID64)->Format(SteamID::FORMAT_STEAMID32);
-
-        preg_match('/STEAM_1:([0-1]:[0-9]+)/', $steamid32, $matches);
-        $steamPattern = 'STEAM_[0-1]:' . $matches[1];
-
-        // query sourcebans
-        $db = ConnectionManager::getDataSource('sourcebans');
-        $result = $db->fetchAll(
-            "SELECT * FROM rxg__bans WHERE (ends > :time OR length = 0) AND RemovedOn is null AND rxg__bans.authid RLIKE :steamPattern ORDER BY ends limit 1",
-            array(
-                'time' => time(),
-                'steamPattern' => $steamPattern
-            )
-        );
-
-        return (bool)$result;
     }
 
     /**
