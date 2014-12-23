@@ -1537,7 +1537,7 @@ input[type="checkbox"].item_edit_input {
 }
 
 .item_browse_cash {
-    /*margin-bottom: 5px;*/
+    margin-bottom: 15px;
 }
 
 .browse_addfunds {
@@ -2213,10 +2213,6 @@ th.gift_item_heading {
 }
 
 
-
-.item_browse_cash {
-    margin-bottom: 5px;
-}
 
 
 /* Wrapper to fix margin collapsing with animations */
