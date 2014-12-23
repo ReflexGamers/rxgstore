@@ -22,7 +22,7 @@ class AdminController extends AppController {
     public function index() {
 
         if (!$this->Access->check('Stock', 'update')) {
-            $this->redirect($this->referer());
+            $this->redirect(array('controller' => 'Items', 'action' => 'index'));
             return;
         }
     }
