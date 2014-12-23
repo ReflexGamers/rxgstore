@@ -10,6 +10,7 @@
 
     {% include '/ShoutboxMessages/shoutbox.inc.tpl' %}
 
+    {{ session.flash('quickauth') }}
     {{ session.flash() }}
 
     {% if user %}

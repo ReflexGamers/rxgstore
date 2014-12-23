@@ -205,6 +205,7 @@ class QuickAuthController extends AppController {
         }
 
         $this->Session->write('Auth.user.ingame', true);
+        $this->Session->setFlash('Visit the store outside of the game at store.reflex-gamers.com', 'flash_closable', null, 'quickauth');
 
         // go straight to store if source not specified
         if (empty($params['source'])) {
