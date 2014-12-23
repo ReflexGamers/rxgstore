@@ -4,9 +4,11 @@ App::uses('File', 'Utility');
 
 /**
  * Class PermissionsController
+ *
+ * @property PermissionsComponent $Permissions
  */
 class PermissionsController extends AppController {
-    public $components = array('RequestHandler');
+    public $components = array('RequestHandler', 'Permissions');
     public $helpers = array('Html', 'Form', 'Session', 'Js', 'Time');
 
     public function beforeFilter() {
@@ -76,7 +78,7 @@ class PermissionsController extends AppController {
             return;
         }
 
-        $syncResult = $this->AccountUtility->syncPermissions();
+        $syncResult = $this->Permissions->syncAll();
 
         $syncResult['added'] = Hash::extract($syncResult, 'added.{n}.alias');
         $syncResult['updated'] = Hash::extract($syncResult, 'updated.{n}.alias');
