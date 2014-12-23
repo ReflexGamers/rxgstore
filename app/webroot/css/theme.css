@@ -1328,6 +1328,10 @@ input[type="checkbox"].item_edit_input {
     cursor: pointer;
 }
 
+.flash_outer {
+    padding-bottom: 10px;
+}
+
 #flashMessage,
 .flashMessage {
     background: #37c;
@@ -1336,7 +1340,6 @@ input[type="checkbox"].item_edit_input {
     font-weight: 400;
     border-radius: 5px;
     padding: 5px 10px;
-    margin-bottom: 10px;
 }
 
 #flashMessage.success {
@@ -1522,7 +1525,6 @@ input[type="checkbox"].item_edit_input {
     /*box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);*/
     padding: 0 5px 10px;
     /*border-radius: 100px;*/
-    margin: 20px 0 0;
     text-align: center;
 }
 
