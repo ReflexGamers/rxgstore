@@ -24,8 +24,8 @@
         {{ server.name }}
     {% else %}
         <span class="quickauth_server_unknown">
-                        {{ entry.server }}
-                    </span>
+            {{ entry.server }}
+        </span>
     {% endif %}
 </td>
 
