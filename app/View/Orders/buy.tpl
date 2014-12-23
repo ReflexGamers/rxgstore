@@ -12,7 +12,8 @@
     {% if order %}
 
         <div class="back_link">
-            {{ html.link('< Continue Shopping',
+            <i class="fa fa-arrow-circle-left"></i>
+            {{ html.link('Continue Shopping',
                 {'controller': 'Items', 'action': 'index'}
             ) }}
         </div>
