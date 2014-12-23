@@ -85,6 +85,8 @@
 
 {% if scripts %}
     {{ html.script(( (scripts is iterable) ? scripts : [scripts] )|merge(['common'])) }}
+{% else %}
+    {{ html.script('common') }}
 {% endif %}
 
 </body>
