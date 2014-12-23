@@ -43,6 +43,12 @@ class Server extends AppModel {
         )), '{n}.Server');
     }
 
+    /**
+     * Returns a list item ids usable in the server specified by server_ip.
+     *
+     * @param string $server_ip the server ip for which to find usable items
+     * @return array list of item ids usable in the server
+     */
     public function getUsableItems($server_ip) {
 
         return Hash::extract($this->find('all', array(
@@ -64,6 +70,9 @@ class Server extends AppModel {
         )), '{n}.server_item.item_id');
     }
 
+    /**
+     * TODO: Appears to be unused
+     */
     public function getTree() {
 
         $servers = Hash::extract($this->find('all', array(
@@ -105,6 +114,12 @@ class Server extends AppModel {
         return $tree;
     }
 
+    /**
+     * Returns a list of all servers sorted with each parent preceding its list of children. In the output, you can
+     * identify the parents because they will have a null parent_id.
+     *
+     * @return array of all servers
+     */
     public function getAll() {
 
         $servers = Hash::extract($this->find('all', array(
@@ -127,10 +142,6 @@ class Server extends AppModel {
         $servers = Hash::sort($servers, '{n}.sort_index');
 
         return $servers;
-
-        /*return $this->find('list', array(
-            'fields' => array('short_name', 'name')
-        ));*/
     }
 
 /**

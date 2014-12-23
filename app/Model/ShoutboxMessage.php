@@ -17,6 +17,11 @@ class ShoutboxMessage extends AppModel {
     public $order = 'ShoutboxMessage.date desc';
 
 
+    /**
+     * Returns a list of the most recent Shoutbox Messages.
+     *
+     * @return array of messages
+     */
     public function getRecent() {
         return Hash::extract($this->find('all', array(
             'limit' => 10,
@@ -26,6 +31,13 @@ class ShoutboxMessage extends AppModel {
         )), '{n}.ShoutboxMessage');
     }
 
+    /**
+     * Returns a boolean representing whether the user is allowed to post based on when they last posted and the config
+     * value set by Store.Shoutbox.PostCooldown.
+     *
+     * @param int $user_id the user to check
+     * @return bool whether the user can post or not
+     */
     public function canUserPost($user_id) {
 
         $message = $this->find('first', array(
