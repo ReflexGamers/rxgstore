@@ -8,7 +8,7 @@ App::uses('AppController', 'Controller');
  * @property PermissionsComponent $Permissions
  */
 class AdminController extends AppController {
-    public $components = array('Conversion', 'Permissions', 'RequestHandler',);
+    public $components = array('Conversion', 'Permissions', 'RequestHandler');
     public $helpers = array('Html', 'Form', 'Session', 'Js', 'Time');
 
     public function beforeFilter() {
@@ -58,13 +58,13 @@ class AdminController extends AppController {
 
         set_time_limit(300);
 
-        $this->Conversion->convertUsers();
-        $this->Conversion->convertInventories();
-        $this->Conversion->convertOrders();
-
         $this->Permissions->dumpAll();
         $this->Permissions->initAll();
         $this->Permissions->syncAll();
+
+        $this->Conversion->convertUsers();
+        $this->Conversion->convertInventories();
+        $this->Conversion->convertOrders();
 
         $this->autoRender = false;
     }
