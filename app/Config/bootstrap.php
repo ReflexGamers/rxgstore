@@ -120,7 +120,7 @@ Configure::write('Store', array(
 	),
 	'Shipping' => array(
 		'Cost' => 100,
-		'FreeThreshold' => 5000,
+		'FreeThreshold' => 2500,
 	),
 	'CurrencyMultiplier' => 100, //Cents to CASH
 	'CashStackSize' => 100,
