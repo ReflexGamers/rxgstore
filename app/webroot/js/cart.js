@@ -85,7 +85,7 @@
 
         var el = $(this);
 
-        $.ajax(el.parent().attr('href'), {
+        $.ajax(el.data('href'), {
 
             type: 'post',
             beforeSend: function() {
