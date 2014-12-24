@@ -682,6 +682,8 @@ tr.cart_separator td {
 .cart_remove {
     vertical-align: bottom;
     padding-bottom: 5px;
+    cursor: pointer;
+    color: #C10000;
 }
 
 .cart_quantity_input {

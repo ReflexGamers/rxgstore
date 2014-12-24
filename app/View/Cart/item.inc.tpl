@@ -24,13 +24,7 @@
             'min': 0,
             'max': stock[item.item_id]
         }) }}
-        {{ html.image('misc/remove.png', {
-            'url': {'controller': 'Cart', 'action': 'remove', 'id': item.item_id},
-            'class': 'cart_remove',
-            'title': 'remove',
-            'height': 20,
-            'width': 20
-        }) }}
+        <i class="fa fa-trash cart_remove" title="remove"></i>
     </td>
     <td class="total">{{ fn.currency(itemTotal, {'wrap': true}) }}</td>
 </tr>
