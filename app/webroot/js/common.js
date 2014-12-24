@@ -187,4 +187,14 @@
         });
     };
 
+    var shimNumberFormat = ((1000).toLocaleString() !== "1,000");
+
+    window.rxg.formatNum = function(num) {
+        if (shimNumberFormat) {
+            return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+        } else {
+            return num.toLocaleString();
+        }
+    }
+
 })(jQuery);

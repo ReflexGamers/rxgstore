@@ -33,7 +33,7 @@
 
             if (!invalidInput && val !== "") {
                 var itemTotal = val * el.data('price');
-                el.closest('tr').find('.total').find('.currency_value').first().html(itemTotal.toLocaleString('en-IN'));
+                el.closest('tr').find('.total').find('.currency_value').first().html(rxg.formatNum(itemTotal));
                 subTotal += itemTotal;
             }
         });
@@ -48,9 +48,9 @@
             var shipping = subTotal >= shippingFreeThreshold ? 0 : shippingCost;
             var total = subTotal + shipping;
 
-            $('#cart_subtotal').find('.currency_value').first().html(subTotal.toLocaleString('en-IN'));
-            $('#cart_shipping').find('.currency_value').first().html(shipping.toLocaleString('en-IN'));
-            $('#cart_total').find('.currency_value').first().html(total.toLocaleString('en-IN'));
+            $('#cart_subtotal').find('.currency_value').first().html(rxg.formatNum(subTotal));
+            $('#cart_shipping').find('.currency_value').first().html(rxg.formatNum(shipping));
+            $('#cart_total').find('.currency_value').first().html(rxg.formatNum(total));
 
             if (insufficientFunds) {
                 cash.addClass('cart_cash_insufficient');
@@ -75,7 +75,7 @@
         return confirm('Are you sure you want to empty your cart?');
     });
 
-    $('.cart_quantity_input').on('keyup change', updateCart);
+    $('.cart_quantity_input').on('keyup input', updateCart);
 
     $('.cart_remove').on('click', function(){
 

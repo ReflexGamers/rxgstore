@@ -27,7 +27,7 @@
         btn.removeAttr('disabled').removeClass('disabled');
 
         var amount = val * 100 * currencyMult;
-        output.text(amount.toLocaleString());
+        output.text(rxg.formatNum(amount));
 
     });
 
