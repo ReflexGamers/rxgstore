@@ -60,11 +60,11 @@
         }
 
         if (invalidInput || insufficientFunds) {
-            checkout.attr('disabled', 'disabled').addClass('disabled');
-            update.attr('disabled', 'disabled').addClass('disabled');
+            checkout.prop('disabled', true).addClass('disabled');
+            update.prop('disabled', true).addClass('disabled');
         } else {
-            checkout.removeAttr('disabled').removeClass('disabled');
-            update.removeAttr('disabled').removeClass('disabled');
+            checkout.prop('disabled', false).removeClass('disabled');
+            update.prop('disabled', false).removeClass('disabled');
         }
 
         return true;

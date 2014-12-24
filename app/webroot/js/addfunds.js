@@ -20,11 +20,11 @@
 
         if (val < min) {
             output.text('Must be at least $' + min.toFixed(2));
-            btn.attr('disabled', 'disabled').addClass('disabled');
+            btn.prop('disabled', true).addClass('disabled');
             return;
         }
 
-        btn.removeAttr('disabled').removeClass('disabled');
+        btn.prop('disabled', false).removeClass('disabled');
 
         var amount = val * 100 * currencyMult;
         output.text(rxg.formatNum(amount));

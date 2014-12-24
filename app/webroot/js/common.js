@@ -101,7 +101,7 @@
         return false;
     });
 
-    $('#shoutbox_button').on('click', function(){
+    $('#shoutbox_button').prop('disabled', false).on('click', function(){
 
         if ($('#shoutbox_input').val() == '') {
             return false;
@@ -129,9 +129,9 @@
 
             complete: function(){
                 restartUpdateTimer();
-                btn.attr('disabled', 'disabled').addClass('disabled');
+                btn.prop('disabled', true).addClass('disabled');
                 setTimeout(function(){
-                    btn.removeAttr('disabled').removeClass('disabled');
+                    btn.prop('disabled', false).removeClass('disabled');
                 }, submitDelay)
             }
 
