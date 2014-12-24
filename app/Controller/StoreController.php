@@ -1,54 +1,30 @@
 <?php
 
+/**
+ * Class StoreController
+ *
+ * @property ConversionComponent $Conversion
+ * @property PermissionsComponent $Permissions
+ */
 class StoreController extends AppController {
-    public $components = array('Conversion', 'AccountUtility');
+    public $components = array('Conversion', 'Permissions');
     public $helpers = array('Html', 'Form', 'Session', 'Js', 'Time');
 
     public function index() {
     }
 
-    public function store($server = '') {
+    public function convert() {
 
-        if ($this->request->is('post') && isset($this->request->data['server']['short_name'])) {
-            $server = $this->request->data['server']['short_name'];
-        }
+        set_time_limit(300);
 
-        $this->loadModel('Item');
-        $this->loadModel('Stock');
+        $this->Permissions->dumpAll();
+        $this->Permissions->initAll();
+        $this->Permissions->syncAll();
 
-        if (empty($server)) {
-            $serverItems = $this->Item->getBuyable();
-        } else {
-            $serverItems = $this->Item->getByServer($server);
+        $this->Conversion->convertUsers();
+        $this->Conversion->convertInventories();
+        $this->Conversion->convertOrders();
 
-            //Redirect on unrecognized game
-            if (empty($serverItems) && !$this->request->is('ajax')) {
-                $this->redirect(array('controller' => 'Store', 'action' => 'store'));
-            }
-
-            $this->set('game', $server);
-        }
-
-        if (!$this->request->is('ajax')) {
-
-            $this->loadModel('User');
-            $this->loadModel('UserItem');
-            $this->loadModel('Server');
-
-            if ($this->Auth->user()) {
-
-                $user = $this->User->findByUserId($this->Auth->user('user_id'))['User'];
-                $useritem = $this->UserItem->getByUser($user['user_id']);
-
-                $this->set('useritem', $useritem);
-                $this->set('credit', $user['credit']);
-            }
-
-            //$this->set('servers', $this->Server->getList());
-        }
-
-        $this->set('stock', $this->Stock->find('list'));
-        $this->set('items', $this->Item->getBuyable());
-        $this->set('gameItems', $serverItems);
+        $this->autoRender = false;
     }
 }
