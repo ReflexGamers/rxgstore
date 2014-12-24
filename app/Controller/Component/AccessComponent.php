@@ -114,6 +114,6 @@ class AccessComponent extends Component {
      */
     public function checkUser($user_id, $aco, $action = '*') {
 
-        return $this->Acl->check(array('model' => 'User', 'foreign_key' => $user_id), $aco, $action);
+        return $this->checkIsMember($user_id) ? $this->Acl->check(array('model' => 'User', 'foreign_key' => $user_id), $aco, $action) : false;
     }
 }
