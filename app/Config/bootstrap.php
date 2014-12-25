@@ -125,8 +125,8 @@ Configure::write('Store', array(
 	'CurrencyMultiplier' => 100, //Cents to CASH
 	'CashStackSize' => 100,
 	'Paypal' => array(
-		//'EndPoint' => 'api.paypal.com',
-		'EndPoint' => 'api.sandbox.paypal.com',
+		'EndPoint' => 'api.paypal.com',
+		//'EndPoint' => 'api.sandbox.paypal.com',
 		'Options' => array(
 			100 => 1.00,
 			250 => 1.02,
@@ -161,11 +161,17 @@ App::uses('CakeLog', 'Log');
 CakeLog::config('default', array(
 	'engine' => 'File'
 ));
-CakeLog::config('debug', array(
-	'engine' => 'File',
-	'types' => array('notice', 'info', 'debug'),
-	'file' => 'debug',
-));
+
+if (getenv('CAKEPHP_DEBUG')) {
+	CakeLog::config('debug', array(
+		'engine' => 'File',
+		'types' => array('notice', 'info', 'debug'),
+		'file' => 'debug',
+	));
+} else {
+	Configure::write('debug', 0);
+}
+
 CakeLog::config('error', array(
 	'engine' => 'File',
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
