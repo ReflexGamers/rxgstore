@@ -2,6 +2,7 @@
 #################################################
 /app/Config/database.php
 /app/Config/security.php
+/app/Config/permissions.php
 /app/tmp
 /app/Plugin/TwigView/tmp
 /lib/Cake/Console/Templates/skel/tmp/
