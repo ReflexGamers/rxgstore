@@ -221,7 +221,7 @@ class QuickAuthController extends AppController {
 
         // if server not found, use source from url
         $server = !empty($server) ? $server['short_name'] : $params['source'];
-        $redirLoc = array('controller' => 'Items', 'action' => 'index', 'server' => $server);
+        $redirLoc = array('controller' => 'Items', 'action' => 'browse', 'server' => $server);
 
         // if server is not in the popup list, send user straight to store
         if (!in_array($params['source'], $config['PopupFromSources'])) {
