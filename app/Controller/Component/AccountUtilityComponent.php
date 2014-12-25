@@ -79,7 +79,7 @@ class AccountUtilityComponent extends Component {
             ));
         }
 
-        $this->Auth->login(array(
+        $loginSuccess = $this->Auth->login(array(
             'steamid' => $steamid,
             'user_id' => $user_id,
             'name' => $steaminfo['personaname'],
@@ -93,7 +93,11 @@ class AccountUtilityComponent extends Component {
             $this->saveLogin($user_id);
         }
 
-        return true;
+        if (!$loginSuccess) {
+            CakeLog::write('login', "Login failed for $steamid.");
+        }
+
+        return $loginSuccess;
     }
 
     /**
@@ -143,6 +147,9 @@ class AccountUtilityComponent extends Component {
             // not found or expired
             $this->SavedLogin->deleteAllExpired();
             $this->Cookie->delete('saved_login');
+            CakeLog::write('saved_login', "Saved Login token $id-$code for $remoteip not found or expired.");
+
+            return false;
 
         } else {
 
@@ -153,6 +160,7 @@ class AccountUtilityComponent extends Component {
             // log the user in
             if (!$updateOnly) {
                 $this->loginUser($loginInfo['SavedLogin']['user_id']);
+                CakeLog::write('saved_login', "Saved Login token $id-$code successfully used.");
             }
         }
 
