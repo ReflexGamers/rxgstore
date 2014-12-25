@@ -139,7 +139,7 @@ class PaypalOrdersController extends AppController {
 
         } catch (Exception $e) {
 
-            $this->Session->setFlash('Oops! An error occurred. Your PAYPAL has not been charged.', 'flash_closable', array('class' => 'error'));
+            $this->Session->setFlash('Oops! An error occurred. You have NOT been charged.', 'flash_closable', array('class' => 'error'));
             $this->redirect(array('action' => 'addfunds'));
         }
     }
@@ -174,7 +174,7 @@ class PaypalOrdersController extends AppController {
         }
 
         if ($problemWithRequest) {
-            $this->Session->setFlash('Oops! An error occurred. You have not been charged.', 'flash_closable', array('class' => 'error'));
+            $this->Session->setFlash('Oops! An error occurred. You have NOT been charged.', 'flash_closable', array('class' => 'error'));
             $this->redirect(array('action' => 'addfunds'));
             return;
         }
@@ -223,7 +223,7 @@ class PaypalOrdersController extends AppController {
         $steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
         CakeLog::write('paypal', "$steamid cancelled a transaction.");
 
-        $this->Session->setFlash('Your transaction was cancelled and your PAYPAL was not charged.', 'flash_closable', array('class' => 'error'));
+        $this->Session->setFlash('Your transaction was cancelled and you were NOT charged.', 'flash_closable', array('class' => 'error'));
         $this->redirect(array('controller' => 'PaypalOrders', 'action' => 'addfunds'));
     }
 }
