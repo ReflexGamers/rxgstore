@@ -126,7 +126,7 @@ CakePlugin::load('TwigView');
 
 Configure::load('rxgstore');
 Configure::load('permissions');
-Configure::load('security');
+Configure::load('security', 'default', false);
 
 spl_autoload_register(function ($class) {
     foreach (App::path('Vendor') as $base) {
