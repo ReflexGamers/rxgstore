@@ -25,19 +25,8 @@ class QuickAuthController extends AppController {
             return;
         }
 
-        $this->loadModel('Server');
-        $servers = Hash::combine($this->Server->find('all', array(
-            'fields' => array(
-                'server_ip', 'name', 'short_name'
-            ),
-            'conditions' => array(
-                'server_ip is not null'
-            )
-        )), '{n}.Server.server_ip', '{n}.Server');
-
         $this->set(array(
-            'tokenExpire' => Configure::read('Store.QuickAuth.TokenExpire'),
-            'servers' => $servers
+            'tokenExpire' => Configure::read('Store.QuickAuth.TokenExpire')
         ));
 
         $this->records();
@@ -66,7 +55,18 @@ class QuickAuthController extends AppController {
         $quickauth = Hash::extract($this->Paginator->paginate('QuickAuth'), '{n}.QuickAuth');
         $this->addPlayers($quickauth, '{n}.user_id');
 
+        $this->loadModel('Server');
+        $servers = Hash::combine($this->Server->find('all', array(
+            'fields' => array(
+                'server_ip', 'name', 'short_name'
+            ),
+            'conditions' => array(
+                'server_ip is not null'
+            )
+        )), '{n}.Server.server_ip', '{n}.Server');
+
         $this->set(array(
+            'servers' => $servers,
             'quickauth' => $quickauth,
             'pageModel' => $this->QuickAuth->name,
             'pageLocation' => array('controller' => 'QuickAuth', 'action' => 'records')
