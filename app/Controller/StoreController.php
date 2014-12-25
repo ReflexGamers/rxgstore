@@ -15,16 +15,16 @@ class StoreController extends AppController {
 
     public function convert() {
 
-        set_time_limit(300);
-
-        $this->Permissions->dumpAll();
-        $this->Permissions->initAll();
-        $this->Permissions->syncAll();
-
-        $this->Conversion->convertUsers();
-        $this->Conversion->convertInventories();
-        $this->Conversion->convertOrders();
-
-        $this->autoRender = false;
+//        set_time_limit(300);
+//
+//        $this->Permissions->dumpAll();
+//        $this->Permissions->initAll();
+//        $this->Permissions->syncAll();
+//
+//        $this->Conversion->convertUsers();
+//        $this->Conversion->convertInventories();
+//        $this->Conversion->convertOrders();
+//
+//        $this->autoRender = false;
     }
 }
