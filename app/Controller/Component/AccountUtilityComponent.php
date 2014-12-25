@@ -61,7 +61,8 @@ class AccountUtilityComponent extends Component {
 
         $steaminfo = $this->SteamPlayer->getByIds(array($steamid));
 
-        if (empty($steaminfo) && !($flags & self::LOGIN_FORCE)) {
+        if ((empty($steaminfo) || empty($steaminfo[0])) && !($flags & self::LOGIN_FORCE)) {
+            CakeLog::write('login', "Error fetching data for $steamid.");
             return false;
         } else {
             $steaminfo = $steaminfo[0];
