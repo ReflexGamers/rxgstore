@@ -10,6 +10,7 @@
 
     {% include '/ShoutboxMessages/shoutbox.inc.tpl' %}
 
+    {{ session.flash('holidays') }}
     {{ session.flash('quickauth') }}
     {{ session.flash() }}
 

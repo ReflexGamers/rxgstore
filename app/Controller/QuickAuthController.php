@@ -205,7 +205,11 @@ class QuickAuthController extends AppController {
         }
 
         $this->Session->write('Auth.user.ingame', true);
-        $this->Session->setFlash('Visit the store outside of the game at store.reflex-gamers.com', 'flash_closable', null, 'quickauth');
+        if (date('m-d-y') === '12-25-14') {
+            $this->Session->setFlash('To celebrate the holidays, we will periodically be giving out free items to players in our servers today! See the FAQ for how to use items.', 'flash_default', null, 'holidays');
+        } else {
+            $this->Session->setFlash('Visit the store outside of the game at store.reflex-gamers.com', 'flash_closable', null, 'quickauth');
+        }
 
         // go straight to store if source not specified
         if (empty($params['source'])) {
