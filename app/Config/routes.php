@@ -202,9 +202,6 @@
 		)
 	);
 
-	//Temp
-	Router::connect('/convert', array('controller' => 'Admin', 'action' => 'convert'));
-
 
 	//Router::connectNamed(array('page'));
 	//Allow JSON views
