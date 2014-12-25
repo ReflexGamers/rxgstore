@@ -1,6 +1,7 @@
 # User specific & automatically generated files #
 #################################################
 /app/Config/database.php
+/app/Config/security.php
 /app/tmp
 /app/Plugin/TwigView/tmp
 /lib/Cake/Console/Templates/skel/tmp/
