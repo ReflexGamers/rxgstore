@@ -133,7 +133,7 @@ a:hover {
 }
 .headert td.header_left a{
     color:#fff;
-    margin-right: 10px;
+    margin-right: 5px;
     background: rgba(0, 0, 0, 0.15);
     border-radius: 5px;
     border: 1px solid rgba(0, 0, 0, 0.05);
@@ -595,6 +595,10 @@ table.addfunds td {
 .username_link {
     font-weight:bold;
     color: #ffffff;
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
 }
 
 .user_avatar {
