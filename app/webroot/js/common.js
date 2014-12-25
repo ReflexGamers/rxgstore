@@ -29,6 +29,7 @@
     });
 
     var shoutbox = $('#shoutbox');
+    var shoutboxButton = $('#shoutbox_button');
     var updateInterval = $('#shoutbox_post_cooldown').val() * 1000;
     var submitDelay = $('#shoutbox_update_interval').val() * 1000;
     var updateTimer;
@@ -101,7 +102,7 @@
         return false;
     });
 
-    $('#shoutbox_button').prop('disabled', false).on('click', function(){
+    shoutboxButton.prop('disabled', false).on('click', function(){
 
         if ($('#shoutbox_input').val() == '') {
             return false;
@@ -142,7 +143,7 @@
 
 
     scrollShoutbox(true);
-    if (shoutbox.length != 0) {
+    if (shoutbox.length != 0 && shoutboxButton.length != 0) {
         restartUpdateTimer();
     }
 
