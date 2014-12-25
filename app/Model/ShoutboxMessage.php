@@ -24,7 +24,7 @@ class ShoutboxMessage extends AppModel {
      */
     public function getRecent() {
         return Hash::extract($this->find('all', array(
-            'limit' => 10,
+            'limit' => 20,
             'conditions' => array(
                 'removed = 0'
             )
