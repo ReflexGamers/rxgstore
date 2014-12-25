@@ -325,26 +325,7 @@ class User extends AppModel {
     public function getCurrentAndPastItems($user_id) {
 
         $currentItems = $this->getItems($user_id);
-
-        $totals = Hash::combine($this->Order->find('all', array(
-            'conditions' => array(
-                'user_id' => $user_id
-            ),
-            'fields' => array(
-                'order_detail.item_id', 'SUM(quantity) as quantity'
-            ),
-            'joins' => array(
-                array(
-                    'table' => 'order_detail',
-                    'conditions' => array(
-                        'Order.order_id = order_detail.order_id'
-                    )
-                )
-            ),
-            'group' => array(
-                'order_detail.item_id'
-            )
-        )), '{n}.order_detail.item_id', '{n}.{n}.quantity' );
+        $totals = $this->getObtainedItems($user_id);
 
         $pastItems = array();
 
@@ -364,6 +345,84 @@ class User extends AppModel {
             'current' => $currentItems,
             'past' => $pastItems
         );
+    }
+
+    /**
+     * Returns an array of all items ever obtained by the specified user, including current and past. To get this
+     * information, Orders, Gifts and Rewards are looked up.
+     *
+     * @param int $user_id
+     * @return array of quantities indexed by item_id
+     */
+    private function getObtainedItems($user_id) {
+
+        $db = $this->getDataSource();
+
+        $orderQuery = $db->buildStatement(array(
+            'fields' => array(
+                'OrderDetail.item_id as item_id, OrderDetail.quantity as quantity'
+            ),
+            'table' => $db->fullTableName($this->Order),
+            'alias' => 'Order',
+            'conditions' => array(
+                'user_id' => $user_id
+            ),
+            'joins' => array(
+                array(
+                    'table' => 'order_detail',
+                    'alias' => 'OrderDetail',
+                    'conditions' => array(
+                        'Order.order_id = OrderDetail.order_id'
+                    )
+                )
+            )
+        ), $this->Order);
+
+        $giftQuery = $db->buildStatement(array(
+            'fields' => array(
+                'GiftDetail.item_id as quantity, GiftDetail.quantity as quantity'
+            ),
+            'table' => $db->fullTableName($this->Gift),
+            'alias' => 'Gift',
+            'conditions' => array(
+                'recipient_id' => $user_id,
+                'accepted = 1'
+            ),
+            'joins' => array(
+                array(
+                    'table' => 'gift_detail',
+                    'alias' => 'GiftDetail',
+                    'conditions' => array(
+                        'Gift.gift_id = GiftDetail.gift_id'
+                    )
+                )
+            )
+        ), $this->Gift);
+
+        $rewardQuery = $db->buildStatement(array(
+            'fields' => array(
+                'RewardDetail.item_id as quantity, RewardDetail.quantity as quantity'
+            ),
+            'table' => $db->fullTableName($this->RewardRecipient),
+            'alias' => 'RewardRecipient',
+            'conditions' => array(
+                'recipient_id' => $user_id,
+                'accepted = 1'
+            ),
+            'joins' => array(
+                array(
+                    'table' => 'reward_detail',
+                    'alias' => 'RewardDetail',
+                    'conditions' => array(
+                        'RewardRecipient.reward_id = RewardDetail.reward_id'
+                    )
+                )
+            )
+        ), $this->RewardRecipient);
+
+        $rawQuery = "select item_id, sum(quantity) as quantity from ($orderQuery union all $giftQuery union all $rewardQuery) as Item group by item_id";
+
+        return Hash::combine($db->fetchAll($rawQuery), '{n}.Item.item_id', '{n}.{n}.quantity');
     }
 
 /**
