@@ -785,6 +785,8 @@ input.cart_quantity_input:focus {
     margin: 0 0 10px;
     border-radius: 8px;
     font-size: 28px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .player_heading {
@@ -2458,6 +2460,7 @@ button::-moz-focus-inner {
     padding: 20px 5px;
     margin: 10px auto;
     text-align: center;
+    overflow: hidden;
 }
 
 .activity_item:last-child {
