@@ -9,7 +9,11 @@
 
     <p>This Store synchronizes with our Sourcebans database to provide group-based admin permissions for things like moderating comments/reviews, editing items and updating stock. The Forum database is also used to obtain division tags and to identify other Members.</p>
 
-    <p>Synchronization should happen automatically twice daily, and depending on your permissions, you may see a button on this page to manually perform a sync.</p>
+    <p>Synchronization should happen automatically twice daily, and high level admins will see a button on this page to manually perform a sync.</p>
+
+    {% if access.check('Debug') %}
+        <p>You can edit permission overrides in the permissions.php config. They will automatically be re-applied on every sync, or you can manually apply them by pressing the button below. Pressing rebuild will dump all permissions and re-create everything from scratch, then perform a sync.</p>
+    {% endif %}
 
     <p>{{ html.link('Click here', {
             'controller': 'Admin',
@@ -21,6 +25,11 @@
         <div class="permissions_batch_actions">
             {% if access.check('Permissions', 'update') %}
                 <input type="button" id="permissions_sync" class="btn-primary" value="Synchronize Now" data-href="{{ html.url({'action': 'synchronize'}) }}" />
+            {% endif %}
+
+            {% if access.check('Debug') %}
+                <input type="button" id="permissions_overrides" class="btn-primary" value="Re-apply Overrides" data-href="{{ html.url({'action': 'overrides'}) }}" />
+                <input type="button" id="permissions_rebuild" class="btn-danger" value="Rebuild Now" data-href="{{ html.url({'action': 'rebuild'}) }}" />
             {% endif %}
 
             {{ html.image('misc/ajax-loader.gif', {

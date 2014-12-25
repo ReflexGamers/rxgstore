@@ -1,27 +1,36 @@
 (function($){
 
-    $('#permissions_sync').on('click', function(){
+    function ajaxButton(selector, confirmText) {
 
-        if (!confirm('Are you sure you want to synchronize admin/member permissions with the Sourcebans and forum databases?')) {
-            return false;
-        }
+        $(selector).on('click', function(){
 
-        var el = $(this);
-
-        $.ajax(el.attr('href') || el.data('href'), {
-
-            type: 'post',
-            beforeSend: function(){
-                $('#permissions_loading').fadeIn();
-            },
-
-            success: function(data, textStatus) {
-                $('#permissions_data').html(data);
-                $('#permissions_loading').fadeOut();
+            if (!confirm(confirmText)) {
+                return false;
             }
-        });
 
-        return false;
-    });
+            var el = $(this);
+
+            $.ajax(el.attr('href') || el.data('href'), {
+
+                type: 'post',
+                beforeSend: function(){
+                    $('#permissions_loading').fadeIn();
+                },
+
+                success: function(data, textStatus) {
+                    $('#permissions_data').html(data);
+                    $('#permissions_loading').fadeOut();
+                }
+            });
+
+            return false;
+        });
+    }
+
+    ajaxButton('#permissions_sync', 'Are you sure you want to synchronize admin/member permissions with the Sourcebans and forum databases?');
+
+    ajaxButton('#permissions_rebuild', 'Are you sure you want to completely rebuild the admin/member permission tables?');
+
+    ajaxButton('#permissions_overrides', 'Are you sure you want to re-apply the overrides in the permissions config?');
 
 })(jQuery);

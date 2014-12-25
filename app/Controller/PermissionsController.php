@@ -87,9 +87,24 @@ class PermissionsController extends AppController {
     }
 
     /**
+     * Re-applies overrides in permissions.php.
+     */
+    public function overrides() {
+
+        if (!$this->Access->check('Debug')) {
+            $this->redirect($this->referer());
+            return;
+        }
+
+        $this->Permissions->applyOverrides();
+
+        $this->view('list.inc');
+    }
+
+    /**
      * Rebuilds all the access control tables.
      */
-    public function rebuildTables() {
+    public function rebuild() {
 
         if (!$this->Access->check('Debug')) {
             $this->redirect($this->referer());
@@ -99,5 +114,7 @@ class PermissionsController extends AppController {
         $this->Permissions->dumpAll();
         $this->Permissions->initAll();
         $this->Permissions->syncAll();
+
+        $this->view('list.inc');
     }
 }

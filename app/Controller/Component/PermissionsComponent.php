@@ -127,10 +127,6 @@ class PermissionsComponent extends Component {
             array(
                 'alias' => 'Webmaster',
                 'parent_id' => 7
-            ),
-            array(
-                'alias' => 'WhiteThunder',
-                'parent_id' => 8
             )
         );
 
@@ -163,6 +159,45 @@ class PermissionsComponent extends Component {
 
         $this->Acl->allow('Advisor', 'Stock');
         $this->Acl->allow('Advisor', 'Users', 'update');
+    }
+
+    /**
+     * Updates the users in the permissions.php config with the corresponding groups.
+     */
+    public function applyOverrides() {
+
+        $Aro = $this->Acl->Aro;
+
+        $overrides = Configure::read('Store.PermissionOverrides');
+
+        // group names indexed by id
+        $groupIds = array_flip($this->getAroGroupNames());
+
+        foreach ($overrides as $group => $aliases) {
+
+            if (!empty($groupIds[$group])) {
+
+                $groupId = $groupIds[$group];
+
+                foreach ($aliases as $alias) {
+
+                    $user = $Aro->find('first', array(
+                        'fields' => array(
+                            'id'
+                        ),
+                        'conditions' => array(
+                            'alias' => $alias
+                        ),
+                        'recursive' => -1
+                    ));
+
+                    if (!empty($user)) {
+                        $user['Aro']['parent_id'] = $groupId;
+                        $Aro->save($user);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -392,6 +427,9 @@ class PermissionsComponent extends Component {
             $Aro->save($data);
             $results['added'][] = $data;
         }
+
+        // apply overrides after sync
+        $this->applyOverrides();
 
         return $results;
     }
