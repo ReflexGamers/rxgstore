@@ -2329,8 +2329,10 @@ button::-moz-focus-inner {
 
 .quickauth_player {
     font-size: 20px;
-    min-width: 350px;
-    word-break: break-all;
+    min-width: 300px;
+    max-width: 400px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .quickauth_player img {
@@ -2350,6 +2352,8 @@ button::-moz-focus-inner {
     border-radius: 12px;
     vertical-align: middle;
     text-align: center;
+    position: relative;
+    z-index: 100;
 }
 
 .quickauth_member {
@@ -2371,7 +2375,7 @@ button::-moz-focus-inner {
 .quickauth_time {
     float: right;
     font-size: 16px;
-    width: 100px;
+    width: 120px;
 }
 
 .quickauth_actions {
