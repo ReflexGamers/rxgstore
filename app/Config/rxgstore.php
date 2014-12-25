@@ -1,6 +1,6 @@
 <?php
 
-Configure::write('Store', array(
+$config['Store'] = array(
 	'SavedLoginDuration' => 2592000, //1 month
 	'Shoutbox' => array(
 		'PostCooldown' => 60, //1 minute
@@ -53,4 +53,4 @@ Configure::write('Store', array(
 			'Minecraft' => 'MC'
 		)
 	)
-));
+);
