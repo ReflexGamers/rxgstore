@@ -31,9 +31,6 @@
 	Router::connect('/login', array('controller' => 'Users', 'action' => 'login'));
 	Router::connect('/logout', array('controller' => 'Users', 'action' => 'logout'));
 
-	Router::connect('/checkout', array('controller' => 'orders', 'action' => 'checkout'));
-	Router::connect('/buy', array('controller' => 'orders', 'action' => 'buy'));
-
 	Router::connect('/recent/*', array('controller' => 'Items', 'action' => 'recent'));
 
 	Router::connect('/store/:action', array('controller' => 'Store'));
@@ -108,6 +105,7 @@
 
 	Router::connect('/cart', array('controller' => 'Cart', 'action' => 'view'));
     Router::connect('/quickbuy', array('controller' => 'Cart', 'action' => 'quickbuy'));
+	Router::connect('/cart/:action', array('controller' => 'Cart'));
 	Router::connect('/cart/:action/:id', array(
 			'controller' => 'Cart'
 		), array(
@@ -116,6 +114,7 @@
 		)
 	);
 
+	Router::connect('/buy', array('controller' => 'Orders', 'action' => 'buy'));
 
 	Router::connect('/shout', array('controller' => 'ShoutboxMessages', 'action' => 'add'));
 	Router::connect('/shout/check/:time', array(
