@@ -124,6 +124,14 @@ class PermissionsComponent extends Component {
                 'alias' => 'Director',
                 'parent_id' => 6
             ),
+            array(
+                'alias' => 'Webmaster',
+                'parent_id' => 7
+            ),
+            array(
+                'alias' => 'WhiteThunder',
+                'parent_id' => 8
+            )
         );
 
         foreach ($groups as $group) {
@@ -137,23 +145,23 @@ class PermissionsComponent extends Component {
      */
     private function createAssociations() {
 
-        $this->Acl->allow('Captain', 'Debug');
+        $this->Acl->allow('Director', 'Debug');
         $this->Acl->allow('Advisor', 'QuickAuth');
         $this->Acl->allow('Advisor', 'Rewards');
         $this->Acl->allow('Advisor', 'Permissions', 'read');
-        $this->Acl->allow('Advisor', 'Permissions', 'update');
+        $this->Acl->allow('Director', 'Permissions', 'update');
         $this->Acl->allow('Advisor', 'Cache', 'read');
-        $this->Acl->allow('Advisor', 'Cache', 'update');
-        $this->Acl->allow('Advisor', 'Cache', 'delete');
+        $this->Acl->allow('Cabinet', 'Cache', 'update');
+        $this->Acl->allow('Cabinet', 'Cache', 'delete');
         $this->Acl->allow('Advisor', 'Chats', 'delete');
-        $this->Acl->allow('Advisor', 'Items', 'create');
-        $this->Acl->allow('Advisor', 'Items', 'update');
+        $this->Acl->allow('Captain', 'Items', 'create');
+        $this->Acl->allow('Captain', 'Items', 'update');
         $this->Acl->allow('Advisor', 'Logs', 'read');
         $this->Acl->allow('Advisor', 'Reviews', 'update');
         $this->Acl->allow('Advisor', 'Reviews', 'delete');
         $this->Acl->allow('Advisor', 'Receipts', 'read');
 
-        $this->Acl->allow('Advisor', 'Stock', 'update');
+        $this->Acl->allow('Advisor', 'Stock');
         $this->Acl->allow('Advisor', 'Users', 'update');
     }
 

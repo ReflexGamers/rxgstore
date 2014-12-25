@@ -13,8 +13,6 @@ class PermissionsController extends AppController {
 
     public function beforeFilter() {
         parent::beforeFilter();
-
-        // allow logged in users only
         $this->Auth->deny();
     }
 
@@ -86,5 +84,20 @@ class PermissionsController extends AppController {
 
         $this->set('syncResult', $syncResult);
         $this->view('list.inc');
+    }
+
+    /**
+     * Rebuilds all the access control tables.
+     */
+    public function rebuildTables() {
+
+        if (!$this->Access->check('Debug')) {
+            $this->redirect($this->referer());
+            return;
+        }
+
+        $this->Permissions->dumpAll();
+        $this->Permissions->initAll();
+        $this->Permissions->syncAll();
     }
 }
