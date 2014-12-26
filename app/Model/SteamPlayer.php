@@ -54,6 +54,11 @@ class SteamPlayer extends AppModel {
                 'cached <' => $cacheExpireTime
             ));
 
+            if (empty($steamPlayers)) {
+                CakeLog::write('steam', 'Steam API provided no response or did not respond in time. Cached players used.');
+                return Hash::extract($cache, '{n}.SteamPlayerCache');
+            }
+
             return $steamPlayers;
         }
     }
