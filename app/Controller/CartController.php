@@ -84,6 +84,7 @@ class CartController extends AppController {
     public function process() {
 
         $this->request->allowMethod('post');
+        $this->autoRender = false;
 
         if (empty($this->request->data['ProcessAction'])) {
             $this->Session->setFlash('Oops! There was an error processing your cart.', 'flash_closable', array('class' => 'error'));
