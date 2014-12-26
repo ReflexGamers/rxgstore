@@ -162,45 +162,6 @@ class PermissionsComponent extends Component {
     }
 
     /**
-     * Updates the users in the permissions.php config with the corresponding groups.
-     */
-    public function applyOverrides() {
-
-        $Aro = $this->Acl->Aro;
-
-        $overrides = Configure::read('Store.PermissionOverrides');
-
-        // group names indexed by id
-        $groupIds = array_flip($this->getAroGroupNames());
-
-        foreach ($overrides as $group => $aliases) {
-
-            if (!empty($groupIds[$group])) {
-
-                $groupId = $groupIds[$group];
-
-                foreach ($aliases as $alias) {
-
-                    $user = $Aro->find('first', array(
-                        'fields' => array(
-                            'id'
-                        ),
-                        'conditions' => array(
-                            'alias' => $alias
-                        ),
-                        'recursive' => -1
-                    ));
-
-                    if (!empty($user)) {
-                        $user['Aro']['parent_id'] = $groupId;
-                        $Aro->save($user);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * Returns all ARO group names in a list indexed by group id.
      *
      * @return array list of group names indexed by group id
@@ -237,13 +198,21 @@ class PermissionsComponent extends Component {
     }
 
     /**
-     * Synchronizes the permission tables with Sourcebans and the forums.
+     * Synchronizes the permission tables with Sourcebans and the forums. Also checks the Store.PermissionOverrides
+     * config array for a key-value list of aliases to group names that will override anything in the foreign databases.
      *
      * @return array result of sync with keys 'added', 'updated' and 'removed' as sub-arrays with the changed admin data
      */
     public function syncAll() {
 
         $Aro = $this->Acl->Aro;
+
+        // permission overrides
+        $overrides = Configure::read('Store.PermissionOverrides');
+
+        if (empty($overrides)) {
+            $overrides = array();
+        }
 
         // group names indexed by id
         $groupNames = $this->getAroGroupNames();
@@ -362,8 +331,20 @@ class PermissionsComponent extends Component {
 
                 // admin is in sourcebans db
                 $adminData = $sbAdmins[$user_id];
+                $adminAlias = $adminData['alias'];
 
-                if ($data['parent_id'] != $adminData['parent_id'] || $data['alias'] != $adminData['alias'] || $data['division'] != $division) {
+                // check for override in config
+                if (!empty($overrides[$adminAlias])) {
+
+                    $overrideGroup = $overrides[$adminAlias];
+
+                    if (!empty($groupIds[$overrideGroup])) {
+                        $adminData['parent_id'] = $groupIds[$overrideGroup];
+                    }
+                }
+
+                // check whether data differs from what it saved
+                if ($data['parent_id'] != $adminData['parent_id'] || $data['alias'] != $adminAlias || $data['division'] != $division) {
 
                     // needs updating
                     $steamid = $this->AccountUtility->SteamID64FromAccountID($data['foreign_key']);
@@ -399,11 +380,23 @@ class PermissionsComponent extends Component {
                 $data['division'] = $forumMembers[$user_id]['division'];
             }
 
+            $adminAlias = $data['alias'];
+
+            // check for override in config
+            if (!empty($overrides[$adminAlias])) {
+
+                $overrideGroup = $overrides[$adminAlias];
+
+                if (!empty($groupIds[$overrideGroup])) {
+                    $data['parent_id'] = $groupIds[$overrideGroup];
+                }
+            }
+
             $division = !empty($data['division']) ? $data['division'] : 'No Division';
             $rank = $groupNames[$data['parent_id']];
 
             $steamid = $this->AccountUtility->SteamID64FromAccountID($user_id);
-            CakeLog::write('permsync', " - added $rank: '{$data['alias']}' / $steamid / $division");
+            CakeLog::write('permsync', " - added $rank: '$adminAlias' / $steamid / $division");
 
             $data['model'] = 'User';
             $data['foreign_key'] = $user_id;
@@ -427,9 +420,6 @@ class PermissionsComponent extends Component {
             $Aro->save($data);
             $results['added'][] = $data;
         }
-
-        // apply overrides after sync
-        $this->applyOverrides();
 
         return $results;
     }
