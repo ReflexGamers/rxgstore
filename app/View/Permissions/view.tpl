@@ -12,7 +12,8 @@
     <p>Synchronization should happen automatically twice daily, and high level admins will see a button on this page to manually perform a sync.</p>
 
     {% if access.check('Debug') %}
-        <p>You can edit permission overrides in the permissions.php config. They will automatically be re-applied on every sync, or you can manually apply them by pressing the button below. Pressing rebuild will dump all permissions and re-create everything from scratch, then perform a sync.</p>
+        <p>You can edit permission overrides in the permissions.php config. They are automatically applied during every sync and will override anything coming from the other databases. Pressing rebuild will dump all permissions and re-create everything from scratch, then perform a sync.</p>
+        <p>You can also run those two functions from command line with <code>cake permissions sync</code> and <code>cake permissions rebuild</code> from the store folder.</p>
     {% endif %}
 
     <p>{{ html.link('Click here', {
@@ -28,7 +29,6 @@
             {% endif %}
 
             {% if access.check('Debug') %}
-                <input type="button" id="permissions_overrides" class="btn-primary" value="Re-apply Overrides" data-href="{{ html.url({'action': 'overrides'}) }}" />
                 <input type="button" id="permissions_rebuild" class="btn-danger" value="Rebuild Now" data-href="{{ html.url({'action': 'rebuild'}) }}" />
             {% endif %}
 

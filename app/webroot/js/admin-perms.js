@@ -31,6 +31,4 @@
 
     ajaxButton('#permissions_rebuild', 'Are you sure you want to completely rebuild the admin/member permission tables?');
 
-    ajaxButton('#permissions_overrides', 'Are you sure you want to re-apply the overrides in the permissions config?');
-
 })(jQuery);

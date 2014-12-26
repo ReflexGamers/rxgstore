@@ -87,21 +87,6 @@ class PermissionsController extends AppController {
     }
 
     /**
-     * Re-applies overrides in permissions.php.
-     */
-    public function overrides() {
-
-        if (!$this->Access->check('Debug')) {
-            $this->redirect($this->referer());
-            return;
-        }
-
-        $this->Permissions->applyOverrides();
-
-        $this->view('list.inc');
-    }
-
-    /**
      * Rebuilds all the access control tables.
      */
     public function rebuild() {
