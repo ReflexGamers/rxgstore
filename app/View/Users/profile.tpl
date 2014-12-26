@@ -1,22 +1,19 @@
 {% extends 'Common/base.tpl' %}
 
-{% set title = 'Player Profile' %}
+{% set player = players[user_id] %}
+{% set title = player.name %}
 
 {% if activities or reviews %}
     {% set styles = ['rateit'] %}
     {% set scripts = ['jquery.rateit.min', 'items'] %}
 {% endif %}
 
+{% block title %}
+    {{ fn.memberTag(player) }}
+    {{ fn.stripTag(player)|e }}
+{% endblock %}
+
 {% block content %}
-
-    {% set player = players[user_id] %}
-
-    <h1 class="player_heading">
-        {{ fn.memberTag(player) }}
-        {{ fn.stripTag(player)|e }}
-    </h1>
-
-    {% include '/ShoutboxMessages/shoutbox.inc.tpl' %}
 
     <section class="player_details">
 
@@ -57,7 +54,7 @@
 
     {% if pastItems %}
 
-        <section id="lifetime">
+        <section id="past_items">
 
             <h2 class="page_subheading">Past Items</h2>
 
@@ -71,27 +68,13 @@
     {% endif %}
 
 
-    {% if reviews %}
+    {% include 'Common/reviews.inc.tpl' with {
+        'title': 'Item Reviews',
+        'headerClass': 'player_reviews'
+    } %}
 
-        <section id="reviews">
-
-            <h2 class="page_subheading player_reviews">Item Reviews</h2>
-
-            <div id="reviews_content">
-                {% include '/Reviews/list.inc.tpl' %}
-            </div>
-
-        </section>
-
-    {% endif %}
-
-
-    {% if activities %}
-
-        {% include 'Common/activity.inc.tpl' with {
-            'title': 'Recent Activity'
-        } %}
-
-    {% endif %}
+    {% include 'Common/activity.inc.tpl' with {
+        'title': 'Recent Activity'
+    } %}
 
 {% endblock %}

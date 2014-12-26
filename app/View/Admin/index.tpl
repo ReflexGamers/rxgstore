@@ -4,8 +4,6 @@
 
 {% block content %}
 
-    <h1 class="page_heading">Admin Control Panel</h1>
-
     <p>This is the admin control panel where you can do special things.</p>
 
     <p>{{ html.link('Click here', {'controller': 'Admin', 'action': 'viewlog', 'name': 'admin'}) }} to view the admin log.</p>

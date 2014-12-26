@@ -71,6 +71,8 @@ class RewardsController extends AppController {
             'isReward' => true
         ));
 
+        $this->loadShoutbox();
+
         $this->activity(false);
         $this->render('/Gifts/compose');
     }
@@ -112,7 +114,10 @@ class RewardsController extends AppController {
         ));
 
         if ($forceRender) {
-            $this->set('title', 'Reward Activity');
+            $this->set(array(
+                'standalone' => true,
+                'title' => 'Reward Activity'
+            ));
             $this->render('/Activity/list');
         }
     }

@@ -1,14 +1,7 @@
 
-{% if activities %}
-
-    <section id="activity">
-
-        <h2 class="page_subheading">{{ title }}</h2>
-
-        <div id="activity_content">
-            {% include 'Activity/list.inc.tpl' %}
-        </div>
-
-    </section>
-
-{% endif %}
+{% include 'Common/section.inc.tpl' with {
+    'data': activities,
+    'sectionId': 'activity',
+    'contentId': 'activity_content',
+    'innerTemplate': 'Activity/list.inc.tpl'
+} %}

@@ -4,10 +4,6 @@
 
 {% block content %}
 
-    <h1 class="page_heading">{{ title }}</h1>
-
-    {{ session.flash() }}
-
     <p>Below, you may receive a shipment to add items to stock.</p>
 
     <p><strong>Please do not order shipments more than 1-2 times per week.</strong> Shipments are public information so we want to space them out somewhat evenly. Be sure to check the recent shipments at the bottom of this page before proceeding.</p>

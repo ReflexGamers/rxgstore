@@ -131,7 +131,7 @@ class AppController extends Controller {
      * Loads Shoutbox data and passes it to the view. Call this from any controller action that includes the shoutbox
      * partial view which expects this data.
      */
-    public function loadShoutboxData() {
+    public function loadShoutbox() {
 
         $this->loadModel('ShoutboxMessage');
         $messages = $this->ShoutboxMessage->getRecent();
@@ -139,6 +139,7 @@ class AppController extends Controller {
         $shoutConfig = Configure::read('Store.Shoutbox');
 
         $this->set(array(
+            'showShoutbox' => true,
             'messages' => $messages,
             'theTime' => time(),
             'shoutPostCooldown' => $shoutConfig['PostCooldown'],

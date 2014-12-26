@@ -1,39 +1,31 @@
 {% extends 'Common/base.tpl' %}
 
 {% if not isAjax %}
-    {% if user_id %}
-        {% set title = players[user_id].name ~ '\'s Reviews' %}
-    {% elseif item %}
-        {% set title = item.name ~ ' Reviews' %}
-    {% else %}
-        {% set title = 'Reviews' %}
-    {% endif %}
-
-    {% set jquery = true %}
     {% set styles = ['rateit'] %}
     {% set scripts = ['jquery.rateit.min', 'items'] %}
 {% endif %}
 
+{% if user_id %}
+    {% set player = players[user_id] %}
+{% endif %}
+
+{% if not title %}
+    {% if user_id %}
+        {% set title = player.name ~ '\'s Reviews' %}
+    {% endif %}
+{% endif %}
+
+{% block title %}
+    {% if user_id %}
+        {{ fn.memberTag(player) }}
+        {{ fn.stripTag(player)|e }}'s Reviews
+    {% else %}
+        {{ title }}
+    {% endif %}
+{% endblock %}
+
 {% block content %}
 
-    {% if isAjax %}
-
-        <div id="reviews_content">
-            {% include 'Reviews/list.inc.tpl' %}
-        </div>
-
-    {% else %}
-
-        <section id="reviews">
-
-            <h1 class="page_heading">{{ user_id ? fn.memberTag(players[user_id]) }}{{ title }}</h1>
-
-            <div id="reviews_content">
-                {% include 'Reviews/list.inc.tpl' %}
-            </div>
-
-        </section>
-
-    {% endif %}
+    {% include 'Common/reviews.inc.tpl' %}
 
 {% endblock %}

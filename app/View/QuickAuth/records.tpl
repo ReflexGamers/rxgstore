@@ -1,5 +1,7 @@
 {% extends 'Common/base.tpl' %}
 
+{% set title = 'QuickAuth Records' %}
+
 {% block content %}
 
     {% if isAjax %}
@@ -9,8 +11,6 @@
         </div>
 
     {% else %}
-
-        <h1 class="page_heading">QuickAuth Records</h1>
 
         <div id="quickauth_content">
             {% include 'QuickAuth/list.inc.tpl' %}

@@ -36,7 +36,7 @@ class ShoutboxMessagesController extends AppController {
             }
         }
 
-        $this->loadShoutboxData();
+        $this->loadShoutbox();
         $this->render('view.inc');
     }
 

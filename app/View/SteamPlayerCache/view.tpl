@@ -3,10 +3,7 @@
 {% set title = 'Steam Data Cache' %}
 {% set scripts = ['common', 'admin-cache'] %}
 
-
 {% block content %}
-
-    <h1 class="page_heading">{{ title }}</h1>
 
     <p>When a part of this site attempts to get Steam data about players, it calls the Steam API to get their information. We automatically cache that information for up to <strong>{{ cacheDuration }}</strong> hours per player.</p>
 

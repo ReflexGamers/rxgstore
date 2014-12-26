@@ -41,7 +41,7 @@ class UsersController extends AppController {
             'totalSpent' => $this->User->getTotalSpent($user_id)
         ));
 
-        $this->loadShoutboxData();
+        $this->loadShoutbox();
 
         $this->reviews($steamid, false);
         $this->activity($steamid, false);
@@ -83,6 +83,7 @@ class UsersController extends AppController {
         ));
 
         if ($forceRender) {
+            $this->set('standalone', true);
             $this->render('/Reviews/list');
         }
     }
@@ -120,6 +121,7 @@ class UsersController extends AppController {
         ));
 
         if ($forceRender) {
+            $this->set('standalone', true);
             $this->render('/Activity/list');
         }
     }

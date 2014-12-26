@@ -89,6 +89,7 @@ class ShipmentsController extends AppController {
 
         $this->set('stock', $stock);
 
+        $this->loadShoutbox();
         $this->activity(false);
     }
 
@@ -129,7 +130,10 @@ class ShipmentsController extends AppController {
         ));
 
         if ($forceRender) {
-            $this->set('title', 'Shipment Activity');
+            $this->set(array(
+                'standalone' => true,
+                'title' => 'Shipment Activity'
+            ));
             $this->render('/Activity/list');
         }
     }

@@ -5,10 +5,6 @@
 
 {% block content %}
 
-    <h1 class="page_heading">{{ title }}</h1>
-
-    {{ session.flash() }}
-
     <div class="addfunds">
 
         <p>Add funds to your rxg CASH through PayPal™. If you do not have a PayPal™ account, you can use a credit card to pay once directed to their site. Every dollar of real money is equivalent to a minimum of <strong>{{ fn.currency(100 * currencyMult) }} CASH</strong>. Depending on how much you give, you may receive a bonus.</p>
@@ -62,13 +58,9 @@
 
         <p>100% of dollar bills obtained is put back into the community; feel confident while giving us your money!</p>
 
-        {% if activities %}
-
-            {% include 'Common/activity.inc.tpl' with {
-                'title': 'Recent CASH Purchases'
-            } %}
-
-        {% endif %}
+        {% include 'Common/activity.inc.tpl' with {
+            'title': 'Recent CASH Purchases'
+        } %}
 
     </div>
 

@@ -90,6 +90,8 @@ class GiftsController extends AppController {
             'userItems' => $this->User->getItems($user_id)
         ));
 
+        $this->loadShoutbox();
+
         $this->activity(false);
     }
 
@@ -123,7 +125,10 @@ class GiftsController extends AppController {
         ));
 
         if ($forceRender) {
-            $this->set('title', 'Gift Activity');
+            $this->set(array(
+                'standalone' => true,
+                'title' => 'Gift Activity'
+            ));
             $this->render('/Activity/list');
         }
     }

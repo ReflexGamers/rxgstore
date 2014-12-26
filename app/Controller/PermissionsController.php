@@ -58,6 +58,8 @@ class PermissionsController extends AppController {
             'members' => $admins
         ));
 
+        $this->loadShoutbox();
+
         if (!empty($view)) {
             $this->render($view);
         }

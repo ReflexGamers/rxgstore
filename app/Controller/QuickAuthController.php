@@ -29,6 +29,8 @@ class QuickAuthController extends AppController {
             'tokenExpire' => Configure::read('Store.QuickAuth.TokenExpire')
         ));
 
+        $this->loadShoutbox();
+
         $this->records();
     }
 

@@ -5,8 +5,6 @@
 
 {% block content %}
 
-    <h1 class="page_heading">{{ title }}</h1>
-
     <p>This Store synchronizes with our Sourcebans database to provide group-based admin permissions for things like moderating comments/reviews, editing items and updating stock. The Forum database is also used to obtain division tags and to identify other Members.</p>
 
     <p>Synchronization should happen automatically twice daily, and high level admins will see a button on this page to manually perform a sync.</p>

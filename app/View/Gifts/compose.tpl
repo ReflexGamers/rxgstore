@@ -1,13 +1,9 @@
 {% extends 'Common/base.tpl' %}
 
-{% set title = 'Composing ' ~ (isReward ? 'Reward' : 'Gift') %}
+{% set title = 'Compose ' ~ (isReward ? 'Reward' : 'Gift') %}
 {% set scripts = 'gifts' %}
 
 {% block content %}
-
-    <h1 class="page_heading">Compose {{ isReward ? 'Reward' : 'Gift' }}</h1>
-
-    {{ session.flash() }}
 
     {% if data is empty %}
         {% if isReward %}

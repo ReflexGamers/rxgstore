@@ -42,6 +42,8 @@ class CartController extends AppController {
             'shippingCost' => $config['Cost'],
             'shippingFreeThreshold' => $config['FreeThreshold']
         ));
+
+        $this->loadShoutbox();
     }
 
     /**

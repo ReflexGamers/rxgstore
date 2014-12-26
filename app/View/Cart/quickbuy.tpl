@@ -5,10 +5,6 @@
 
 {% block content %}
 
-    <h1 class="page_heading">{{ title }}</h1>
-
-    {{ session.flash() }}
-
     {% if cart or isQuickbuy %}
 
         {% if not isQuickbuy %}

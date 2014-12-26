@@ -1,41 +1,31 @@
 {% extends 'Common/base.tpl' %}
 
 {% if not isAjax %}
-    {% if not title %}
-        {% if user_id %}
-            {% set title = players[user_id].name ~ '\'s Activity' %}
-        {% elseif item %}
-            {% set title = item.name ~ ' Activity' %}
-        {% else %}
-            {% set title = 'Store Activity' %}
-        {% endif %}
-    {% endif %}
-
-    {% set jquery = true %}
     {% set styles = ['rateit'] %}
     {% set scripts = ['jquery.rateit.min', 'items'] %}
 {% endif %}
 
+{% if user_id %}
+    {% set player = players[user_id] %}
+{% endif %}
+
+{% if not title %}
+    {% if user_id %}
+        {% set title = player.name ~ '\'s Activity' %}
+    {% endif %}
+{% endif %}
+
+{% block title %}
+    {% if user_id %}
+        {{ fn.memberTag(player) }}
+        {{ fn.stripTag(player)|e }}'s Activity
+    {% else %}
+        {{ title }}
+    {% endif %}
+{% endblock %}
+
 {% block content %}
 
-    {% if isAjax %}
-
-        <div id="activity_content">
-            {% include 'Activity/list.inc.tpl' %}
-        </div>
-
-    {% else %}
-
-        <section id="activity">
-
-            <h1 class="page_heading">{{ user_id ? fn.memberTag(players[user_id]) }}{{ title }}</h1>
-
-            <div id="activity_content">
-                {% include 'Activity/list.inc.tpl' %}
-            </div>
-
-        </section>
-
-    {% endif %}
+    {% include 'Common/activity.inc.tpl' %}
 
 {% endblock %}

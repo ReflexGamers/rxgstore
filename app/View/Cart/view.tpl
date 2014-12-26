@@ -5,10 +5,6 @@
 
 {% block content %}
 
-    <h1 class="page_heading">Shopping Cart</h1>
-
-    {{ session.flash() }}
-
     {% if cart %}
 
         <p>Manage the contents of your cart below. If you edit your cart and want to save your changes for later, click Update Cart before leaving this page.</p>

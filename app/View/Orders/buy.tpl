@@ -1,13 +1,9 @@
 {% extends 'Common/layout.tpl' %}
 
-{% set title = 'CHECKOUT' %}
+{% set title = 'Purchase Completed' %}
 {% set backLink = {'controller': 'store', 'action': 'store'} %}
 
 {% block content %}
-
-    <h1 class="page_heading">Order Completion</h1>
-
-    {{ session.flash() }}
 
     {% if order %}
 

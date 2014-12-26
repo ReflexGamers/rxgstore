@@ -68,7 +68,23 @@
 </header>
 
 <article id="content" class="content cf">
+
+    {% block preheader %}{% endblock %}
+
+    <h1 class="page_heading">
+        {% block title %}
+            {{ title }}
+        {% endblock %}
+    </h1>
+
+    {% if showShoutbox %}
+        {% include '/ShoutboxMessages/shoutbox.inc.tpl' %}
+    {% endif %}
+
+    {{ session.flash() }}
+
     {% block content %}{% endblock %}
+
 </article>
 
 <footer class="foot">

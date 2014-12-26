@@ -1,17 +1,12 @@
 {% extends 'Common/base.tpl' %}
 
-{% set title = 'Browse Items' %}
+{% set title = 'RXG Store' %}
 {% set styles = 'rateit' %}
 {% set scripts = ['jquery.ddslick.min', 'jquery.rateit.min', 'browse'] %}
 
 {% block content %}
 
-    <h1 class="page_heading">RXG Store</h1>
-
-    {% include '/ShoutboxMessages/shoutbox.inc.tpl' %}
-
     {{ session.flash('quickauth') }}
-    {{ session.flash() }}
 
     {% if user %}
 

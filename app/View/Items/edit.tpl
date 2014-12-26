@@ -31,10 +31,6 @@
 
 {% block content %}
 
-    <h1 class="page_heading">Editing: {{ item.name }}</h1>
-
-    {{ session.flash() }}
-
     {{ html.image("items/#{item.short_name}.png", {
         'url': {'action': 'view', 'id': item.short_name},
         'class': 'item_edit_image'

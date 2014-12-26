@@ -28,6 +28,7 @@ class SteamPlayerCacheController extends AppController {
 
         $this->set('cacheDuration', Configure::read('Store.SteamCacheDuration') / 3600);
 
+        $this->loadShoutbox();
         $this->players(false);
     }
 

@@ -1,10 +1,8 @@
 {% extends 'Common/base.tpl' %}
 
-{% set title = 'Checkout' %}
+{% set title = 'Order Confirmation' %}
 
 {% block content %}
-
-    <h1 class="page_heading">Order Confirmation</h1>
 
     {% set flash = session.flash('error') %}
 
@@ -14,20 +12,20 @@
 
         <div class="back_link">
             <i class="fa fa-arrow-circle-left"></i>
-            {{ html.link('Return to Cart',
-            {'controller': 'Cart', 'action': 'view'}
-            ) }}
+            {{ html.link('Return to Cart', {
+                'controller': 'Cart',
+                'action': 'view'
+            }) }}
         </div>
 
     {% else %}
 
-        {{ session.flash() }}
-
         <div class="back_link">
             <i class="fa fa-arrow-circle-left"></i>
-            {{ html.link('Return to Cart',
-                {'controller': 'Cart', 'action': 'view'}
-            ) }}
+            {{ html.link('Return to Cart', {
+                'controller': 'Cart',
+                'action': 'view'
+            }) }}
         </div>
 
         <table class="cart">

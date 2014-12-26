@@ -1,5 +1,7 @@
 {% extends 'Common/base.tpl' %}
 
+{% set title = 'Steam Player Cache' %}
+
 {% if not isAjax %}
     {% set scripts = 'common' %}
 {% endif %}
@@ -13,8 +15,6 @@
         </div>
 
     {% else %}
-
-        <h1 class="page_heading">Steam Player Cache</h1>
 
         <div id="cache_content">
             {% include 'SteamPlayerCache/list.inc.tpl' %}

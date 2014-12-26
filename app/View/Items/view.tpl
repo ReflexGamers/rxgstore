@@ -4,8 +4,7 @@
 {% set styles = 'rateit' %}
 {% set scripts = ['jquery.rateit.min', 'items'] %}
 
-
-{% block content %}
+{% block preheader %}
 
     {% if access.check('Items', 'update') %}
         <div class="item_edit_link">
@@ -17,11 +16,11 @@
         </div>
     {% endif %}
 
-    <h1 class="page_heading">{{ item.name }}</h1>
+{% endblock %}
+
+{% block content %}
 
     <div id="flash_container"></div>
-
-    {% include '/ShoutboxMessages/shoutbox.inc.tpl' %}
 
 
     <section id="item_details">
@@ -127,23 +126,11 @@
     </section>
 
 
-    {% if reviews or userCanRate %}
-
-        <section id="reviews">
-
-            <h2 class="page_subheading">Customer Reviews</h2>
-
-            {% if reviews %}
-                <p class="reviews_description">The number next to each review is the quantity of this item the reviewer purchased. Want your review to be seen first? Buy more of this item to push it to the top!</p>
-            {% endif %}
-
-            <div id="reviews_content">
-                {% include 'Reviews/list.inc.tpl' %}
-            </div>
-
-        </section>
-
-    {% endif %}
+    {% include 'Common/reviews.inc.tpl' with {
+        'condition': reviews or userCanRate,
+        'title': 'Customer Reviews',
+        'description': 'The number next to each review is the quantity of this item the reviewer purchased. Want your review to be seen first? Buy more of this item to push it to the top!'
+    } %}
 
 
     {% if topBuyers %}

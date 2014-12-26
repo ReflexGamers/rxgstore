@@ -18,8 +18,6 @@ class PaypalOrdersController extends AppController {
 
     public function beforeFilter() {
         parent::beforeFilter();
-
-        // allow logged in users only
         $this->Auth->deny();
     }
 
@@ -38,6 +36,7 @@ class PaypalOrdersController extends AppController {
             'maxMult' => max($options)
         ));
 
+        $this->loadShoutbox();
         $this->activity(false);
     }
 
@@ -67,7 +66,10 @@ class PaypalOrdersController extends AppController {
         ));
 
         if ($forceRender) {
-            $this->set('title', 'PayPal Activity');
+            $this->set(array(
+                'standalone' => true,
+                'title' => 'Recent CASH Purchases'
+            ));
             $this->render('/Activity/list');
         }
     }

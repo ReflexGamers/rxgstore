@@ -1,10 +1,8 @@
 {% extends 'Common/base.tpl' %}
 
-{% set title = 'RXG Store FAQ' %}
+{% set title = 'Help / FAQ' %}
 
 {% block content %}
-
-    <div class="page_heading">Help / FAQ</div>
 
     <div class="faq_item">
         <div class="faq_question">How do I use items?</div>

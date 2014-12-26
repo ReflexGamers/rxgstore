@@ -32,6 +32,7 @@ class ItemsController extends AppController {
      */
     public function faq() {
         // no data needed, but method is required for it to work
+        $this->loadShoutbox();
     }
 
     /**
@@ -87,7 +88,7 @@ class ItemsController extends AppController {
             'childServers' => implode($childServers, ',')
         ));
 
-        $this->loadShoutboxData();
+        $this->loadShoutbox();
         $this->server($server);
         $this->recent(false);
     }
@@ -175,6 +176,10 @@ class ItemsController extends AppController {
         ));
 
         if ($forceRender) {
+            $this->set(array(
+                'standalone' => true,
+                'title' => 'Store Activity'
+            ));
             $this->render('/Activity/list');
         }
     }
@@ -231,7 +236,7 @@ class ItemsController extends AppController {
         ));
 
         $this->loadItems();
-        $this->loadShoutboxData();
+        $this->loadShoutbox();
 
         $this->reviews($item, false);
         $this->activity($item, false);
@@ -282,6 +287,10 @@ class ItemsController extends AppController {
         ));
 
         if ($forceRender) {
+            $this->set(array(
+                'standalone' => true,
+                'title' => "{$item['name']} Reviews"
+            ));
             $this->render('/Reviews/list');
         }
     }
@@ -326,6 +335,10 @@ class ItemsController extends AppController {
         ));
 
         if ($forceRender) {
+            $this->set(array(
+                'standalone' => true,
+                'title' => "{$item['name']} Activity"
+            ));
             $this->render('/Activity/list');
         }
     }
@@ -527,6 +540,8 @@ class ItemsController extends AppController {
             'currencyMult' => Configure::read('Store.CurrencyMultiplier')
         ));
 
+        $this->loadShoutbox();
+
         $stock = $this->Item->Stock->findByItemId($item_id);
         if (!empty($stock)) {
             $this->set('stock', $stock['Stock']);
@@ -569,5 +584,6 @@ class ItemsController extends AppController {
         }
 
         $this->loadItems();
+        $this->loadShoutbox();
     }
 }
