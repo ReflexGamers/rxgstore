@@ -13,7 +13,7 @@
 
     {% if access.check('Debug') %}
         <p>You can edit permission overrides in the permissions.php config. They are automatically applied during every sync and will override anything coming from the other databases. Pressing rebuild will dump all permissions and re-create everything from scratch, then perform a sync.</p>
-        <p>You can also run those two functions from command line in the store folder with <code>cake permissions sync</code> and <code>cake permissions rebuild</code>.</p>
+        <p>You can also run those two functions from command line in the store folder with <code>./cake permissions sync</code> and <code>./cake permissions rebuild</code>.</p>
     {% endif %}
 
     <p>{{ html.link('Click here', {
