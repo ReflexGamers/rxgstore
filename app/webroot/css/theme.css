@@ -1804,7 +1804,7 @@ input[type="checkbox"].item_edit_input {
 }
 
 #shoutbox_content {
-    height: 116px;
+    height: 112px;
     background: #eee;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
     list-style: none;
