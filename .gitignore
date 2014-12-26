@@ -13,6 +13,7 @@
 /tags
 /.idea
 /app/webroot/deploy.php
+/cake
 
 # OS generated files #
 ######################
