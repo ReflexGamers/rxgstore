@@ -36,7 +36,7 @@ class ShoutboxMessagesController extends AppController {
             }
         }
 
-        $this->loadShoutboxData();
+        $this->loadShoutbox();
         $this->render('view.inc');
     }
 
@@ -62,6 +62,7 @@ class ShoutboxMessagesController extends AppController {
             } else {
 
                 $this->set('userCantPost', true);
+                $this->response->statusCode(405);
             }
         }
 

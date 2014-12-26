@@ -30,8 +30,8 @@
 
     var shoutbox = $('#shoutbox');
     var shoutboxButton = $('#shoutbox_button');
-    var updateInterval = $('#shoutbox_post_cooldown').val() * 1000;
-    var submitDelay = $('#shoutbox_update_interval').val() * 1000;
+    var postCooldown = $('#shoutbox_post_cooldown').val() * 1000;
+    var updateInterval = $('#shoutbox_update_interval').val() * 1000;
     var updateTimer;
 
     function restartUpdateTimer() {
@@ -128,12 +128,18 @@
                 scrollShoutbox();
             },
 
+            error: function (xhr, textStatus, errorThrown) {
+                $('#shoutbox_content').html(xhr.responseText);
+                $('#shoutbox_loading').fadeOut();
+                scrollShoutbox();
+            },
+
             complete: function(){
                 restartUpdateTimer();
                 btn.prop('disabled', true).addClass('disabled');
                 setTimeout(function(){
                     btn.prop('disabled', false).removeClass('disabled');
-                }, submitDelay)
+                }, postCooldown)
             }
 
         });
