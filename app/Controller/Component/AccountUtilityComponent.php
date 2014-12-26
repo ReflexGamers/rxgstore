@@ -148,8 +148,8 @@ class AccountUtilityComponent extends Component {
 
         if (empty($cookie) || strlen($cookie) != 32) return false;
 
-        $id = substr($cookie, 0, 16);
-        $code = substr($cookie, 16, 16);
+        $id = (int)substr($cookie, 0, 16);
+        $code = (int)substr($cookie, 16, 16);
         $remoteip = $this->controller->request->clientIp();
 
         $loginInfo = $this->SavedLogin->findActive($id, $code, $remoteip);
