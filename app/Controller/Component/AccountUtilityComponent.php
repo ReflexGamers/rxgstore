@@ -65,6 +65,15 @@ class AccountUtilityComponent extends Component {
             if (!($flags & self::LOGIN_FORCE)) {
                 CakeLog::write('login', "Error fetching data for $steamid.");
                 return false;
+            } else {
+                // login player in with this if steam was unresponsive
+                $steaminfo = array(
+                    'personaname' => 'Steam Error',
+                    'avatar' => '',
+                    'avatarmedium' => '',
+                    'avatarfull' => '',
+                    'profileurl'
+                );
             }
         } else {
             $steaminfo = $steaminfo[0];
