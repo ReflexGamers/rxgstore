@@ -48,9 +48,10 @@ class SteamPlayerCache extends AppModel {
      * If more than 100 steamids are provided, this will make multiple API calls back-to-back with 100 steamids each.
      *
      * @param array $steamids list of 64-bit steamids to refresh
+     * @param bool $precache whether to mark the players as pre-cached
      * @return array the result of the Steam API call
      */
-    public function refreshPlayers($steamids) {
+    public function refreshPlayers($steamids, $precache = false) {
 
         $cachedTime = $this->formatTimestamp(time());
 
@@ -69,7 +70,7 @@ class SteamPlayerCache extends AppModel {
             );
         }
 
-        $saveToCache = Hash::map($steamPlayers, '{n}', function($player) use ($cachedTime){
+        $saveToCache = Hash::map($steamPlayers, '{n}', function($player) use ($cachedTime, $precache){
             return array(
                 'steamid' => $player['steamid'],
                 'personaname' => $player['personaname'],
@@ -77,7 +78,8 @@ class SteamPlayerCache extends AppModel {
                 'avatar' => $player['avatar'],
                 'avatarmedium' => $player['avatarmedium'],
                 'avatarfull' => $player['avatarfull'],
-                'cached' => $cachedTime
+                'cached' => $cachedTime,
+                'precached' => $precache
             );
         });
 
@@ -171,12 +173,26 @@ class SteamPlayerCache extends AppModel {
     }
 
     /**
+     * Returns the number of pre-cached players in the cache.
+     *
+     * @return int the number of pre-cached players in the cache
+     */
+    public function countPrecachedPlayers() {
+
+        return $this->find('count', array(
+            'conditions' => array(
+                'precached = 1'
+            )
+        ));
+    }
+
+    /**
      * Formats the provided time (or current time by default) into a timestamp that MySQL understands.
      *
      * @param int $time optional time (defaults to current time)
      * @return string the formatted date
      */
-    private function formatTimestamp($time) {
+    protected function formatTimestamp($time) {
         return date('Y-m-d H:i:s', !empty($time) ? $time : time());
     }
 

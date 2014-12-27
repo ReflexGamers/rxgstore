@@ -21,12 +21,13 @@ class SteamCacheShell extends AppShell {
 
 		$valid = $this->SteamPlayerCache->countValidPlayers();
 		$expired = $this->SteamPlayerCache->countExpiredPlayers();
-
+		$precached = $this->SteamPlayerCache->countPrecachedPlayers();
 		$total = $valid + $expired;
 
-		$totalMessage = ($total !== $valid) ? " ($total total)" : "";
-
-		$this->out("The Steam Cache has $valid valid players and $expired expired players$totalMessage.");
+		$this->out("Total: $total");
+		$this->out("Valid: $valid");
+		$this->out("Expired: $expired");
+		$this->out("Precached: $precached");
 	}
 
 	/**
@@ -74,8 +75,11 @@ class SteamCacheShell extends AppShell {
 
 		$steamids = $this->User->getAllPlayersIngame();
 
-		$playerCount = count($steamids);
+		$count = count($steamids);
+		$this->SteamPlayerCache->refreshPlayers($steamids, true);
+		$message = "Precached $count players.";
 
-		$this->out("$playerCount players found in-game.");
+		CakeLog::write('steam_precache', $message);
+		$this->out($message);
 	}
 }
