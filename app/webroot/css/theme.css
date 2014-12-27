@@ -1929,6 +1929,8 @@ input[type="checkbox"].item_edit_input {
 .precached {
     color: #FFC128;
     font-size: 24px;
+    position: relative;
+    z-index: 100;
 }
 
 .cache_entry {
