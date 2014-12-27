@@ -59,7 +59,7 @@ class AccountUtilityComponent extends Component {
             return false;
         }
 
-        $steaminfo = $this->SteamPlayer->getByIds(array($steamid));
+        $steaminfo = $this->SteamPlayer->getPlayers(array($steamid));
 
         if (empty($steaminfo)) {
             if (!($flags & self::LOGIN_FORCE)) {
@@ -72,7 +72,7 @@ class AccountUtilityComponent extends Component {
                     'avatar' => '',
                     'avatarmedium' => '',
                     'avatarfull' => '',
-                    'profileurl'
+                    'profileurl' => ''
                 );
             }
         } else {
@@ -189,7 +189,7 @@ class AccountUtilityComponent extends Component {
     public function getSteamInfo($id, $isSteamid = false) {
 
         $steamid = $isSteamid ? $id : $this->SteamID64FromAccountID($id);
-        $steamPlayer = $this->SteamPlayer->getByIds(array($steamid));
+        $steamPlayer = $this->SteamPlayer->getPlayers(array($steamid));
 
         if (empty($steamPlayer)) return array();
 
@@ -220,7 +220,7 @@ class AccountUtilityComponent extends Component {
             $steamids[] = $this->SteamID64FromAccountID($acc);
         }
 
-        $steamPlayers = $this->SteamPlayer->getByIds($steamids);
+        $steamPlayers = $this->SteamPlayer->getPlayers($steamids);
         $members = $this->Access->getMemberInfo($accounts);
         $players = array();
 

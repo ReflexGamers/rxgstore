@@ -4,6 +4,10 @@ App::uses('AppModel', 'Model');
 /**
  * SteamPlayerCache Model
  *
+ * This model controls the Steam player caching system which stores the results of Steam API calls for later use.
+ * If a player's data was cached more than Store.SteamCacheDuration seconds ago, that player is considered 'expired'.
+ * Players that have not expired are considered 'valid'.
+ *
  * @property SteamPlayer $SteamPlayer
  *
  * Magic Methods (for inspection):
@@ -19,11 +23,24 @@ class SteamPlayerCache extends AppModel {
     public $order = 'SteamPlayerCache.cached desc';
 
 
+    protected $expireTime = null;
+
     /**
-     * Truncates the cache table (empties it out).
+     * Returns cached player data for all the provided steamids that have not expired.
+     *
+     * @param array $steamids list of 64-bit steamids
+     * @return array of cached player data
      */
-    public function clearAll() {
-        $this->query('truncate steam_player_cache');
+    public function getValidPlayers($steamids) {
+
+        return $this->find('all', array(
+            'conditions' => array(
+                'cached >' => $this->getExpireTime(),
+                'AND' => array(
+                    'steamid' => $steamids
+                )
+            )
+        ));
     }
 
     /**
@@ -33,9 +50,9 @@ class SteamPlayerCache extends AppModel {
      * @param array $steamids list of 64-bit steamids to refresh
      * @return array the result of the Steam API call
      */
-    public function refresh($steamids) {
+    public function refreshPlayers($steamids) {
 
-        $cachedTime = date('Y-m-d H:i:s', time());
+        $cachedTime = $this->formatTimestamp(time());
 
         $i = 0;
         $steamPlayers = array();
@@ -69,13 +86,100 @@ class SteamPlayerCache extends AppModel {
     }
 
     /**
+     * Truncates the cache table.
+     */
+    public function clearAll() {
+        $this->query('truncate steam_player_cache');
+    }
+
+    /**
      * Refreshes all steamids in the cache. Use sparingly.
      */
     public function refreshAll() {
 
         $steamids = Hash::extract($this->find('all', array('fields' => 'steamid')), '{n}.SteamPlayerCache.steamid');
-        $this->refresh($steamids);
+        $this->refreshPlayers($steamids);
     }
+
+    /**
+     * Returns the time to compare cached players against for determining which are expired. This time is basically
+     * Store.SteamCacheDuration seconds ago, so if the time a player was cached is less than this, that player is
+     * expired.
+     *
+     * @return int the time against which to compare players' cached time
+     */
+    public function getExpireTime() {
+
+        if (empty($this->expireTime)) {
+            $this->expireTime = $this->formatTimestamp(time() - Configure::read('Store.SteamCacheDuration'));
+        }
+
+        return $this->expireTime;
+    }
+
+    /**
+     * Refreshes all expired players in the cache.
+     */
+    public function refreshExpiredPlayers() {
+
+        $steamids = Hash::extract($this->find('all', array(
+            'fields' => 'steamid',
+            'conditions' => array(
+                'cached <' => $this->getExpireTime()
+            )
+        )), '{n}.SteamPlayerCache.steamid');
+
+        $this->refreshPlayers($steamids);
+    }
+
+    /**
+     * Deletes all expired players from the cache.
+     */
+    public function pruneExpiredPlayers() {
+
+        $this->deleteAll(array(
+            'cached <' => $this->getExpireTime()
+        ), false);
+    }
+
+    /**
+     * Returns the number of valid players in the cache. Valid players are not expired.
+     *
+     * @return int the number of valid players in the cache
+     */
+    public function countValidPlayers() {
+
+        return $this->find('count', array(
+            'conditions' => array(
+                'cached >=' => $this->getExpireTime()
+            )
+        ));
+    }
+
+    /**
+     * Returns the number of expired players in the cache.
+     *
+     * @return int the number of expired players in the cache
+     */
+    public function countExpiredPlayers() {
+
+        return $this->find('count', array(
+            'conditions' => array(
+                'cached <' => $this->getExpireTime()
+            )
+        ));
+    }
+
+    /**
+     * Formats the provided time (or current time by default) into a timestamp that MySQL understands.
+     *
+     * @param int $time optional time (defaults to current time)
+     * @return string the formatted date
+     */
+    private function formatTimestamp($time) {
+        return date('Y-m-d H:i:s', !empty($time) ? $time : time());
+    }
+
 
 /**
  * Validation rules

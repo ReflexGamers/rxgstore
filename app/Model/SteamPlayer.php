@@ -18,19 +18,9 @@ class SteamPlayer extends AppModel {
      * @param array $steamids list of 64-bit steamids
      * @return array of player data in no particular order
      */
-    public function getByIds($steamids) {
+    public function getPlayers($steamids) {
 
-        $cacheDuration = Configure::read('Store.SteamCacheDuration');
-        $cacheExpireTime = date('Y-m-d H:i:s', time() - $cacheDuration);
-
-        $cache = $this->SteamPlayerCache->find('all', array(
-            'conditions' => array(
-                'cached >' => $cacheExpireTime,
-                'AND' => array(
-                    'steamid' => $steamids
-                )
-            )
-        ));
+        $cache = $this->SteamPlayerCache->getValidPlayers($steamids);
 
         $countDesired = count($steamids);
         $countFound = count($cache);
@@ -43,16 +33,11 @@ class SteamPlayer extends AppModel {
         } else {
 
             $beginTime = microtime(true);
-            $steamPlayers = $this->SteamPlayerCache->refresh($steamids);
+            $steamPlayers = $this->SteamPlayerCache->refreshPlayers($steamids);
             $endTime = microtime(true);
 
             $timeTaken = number_format($endTime - $beginTime, 3);
             CakeLog::write('steam', "Tried to fetch $countDesired players from the Steam cache but found only $countFound. Steam API used. Took $timeTaken seconds.");
-
-            // prune expired records
-            $this->SteamPlayerCache->deleteAll(array(
-                'cached <' => $cacheExpireTime
-            ));
 
             if (empty($steamPlayers)) {
                 CakeLog::write('steam', 'Steam API provided no response or did not respond in time. Cached players used.');
@@ -69,7 +54,7 @@ class SteamPlayer extends AppModel {
      * @param int $steamid the 64-bit steamid of the player
      * @return array of player data for the specified steamid
      */
-    public function getBySteamId($steamid) {
+    public function getPlayer($steamid) {
         $players = $this->find('all', array(
             'conditions' => array(
                 'steamids' => array($steamid)

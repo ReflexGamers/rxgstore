@@ -98,6 +98,43 @@ class User extends AppModel {
     }
 
     /**
+     * Returns a list of steamids for all the players currently in-game in store-enabled servers that are registered
+     * properly in the servers table. Servers running the store plugin that are not properly registered will be ignored.
+     *
+     * @return array of 64-bit steamids
+     */
+    public function getAllPlayersIngame() {
+
+        $ids = Hash::extract($this->find('all', array(
+            'fields' => 'user_id',
+            'conditions' => array(
+                'ingame >' => time() - Configure::read('Store.MaxTimeToConsiderInGame')
+            ),
+            'joins' => array(
+                array(
+                    'table' => 'server',
+                    'alias' => 'Server',
+                    'conditions' => array(
+                        'User.server = server.server_ip'
+                    )
+                )
+            )
+        )), '{n}.User.user_id');
+
+        if (empty($ids)) {
+            return array();
+        }
+
+        $steamids = array();
+
+        foreach ($ids as $id) {
+            $steamids[] = SteamID::Parse($id, SteamID::FORMAT_S32)->Format(SteamID::FORMAT_STEAMID64);
+        }
+
+        return $steamids;
+    }
+
+    /**
      * Returns an array of all pending gifts for the specified user. Each gift will be an array of quantities indexed
      * by item_id, which represents how many of each item is in the gift.
      *

@@ -101,7 +101,7 @@ class SteamPlayerCacheController extends AppController {
         $admin_steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
         CakeLog::write('admin', "$admin_steamid force refreshed $steamid in the Steam cache.");
 
-        $this->SteamPlayerCache->refresh(array($steamid));
+        $this->SteamPlayerCache->refreshPlayers(array($steamid));
 
         $player = $this->SteamPlayerCache->findBySteamid($steamid)['SteamPlayerCache'];
         $player['name'] = $player['personaname'];
