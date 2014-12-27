@@ -1926,7 +1926,7 @@ input[type="checkbox"].item_edit_input {
     transition: all 0.2s;
 }
 
-.cache_precached {
+.precached {
     color: #FFC128;
     font-size: 24px;
 }

@@ -4,6 +4,9 @@
 
 <td class="quickauth_player">
     <div class="quickauth_flags">
+        {% if entry.precached %}
+            <i class="fa fa-bolt precached" title="Steam data precached"></i>
+        {% endif %}
         <div class="quickauth_flag {{ entry.redeemed ? 'redeemed' : 'unredeemed' }}" title="Token {{ entry.redeemed ? 'redeemed' : 'never redeemed' }}">
             {% if entry.is_member %}
                 <span class="quickauth_member" title="Authenticated as a Member">M</span>
