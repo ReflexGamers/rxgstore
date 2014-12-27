@@ -2343,7 +2343,7 @@ button::-moz-focus-inner {
 .quickauth_player {
     font-size: 20px;
     min-width: 300px;
-    max-width: 380px;
+    max-width: 360px;
     white-space: nowrap;
     overflow: hidden;
 }
