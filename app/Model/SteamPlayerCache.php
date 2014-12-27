@@ -187,6 +187,22 @@ class SteamPlayerCache extends AppModel {
     }
 
     /**
+     * Returns true/false depending on whether the player with the specified steamid is precached.
+     *
+     * @param int $steamid the 64-bit steamid of the player to check
+     * @return bool whether the player is precached
+     */
+    public function isPlayerPrecached($steamid) {
+
+        return (bool)Hash::get($this->find('first', array(
+            'fields' => 'precached',
+            'conditions' => array(
+                'steamid' => $steamid
+            )
+        )), 'SteamPlayerCache.precached', false);
+    }
+
+    /**
      * Formats the provided time (or current time by default) into a timestamp that MySQL understands.
      *
      * @param int $time optional time (defaults to current time)

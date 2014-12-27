@@ -10,6 +10,7 @@ App::uses('AppController', 'Controller');
  *
  * Magic Properties (for inspection):
  * @property Server $Server
+ * @property SteamPlayerCache $SteamPlayerCache
  */
 class QuickAuthController extends AppController {
     public $components = array('Acl', 'Paginator', 'RequestHandler');
@@ -146,11 +147,17 @@ class QuickAuthController extends AppController {
             // silently ignore if already redeemed (probably double request)
             if (!$auth['redeemed']) {
 
-                // set token as redeemed in db
-                $this->QuickAuth->id = $auth['quick_auth_id'];
-                $this->QuickAuth->saveField('redeemed', 1);
-
                 $user_id = $auth['user_id'];
+
+                // was the user's steam data precached
+                $this->loadModel('SteamPlayerCache');
+                $auth['precached'] = $this->SteamPlayerCache->isPlayerPrecached(
+                    $this->AccountUtility->SteamID64FromAccountID($user_id)
+                );
+
+                // set token as redeemed and save
+                $auth['redeemed'] = true;
+                $this->QuickAuth->save($auth);
 
                 // if confirmed member, promote to member if not already set
                 if ($auth['is_member'] && !$this->Access->checkIsMember($user_id)) {
