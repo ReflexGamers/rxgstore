@@ -115,7 +115,7 @@ class User extends AppModel {
                     'table' => 'server',
                     'alias' => 'Server',
                     'conditions' => array(
-                        'User.server = server.server_ip'
+                        'User.server = Server.server_ip'
                     )
                 )
             )
