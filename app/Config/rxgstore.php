@@ -6,7 +6,7 @@ $config['Store'] = array(
 		'PostCooldown' => 60, //1 minute
 		'UpdateInterval' => 30 //30 seconds
 	),
-	'SteamCacheDuration' => 216000, //60 hours
+	'SteamCacheDuration' => 14400, //4 hours
 	'MaxTimeToConsiderInGame' => 300, //5 minutes
 	'QuickAuth' => array(
 		'TokenExpire' => 180, //expires after 3 minutes
