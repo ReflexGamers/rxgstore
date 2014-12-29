@@ -3,6 +3,7 @@ App::uses('AppModel', 'Model');
 /**
  * User Model
  *
+ * @property Aro $Aro
  * @property Gift $Gift
  * @property Order $Order
  * @property PaypalOrder $PaypalOrder
@@ -19,7 +20,9 @@ class User extends AppModel {
     public $useTable = 'user';
     public $primaryKey = 'user_id';
 
-    public $hasOne = 'UserPreference';
+    public $hasOne = array(
+        'Aro', 'SteamPlayerCache', 'UserPreference'
+    );
 
     public $hasMany = array(
         'Gift', 'Order', 'PaypalOrder', 'QuickAuth', 'Rating', 'RewardRecipient', 'SavedLogin', 'ShoutboxMessage', 'UserItem'
@@ -101,11 +104,11 @@ class User extends AppModel {
      * Returns a list of steamids for all the players currently in-game in store-enabled servers that are registered
      * properly in the servers table. Servers running the store plugin that are not properly registered will be ignored.
      *
-     * @return array of 64-bit steamids
+     * @return array of signed 32-bit steamids (user_id)
      */
     public function getAllPlayersIngame() {
 
-        $ids = Hash::extract($this->find('all', array(
+        $accounts = Hash::extract($this->find('all', array(
             'fields' => 'user_id',
             'conditions' => array(
                 'ingame >' => time() - Configure::read('Store.MaxTimeToConsiderInGame')
@@ -121,17 +124,7 @@ class User extends AppModel {
             )
         )), '{n}.User.user_id');
 
-        if (empty($ids)) {
-            return array();
-        }
-
-        $steamids = array();
-
-        foreach ($ids as $id) {
-            $steamids[] = SteamID::Parse($id, SteamID::FORMAT_S32)->Format(SteamID::FORMAT_STEAMID64);
-        }
-
-        return $steamids;
+        return $accounts;
     }
 
     /**

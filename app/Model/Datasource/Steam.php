@@ -19,6 +19,7 @@ class Steam extends DataSource {
         $results = array();
 
         $modelName = Inflector::camelize($model->useTable);
+        $timeout = !empty($queryData['timeout']) ? $queryData['timeout'] : 30;
 
         switch($model->useTable)
         {
@@ -39,7 +40,7 @@ class Steam extends DataSource {
                 $url .= "?appid={$queryData['conditions']['appid']}&count={$queryData['conditions']['count']}&maxlength={$queryData['conditions']['maxlength']}&format=json";
 
                 //$response = json_decode($this->connection->get($url), true);
-                $response = json_decode($this->_getContents($this->apiUrl . $url), true);
+                $response = json_decode($this->_getContents($this->apiUrl . $url, $timeout), true);
                 if (empty($response)) {
                     $results[$modelName] = array();
                     break;
@@ -62,7 +63,7 @@ class Steam extends DataSource {
                 $url .= "?key={$this->config['apikey']}&steamids={$steamids}&format=json";
 
                 //$response = json_decode($this->connection->get($url), true);
-                $response = json_decode($this->_getContents($this->apiUrl . $url), true);
+                $response = json_decode($this->_getContents($this->apiUrl . $url, $timeout), true);
                 if (empty($response)) {
                     $results[$modelName] = array();
                     break;
@@ -83,7 +84,7 @@ class Steam extends DataSource {
                 $url .= "?gameid={$queryData['conditions']['gameid']}&format=json";
 
                 //$response = json_decode($this->connection->get($url), true);
-                $response = json_decode($this->_getContents($this->apiUrl . $url), true);
+                $response = json_decode($this->_getContents($this->apiUrl . $url, $timeout), true);
                 if (empty($response)) {
                     $results[$modelName] = array();
                     break;
@@ -109,12 +110,13 @@ class Steam extends DataSource {
         return $model->_schema;
     }
 
-    protected function _getContents($url) {
+    protected function _getContents($url, $timeout = 30) {
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch,CURLOPT_FOLLOWLOCATION,1);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
 
         $data = curl_exec($ch);
 

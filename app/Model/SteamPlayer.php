@@ -11,18 +11,19 @@ class SteamPlayer extends AppModel {
 
     /**
      * Gets player data for all of the players in the provided list of steamids. If all of the players are saved in the
-     * cache and have not expired according to Store.SteamCacheDuration, the data will be pulled from the cache. If not,
-     * all players will be re-fetched with the Steam API and saved again. This aggressive approach ensures fewer calls
-     * to the Steam API overall, but the calls that do happen may take longer.
+     * cache and have not expired according to Store.SteamCache.Duration, the data will be pulled from the cache. If
+     * not, all players will be re-fetched with the Steam API and saved again. This aggressive approach ensures fewer
+     * calls to the Steam API overall, but the calls that do happen may take longer.
      *
-     * @param array $steamids list of 64-bit steamids
+     * @param array $accounts list of signed 32-bit steamids (user_id)
+     * @param int $timeout optional number of seconds for which to limit the request
      * @return array of player data in no particular order
      */
-    public function getPlayers($steamids) {
+    public function getPlayers($accounts, $timeout = 30) {
 
-        $cache = $this->SteamPlayerCache->getValidPlayers($steamids);
+        $cache = $this->SteamPlayerCache->getPlayers($accounts);
 
-        $countDesired = count($steamids);
+        $countDesired = count($accounts);
         $countFound = count($cache);
 
         if (!empty($cache) && $countFound == $countDesired) {
@@ -33,7 +34,7 @@ class SteamPlayer extends AppModel {
         } else {
 
             $beginTime = microtime(true);
-            $steamPlayers = $this->SteamPlayerCache->refreshPlayers($steamids);
+            $steamPlayers = $this->SteamPlayerCache->refreshPlayers($accounts, $timeout);
             $endTime = microtime(true);
 
             $timeTaken = number_format($endTime - $beginTime, 3);

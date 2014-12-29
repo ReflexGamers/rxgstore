@@ -214,18 +214,13 @@ class AccountUtilityComponent extends Component {
         if (empty($accounts)) return array();
 
         $accounts = array_unique($accounts);
-        $steamids = array();
 
-        foreach ($accounts as $acc) {
-            $steamids[] = $this->SteamID64FromAccountID($acc);
-        }
-
-        $steamPlayers = $this->SteamPlayer->getPlayers($steamids);
+        $steamPlayers = $this->SteamPlayer->getPlayers($accounts);
         $members = $this->Access->getMemberInfo($accounts);
         $players = array();
 
         foreach ($steamPlayers as $player) {
-            $user_id = $this->AccountIDFromSteamID64($player['steamid']);
+            $user_id = $player['user_id'];
             $players[$user_id] = array(
                 'steamid' => $player['steamid'],
                 'name' => $player['personaname'],
