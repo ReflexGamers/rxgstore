@@ -52,14 +52,16 @@ class AccountUtilityComponent extends Component {
      */
     public function login($steamid, $flags = 0) {
 
+        $user_id = $this->AccountIDFromSteamID64($steamid);
+
         if (!($flags & self::LOGIN_SKIP_BAN_CHECK) && $this->Permissions->isPlayerBanned($steamid)) {
             $this->Session->setFlash('You are currently banned and may not use the store.', 'flash_closable', array('class' => 'error'));
-            $this->SavedLogin->deleteForUser($this->AccountIDFromSteamID64($steamid));
+            $this->SavedLogin->deleteForUser($user_id);
             $this->Cookie->delete('saved_login');
             return false;
         }
 
-        $steaminfo = $this->SteamPlayer->getPlayers(array($steamid));
+        $steaminfo = $this->SteamPlayer->getPlayers(array($user_id));
 
         if (empty($steaminfo)) {
             if (!($flags & self::LOGIN_FORCE)) {
@@ -80,8 +82,6 @@ class AccountUtilityComponent extends Component {
         }
 
         // rxg csgo clan id: 103582791434658915
-
-        $user_id = $this->AccountIDFromSteamID64($steamid);
 
         if (!$this->User->exists($user_id)) {
             $this->User->save(array(
@@ -188,14 +188,14 @@ class AccountUtilityComponent extends Component {
      */
     public function getSteamInfo($id, $isSteamid = false) {
 
-        $steamid = $isSteamid ? $id : $this->SteamID64FromAccountID($id);
-        $steamPlayer = $this->SteamPlayer->getPlayers(array($steamid));
+        $user_id = $isSteamid ? $this->AccountIDFromSteamID64($id) : $id;
+        $steamPlayer = $this->SteamPlayer->getPlayers(array($user_id));
 
         if (empty($steamPlayer)) return array();
 
         $player = $steamPlayer[0];
         $player['name'] = $player['personaname'];
-        $player['member'] = $this->Access->checkIsMember($isSteamid ? $this->AccountIDFromSteamID64($id) : $id);
+        $player['member'] = $this->Access->checkIsMember($user_id);
 
         return $player;
     }

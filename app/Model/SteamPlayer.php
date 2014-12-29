@@ -52,13 +52,13 @@ class SteamPlayer extends AppModel {
     /**
      * Gets a single player from the cache by steamid.
      *
-     * @param int $steamid the 64-bit steamid of the player
+     * @param int $user_id the signed 32-bit steamid (user_id) of the player
      * @return array of player data for the specified steamid
      */
-    public function getPlayer($steamid) {
+    public function getPlayer($user_id) {
         $players = $this->find('all', array(
             'conditions' => array(
-                'steamids' => array($steamid)
+                'user_id' => array($user_id)
             )
         ))['SteamPlayers'];
 
