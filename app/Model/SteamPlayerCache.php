@@ -264,15 +264,15 @@ class SteamPlayerCache extends AppModel {
     /**
      * Returns true/false depending on whether the player with the specified steamid is precached.
      *
-     * @param int $steamid the 64-bit steamid of the player to check
+     * @param int $user_id signed 32-bit steamid of the player to check
      * @return bool whether the player is precached
      */
-    public function isPlayerPrecached($steamid) {
+    public function isPlayerPrecached($user_id) {
 
         return (bool)Hash::get($this->find('first', array(
             'fields' => 'precached',
             'conditions' => array(
-                'steamid' => $steamid
+                'user_id' => $user_id
             )
         )), 'SteamPlayerCache.precached', false);
     }
