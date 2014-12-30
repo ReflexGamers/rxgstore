@@ -758,6 +758,12 @@ input.cart_quantity_input:focus {
     /*width: 440px;*/
 }
 
+.player_ingame {
+    color: #0a0;
+    font-size: 125%;
+    cursor: default;
+}
+
 .player_member {
     color: #fff;
     font-weight: bold;

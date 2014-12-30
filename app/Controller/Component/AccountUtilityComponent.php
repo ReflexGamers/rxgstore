@@ -195,6 +195,7 @@ class AccountUtilityComponent extends Component {
         $player = $steamPlayer[0];
         $player['name'] = $player['personaname'];
         $player['member'] = $this->Access->checkIsMember($user_id);
+        $player['ingame'] = ($this->User->getCurrentServer($user_id) !== false);
 
         return $player;
     }
@@ -216,6 +217,7 @@ class AccountUtilityComponent extends Component {
 
         $steamPlayers = $this->SteamPlayer->getPlayers($accounts);
         $members = $this->Access->getMemberInfo($accounts);
+        $playerServers = $this->User->getIngamePlayerServers();
         $players = array();
 
         foreach ($steamPlayers as $player) {
@@ -228,7 +230,8 @@ class AccountUtilityComponent extends Component {
                 'avatarfull' => $player['avatarfull'],
                 'profile' => $player['profileurl'],
                 'member' => !empty($members[$user_id]),
-                'division' => !empty($members[$user_id]['division']) ? $members[$user_id]['division'] : ''
+                'division' => !empty($members[$user_id]['division']) ? $members[$user_id]['division'] : '',
+                'server' => !empty($playerServers[$user_id]) ? $playerServers[$user_id] : ''
             );
         }
 

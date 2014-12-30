@@ -20,6 +20,9 @@
     }, {
         'class': 'player_link'
     }) -}}
+    {% if player.server %}
+        <i class="fa fa-gamepad player_ingame" title="Currently in-game"></i>
+    {% endif %}
 {% endmacro %}
 
 {% macro memberTag(player) %}

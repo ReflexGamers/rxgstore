@@ -93,7 +93,7 @@ class User extends AppModel {
 
         $gameData = Hash::extract($this->read(array('server', 'ingame'), $user_id), 'User');
 
-        if (!empty($gameData['server']) && $gameData['ingame'] + Configure::read('Store.MaxTimeToConsiderInGame') >= time()) {
+        if (!empty($gameData['server']) && $gameData['ingame'] > $this->getIngameTime()) {
             return $gameData['server'];
         } else {
             return false;
@@ -111,7 +111,7 @@ class User extends AppModel {
         $accounts = Hash::extract($this->find('all', array(
             'fields' => 'user_id',
             'conditions' => array(
-                'ingame >' => time() - Configure::read('Store.MaxTimeToConsiderInGame')
+                'ingame >' => $this->getIngameTime()
             ),
             'joins' => array(
                 array(
@@ -125,6 +125,23 @@ class User extends AppModel {
         )), '{n}.User.user_id');
 
         return $accounts;
+    }
+
+    /**
+     * Returns a list of all ingame players and the server each one is in.
+     *
+     * @return array
+     */
+    public function getIngamePlayerServers() {
+
+        return $this->find('list', array(
+            'fields' => array(
+                'user_id', 'server'
+            ),
+            'conditions' => array(
+                'ingame >' => $this->getIngameTime()
+            )
+        ));
     }
 
     /**
@@ -454,6 +471,16 @@ class User extends AppModel {
 
         return Hash::combine($db->fetchAll($rawQuery), '{n}.Item.item_id', '{n}.{n}.quantity');
     }
+
+    /**
+     * Returns the time after which players should still be considered ingame.
+     *
+     * @return int
+     */
+    private function getIngameTime() {
+        return time() - Configure::read('Store.MaxTimeToConsiderInGame');
+    }
+
 
 /**
  * Validation rules
