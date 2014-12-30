@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="activity_date">
-                    sent you a {{ isReward ? 'reward' : 'gift' }} {{ fn.time(_context, gift.date) }}
+                    sent you a {{ isReward ? 'reward' : 'gift' }} <i class="fa fa-gift {{ isReward ? 'icon_reward' : 'icon_gift' }}"></i> {{ fn.time(_context, gift.date) }}
                 </div>
 
                 {% include 'Items/list.inc.tpl' with {
