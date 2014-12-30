@@ -2319,6 +2319,14 @@ button::-moz-focus-inner {
 }
 
 
+.icon_gift,
+.icon_reward {
+    font-size: 125%;
+    color: #06c;
+    cursor: default;
+}
+
+
 
 .quickauth_total {
     font-weight: 400;

@@ -27,7 +27,7 @@
             <div class="player_links">
                 <a href="{{ player.profile }}">view steam profile</a>
                 {% if user and user.user_id != user_id %}
-                    <br>{{ html.link('send a gift', {'controller': 'Gifts', 'action': 'compose', 'id': player.steamid}) }}
+                    <br>{{ html.link('send a gift', {'controller': 'Gifts', 'action': 'compose', 'id': player.steamid}) }} <i class="fa fa-gift icon_gift"></i>
                 {% endif %}
             </div>
         </div>

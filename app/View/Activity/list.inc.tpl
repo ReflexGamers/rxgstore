@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="activity_date">
-                    sent a gift {{ fn.formatTime(_context, gift.date) }} to
+                    sent a gift <i class="fa fa-gift icon_gift"></i> {{ fn.formatTime(_context, gift.date) }} to
                 </div>
 
                 <div class="activity_player recipient">
@@ -87,7 +87,7 @@
                 </div>
 
                 <div class="activity_date">
-                    sent a reward {{ fn.formatTime(_context, reward.date) }} to
+                    sent a reward <i class="fa fa-gift icon_reward"></i> {{ fn.formatTime(_context, reward.date) }} to
                     {% if num_recipients > 3 %}
                         <a class="recipient_expand">{{ num_recipients }} players</a>
                     {% endif %}
