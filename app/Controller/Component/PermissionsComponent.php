@@ -20,12 +20,12 @@ class PermissionsComponent extends Component {
     /**
      * Queries the Sourcebans database to see if the player is banned and returns true/false.
      *
-     * @param int $steamid the 64-bit steamid of the player
+     * @param int $user_id the signed 32-bit steamid of the player
      * @return bool whether the player is currently banned
      */
-    public function isPlayerBanned($steamid) {
+    public function isPlayerBanned($user_id) {
 
-        $steamid32 = SteamID::Parse($steamid, SteamID::FORMAT_STEAMID64)->Format(SteamID::FORMAT_STEAMID32);
+        $steamid32 = SteamID::Parse($user_id, SteamID::FORMAT_S32)->Format(SteamID::FORMAT_STEAMID32);
 
         preg_match('/STEAM_1:([0-1]:[0-9]+)/', $steamid32, $matches);
         $steamPattern = 'STEAM_[0-1]:' . $matches[1];

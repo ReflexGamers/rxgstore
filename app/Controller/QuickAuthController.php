@@ -189,7 +189,7 @@ class QuickAuthController extends AppController {
                         }
 
                         // try to login user
-                        if (!$this->AccountUtility->loginUser($user_id, $flags)) {
+                        if (!$this->AccountUtility->login($user_id, $flags)) {
 
                             // failed to login user
                             CakeLog::write('quickauth', "Failed to login user $user_id with token $tokenId-$tokenValue.");

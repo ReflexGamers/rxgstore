@@ -32,29 +32,28 @@ class AccountUtilityComponent extends Component {
     }
 
     /**
-     * Logs in the current user to the account specified by user_id. Different from login(), it uses user_id instead of
-     * steamid. This is used by QuickAuth.
-     *
-     * @param int $user_id the signed 32-bit steamid of the user to login
-     * @param int $flags login flags
-     * @return bool success of login attempt
-     */
-    public function loginUser($user_id, $flags = 0) {
-        return $this->login($this->SteamID64FromAccountID($user_id), $flags);
-    }
-
-    /**
-     * Logs in a player by steamid.
+     * Logs in the current user to the account specified by a 64-bit steamid.
      *
      * @param int $steamid the 64-bit steamid of the user to login
      * @param int $flags login flags
      * @return bool success of login attempt
      */
-    public function login($steamid, $flags = 0) {
+    public function loginSteamid($steamid, $flags = 0) {
+        return $this->login($this->AccountIDFromSteamID64($steamid), $flags);
+    }
 
-        $user_id = $this->AccountIDFromSteamID64($steamid);
+    /**
+     * Logs in the current user to the account specified by by user_id (signed 32-bit steamid).
+     *
+     * @param int $user_id signed 32-bit steamid of the user to login
+     * @param int $flags login flags
+     * @return bool success of login attempt
+     */
+    public function login($user_id, $flags = 0) {
 
-        if (!($flags & self::LOGIN_SKIP_BAN_CHECK) && $this->Permissions->isPlayerBanned($steamid)) {
+        $steamid = $this->SteamID64FromAccountID($user_id);
+
+        if (!($flags & self::LOGIN_SKIP_BAN_CHECK) && $this->Permissions->isPlayerBanned($user_id)) {
             $this->Session->setFlash('You are currently banned and may not use the store.', 'flash_closable', array('class' => 'error'));
             $this->SavedLogin->deleteForUser($user_id);
             $this->Cookie->delete('saved_login');
@@ -70,7 +69,7 @@ class AccountUtilityComponent extends Component {
             } else {
                 // login player in with this if steam was unresponsive
                 $steaminfo = array(
-                    'personaname' => 'Steam Error',
+                    'personaname' => 'Logged In',
                     'avatar' => '',
                     'avatarmedium' => '',
                     'avatarfull' => '',
@@ -171,7 +170,7 @@ class AccountUtilityComponent extends Component {
 
             // log the user in
             if (!$updateOnly) {
-                $this->loginUser($loginInfo['SavedLogin']['user_id']);
+                $this->login($loginInfo['SavedLogin']['user_id']);
                 CakeLog::write('saved_login', "Saved Login token $id-$code successfully used.");
             }
         }

@@ -134,7 +134,7 @@ class UsersController extends AppController {
     public function impersonate($steamid) {
 
         if ($this->Access->check('Debug')) {
-            $this->AccountUtility->login($steamid);
+            $this->AccountUtility->loginSteamid($steamid);
         }
 
         $this->redirect(array('controller' => 'Users', 'action' => 'profile', 'id' => $steamid));
@@ -177,7 +177,7 @@ class UsersController extends AppController {
                 $oid = $openid->identity;
                 $steamid = substr($oid, strrpos($oid, "/") + 1);
                 $loginFlags = ($this->Session->read('rememberme')) ? AccountUtilityComponent::LOGIN_SAVE : 0;
-                $this->AccountUtility->login($steamid, $loginFlags);
+                $this->AccountUtility->loginSteamid($steamid, $loginFlags);
             }
         } catch (ErrorException $e) {
             echo 'auth error: ' . $e->getMessage();
