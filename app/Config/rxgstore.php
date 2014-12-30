@@ -7,7 +7,7 @@ $config['Store'] = array(
 		'UpdateInterval' => 30 //30 seconds
 	),
 	'SteamCache' => array(
-		'Duration' => 14400, //4 hours
+		'Duration' => 86400, //24 hours
 		'PrecacheQuickAuthTime' => 604800 //1 week
 	),
 	'MaxTimeToConsiderInGame' => 300, //5 minutes
