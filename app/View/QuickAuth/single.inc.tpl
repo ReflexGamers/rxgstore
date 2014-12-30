@@ -4,8 +4,8 @@
 
 <td class="quickauth_player">
     <div class="quickauth_flags">
-        {% if entry.precached %}
-            <i class="fa fa-bolt precached" title="Steam data precached"></i>
+        {% if entry.cached %}
+            <i class="fa fa-bolt player_cached {{ entry.cached == 2 ? 'player_precached' : '' }}" title="Steam data {{ entry.cached == 2 ? 'pre' : '' }}cached"></i>
         {% endif %}
         <div class="quickauth_flag {{ entry.redeemed ? 'redeemed' : 'unredeemed' }}" title="Token {{ entry.redeemed ? 'redeemed' : 'never redeemed' }}">
             {% if entry.is_member %}

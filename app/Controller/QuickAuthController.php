@@ -151,7 +151,7 @@ class QuickAuthController extends AppController {
 
                 // was the user's steam data precached
                 $this->loadModel('SteamPlayerCache');
-                $auth['precached'] = $this->SteamPlayerCache->isPlayerPrecached($user_id);
+                $auth['cached'] = $this->SteamPlayerCache->getPlayerStatus($user_id);
 
                 // set token as redeemed and save
                 $auth['redeemed'] = true;

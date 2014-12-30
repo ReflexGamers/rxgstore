@@ -2,7 +2,7 @@
 
 <div class="cache_time">
     {% if player.precached %}
-        <i class="fa fa-bolt precached" title="Steam data precached"></i> pre
+        <i class="fa fa-bolt player_cached player_precached" title="Steam data precached"></i> pre
     {%- endif -%}
     cached {{ fn.time(_context, player.cached) }}
 </div>
