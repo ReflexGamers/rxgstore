@@ -103,7 +103,7 @@ class SteamCacheShell extends AppShell {
 	 */
 	public function precache_known() {
 
-		set_time_limit(300);
+		set_time_limit(90);
 
 		$accounts = $this->SteamPlayerCache->getKnownPlayers();
 
