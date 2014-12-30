@@ -63,6 +63,7 @@ class SteamPlayerCacheController extends AppController {
             $accounts[] = $this->AccountUtility->AccountIDFromSteamID64($player['steamid']);
         }
         $members = $this->Access->getMemberInfo($accounts);
+        $playerServers = $this->User->getIngamePlayerServers();
 
         $i = 0;
         foreach ($players as &$player) {
@@ -70,6 +71,7 @@ class SteamPlayerCacheController extends AppController {
             $player['name'] = $player['personaname'];
             $player['member'] = !empty($members[$user_id]);
             $player['division'] = !empty($members[$user_id]['division']) ? $members[$user_id]['division'] : '';
+            $player['server'] = !empty($playerServers[$user_id]) ? $playerServers[$user_id] : '';
         }
 
         $this->set(array(
