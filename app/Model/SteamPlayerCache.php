@@ -101,8 +101,8 @@ class SteamPlayerCache extends AppModel {
     }
 
     /**
-     * Returns a list of steamids for all known players. Known players have completed purchases, received rewards, or
-     * used QuickAuth.
+     * Returns a list of steamids for all known players. Known players are members, have completed purchases or received
+     * rewards.
      *
      * @return array of signed 32-bit steamids (user_id)
      */
@@ -118,25 +118,25 @@ class SteamPlayerCache extends AppModel {
             'alias' => 'Order'
         ), $this->User->Order);
 
-        $quickauthQuery = $db->buildStatement(array(
-            'fields' => array(
-                'User.user_id'
-            ),
-            'conditions' => array(
-                'last_activity >' => (time() - Configure::read('Store.SteamCache.PrecacheQuickAuthTime'))
-            ),
-            'joins' => array(
-                array(
-                    'table' => $db->fullTableName($this->User->QuickAuth),
-                    'alias' => 'QuickAuth',
-                    'conditions' => array(
-                        'User.user_id = QuickAuth.user_id'
-                    )
-                )
-            ),
-            'table' => $db->fullTableName($this->User),
-            'alias' => 'User',
-        ), $this->User);
+//        $quickauthQuery = $db->buildStatement(array(
+//            'fields' => array(
+//                'User.user_id'
+//            ),
+//            'conditions' => array(
+//                'last_activity >' => (time() - Configure::read('Store.SteamCache.PrecacheQuickAuthTime'))
+//            ),
+//            'joins' => array(
+//                array(
+//                    'table' => $db->fullTableName($this->User->QuickAuth),
+//                    'alias' => 'QuickAuth',
+//                    'conditions' => array(
+//                        'User.user_id = QuickAuth.user_id'
+//                    )
+//                )
+//            ),
+//            'table' => $db->fullTableName($this->User),
+//            'alias' => 'User',
+//        ), $this->User);
 
         $rewardQuery = $db->buildStatement(array(
             'fields' => array(
@@ -157,7 +157,7 @@ class SteamPlayerCache extends AppModel {
             'alias' => 'QuickAuth',
         ), $this->User->Aro);
 
-        $rawQuery = "select distinct user_id from ($orderQuery union all $quickauthQuery union all $rewardQuery union all $memberQuery) as t";
+        $rawQuery = "select distinct user_id from ($orderQuery union all $rewardQuery union all $memberQuery) as t";
 
         return Hash::extract($db->fetchAll($rawQuery), '{n}.t.user_id');
     }
