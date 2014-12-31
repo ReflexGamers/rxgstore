@@ -195,7 +195,7 @@ class AccountUtilityComponent extends Component {
         $player = $steamPlayer[0];
         $player['name'] = $player['personaname'];
         $player['member'] = $this->Access->checkIsMember($user_id);
-        $player['ingame'] = ($this->User->getCurrentServer($user_id) !== false);
+        $player['server'] = ($this->User->getCurrentServer($user_id) !== false);
 
         return $player;
     }
