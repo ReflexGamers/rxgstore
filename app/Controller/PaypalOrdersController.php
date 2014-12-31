@@ -36,6 +36,10 @@ class PaypalOrdersController extends AppController {
             'maxMult' => max($options)
         ));
 
+        $topBuyers = $this->PaypalOrder->getTopBuyers();
+        $this->addPlayers(array_keys($topBuyers));
+        $this->set('topBuyers', $topBuyers);
+
         $this->loadShoutbox();
         $this->activity(false);
     }

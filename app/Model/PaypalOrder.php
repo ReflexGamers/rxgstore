@@ -15,6 +15,26 @@ class PaypalOrder extends AppModel {
 
     public $order = 'PaypalOrder.paypal_order_id DESC';
 
+
+    /**
+     * Returns the top buyers of CASH. Top buyers are determined by the amount bought, not the amount spent.
+     *
+     * @param int $limit optional limit for number of top buyers to return
+     * @return array
+     */
+    public function getTopBuyers($limit = 7) {
+
+        return Hash::combine($this->find('all', array(
+            'fields' => array(
+                'user_id', 'SUM(credit) as received', 'SUM(amount) as spent'
+            ),
+            'group' => 'user_id',
+            'order' => 'received desc',
+            'limit' => $limit
+        )), '{n}.PaypalOrder.user_id', '{n}.{n}');
+    }
+
+
 /**
  * Validation rules
  *

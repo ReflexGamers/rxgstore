@@ -58,6 +58,33 @@
 
         <p>100% of dollar bills obtained is put back into the community; feel confident while giving us your money!</p>
 
+
+        {% if topBuyers %}
+
+            <section id="top_buyers">
+
+                <h2 class="page_subheading">Top Buyers</h2>
+
+                <ul class="top_buyer_list">
+
+                    {% for buyer, data in topBuyers %}
+
+                        <li>
+                            <span class="top_buyer_name">
+                                {{ fn.player(_context, players[buyer]) }}
+                            </span>
+                            spent <strong>{{ fn.realMoney(data.spent) }}</strong> on <span class="top_buyer_amount">{{ fn.currency(data.received, {'big': true}) }}</span>
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </section>
+
+        {% endif %}
+
+
         {% include 'Common/activity.inc.tpl' with {
             'title': 'Recent CASH Purchases'
         } %}
