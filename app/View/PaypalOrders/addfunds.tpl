@@ -73,7 +73,7 @@
                             <span class="top_buyer_name">
                                 {{ fn.player(_context, players[buyer]) }}
                             </span>
-                            spent <strong>{{ fn.realMoney(data.spent) }}</strong> on <span class="top_buyer_amount">{{ fn.currency(data.received, {'big': true}) }}</span>
+                            spent <strong>{{ fn.realMoney(data.spent) }}</strong> on <span class="currency_value">{{ fn.currency(data.received, {'big': true}) }}</span>
                         </li>
 
                     {% endfor %}
