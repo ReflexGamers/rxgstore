@@ -206,13 +206,7 @@ class ItemsController extends AppController {
         $parsedown = new Parsedown();
         $item['description'] = $parsedown->text($item['description']);
 
-
-        $topBuyers = Hash::combine(
-            $this->Item->getTopBuyers($item_id),
-            '{n}.Order.user_id',
-            '{n}.{n}'
-        );
-
+        $topBuyers = $this->Item->getTopBuyers($item_id);
         $this->addPlayers(array_keys($topBuyers));
 
         if ($this->Auth->user()) {

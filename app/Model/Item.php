@@ -191,7 +191,7 @@ class Item extends AppModel {
      */
     public function getTopBuyers($item_id, $limit = 5) {
 
-        return $this->OrderDetail->find('all', array(
+        return Hash::combine($this->OrderDetail->find('all', array(
             'fields' => array(
                 'Order.user_id', 'SUM(OrderDetail.quantity) as quantity', 'SUM(OrderDetail.quantity * price) as total'
             ),
@@ -208,7 +208,7 @@ class Item extends AppModel {
             'group' => 'user_id',
             'order' => 'quantity desc',
             'limit' => $limit
-        ));
+        )), '{n}.Order.user_id', '{n}.{n}');
     }
 
     /**
