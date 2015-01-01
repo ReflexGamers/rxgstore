@@ -2517,6 +2517,20 @@ button::-moz-focus-inner {
 
 }
 
+
+.icon_gift_accepted,
+.icon_gift_pending {
+    cursor: default;
+}
+
+.icon_gift_accepted {
+    color: #0c0;
+}
+
+.icon_gift_pending {
+    color: #999;
+}
+
 .activity_reward_recipients .activity_player:last-child {
     /*padding-bottom: 0;*/
 }

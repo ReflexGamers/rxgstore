@@ -391,12 +391,6 @@ class Activity extends AppModel {
                     '{n}.item_id', '{n}.quantity'
                 );
 
-                if (isset($activity['RewardRecipient'])) {
-                    $activity['RewardRecipient'] = Hash::extract(
-                        $activity['RewardRecipient'], '{n}.recipient_id'
-                    );
-                }
-
             } else if (isset($activity['ShipmentDetail'])) {
 
                 $activity['ShipmentDetail'] = Hash::combine(
