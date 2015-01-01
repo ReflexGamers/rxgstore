@@ -36,7 +36,13 @@
 
                 {% if gift.message %}
                     <div class="activity_message">
-                        "{{ gift.message|e }}"
+                        {% if not isReward %}
+                            <i class="fa fa-quote-left icon_gift_quote"></i>
+                        {% endif %}
+                        {{ gift.message|e }}
+                        {% if not isReward %}
+                            <i class="fa fa-quote-right icon_gift_quote"></i>
+                        {% endif %}
                     </div>
                 {% endif %}
 

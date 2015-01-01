@@ -1228,6 +1228,10 @@ input.cart_quantity_input:focus {
     color: #333;
 }
 
+.icon_gift_quote {
+    color: #333;
+}
+
 
 #rating {
     margin-top: 5px;

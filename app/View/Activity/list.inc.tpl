@@ -78,7 +78,7 @@
 
                 {% if gift.message %}
                     <div class="activity_message">
-                        "{{ gift.message|e }}"
+                        <i class="fa fa-quote-left icon_gift_quote"></i> {{ gift.message|e }} <i class="fa fa-quote-right icon_gift_quote"></i>
                     </div>
                 {% endif %}
 
@@ -126,7 +126,7 @@
 
                 {% if reward.message %}
                     <div class="activity_message">
-                        "{{ reward.message|e }}"
+                        {{ reward.message|e }}
                     </div>
                 {% endif %}
 
