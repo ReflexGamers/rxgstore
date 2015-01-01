@@ -24,6 +24,11 @@
                     {{ player.division ? "RXG #{player.division} Division" : 'RXG Member' }}
                 </div>
             {% endif %}
+            {% if player.server %}
+                <div class="profile_ingame">
+                    Currently in-game <i class="fa fa-gamepad profile_ingame_icon"></i>
+                </div>
+            {% endif %}
             <div class="player_links">
                 <a href="{{ player.profile }}">view steam profile</a>
                 {% if user and user.user_id != user_id %}
