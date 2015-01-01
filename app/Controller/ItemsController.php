@@ -165,7 +165,7 @@ class ItemsController extends AppController {
         $this->addPlayers($activities, '{n}.{s}.user_id');
         $this->addPlayers($activities, '{n}.{s}.sender_id');
         $this->addPlayers($activities, '{n}.{s}.recipient_id');
-        $this->addPlayers($activities, '{n}.RewardRecipient.{n}');
+        $this->addPlayers($activities, '{n}.RewardRecipient.{n}.recipient_id');
 
         $this->loadItems();
         $this->loadCashData();
@@ -319,7 +319,7 @@ class ItemsController extends AppController {
         $this->addPlayers($activities, '{n}.{s}.user_id');
         $this->addPlayers($activities, '{n}.{s}.sender_id');
         $this->addPlayers($activities, '{n}.{s}.recipient_id');
-        $this->addPlayers($activities, '{n}.RewardRecipient.{n}');
+        $this->addPlayers($activities, '{n}.RewardRecipient.{n}.recipient_id');
 
         $this->loadItems();
 

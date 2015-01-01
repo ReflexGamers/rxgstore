@@ -62,6 +62,13 @@
 
                 <div class="activity_player recipient">
                     {{ fn.player(_context, recipient) }}
+                    {% if access.check('Rewards') %}
+                        {% if gift.accepted %}
+                            <i class="fa fa-check icon_gift_accepted" title="Accepted"></i>
+                        {% else %}
+                            <i class="fa fa-clock-o icon_gift_pending" title="Pending"></i>
+                        {% endif %}
+                    {% endif %}
                 </div>
 
                 {% include 'Items/list.inc.tpl' with {
@@ -98,7 +105,14 @@
                     {% for recipient in recipients %}
 
                         <div class="activity_player recipient">
-                            {{ fn.player(_context, players[recipient]) }}
+                            {{ fn.player(_context, players[recipient.recipient_id]) }}
+                            {% if access.check('Rewards') %}
+                                {% if recipient.accepted %}
+                                    <i class="fa fa-check icon_gift_accepted" title="Accepted"></i>
+                                {% else %}
+                                    <i class="fa fa-clock-o icon_gift_pending" title="Pending"></i>
+                                {% endif %}
+                            {% endif %}
                         </div>
 
                     {% endfor %}

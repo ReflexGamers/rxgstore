@@ -94,16 +94,10 @@ class RewardsController extends AppController {
                 $reward['RewardDetail'],
                 '{n}.item_id', '{n}.quantity'
             );
-
-            if (!empty($reward['RewardRecipient'])) {
-                $reward['RewardRecipient'] = Hash::extract(
-                    $reward['RewardRecipient'], '{n}.recipient_id'
-                );
-            }
         }
 
         $this->addPlayers($rewards, '{n}.{s}.sender_id');
-        $this->addPlayers($rewards, '{n}.RewardRecipient.{n}');
+        $this->addPlayers($rewards, '{n}.RewardRecipient.{n}.recipient_id');
 
         $this->loadItems();
 
