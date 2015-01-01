@@ -142,7 +142,7 @@
     {% else %}
 
         <div class="review_content">
-            "{{ review.content|e }}"
+            <i class="fa fa-quote-left icon_review_quote"></i> {{ review.content|e }} <i class="fa fa-quote-right icon_review_quote"></i>
         </div>
 
     {% endif %}

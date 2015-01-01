@@ -1224,6 +1224,10 @@ input.cart_quantity_input:focus {
     margin: 0 0 2px 0;
 }
 
+.icon_review_quote {
+    color: #333;
+}
+
 
 #rating {
     margin-top: 5px;
