@@ -78,10 +78,7 @@
 
         {% else %}
 
-            {{ html.link(
-                player.name,
-                {'controller': 'Users', 'action': 'profile', 'id': player.steamid}
-            ) }}
+            {{ fn.profile(_context, player) }}
 
         {% endif %}
     </div>
