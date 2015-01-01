@@ -209,17 +209,6 @@ class ItemsController extends AppController {
         $topBuyers = $this->Item->getTopBuyers($item_id);
         $this->addPlayers(array_keys($topBuyers));
 
-        if ($this->Auth->user()) {
-
-            $this->loadModel('User');
-            $user_id = $this->Auth->user('user_id');
-
-            $this->set(array(
-                'userCanRate' => $this->User->canRateItem($user_id, $item_id),
-                'review' => $this->Item->Rating->getByItemAndUser($item_id, $user_id)
-            ));
-        }
-
         $this->set(array(
             'item' => $item,
             'stock' => $this->Item->getStock($item_id),
@@ -256,9 +245,10 @@ class ItemsController extends AppController {
             $this->set('item', $item);
         }
 
+        $item_id = $item['item_id'];
 
         $this->loadModel('Rating');
-        $this->Paginator->settings = $this->Item->getReviewPageQuery($item['item_id'], 3);
+        $this->Paginator->settings = $this->Item->getReviewPageQuery($item_id, 3);
 
         $reviews = Hash::map(
             $this->Paginator->paginate('Rating'),
@@ -273,6 +263,17 @@ class ItemsController extends AppController {
 
         $this->addPlayers($reviews, '{n}.user_id');
         $this->loadItems();
+
+        if ($this->Auth->user()) {
+
+            $this->loadModel('User');
+            $user_id = $this->Auth->user('user_id');
+
+            $this->set(array(
+                'userCanRate' => $this->User->canRateItem($user_id, $item_id),
+                'review' => $this->Item->Rating->getByItemAndUser($item_id, $user_id)
+            ));
+        }
 
         $this->set(array(
             'reviews' => $reviews,
