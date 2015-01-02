@@ -297,8 +297,16 @@ class AccountUtilityComponent extends Component {
 
         foreach ($ids as $id) {
 
-            if ($id == 'me') {
+            if (empty($id)) {
+
+                // skip empty lines
+                continue;
+
+            } else if (strtolower($id) == 'me') {
+
+                // 'me' keyword refers to current user
                 $accounts[] = $this->Auth->user('user_id');
+
             } else {
 
                 // parse steamid32 or steamid3 out of line first
