@@ -68,11 +68,30 @@ class RewardsController extends AppController {
         $this->loadModel('Item');
 
         $this->set(array(
-            'isReward' => true
+            'isReward' => true,
+            'composing' => true
         ));
 
-        $this->loadShoutbox();
+        // check session for reward in case returning to compose page
+        $reward = $this->Session->read('reward');
 
+        if (!empty($reward)) {
+
+            $recipientText = '';
+            $recipients = Hash::extract($reward['RewardRecipient'], '{n}.recipient_id');
+
+            foreach ($recipients as $recipient) {
+                $recipientText .= SteamID::Parse($recipient, SteamID::FORMAT_S32)->Format(SteamID::FORMAT_STEAMID32) . "\n";
+            }
+
+            $this->set(array(
+                'details' => Hash::combine($reward['RewardDetail'], '{n}.item_id', '{n}.quantity'),
+                'message' => $reward['Reward']['message'],
+                'recipientText' => $recipientText
+            ));
+        }
+
+        $this->loadShoutbox();
         $this->activity(false);
         $this->render('/Gifts/compose');
     }
@@ -189,7 +208,7 @@ class RewardsController extends AppController {
         $this->set(array(
             'recipients' => $recipients,
             'failedRecipients' => $failedRecipients,
-            'data' => $rewardDetails,
+            'details' => Hash::combine($rewardDetails, '{n}.item_id', '{n}.quantity'),
             'message' => $message,
             'totalValue' => $totalValue,
             'isReward' => true

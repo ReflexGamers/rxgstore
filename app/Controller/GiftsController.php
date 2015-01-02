@@ -87,11 +87,22 @@ class GiftsController extends AppController {
 
         $this->set(array(
             'player' => $player,
-            'userItems' => $this->User->getItems($user_id)
+            'userItems' => $this->User->getItems($user_id),
+            'composing' => true
         ));
 
-        $this->loadShoutbox();
+        // check session for gift in case returning to compose page
+        $gift = $this->Session->read("gift-$steamid");
 
+        if (!empty($gift)) {
+            $this->set(array(
+                'details' => Hash::combine($gift['GiftDetail'], '{n}.item_id', '{n}.quantity'),
+                'message' => $gift['Gift']['message'],
+                'anonymous' => $gift['Gift']['anonymous']
+            ));
+        }
+
+        $this->loadShoutbox();
         $this->activity(false);
     }
 
@@ -154,7 +165,7 @@ class GiftsController extends AppController {
 
         $giftDetails = $this->request->data['GiftDetail'];
         $message = empty($this->request->data['Gift']['message']) ? '' : $this->request->data['Gift']['message'];
-        $anonymous = empty($this->request->data['Gift']['anonymous']) ? false : $this->request->data['Gift']['anonymous'] == 'on';
+        $anonymous = empty($this->request->data['Gift']['anonymous']) ? false : $this->request->data['Gift']['anonymous'];
 
         $user_id = $this->Auth->user('user_id');
         $recipient_id = $this->AccountUtility->AccountIDFromSteamID64($steamid);
@@ -210,7 +221,7 @@ class GiftsController extends AppController {
         $this->set(array(
             'player' => $player,
             'userItems' => $userItems,
-            'data' => $giftDetails,
+            'details' => Hash::combine($giftDetails, '{n}.item_id', '{n}.quantity'),
             'message' => $message,
             'anonymous' => $anonymous,
             'totalValue' => $totalValue

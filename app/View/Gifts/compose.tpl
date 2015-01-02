@@ -5,7 +5,8 @@
 
 {% block content %}
 
-    {% if data is empty %}
+    {% if composing %}
+
         {% if isReward %}
             <p>Please provide a list of recipients (one per line) and then choose which items they should receive. Multiple formats are allowed and you can even paste in a status print-out. If you want to send a reward to yourself, you need simply use the "me" keyword.</p>
         {% else %}
@@ -21,26 +22,41 @@
                 <p>Want to send a reward from Reflex Gamers instead? {{ html.link('Click here', {'controller': 'Rewards', 'action': 'compose'}) }}.</p>
             {% endif %}
         {% endif %}
+
+    {% else %}
+
+        <div class="back_link gift_backlink">
+            <i class="fa fa-arrow-circle-left"></i>
+            {{ html.link('Edit Details', (isReward ? {
+                    'controller': 'Rewards',
+                    'action': 'compose'
+                } : {
+                    'controller': 'Gifts',
+                    'action': 'compose',
+                    'id': player.steamid
+            })) }}
+        </div>
+
     {% endif %}
 
-    {{ form.create(isReward ? 'RewardDetail' : 'GiftDetail', {
+    {{ form.create((isReward) ? 'RewardDetail' : 'GiftDetail', {
         'inputDefaults': {
             'label': false,
             'div': false,
             'required': false
         },
         'url': (isReward ? {
-                'controller': isReward ? 'rewards' : 'gifts',
-                'action': data ? 'send' : 'package'
+                'controller': 'Rewards',
+                'action': (composing) ? 'package' : 'send'
             } : {
                 'controller': 'Gifts',
-                'action': data ? 'send' : 'package',
+                'action': (composing) ? 'package' : 'send',
                 'id': player.steamid
         }),
         'class': 'cf'
     }) }}
 
-    {% if data %}
+    {% if not composing %}
 
         <h2 class="gift_subheading">
             {{ isReward ? 'Reward' : 'Gift' }} value
@@ -57,11 +73,11 @@
 
     {% endif %}
 
-    <h2 class="gift_subheading">Recipient{{ isReward ? (data ? 's: ' ~ recipients|length : '(s)') : '' }}</h2>
+    <h2 class="gift_subheading">Recipient{{ (isReward) ? (composing ? '(s)' : 's: ' ~ recipients|length) : '' }}</h2>
 
     {% if isReward %}
 
-        {% if data %}
+        {% if not composing %}
 
             {% for recipient in recipients %}
 
@@ -90,7 +106,8 @@
             {{ form.input('Reward.recipients', {
                 'type': 'textarea',
                 'placeholder': 'Enter a list of Steam IDs or profile URLs...',
-                'class': 'gift_recipients_input'
+                'class': 'gift_recipients_input',
+                'value': recipientText
             }) }}
 
         {% endif %}
@@ -107,23 +124,24 @@
 
     <h2 class="gift_subheading">Contents</h2>
 
-    <table class="gift_item_table {{ data ? 'gift_preview' : '' }}">
+    <table class="gift_item_table {{ composing ? '' : 'gift_preview' }}">
+
+        {% set showUserQuantity = composing and not isReward %}
 
         <tr>
             <th class="gift_item_heading">Item</th>
-            {% if gift is empty and not isReward %}
+            {% if showUserQuantity %}
                 <th>You Have</th>
             {% endif %}
             <th class="quantity">Quantity</th>
         </tr>
 
-        {% for item in (data ?: sortedItems) if isReward or userItems[item.item_id] > 0 or item.quantity > 0 %}
+        {% for item in sortedItems if (composing ? (isReward or userItems[item.item_id] > 0) : details[item.item_id] > 0) %}
 
-            {% set userQuantity = userItems[item.item_id] %}
+            {% set quantity = (details) ? details[item.item_id] : '' %}
 
-            {% if data %}
-                {% set quantity = item.quantity %}
-                {% set item = items[item.item_id] %}
+            {% if showUserQuantity %}
+                {% set userQuantity = userItems[item.item_id] %}
             {% endif %}
 
             <tr>
@@ -134,20 +152,21 @@
                     }) }}
                     {{ html.link(item.name, {'controller': 'Items', 'action': 'view', 'id': item.short_name}) }}
                 </td>
-                {% if gift is empty and not isReward %}
+                {% if showUserQuantity %}
                     <td class="gift_item_available">
                         {{ userQuantity }}
                     </td>
                 {% endif %}
                 <td class="gift_item_input quantity">
-                    {% if data %}
-                        {{ quantity }}
-                    {% else %}
+                    {% if composing %}
                         {{ form.hidden(loop.index0 ~ '.item_id', {'value': item.item_id}) }}
                         {{ form.input(loop.index0 ~ '.quantity', {
                             'min': 0,
-                            'max': userQuantity
+                            'max': userQuantity,
+                            'value': quantity
                         }) }}
+                    {% else %}
+                        {{ quantity }}
                     {% endif %}
                 </td>
             </tr>
@@ -162,9 +181,9 @@
         'class': 'gift_message_input',
         'type': 'textarea',
         'maxlength': 100,
-        'placeholder': data ? message : 'Write a message to the recipient' ~ (isReward ? '(s)' : '') ~ '...',
+        'placeholder': composing ? ('Write a message to the recipient' ~ (isReward ? '(s)' : '') ~ '...') : '',
         'value': message,
-        'disabled': data ? 'disabled' : ''
+        'disabled': composing ? '' : 'disabled'
     }) }}
 
     <span class="gift_message_chars"></span>
@@ -173,14 +192,14 @@
         <div class="gift_anonymous">
             {{ form.input('Gift.anonymous', {
                 'label': 'send anonymously',
-                'value': anonymous,
-                'disabled': data ? 'disabled' : '',
+                'checked': anonymous,
+                'disabled': (composing) ? '' : 'disabled',
                 'class': 'gift_anonymous_checkbox'
             }) }}
         </div>
     {% endif %}
 
-    {{ form.submit((data ? 'Send ' : 'Package ') ~ (isReward ? 'Reward' : 'Gift'), {
+    {{ form.submit((composing ? 'Package ' : 'Send ') ~ (isReward ? 'Reward' : 'Gift'), {
         'div': false,
         'class': 'btn-primary',
         'id': 'gift_package_button'

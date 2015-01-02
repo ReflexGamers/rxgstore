@@ -2108,8 +2108,12 @@ input[type="checkbox"].item_edit_input {
 
 
 
+.gift_backlink {
+    margin: 10px 0;
+}
+
 .gift_subheading {
-    margin: 10px 0 5px;
+    margin: 5px 0;
     font-size: 24px;
 }
 
