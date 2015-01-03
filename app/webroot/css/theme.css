@@ -2363,6 +2363,14 @@ button::-moz-focus-inner {
 }
 
 
+.chart_container {
+    margin: 30px 0;
+    padding: 10px 0;
+    box-shadow: 0 0 5px rgba(0,0,0,0.35), inset 0 0 5px rgba(0,0,0,0.1);
+    border-radius: 5px;
+}
+
+
 
 .quickauth_total {
     font-weight: 400;

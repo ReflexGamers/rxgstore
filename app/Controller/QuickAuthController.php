@@ -36,6 +36,48 @@ class QuickAuthController extends AppController {
     }
 
     /**
+     * Returns json data for overall QuickAuth usage by server.
+     */
+    public function totals() {
+
+        if (!$this->Access->check('QuickAuth', 'read')) {
+            $this->autoRender = false;
+            return;
+        }
+
+        $data = $this->QuickAuth->find('all', array(
+            'fields' => array(
+                'Server.name as server', 'count(QuickAuth.quick_auth_id) as count'
+            ),
+            'conditions' => array(
+                'redeemed = 1'
+            ),
+            'joins' => array(
+                array(
+                    'table' => 'server',
+                    'alias' => 'Server',
+                    'conditions' => array(
+                        'Server.server_ip = QuickAuth.server'
+                    )
+                )
+            ),
+            'group' => 'Server.name'
+        ));
+
+        $data = Hash::map($data, '{n}', function($arr) {
+            return array(
+                Hash::get($arr, 'Server.server'),
+                Hash::get($arr, '0.count')
+            );
+        });
+
+        $this->set(array(
+            'data' => $data,
+            '_serialize' => array('data')
+        ));
+    }
+
+    /**
      * Shows a page of QuickAuth records. Called by view action or via ajax directly.
      */
     public function records() {
