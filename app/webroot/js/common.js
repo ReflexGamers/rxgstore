@@ -19,7 +19,7 @@
     };
 
     $('#content').on('click', '.flash_remove', function () {
-        $(this).closest('.flashMessage').slideUp(function () {
+        $(this).closest('.flash_outer').slideUp(function () {
             $(this).remove();
         });
     });

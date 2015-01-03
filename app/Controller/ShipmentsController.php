@@ -71,7 +71,7 @@ class ShipmentsController extends AppController {
                     'ShipmentDetail' => $shipmentDetail
                 ), array('atomic' => false));
 
-                $this->Session->setFlash('The shipment was received successfully!', 'flash_closable', array('class' => 'success'));
+                $this->Session->setFlash('The shipment was received successfully!', 'flash', array('class' => 'success'));
             }
         }
 

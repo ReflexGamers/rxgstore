@@ -86,7 +86,7 @@ class PaypalOrdersController extends AppController {
         $this->request->allowMethod('post');
 
         if (empty($this->request->data['PaypalOrder'])) {
-            $this->Session->setFlash('You did not specify an amount.', 'flash_closable', array('class' => 'error'));
+            $this->Session->setFlash('You did not specify an amount.', 'flash', array('class' => 'error'));
             $this->redirect(array('controller' => 'PaypalOrders', 'action' => 'addfunds'));
             return;
         }
@@ -108,7 +108,7 @@ class PaypalOrdersController extends AppController {
             $price = $data['amount'] * 100;
 
             if ($price < max($optPrices)) {
-                $this->Session->setFlash('An error occurred.', 'flash_closable', array('class' => 'error'));
+                $this->Session->setFlash('An error occurred.', 'flash', array('class' => 'error'));
                 $this->redirect(array('controller' => 'PaypalOrders', 'action' => 'addfunds'));
                 return;
             }
@@ -145,7 +145,7 @@ class PaypalOrdersController extends AppController {
 
         } catch (Exception $e) {
 
-            $this->Session->setFlash('Oops! An error occurred. You have NOT been charged.', 'flash_closable', array('class' => 'error'));
+            $this->Session->setFlash('Oops! An error occurred. You have NOT been charged.', 'flash', array('class' => 'error'));
             $this->redirect(array('action' => 'addfunds'));
         }
     }
@@ -180,7 +180,7 @@ class PaypalOrdersController extends AppController {
         }
 
         if ($problemWithRequest) {
-            $this->Session->setFlash('Oops! An error occurred. You have NOT been charged.', 'flash_closable', array('class' => 'error'));
+            $this->Session->setFlash('Oops! An error occurred. You have NOT been charged.', 'flash', array('class' => 'error'));
             $this->redirect(array('action' => 'addfunds'));
             return;
         }
@@ -215,7 +215,7 @@ class PaypalOrdersController extends AppController {
                 $this->ServerUtility->broadcastPurchaseCash($server, $user_id, $data['amount']);
             }
 
-            $this->Session->setFlash('The CASH has been added to your account.', 'flash_closable', array('class' => 'success'));
+            $this->Session->setFlash('The CASH has been added to your account.', 'flash', array('class' => 'success'));
         }
 
         $this->redirect(array('controller' => 'PaypalOrders', 'action' => 'addfunds'));
@@ -229,7 +229,7 @@ class PaypalOrdersController extends AppController {
         $steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
         CakeLog::write('paypal', "$steamid cancelled a transaction.");
 
-        $this->Session->setFlash('Your transaction was cancelled and you were NOT charged.', 'flash_closable', array('class' => 'error'));
+        $this->Session->setFlash('Your transaction was cancelled and you were NOT charged.', 'flash', array('class' => 'error'));
         $this->redirect(array('controller' => 'PaypalOrders', 'action' => 'addfunds'));
     }
 }

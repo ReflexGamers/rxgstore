@@ -178,7 +178,7 @@ class QuickAuthController extends AppController {
                         // token expired
                         $diff = abs($diff);
                         CakeLog::write('quickauth', "Attempted usage of token $tokenId-$tokenValue which expired $diff seconds ago.");
-                        $this->Session->setFlash('Authentication token expired. Please contact an administrator.', 'flash_closable', array('class' => 'error'));
+                        $this->Session->setFlash('Authentication token expired. Please contact an administrator.', 'flash', array('class' => 'error'));
 
                     } else {
 
@@ -193,7 +193,7 @@ class QuickAuthController extends AppController {
 
                             // failed to login user
                             CakeLog::write('quickauth', "Failed to login user $user_id with token $tokenId-$tokenValue.");
-                            $this->Session->setFlash('Login failed. Please contact an administrator.', 'flash_closable', array('class' => 'error'));
+                            $this->Session->setFlash('Login failed. Please contact an administrator.', 'flash', array('class' => 'error'));
                         }
                     }
 
@@ -208,11 +208,11 @@ class QuickAuthController extends AppController {
 
             // token not found in db, nor is used logged in already
             CakeLog::write('quickauth', "Requested token $tokenId-$tokenValue was not found.");
-            $this->Session->setFlash('Invalid Authentication token. Please contact an administrator.', 'flash_closable', array('class' => 'error'));
+            $this->Session->setFlash('Invalid Authentication token. Please contact an administrator.', 'flash', array('class' => 'error'));
         }
 
         $this->Session->write('Auth.user.ingame', true);
-        $this->Session->setFlash('Visit the store outside of the game at store.reflex-gamers.com', 'flash_closable', null, 'quickauth');
+        $this->Session->setFlash('You may also visit the store at store.reflex-gamers.com', 'flash', array('class' => 'info'), 'quickauth');
 
         // go straight to store if source not specified
         if (empty($params['source'])) {

@@ -1338,7 +1338,7 @@ input[type="checkbox"].item_edit_input {
 
 .back_link {
     font-size: 24px;
-    margin-bottom: 20px;
+    margin: 10px 0 20px;
 }
 
 .item_edit_image {
@@ -1352,7 +1352,29 @@ input[type="checkbox"].item_edit_input {
 
 
 .flash_remove {
+    float: right;
     cursor: pointer;
+    font-size: 26px;
+}
+
+.flash_icon {
+    float: left;
+    margin-right: 5px;
+}
+
+.flash_check {
+    float: left;
+    font-size: 28px;
+}
+
+.flash_info {
+    float: left;
+    font-size: 28px;
+}
+
+.flash_warning {
+    float: left;
+    font-size: 27px;
 }
 
 .flash_outer {
@@ -1379,10 +1401,7 @@ input[type="checkbox"].item_edit_input {
 
 #flashMessage .flash_view_cart {
     float: right;
-}
-
-#flashMessage .flash_view_cart {
-
+    margin-right: 5px;
 }
 
 #flashMessage .flash_view_cart a {
