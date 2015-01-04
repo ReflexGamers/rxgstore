@@ -27,31 +27,30 @@ class QuickAuthController extends AppController {
         }
 
         $this->set(array(
-            'tokenExpire' => Configure::read('Store.QuickAuth.TokenExpire')
+            'tokenExpire' => Configure::read('Store.QuickAuth.TokenExpire'),
+            'dayAgo' => time() - 86400,
+            'weekAgo' => time() - 604800
         ));
 
         $this->loadShoutbox();
-
         $this->records();
     }
 
     /**
      * Returns json data for overall QuickAuth usage by server.
+     *
+     * @param int $since how far back to get data
      */
-    public function totals() {
+    public function totals($since = 0) {
 
         if (!$this->Access->check('QuickAuth', 'read')) {
             $this->autoRender = false;
             return;
         }
 
-        // past day
-        $recentTimeAgo = time() - 86400;
-
         $this->set(array(
-            'allTime' => $this->QuickAuth->getTotalsByServer(),
-            'recent' => $this->QuickAuth->getTotalsByServer($recentTimeAgo),
-            '_serialize' => array('allTime', 'recent')
+            'data' => $this->QuickAuth->getTotalsByServer($since),
+            '_serialize' => array('data')
         ));
     }
 

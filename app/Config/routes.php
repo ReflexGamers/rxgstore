@@ -174,6 +174,13 @@
 			'id' => '[0-9]+'
 		)
 	);
+	Router::connect('/quickauth/totals/:time', array(
+			'controller' => 'QuickAuth', 'action' => 'totals',
+		), array(
+			'pass' => array('time'),
+			'time' => '[0-9]+'
+		)
+	);
 	Router::connect('/quickauth/:action/*', array('controller' => 'QuickAuth', 'action' => 'view'));
 
 	Router::connect('/sort', array('controller' => 'Items', 'action' => 'sort'));

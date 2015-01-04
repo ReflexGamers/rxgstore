@@ -1,19 +1,57 @@
 (function($){
 
-    var container = $('#quickauth_charts');
+    var container = $('#quickauth_charts'),
+        controls = container.find('.chart_control'),
+        innerChart = container.find('.chart_inner');
 
-    // get data and build charts
-    $.ajax(container.data('href'), {
+    /**
+     * Renders a chart with the given data.
+     *
+     * @param data
+     */
+    function renderChart(data) {
+        rxg.buildPieChart(innerChart, data, 'QuickAuth Server Distribution');
+    }
 
-        type: 'post',
-        beforeSend: function() {
+    /**
+     * Sends an ajax request to the URL on the provided element's href, then renders a chart with the response.
+     *
+     * @param el
+     * @returns {boolean}
+     */
+    function buildChart(el) {
 
-        },
-        success: function(data, textStatus) {
-            rxg.buildPieChart(container.find('.chart_alltime'), data.allTime, 'QuickAuth Server Distribution (All Time)');
-            rxg.buildPieChart(container.find('.chart_recent'), data.recent, 'QuickAuth Server Distribution (Past Day)');
+        if (el.hasClass('active')) {
+            return false;
         }
 
+        controls.removeClass('active');
+
+        // get data and build charts
+        $.ajax(el.attr('href'), {
+
+            type: 'post',
+            beforeSend: function() {
+                el.addClass('active');
+                $('#chart_loading').fadeIn();
+                innerChart.animate({opacity: 0.1});
+            },
+            success: function(data, textStatus) {
+                renderChart(data.data);
+                $('#chart_loading').fadeOut();
+                innerChart.animate({opacity: 1});
+            }
+
+        });
+    }
+
+    container.find('.chart_controls').on('click', '.chart_control', function () {
+        buildChart($(this));
+        return false;
     });
+
+    buildChart(
+        container.find('.chart_controls').find('.control_week')
+    );
 
 })(jQuery);

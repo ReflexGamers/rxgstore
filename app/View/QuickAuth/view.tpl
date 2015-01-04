@@ -17,12 +17,33 @@
             'name': 'quickauth'
         }) }} to view the QuickAuth log.</p>
 
-    <div id="quickauth_charts" class="chart_container" data-href="{{ html.url({
-        'controller': 'QuickAuth',
-        'action': 'totals.json'
-    }) }}">
-        <div class="chart_alltime sub_chart"></div>
-        <div class="chart_recent sub_chart"></div>
+    <div id="quickauth_charts" class="chart_container">
+        <div class="chart_controls">
+            <a class="chart_control control_alltime" href="{{ html.url({
+                'controller': 'QuickAuth',
+                'action': 'totals',
+                'ext': 'json'
+            }) }}">All time</a>
+            |
+            <a class="chart_control control_week" href="{{ html.url({
+                'controller': 'QuickAuth',
+                'action': 'totals',
+                'time': weekAgo,
+                'ext': 'json'
+            }) }}">Past week</a>
+            |
+            <a class="chart_control control_day" href="{{ html.url({
+                'controller': 'QuickAuth',
+                'action': 'totals',
+                'time': dayAgo,
+                'ext': 'json'
+            }) }}">Past day</a>
+        </div>
+        {{ html.image('misc/ajax-loader.gif', {
+            'class': 'ajax-loader',
+            'id': 'chart_loading'
+        }) }}
+        <div class="chart_inner"></div>
     </div>
 
     <div id="quickauth_content">
