@@ -2370,6 +2370,20 @@ button::-moz-focus-inner {
     border-radius: 5px;
 }
 
+.sub_chart {
+    border-bottom: 1px solid #ccc;
+    padding: 15px 0;
+}
+
+.sub_chart:first-child {
+    padding-top: 0;
+}
+
+.sub_chart:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
 
 
 .quickauth_total {
