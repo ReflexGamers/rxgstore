@@ -33,7 +33,7 @@
             type: 'post',
             beforeSend: function() {
                 el.addClass('active');
-                innerChart.animate({opacity: 0.1});
+                innerChart.animate({opacity: 0.5});
             },
             success: function(data, textStatus) {
                 renderChart(data.data);
