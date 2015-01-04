@@ -10,6 +10,14 @@
             row[1] = parseInt(row[1], 10);
         }
 
+        // slice 2nd piece (should be 2nd biggest)
+        data[1] = {
+            name: data[1][0],
+            y: data[1][1],
+            sliced: true,
+            selected: true
+        };
+
         el.highcharts({
             chart: {
                 type: 'pie',
@@ -53,6 +61,16 @@
             }]
         });
     }
+
+    Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
+        return {
+            radialGradient: { cx: 0.5, cy: 0.3, r: 0.7 },
+            stops: [
+                [0, color],
+                [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+            ]
+        };
+    });
 
     // get data and build charts
     $.ajax(container.data('href'), {
