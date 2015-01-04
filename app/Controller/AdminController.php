@@ -30,6 +30,18 @@ class AdminController extends AppController {
     }
 
     /**
+     * Admin stats page
+     */
+    public function stats() {
+
+        if (!$this->Access->check('Stock', 'update')) {
+            $this->redirect(array('controller' => 'Items', 'action' => 'index'));
+            return;
+        }
+
+    }
+
+    /**
      * View log by name
      *
      * @param string $name name of log to view

@@ -55,6 +55,7 @@
 	Router::connect('/faq', array('controller' => 'Items', 'action' => 'faq'));
     Router::connect('/whatsnew', array('controller' => 'Items', 'action' => 'whatsnew'));
 	Router::connect('/admin', array('controller' => 'Admin', 'action' => 'index'));
+	Router::connect('/admin/:action', array('controller' => 'Admin'));
 	Router::connect('/admin/viewlog/:name', array(
 			'controller' => 'Admin', 'action' => 'viewlog'
 		), array(
@@ -198,6 +199,8 @@
 			'id' => '[0-9]+'
 		)
 	);
+
+	Router::connect('/credit/:action', array('controller' => 'TotalCreditLog'));
 
 
 	//Router::connectNamed(array('page'));
