@@ -38,7 +38,8 @@ class QuickAuth extends AppModel {
                     )
                 )
             ),
-            'group' => 'Server.name'
+            'group' => 'Server.name',
+            'order' => 'count desc'
         ));
 
         return Hash::map($data, '{n}', function($arr) {
