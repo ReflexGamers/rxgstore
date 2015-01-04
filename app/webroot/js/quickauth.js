@@ -33,12 +33,10 @@
             type: 'post',
             beforeSend: function() {
                 el.addClass('active');
-                $('#chart_loading').fadeIn();
                 innerChart.animate({opacity: 0.1});
             },
             success: function(data, textStatus) {
                 renderChart(data.data);
-                $('#chart_loading').fadeOut();
                 innerChart.animate({opacity: 1});
             }
 

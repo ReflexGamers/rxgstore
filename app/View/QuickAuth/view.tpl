@@ -39,10 +39,6 @@
                 'ext': 'json'
             }) }}">Past day</a>
         </div>
-        {{ html.image('misc/ajax-loader.gif', {
-            'class': 'ajax-loader',
-            'id': 'chart_loading'
-        }) }}
         <div class="chart_inner"></div>
     </div>
 

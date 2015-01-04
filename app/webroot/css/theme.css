@@ -2385,12 +2385,6 @@ button::-moz-focus-inner {
     font-weight: bold;
 }
 
-#chart_loading {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-}
-
 .sub_chart {
     border-bottom: 1px solid #ccc;
     padding: 15px 0;
