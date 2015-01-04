@@ -18,11 +18,12 @@ class QuickAuth extends AppModel {
     /**
      * Gets the total number of QuickAuth uses per server and puts it in a format friendly to HighCharts.
      *
+     * @param int $since how far back to get data
      * @return array
      */
-    public function getTotalsForChart() {
+    public function getTotalsByServer($since = 0) {
 
-        $data = $this->find('all', array(
+        $query = array(
             'fields' => array(
                 'Server.name as server', 'count(QuickAuth.quick_auth_id) as count'
             ),
@@ -40,7 +41,13 @@ class QuickAuth extends AppModel {
             ),
             'group' => 'Server.name',
             'order' => 'count desc'
-        ));
+        );
+
+        if (!empty($since)) {
+            $query['conditions']['date >'] = $this->formatTimestamp($since);
+        }
+
+        $data = $this->find('all', $query);
 
         return Hash::map($data, '{n}', function($arr) {
             return array(

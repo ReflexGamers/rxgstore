@@ -45,9 +45,13 @@ class QuickAuthController extends AppController {
             return;
         }
 
+        // past day
+        $recentTimeAgo = time() - 86400;
+
         $this->set(array(
-            'data' => $this->QuickAuth->getTotalsForChart(),
-            '_serialize' => array('data')
+            'allTime' => $this->QuickAuth->getTotalsByServer(),
+            'recent' => $this->QuickAuth->getTotalsByServer($recentTimeAgo),
+            '_serialize' => array('allTime', 'recent')
         ));
     }
 
