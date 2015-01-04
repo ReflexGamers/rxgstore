@@ -11,7 +11,7 @@
         'controller': 'TotalCreditLog',
         'action': 'totals.json'
     }) }}">
-        <div class="chart_alltime sub_chart"></div>
+        <div class="chart_inner"></div>
     </div>
 
 {% endblock %}

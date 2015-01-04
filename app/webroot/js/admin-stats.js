@@ -11,7 +11,7 @@
         },
         success: function(data, textStatus) {
             var allTime = data.allTime;
-            rxg.buildCashTimeChart(container.find('.chart_alltime'), allTime.startDate, allTime.creditLog, allTime.currencyMult, 'Total CASH (All Time)');
+            rxg.buildCashTimeChart(container.find('.chart_inner'), allTime.startDate, allTime.creditLog, allTime.currencyMult, 'Total CASH (All Time)');
         }
 
     });
