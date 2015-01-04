@@ -30,6 +30,18 @@ App::uses('Model', 'Model');
  * @package       app.Model
  */
 class AppModel extends Model {
+
     // disable automatic joins by default
     public $recursive = -1;
+
+    /**
+     * Formats the provided time (or current time by default) into a timestamp that MySQL understands.
+     *
+     * @param int $time optional time (defaults to current time)
+     * @return string the formatted date
+     */
+    protected function formatTimestamp($time) {
+        return date('Y-m-d H:i:s', !empty($time) ? $time : time());
+    }
+
 }

@@ -289,16 +289,6 @@ class SteamPlayerCache extends AppModel {
         }
     }
 
-    /**
-     * Formats the provided time (or current time by default) into a timestamp that MySQL understands.
-     *
-     * @param int $time optional time (defaults to current time)
-     * @return string the formatted date
-     */
-    protected function formatTimestamp($time) {
-        return date('Y-m-d H:i:s', !empty($time) ? $time : time());
-    }
-
 
 /**
  * Validation rules
