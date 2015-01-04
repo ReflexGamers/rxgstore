@@ -1,7 +1,7 @@
 {% extends 'Common/base.tpl' %}
 
 {% set title = 'QuickAuth Records' %}
-{% set scripts = ['highcharts', 'highcharts-3d', 'quickauth'] %}
+{% set scripts = ['highcharts', 'highcharts-3d', 'charts', 'quickauth'] %}
 
 {% block content %}
 
@@ -17,10 +17,13 @@
             'name': 'quickauth'
         }) }} to view the QuickAuth log.</p>
 
-    <div id="quickauth_totals_chart" class="chart_container" data-href="{{ html.url({
+    <div id="quickauth_charts" class="chart_container" data-href="{{ html.url({
         'controller': 'QuickAuth',
         'action': 'totals.json'
-    }) }}"></div>
+    }) }}">
+        <div class="chart_alltime sub_chart"></div>
+        <div class="chart_recent sub_chart"></div>
+    </div>
 
     <div id="quickauth_content">
         {% include 'QuickAuth/list.inc.tpl' %}
