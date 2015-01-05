@@ -29,11 +29,6 @@ class OrdersController extends AppController {
      */
     public function totals($since = 0) {
 
-        if (!$this->Access->check('Stock', 'update')) {
-            $this->autoRender = false;
-            return;
-        }
-
         $this->set(array(
             'data' => $this->Order->OrderDetail->getTotalsSpent($since),
             '_serialize' => array('data')
