@@ -1595,6 +1595,37 @@ input[type="checkbox"].item_edit_input {
     margin: 20px 0 25px;
 }
 
+.browse_howto {
+    margin: 5px auto;
+    text-align: center;
+}
+
+.browse_howto_link {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.browse_howto_header {
+    margin: 0;
+    padding: 15px 0 5px;
+    text-align: center;
+}
+
+.browse_howto_content {
+    display: none;
+    text-align: center;
+    border: 1px dashed #aaa;
+    border-radius: 5px;
+    padding: 0 10px 10px;
+    margin: 0 auto;
+    width: 550px;
+}
+
+.browse_howto_method {
+    margin: 0;
+    padding: 5px 0;
+}
+
 
 .player_list {
     padding: 0;
