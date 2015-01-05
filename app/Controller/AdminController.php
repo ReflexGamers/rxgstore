@@ -39,6 +39,7 @@ class AdminController extends AppController {
             return;
         }
 
+        $this->loadShoutbox();
     }
 
     /**
