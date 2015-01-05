@@ -23,6 +23,24 @@ class OrdersController extends AppController {
     }
 
     /**
+     * Returns json data for overall amount spent for each item.
+     *
+     * @param int $since how far back to get data
+     */
+    public function totals($since = 0) {
+
+        if (!$this->Access->check('Stock', 'update')) {
+            $this->autoRender = false;
+            return;
+        }
+
+        $this->set(array(
+            'data' => $this->Order->OrderDetail->getTotalsSpent($since),
+            '_serialize' => array('data')
+        ));
+    }
+
+    /**
      * Shows a receipt for a past order.
      *
      * @param int $order_id
