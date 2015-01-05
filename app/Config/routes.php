@@ -64,6 +64,8 @@
 	));
 	Router::connect('/admin/:action/*', array('controller' => 'Admin'));
 
+	Router::connect('/stats', array('controller' => 'Stats'));
+
 
 	Router::connect('/item/:id', array(
 			'controller' => 'Items', 'action' => 'view'
@@ -113,6 +115,13 @@
 	);
 
 	Router::connect('/buy', array('controller' => 'Orders', 'action' => 'buy'));
+	Router::connect('/orders/:action', array('controller' => 'Orders'));
+	Router::connect('/orders/totals/:time', array(
+			'controller' => 'Orders', 'action' => 'totals',
+		), array (
+			'pass' => array('time'),
+			'time' => '[0-9]+'
+	));
 
 	Router::connect('/shout', array('controller' => 'ShoutboxMessages', 'action' => 'add'));
 	Router::connect('/shout/check/:time', array(
