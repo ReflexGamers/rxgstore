@@ -2,70 +2,6 @@
 
     window.rxg = window.rxg || {};
 
-    /**
-     * Builds a chart given an element, the data and a title.
-     * @param el
-     * @param data
-     * @param title
-     */
-    window.rxg.buildPieChart = function(el, data, title) {
-
-        for (var i = 0; i < data.length; i++) {
-            var row = data[i];
-            row[1] = parseInt(row[1], 10);
-        }
-
-        // slice 2nd piece (should be 2nd biggest)
-        data[1] = {
-            name: data[1][0],
-            y: data[1][1],
-            sliced: true,
-            selected: true
-        };
-
-        el.highcharts({
-            chart: {
-                type: 'pie',
-                backgroundColor: null,
-                plotBackgroundColor: null,
-                options3d: {
-                    enabled: true,
-                    alpha: 45,
-                    beta: 0
-                }
-            },
-            title: {
-                text: title
-            },
-            tooltip: {
-                headerFormat: '<span style="font-size: 18px">{point.key}</span><br/>',
-                pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)',
-                style: {
-                    fontSize: '16px',
-                    lineHeight: '24px'
-                }
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    depth: 35,
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f}%',
-                        style: {
-                            fontSize: '14px'
-                        }
-                    }
-                }
-            },
-            series: [{
-                type: 'pie',
-                name: 'Uses',
-                data: data
-            }]
-        });
-    };
 
     /**
      * Builds a time chart given a container element, the data and a title.
@@ -164,6 +100,137 @@
                 [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
             ]
         };
+    });
+
+
+    $.fn.extend({
+
+        /**
+         * Builds a chart given an element, the data and a title.
+         * @param data
+         * @param params
+         */
+        buildPieChart: function(data, params) {
+
+            var el = $(this);
+
+            for (var i = 0; i < data.length; i++) {
+                var row = data[i];
+                row[1] = parseInt(row[1], 10);
+            }
+
+            // slice 2nd piece (should be 2nd biggest)
+            data[1] = {
+                name: data[1][0],
+                y: data[1][1],
+                sliced: true,
+                selected: true
+            };
+
+            el.highcharts($.extend(true, {
+                chart: {
+                    type: 'pie',
+                    backgroundColor: null,
+                    plotBackgroundColor: null,
+                    options3d: {
+                        enabled: true,
+                        alpha: 45,
+                        beta: 0
+                    }
+                },
+                title: {
+                    text: 'title here'
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size: 18px">{point.key}</span><br/>',
+                    pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)',
+                    style: {
+                        fontSize: '16px',
+                        lineHeight: '24px'
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        depth: 35,
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f}%',
+                            style: {
+                                fontSize: '14px'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    data: data
+                }]
+            }, params));
+        },
+
+        /**
+         * Builds a multi-chart on the element.
+         * @param params
+         */
+        multiChart: function (params) {
+
+            var el = $(this),
+                controls = el.find('.chart_control'),
+                innerChart = el.find('.chart_inner'),
+                initOnSelector = '.active',
+                buildParams = {
+                    innerChart: innerChart,
+                    chartFunc: params.chartFunc,
+                    chartParams: params.chartParams
+                };
+
+            el.find('.chart_controls').on('click', '.chart_control', function () {
+
+                var el = $(this);
+
+                if (el.hasClass('active')) {
+                    return false;
+                }
+
+                controls.removeClass('active');
+                $(this).buildInnerChart(buildParams);
+
+                return false;
+            });
+
+            el.find(initOnSelector).buildInnerChart(buildParams);
+        },
+
+        /**
+         * Builds a chart on the element
+         * @param params
+         * @returns {boolean}
+         */
+        buildInnerChart: function (params) {
+
+            var el = $(this),
+                innerChart = params.innerChart;
+
+            el.addClass('active');
+
+            // get data and build charts
+            $.ajax(el.attr('href'), {
+
+                type: 'post',
+                beforeSend: function() {
+                    innerChart.animate({opacity: 0.5});
+                },
+                success: function(data, textStatus) {
+                    innerChart[params.chartFunc](data.data, params.chartParams);
+                    innerChart.animate({opacity: 1});
+                }
+
+            });
+
+            return true;
+        }
     });
 
 })(jQuery);

@@ -17,30 +17,16 @@
             'name': 'quickauth'
         }) }} to view the QuickAuth log.</p>
 
-    <div id="quickauth_charts" class="chart_container">
-        <div class="chart_controls">
-            <a class="chart_control control_alltime" href="{{ html.url({
-                'controller': 'QuickAuth',
-                'action': 'totals',
-                'ext': 'json'
-            }) }}">All time</a>
-            |
-            <a class="chart_control control_week" href="{{ html.url({
-                'controller': 'QuickAuth',
-                'action': 'totals',
-                'time': weekAgo,
-                'ext': 'json'
-            }) }}">Past week</a>
-            |
-            <a class="chart_control control_day" href="{{ html.url({
-                'controller': 'QuickAuth',
-                'action': 'totals',
-                'time': dayAgo,
-                'ext': 'json'
-            }) }}">Past day</a>
-        </div>
-        <div class="chart_inner"></div>
-    </div>
+    {% include 'Charts/multi.inc.tpl' with {
+        'id': 'quickauth_charts',
+        'controller': 'QuickAuth',
+        'action': 'totals',
+        'controls': [
+            ['All Time'],
+            ['Past Week', {'time': weekAgo}, true],
+            ['Past Day', {'time': dayAgo}]
+        ]
+    } %}
 
     <div id="quickauth_content">
         {% include 'QuickAuth/list.inc.tpl' %}
