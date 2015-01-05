@@ -21,6 +21,15 @@
                     lineHeight: '24px'
                 }
             },
+            plotOptions: {
+                pie: {
+                    dataLabels: {
+                        style: {
+                            fontSize: '12px'
+                        }
+                    }
+                }
+            },
             series: [{
                 name: 'CASH'
             }]
