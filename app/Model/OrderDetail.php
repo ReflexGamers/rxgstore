@@ -62,6 +62,52 @@ class OrderDetail extends AppModel {
         });
     }
 
+    /**
+     * Gets the total amount of each item bought and puts it in a format friendly to HighCharts.
+     *
+     * @param int $since how far back to get data
+     * @return array
+     */
+    public function getTotalsBought($since = 0) {
+
+        $query = array(
+            'fields' => array(
+                'Item.name as name', 'sum(OrderDetail.quantity) as bought'
+            ),
+            'joins' => array(
+                array(
+                    'table' => 'item',
+                    'alias' => 'Item',
+                    'conditions' => array(
+                        'Item.item_id = OrderDetail.item_id'
+                    )
+                )
+            ),
+            'group' => 'Item.name',
+            'order' => 'bought desc'
+        );
+
+        if (!empty($since)) {
+            $query['joins'][] = array(
+                'table' => 'order',
+                'alias' => 'Order',
+                'conditions' => array(
+                    'Order.order_id = OrderDetail.order_id'
+                )
+            );
+            $query['conditions']['Order.date >'] = $this->formatTimestamp($since);
+        }
+
+        $data = $this->find('all', $query);
+
+        return Hash::map($data, '{n}', function($arr) {
+            return array(
+                Hash::get($arr, 'Item.name'),
+                Hash::get($arr, '0.bought')
+            );
+        });
+    }
+
 
 /**
  * Validation rules
