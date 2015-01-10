@@ -116,8 +116,8 @@
 
 	Router::connect('/buy', array('controller' => 'Orders', 'action' => 'buy'));
 	Router::connect('/orders/:action', array('controller' => 'Orders'));
-	Router::connect('/orders/totals/:time', array(
-			'controller' => 'Orders', 'action' => 'totals',
+	Router::connect('/orders/:action/:time', array(
+			'controller' => 'Orders',
 		), array (
 			'pass' => array('time'),
 			'time' => '[0-9]+'
