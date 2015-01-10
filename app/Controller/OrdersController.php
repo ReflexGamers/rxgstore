@@ -27,10 +27,23 @@ class OrdersController extends AppController {
      *
      * @param int $since how far back to get data
      */
-    public function totals($since = 0) {
+    public function totals_spent($since = 0) {
 
         $this->set(array(
             'data' => $this->Order->OrderDetail->getTotalsSpent($since),
+            '_serialize' => array('data')
+        ));
+    }
+
+    /**
+     * Returns json data for overall amount of each item bought.
+     *
+     * @param int $since how far back to get data
+     */
+    public function totals_bought($since = 0) {
+
+        $this->set(array(
+            'data' => $this->Order->OrderDetail->getTotalsBought($since),
             '_serialize' => array('data')
         ));
     }

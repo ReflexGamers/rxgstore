@@ -10,7 +10,19 @@
     {% include 'Charts/multi.inc.tpl' with {
         'id': 'spent_chart',
         'controller': 'Orders',
-        'action': 'totals',
+        'action': 'totals_spent',
+        'controls': [
+            ['All Time'],
+            ['Past Month', {'time': monthAgo}],
+            ['Past Week', {'time': weekAgo}, true],
+            ['Past Day', {'time': dayAgo}]
+        ]
+    } %}
+
+    {% include 'Charts/multi.inc.tpl' with {
+        'id': 'bought_chart',
+        'controller': 'Orders',
+        'action': 'totals_bought',
         'controls': [
             ['All Time'],
             ['Past Month', {'time': monthAgo}],

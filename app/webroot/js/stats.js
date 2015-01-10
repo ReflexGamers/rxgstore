@@ -36,4 +36,33 @@
         }
     });
 
+    $('#bought_chart').multiChart({
+        chartFunc: 'buildPieChart',
+        chartParams: {
+            title: {
+                text: 'Total Items Bought'
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size: 18px">{point.key}</span><br/>',
+                pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)',
+                style: {
+                    fontSize: '16px',
+                    lineHeight: '24px'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    dataLabels: {
+                        style: {
+                            fontSize: '12px'
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: 'Bought'
+            }]
+        }
+    });
+
 })(jQuery);
