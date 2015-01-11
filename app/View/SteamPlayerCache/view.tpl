@@ -22,14 +22,10 @@
             {% if access.check('Cache', 'update') %}
                 <input type="button" id="cache_refreshall" class="btn-success" value="Refresh All Players" data-href="{{ html.url({'action': 'refresh_all'}) }}" />
             {% endif %}
-
-            {% if access.check('Cache', 'delete') %}
-                <input type="button" id="cache_clearall" class="btn-danger" value="Clear Entire Cache" data-href="{{ html.url({'action': 'clear_all'}) }}" />
-            {% endif %}
-            {{ html.image(
-                'misc/ajax-loader.gif',
-                {'class': 'ajax-loader', 'id': 'cache_loading'}
-            ) }}
+            {{ html.image('misc/ajax-loader.gif', {
+                'class': 'ajax-loader',
+                'id': 'cache_loading'
+            }) }}
         </div>
     {% endif %}
 

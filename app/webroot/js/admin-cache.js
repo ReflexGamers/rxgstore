@@ -25,25 +25,25 @@
     });
 
 
-    $('#cache_clearall').on('click', function(){
-
-        if (!confirm('Are you sure you clear the entire cache?')) {
-            return false;
-        }
-
-        var el = $(this);
-
-        $.ajax(el.attr('href') || el.data('href'), {
-
-            type: 'post',
-            success: function(data, textStatus) {
-                $('#cache_batch_actions').remove();
-                $('#cache_content').html(data);
-            }
-        });
-
-        return false;
-    });
+    //$('#cache_clearall').on('click', function(){
+    //
+    //    if (!confirm('Are you sure you clear the entire cache?')) {
+    //        return false;
+    //    }
+    //
+    //    var el = $(this);
+    //
+    //    $.ajax(el.attr('href') || el.data('href'), {
+    //
+    //        type: 'post',
+    //        success: function(data, textStatus) {
+    //            $('#cache_batch_actions').remove();
+    //            $('#cache_content').html(data);
+    //        }
+    //    });
+    //
+    //    return false;
+    //});
 
 
     $('#cache_content').on('click', '.cache_refresh', function(){

@@ -162,19 +162,19 @@ class SteamPlayerCacheController extends AppController {
      *
      * @log [admin.log] the admin id
      */
-    public function clear_all() {
-
-        $this->request->allowMethod('post');
-
-        if (!$this->Access->check('Cache', 'delete')) {
-            $this->redirect($this->referer());
-            return;
-        }
-
-        $admin_steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
-        CakeLog::write('admin', "$admin_steamid force cleared the entire Steam cache.");
-
-        $this->SteamPlayerCache->clearAll();
-        $this->render('list.inc');
-    }
+//    public function clear_all() {
+//
+//        $this->request->allowMethod('post');
+//
+//        if (!$this->Access->check('Cache', 'delete')) {
+//            $this->redirect($this->referer());
+//            return;
+//        }
+//
+//        $admin_steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
+//        CakeLog::write('admin', "$admin_steamid force cleared the entire Steam cache.");
+//
+//        $this->SteamPlayerCache->clearAll();
+//        $this->render('list.inc');
+//    }
 }
