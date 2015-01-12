@@ -1,7 +1,7 @@
 {% extends 'Common/base.tpl' %}
 
 {% set title = 'Steam Data Cache' %}
-{% set scripts = ['common', 'admin-cache'] %}
+{% set scripts = ['highcharts', 'highcharts-3d', 'charts', 'admin-cache'] %}
 
 {% block content %}
 
@@ -16,6 +16,14 @@
     <p>This page is mostly just for cache debugging purposes. There is no reason to manually refresh a player from the cache unless you know that person's steam profile name or avatar has changed since it was last fetched.</p>
 
     <p>{{ html.link('Click here', {'controller': 'Admin', 'action': 'viewlog', 'name': 'steam'}) }} to view the Steam cache log.</p>
+
+    <div id="cached_chart" class="chart_container" data-href="{{ html.url({
+        'controller': 'SteamPlayerCache',
+        'action': 'totals_cached',
+        'ext': 'json'
+    }) }}">
+        <div class="chart_inner"></div>
+    </div>
 
     {% if cache %}
         <div id="cache_batch_actions">

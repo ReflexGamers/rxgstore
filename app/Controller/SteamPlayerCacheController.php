@@ -33,6 +33,17 @@ class SteamPlayerCacheController extends AppController {
     }
 
     /**
+     * Returns json data for amount of players cached.
+     */
+    public function totals_cached() {
+
+        $this->set(array(
+            'data' => $this->SteamPlayerCache->getTotalsCached(),
+            '_serialize' => array('data')
+        ));
+    }
+
+    /**
      * Shows a page of cached players. This is usually included in the view page or called via ajax for paging, but
      * sometimes it's used as the whole response such as when refreshing the entire cache.
      *

@@ -87,4 +87,34 @@
         return false;
     });
 
+
+    $('#cached_chart').buildChart({
+        chartFunc: 'buildPieChart',
+        chartParams: {
+            title: {
+                text: 'Total Cached Players'
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size: 18px">{point.key}</span><br/>',
+                pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)',
+                style: {
+                    fontSize: '16px',
+                    lineHeight: '24px'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    dataLabels: {
+                        style: {
+                            fontSize: '16px'
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: 'Count'
+            }]
+        }
+    });
+
 })(jQuery);

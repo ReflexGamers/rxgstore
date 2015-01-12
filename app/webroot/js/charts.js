@@ -230,6 +230,26 @@
             });
 
             return true;
+        },
+
+        /**
+         * Builds a chart on the element
+         * @param params
+         */
+        buildChart: function (params) {
+
+            var el = $(this);
+
+            $.ajax(el.data('href'), {
+
+                type: 'post',
+                beforeSend: function() {
+                },
+                success: function(data, textStatus) {
+                    el[params.chartFunc](data.data, params.chartParams);
+                }
+
+            });
         }
     });
 

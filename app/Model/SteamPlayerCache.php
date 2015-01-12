@@ -289,6 +289,22 @@ class SteamPlayerCache extends AppModel {
         }
     }
 
+    /**
+     * Gets the totals for cached players and puts the data in a format friendly to HighCharts.
+     *
+     * @return array
+     */
+    public function getTotalsCached() {
+
+        $valid = $this->countValidPlayers();
+        $expired = $this->countExpiredPlayers();
+
+        return array(
+            array('Valid', $valid),
+            array('Expired', $expired)
+        );
+    }
+
 
 /**
  * Validation rules
