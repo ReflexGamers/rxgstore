@@ -21,7 +21,21 @@ class AccessComponent extends Component {
      * @param Controller $controller
      */
     public function initialize(Controller $controller) {
-        $this->user = $this->Auth->user();
+        $this->setUser();
+    }
+
+    /**
+     * Sets the current user for the duration of the request. This should be called if the user needs to be logged in
+     * after the component initializes.
+     *
+     * @param array $user optional user to set. if empty, the authentication object will be checked
+     */
+    public function setUser($user = null) {
+        if (empty($user)) {
+            $this->user = $this->Auth->user();
+        } else {
+            $this->user = $user;
+        }
     }
 
     /**

@@ -162,14 +162,19 @@ class AppController extends Controller {
         $this->Auth->allow();
 
         $user = $this->Auth->user();
-        $isUser = isset($user);
+        $loggedIn = isset($user);
 
-        if ($this->AccountUtility->trySavedLogin($isUser) && !$isUser) {
-            //fetch user again after logging in
+        if ($this->AccountUtility->trySavedLogin($loggedIn) && !$loggedIn) {
+
+            // fetch user again after logging in
             $user = $this->Auth->user();
+            $loggedIn = true;
+
+            // access component init already occurred, so user must be set manually
+            $this->Access->setUser($user);
         }
 
-        if ($isUser) {
+        if ($loggedIn) {
             $this->loadModel('User');
             $this->User->id = $user['user_id'];
             $this->User->saveField('last_activity', time());
