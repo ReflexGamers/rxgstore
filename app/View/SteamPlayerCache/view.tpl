@@ -17,18 +17,10 @@
 
     <p>{{ html.link('Click here', {'controller': 'Admin', 'action': 'viewlog', 'name': 'steam'}) }} to view the Steam cache log.</p>
 
-    <div id="cached_chart" class="chart_container" data-href="{{ html.url({
-        'controller': 'SteamPlayerCache',
-        'action': 'totals_cached',
-        'ext': 'json'
-    }) }}">
-        <div class="chart_inner"></div>
-    </div>
-
     {% if cache %}
         <div id="cache_batch_actions">
-            {% if access.check('Cache', 'update') %}
-                <input type="button" id="cache_refreshall" class="btn-success" value="Refresh All Players" data-href="{{ html.url({'action': 'refresh_all'}) }}" />
+            {% if access.check('Cache', 'delete') %}
+                <input type="button" id="cache_clear_expired" class="btn-danger" value="Prune Expired Players" data-href="{{ html.url({'action': 'clear_expired'}) }}" />
             {% endif %}
             {{ html.image('misc/ajax-loader.gif', {
                 'class': 'ajax-loader',
@@ -36,6 +28,14 @@
             }) }}
         </div>
     {% endif %}
+
+    <div id="cached_chart" class="chart_container" data-href="{{ html.url({
+        'controller': 'SteamPlayerCache',
+        'action': 'totals_cached',
+        'ext': 'json'
+    }) }}">
+        <div class="chart_inner"></div>
+    </div>
 
     <div id="cache_content">
         {% include 'SteamPlayerCache/list.inc.tpl' %}

@@ -97,6 +97,27 @@ class SteamPlayerCacheController extends AppController {
     }
 
     /**
+     * Deletes all expired players from the cache.
+     *
+     * @log [admin.log]
+     */
+    public function clear_expired() {
+
+        $this->request->allowMethod('post');
+
+        if (!$this->Access->check('Cache', 'delete')) {
+            $this->redirect($this->referer());
+            return;
+        }
+
+        $admin_steamid = $this->Auth->user('steamid');
+        CakeLog::write('admin', "$admin_steamid force pruned all expired players from the Steam cache.");
+
+        $this->SteamPlayerCache->pruneExpiredPlayers();
+        $this->autoRender = false;
+    }
+
+    /**
      * Refreshes a player in the cache and renders that player's row in the response.
      *
      * @log [admin.log] the admin id, player id
@@ -111,7 +132,7 @@ class SteamPlayerCacheController extends AppController {
             return;
         }
 
-        $admin_steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
+        $admin_steamid = $this->Auth->user('steamid');
         CakeLog::write('admin', "$admin_steamid force refreshed $steamid in the Steam cache.");
 
         $user_id = $this->AccountUtility->AccountIDFromSteamID64($steamid);
@@ -125,26 +146,26 @@ class SteamPlayerCacheController extends AppController {
         $this->render('single.inc');
     }
 
-    /**
-     * Refreshes all players in the cache and renders a page of them in the response.
-     *
-     * @log [admin.log] the admin id
-     */
-    public function refresh_all() {
-
-        $this->request->allowMethod('post');
-
-        if (!$this->Access->check('Cache', 'update')) {
-            $this->redirect($this->referer());
-            return;
-        }
-
-        $admin_steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
-        CakeLog::write('admin', "$admin_steamid force refreshed the entire Steam cache.");
-
-        $this->SteamPlayerCache->refreshAll();
-        $this->players();
-    }
+//    /**
+//     * Refreshes all players in the cache and renders a page of them in the response.
+//     *
+//     * @log [admin.log] the admin id
+//     */
+//    public function refresh_all() {
+//
+//        $this->request->allowMethod('post');
+//
+//        if (!$this->Access->check('Cache', 'update')) {
+//            $this->redirect($this->referer());
+//            return;
+//        }
+//
+//        $admin_steamid = $this->Auth->user('steamid');
+//        CakeLog::write('admin', "$admin_steamid force refreshed the entire Steam cache.");
+//
+//        $this->SteamPlayerCache->refreshAll();
+//        $this->players();
+//    }
 
     /**
      * Removes a player from the cache.
@@ -161,18 +182,18 @@ class SteamPlayerCacheController extends AppController {
             return;
         }
 
-        $admin_steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
+        $admin_steamid = $this->Auth->user('steamid');
         CakeLog::write('admin', "$admin_steamid force cleared $steamid in the Steam cache.");
 
         $this->SteamPlayerCache->delete($steamid);
         $this->autoRender = false;
     }
 
-    /**
-     * Removes all players from the cache and renders an empty list in the response.
-     *
-     * @log [admin.log] the admin id
-     */
+//    /**
+//     * Removes all players from the cache and renders an empty list in the response.
+//     *
+//     * @log [admin.log] the admin id
+//     */
 //    public function clear_all() {
 //
 //        $this->request->allowMethod('post');
@@ -182,7 +203,7 @@ class SteamPlayerCacheController extends AppController {
 //            return;
 //        }
 //
-//        $admin_steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
+//        $admin_steamid = $this->Auth->user('steamid');
 //        CakeLog::write('admin', "$admin_steamid force cleared the entire Steam cache.");
 //
 //        $this->SteamPlayerCache->clearAll();

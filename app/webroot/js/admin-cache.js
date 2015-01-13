@@ -1,8 +1,8 @@
 (function($){
 
-    $('#cache_refreshall').on('click', function(){
+    $('#cache_clear_expired').on('click', function(){
 
-        if (!confirm('Are you sure you want to refresh the entire cache?')) {
+        if (!confirm('Are you sure you want to prune all expired players from the cache?')) {
             return false;
         }
 
