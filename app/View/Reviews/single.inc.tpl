@@ -21,7 +21,7 @@
 
     {% if review.quantity %}
         <div class="review_quantity" title="This player purchased {{ review.quantity }} of this item">
-            <i class="fa fa-shopping-cart"></i> {{ review.quantity }}
+            {{ review.quantity }}
         </div>
     {% endif %}
 </div>
