@@ -1045,6 +1045,7 @@ input.cart_quantity_input:focus {
     border-right: none;
     text-align: center;
     transition: all 0.2s;
+    height: 24px;
 }
 
 #cart_add_qty:focus {
