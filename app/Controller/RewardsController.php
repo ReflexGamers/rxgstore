@@ -158,6 +158,7 @@ class RewardsController extends AppController {
 
         $failedRecipients = array();
         $recipients = $this->AccountUtility->resolveAccountIDs($recipientData, $failedRecipients);
+        $recipients = array_unique($recipients);
         $this->addPlayers($recipients);
 
         $rewardDetails = $this->request->data['RewardDetail'];
