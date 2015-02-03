@@ -91,6 +91,11 @@
 
                 <div class="activity_player sender">
                     <span class="item_browse_reward_sender">Reflex Gamers</span>
+                    {% if access.check('Rewards') %}
+                        <div class="activity_reward_sender">
+                            {{ fn.player(_context, players[reward.sender_id]) }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="activity_date">

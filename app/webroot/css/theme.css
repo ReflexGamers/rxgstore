@@ -2635,20 +2635,23 @@ button::-moz-focus-inner {
     padding: 5px 0;
 }
 
-#content .activity_gift_anonymous_sender {
+#content .activity_gift_anonymous_sender,
+#content .activity_reward_sender {
     opacity: 0.5;
 }
 
-#content .activity_gift_anonymous_sender a {
+#content .activity_gift_anonymous_sender a,
+#content .activity_reward_sender a {
     color: rgba(0, 0, 0, 1);
 }
 
-#content .activity_gift_anonymous_sender .member-tag {
-    /*color: rgba(173, 0, 0, 0.5);*/
+#content .activity_reward_sender {
+    font-size: 24px;
 }
 
-#content .activity_gift_anonymous_sender img {
-    /*opacity: 0.5*/
+#content .activity_reward_sender img {
+    width: 28px;
+    height: 28px;
 }
 
 .activity_player.recipient,
