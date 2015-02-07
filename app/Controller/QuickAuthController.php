@@ -113,15 +113,16 @@ class QuickAuthController extends AppController {
      *
      *        id: the record id obtained from step #2
      *        token: the token you saved in step #1
-     *        source: optional abbreviated name of the game mod (e.g., 'csgo', 'tf2')
+     *        game: optional abbreviated name of the game mod (e.g., 'csgo', 'tf2')
+     *        page: optional URL to redirect to after logging in
      *
      * The random token does not have to be unique because when paired with the unique id, the combination will be both
      * unique and random.
      *
      * Once the user is sent to the URL, the rest of the login process will be handled by this action and the user will
      * be sent to the main store page. If the user is coming from a game server that requires a popup to properly show
-     * the window (e.g., a CS:GO server), the 'source' query parameter specified in the URL must be equal to one of the
-     * values in the Store.QuickAuth.PopupFromSources array in the bootstrap.php config or it will not work.
+     * the window (e.g., a CS:GO server), the 'game' query parameter specified in the URL must be equal to one of the
+     * values in the Store.QuickAuth.PopupFromGames array in the bootstrap.php config or it will not work.
      *
      * Note: You do not need to worry about timezones and clock synchronization because the date field is set by the
      * database when you insert the token as long as your script does not specify it. To configure the amount of time
@@ -140,6 +141,11 @@ class QuickAuthController extends AppController {
             CakeLog::write('quickauth', "QuickAuth attempted with no query string.");
             $this->redirect($redirLoc);
             return;
+        }
+
+        // set redirect to specific page
+        if (!empty($params['page'])) {
+            $redirLoc = $params['page'];
         }
 
         if (empty($params['id']) || empty($params['token'])) {
@@ -203,7 +209,7 @@ class QuickAuthController extends AppController {
 
                         $flags = AccountUtilityComponent::LOGIN_FORCE;
 
-                        if (in_array($params['source'], $config['SkipBanCheckFromSources'])) {
+                        if (in_array($params['game'], $config['SkipBanCheckFromGames'])) {
                             $flags |= AccountUtilityComponent::LOGIN_SKIP_BAN_CHECK;
                         }
 
@@ -230,11 +236,12 @@ class QuickAuthController extends AppController {
             $this->Session->setFlash('Invalid Authentication token. Please contact an administrator.', 'flash', array('class' => 'error'));
         }
 
-        $this->Session->write('Auth.user.ingame', true);
-        $this->Session->setFlash('You may also visit the store at store.reflex-gamers.com', 'flash', array('class' => 'info'), 'quickauth');
-
-        // go straight to store if source not specified
-        if (empty($params['source'])) {
+        // check if coming from a web server or in-game
+        if (!empty($params['game'])) {
+            $this->Session->write('Auth.user.ingame', true);
+            $this->Session->setFlash('You may also visit the store at store.reflex-gamers.com', 'flash', array('class' => 'info'), 'quickauth');
+        } else {
+            // go straight to store if game not specified
             $this->redirect($redirLoc);
             return;
         }
@@ -245,12 +252,12 @@ class QuickAuthController extends AppController {
             $server = Hash::extract($this->Server->findByServerIp($auth['server'], array('short_name')), 'Server');
         }
 
-        // if server not found, use source from url
-        $server = !empty($server) ? $server['short_name'] : $params['source'];
+        // if server not found, use game from url
+        $server = !empty($server) ? $server['short_name'] : $params['game'];
         $redirLoc = array('controller' => 'Items', 'action' => 'index', 'server' => $server);
 
         // if server is not in the popup list, send user straight to store
-        if (!in_array($params['source'], $config['PopupFromSources'])) {
+        if (!in_array($params['game'], $config['PopupFromGames'])) {
             $this->redirect($redirLoc);
             return;
         }

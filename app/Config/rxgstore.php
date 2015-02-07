@@ -15,10 +15,10 @@ $config['Store'] = array(
 		'TokenExpire' => 180, //expires after 3 minutes
 		'WindowHeight' => 600,
 		'WindowWidth' => 800,
-		'PopupFromSources' => array(
+		'PopupFromGames' => array(
 			'csgo'
 		),
-		'SkipBanCheckFromSources' => array(
+		'SkipBanCheckFromGames' => array(
 			'csgo', 'tf2'
 		)
 	),
