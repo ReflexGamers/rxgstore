@@ -2831,3 +2831,21 @@ code {
 #permissions_loading {
     vertical-align: bottom;
 }
+
+.search_box {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 3px 5px;
+}
+
+.btn-search {
+    display: block;
+    margin: 10px auto 30px;
+    padding: 8px 15px;
+    font-size: 20px;
+}
+
+.search_result_send_gift {
+    float: right;
+    font-size: 18px;
+}

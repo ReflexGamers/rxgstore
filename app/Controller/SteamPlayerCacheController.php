@@ -33,6 +33,44 @@ class SteamPlayerCacheController extends AppController {
     }
 
     /**
+     * Search page for cached steam players.
+     */
+    public function search() {
+
+        $term = !empty($this->request->query['term']) ? $this->request->query['term'] : '';
+
+        if (!empty($term)) {
+            $this->search_results($term, false);
+        }
+
+        $this->loadShoutbox();
+    }
+
+    /**
+     * Shows search results for a specific term. Called by the view action or via ajax directly.
+     *
+     * @param string $term search term
+     * @param bool $forceRender whether to force render. set to false if calling from another action
+     */
+    public function search_results($term = '', $forceRender = true) {
+
+        $this->Paginator->settings = $this->SteamPlayerCache->getSearchQueryPage($term);
+        $results = Hash::extract($this->Paginator->paginate('SteamPlayerCache'), '{n}.SteamPlayerCache.user_id');
+        $this->addPlayers($results);
+
+        $this->set(array(
+            'term' => $term,
+            'results' => $results,
+            'pageModel' => $this->SteamPlayerCache->name,
+            'pageLocation' => array('controller' => 'SteamPlayerCache', 'action' => 'search_results', 'term' => $term)
+        ));
+
+        if ($forceRender) {
+            $this->render('results');
+        }
+    }
+
+    /**
      * Returns json data for amount of players cached.
      */
     public function totals_cached() {

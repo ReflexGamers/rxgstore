@@ -29,6 +29,30 @@ class SteamPlayerCache extends AppModel {
     protected $expireTime = null;
 
     /**
+     * Returns a query that can be used to fetch a page of search results for a specific term.
+     *
+     * Note: This does not return data; it simply returns the query as an array.
+     *
+     * @param string $term search term
+     * @param int $limit optional limit for number of reviews to return
+     * @return array query to be passed into paginator
+     */
+    public function getSearchQueryPage($term = '', $limit = 10) {
+
+        return array(
+            'SteamPlayerCache' => array(
+                'fields' => array(
+                    'user_id'
+                ),
+                'conditions' => array(
+                    'personaname like' => "%$term%"
+                ),
+                'limit' => $limit
+            )
+        );
+    }
+
+    /**
      * Returns cached player data for all the provided steamids even if they have expired since it is better to display
      * slightly older data that could still be correct than to wait forever on the Steam API.
      *

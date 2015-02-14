@@ -157,8 +157,6 @@
 			'id' => '[0-9]+'
 	));
 
-	Router::connect('/search', array('controller' => 'Users', 'action' => 'search'));
-
 	Router::connect('/gift/:action', array('controller' => 'Gifts'));
 	Router::connect('/gift/:action/:id', array(
 			'controller' => 'Gifts'
@@ -196,14 +194,21 @@
 	Router::connect('/stock', array('controller' => 'Shipments', 'action' => 'edit'));
 	Router::connect('/stock/activity/*', array('controller' => 'Shipments', 'action' => 'activity'));
 
+	Router::connect('/search', array('controller' => 'SteamPlayerCache', 'action' => 'search'));
+    Router::connect('/search/results/:term/*', array(
+            'controller' => 'SteamPlayerCache',
+            'action' => 'search_results'
+        ), array(
+            'pass' => array('term')
+    ));
+
 	Router::connect('/cache', array('controller' => 'SteamPlayerCache', 'action' => 'view'));
 	Router::connect('/cache/:action/:id/*', array(
 			'controller' => 'SteamPlayerCache'
 		), array(
 			'pass' => array('id'),
 			'id' => '[0-9]+'
-		)
-	);
+	));
 	Router::connect('/cache/:action/*', array('controller' => 'SteamPlayerCache'));
 
 	Router::connect('/permissions', array('controller' => 'Permissions', 'action' => 'view'));
@@ -213,8 +218,7 @@
 		), array(
 			'pass' => array('id'),
 			'id' => '[0-9]+'
-		)
-	);
+	));
 
 	Router::connect('/credit/:action', array('controller' => 'TotalCreditLog'));
 

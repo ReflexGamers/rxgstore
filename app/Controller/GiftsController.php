@@ -63,7 +63,7 @@ class GiftsController extends AppController {
     public function compose($steamid) {
 
         if (empty($steamid)) {
-            $this->redirect(array('controller' => 'Items', 'action' => 'index'));
+            $this->redirect(array('controller' => 'SteamPlayerCache', 'action' => 'search'));
             return;
         }
 
