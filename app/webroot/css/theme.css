@@ -595,7 +595,7 @@ table.addfunds td {
 .username_link {
     font-weight:bold;
     color: #ffffff;
-    max-width: 250px;
+    max-width: 150px;
     overflow: hidden;
     text-overflow: ellipsis;
     display: inline-block;
