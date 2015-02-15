@@ -25,6 +25,11 @@
     </div>
 
     <div class="faq_item">
+        <div class="faq_question">How do I send gifts to other players?</div>
+        <div class="faq_answer">Click on a player's name and then click the "send gift" button on that person's store profile. You can also {{ html.link('search', {'controller': 'SteamPlayerCache', 'action': 'search'}) }} for the player in our database.</div>
+    </div>
+
+    <div class="faq_item">
         <div class="faq_question">Where do I give feedback and suggest new items?</div>
         <div class="faq_answer">Submit your feedback on our forums at <a href="http://reflex-gamers.com">www.reflex-gamers.com</a>. You may also review an item on its respective listing page after purchasing it, but if you think an item is imbalanced, that feedback would be best heard on our forums.</div>
     </div>
