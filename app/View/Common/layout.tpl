@@ -25,6 +25,7 @@
             <td class="header_left">
                 {{ html.link('SHOP', {'controller': 'Items', 'action': 'index'}) }}
                 {{ html.link('FAQ', {'controller': 'Items', 'action': 'faq'}) }}
+                {{ html.link('FORUMS', 'http://reflex-gamers.com') }}
                 <span id="cart_link_content">
                     {% if cartItems %}
                         {% include 'Cart/link.inc.tpl' %}
