@@ -1112,36 +1112,35 @@ input.cart_quantity_input:focus {
     margin-top: 20px;
 }
 
-.top_buyer_list {
+.top_player_list {
     font-size: 22px;
     list-style: none;
     padding: 0 0 0 20px;
     margin: 0;
 }
 
-.top_buyer_list li {
+.top_player_list li {
     padding: 5px 0;
 }
 
-.top_buyer_list li:first-child {
+.top_player_list li:first-child {
     padding-top: 0;
 }
 
-.top_buyer_list img {
+.top_player_list img {
     vertical-align: bottom;
     border-radius: 5px;
 }
 
-
-.top_buyer_info {
+.top_player_info {
     font-size: 28px;
 }
 
-.top_buyer_amount {
+.top_player_amount {
     font-weight: 600;
 }
 
-.top_buyer_name {
+.top_player_name {
     font-weight: 400;
 }
 

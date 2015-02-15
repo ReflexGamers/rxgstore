@@ -212,6 +212,30 @@ class Item extends AppModel {
     }
 
     /**
+     * Returns the top hoarders for a specific item. Top hoarders are determined by the quantity of
+     * the item still in their inventories.
+     *
+     * @param int $item_id
+     * @param int $limit optional limit for number of top hoarders to return
+     * @return array
+     */
+    public function getTopHoarders($item_id, $limit = 5) {
+
+        return Hash::combine($this->UserItem->find('all', array(
+            'fields' => array(
+                'UserItem.user_id', 'SUM(UserItem.quantity) as quantity'
+            ),
+            'conditions' => array(
+                'UserItem.item_id' => $item_id,
+                'quantity > 0'
+            ),
+            'group' => 'user_id',
+            'order' => 'quantity desc',
+            'limit' => $limit
+        )), '{n}.UserItem.user_id', '{n}.{n}');
+    }
+
+    /**
      * Returns a query that can be used to fetch a page of reviews for a specific item.
      *
      * Note: This does not return data; it simply returns the query as an array.

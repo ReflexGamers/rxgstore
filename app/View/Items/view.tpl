@@ -139,15 +139,41 @@
 
             <h2 class="page_subheading">Top Buyers</h2>
 
-            <ul class="top_buyer_list">
+            <ul class="top_player_list">
 
                 {% for buyer, data in topBuyers %}
 
                     <li>
-                        <span class="top_buyer_name">
+                        <span class="top_player_name">
                             {{ fn.player(_context, players[buyer]) }}
                         </span>
-                        bought <span class="top_buyer_amount">{{ data.quantity }}</span> for <span class="top_buyer_cost">{{ fn.currency(data.total, {'big': true}) }}</span>
+                        bought <span class="top_player_amount">{{ data.quantity }}</span> for <span class="top_player_cost">{{ fn.currency(data.total, {'big': true}) }}</span>
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </section>
+
+    {% endif %}
+
+
+    {% if topHoarders %}
+
+        <section id="top_hoarders">
+
+            <h2 class="page_subheading">Top Hoarders</h2>
+
+            <ul class="top_player_list">
+
+                {% for buyer, data in topHoarders %}
+
+                    <li>
+                        <span class="top_player_name">
+                            {{ fn.player(_context, players[buyer]) }}
+                        </span>
+                        is hoarding <span class="top_player_amount">{{ data.quantity }}</span>
                     </li>
 
                 {% endfor %}

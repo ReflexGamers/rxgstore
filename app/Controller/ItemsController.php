@@ -209,11 +209,15 @@ class ItemsController extends AppController {
         $topBuyers = $this->Item->getTopBuyers($item_id);
         $this->addPlayers(array_keys($topBuyers));
 
+        $topHoarders = $this->Item->getTopHoarders($item_id);
+        $this->addPlayers(array_keys($topHoarders));
+
         $this->set(array(
             'item' => $item,
             'stock' => $this->Item->getStock($item_id),
             'servers' => $servers,
             'topBuyers' => $topBuyers,
+            'topHoarders' => $topHoarders,
             'ratings' => $this->Item->getRating($item_id),
             'features' => $itemData['Feature']
         ));
