@@ -22,6 +22,24 @@ class PaypalOrdersController extends AppController {
     }
 
     /**
+     * Returns json data for total real money spent each day.
+     */
+    public function totals(){
+
+        if (!$this->Access->check('Stock', 'update')) {
+            $this->autoRender = false;
+            return;
+        }
+
+        $data = $this->PaypalOrder->getDailySums();
+
+        $this->set(array(
+            'data' => $data,
+            '_serialize' => array('data')
+        ));
+    }
+
+    /**
      * Add Funds page (primary hub for PayPal)
      */
     public function addfunds() {

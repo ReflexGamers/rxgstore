@@ -15,4 +15,12 @@
         <div class="chart_inner"></div>
     </div>
 
+    <div id="paypal_chart" class="chart_container" data-href="{{ html.url({
+        'controller': 'PaypalOrders',
+        'action': 'totals',
+        'ext': 'json'
+    }) }}">
+        <div class="chart_inner"></div>
+    </div>
+
 {% endblock %}
