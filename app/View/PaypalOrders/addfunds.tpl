@@ -65,12 +65,12 @@
 
                 <h2 class="page_subheading">Top Buyers</h2>
 
-                <ul class="top_buyer_list">
+                <ul class="top_player_list">
 
                     {% for buyer, data in topBuyers %}
 
                         <li>
-                            <span class="top_buyer_name">
+                            <span class="top_player_name">
                                 {{ fn.player(_context, players[buyer]) }}
                             </span>
                             spent <strong>{{ fn.realMoney(data.spent) }}</strong> on <span class="currency_value">{{ fn.currency(data.received, {'big': true}) }}</span>
