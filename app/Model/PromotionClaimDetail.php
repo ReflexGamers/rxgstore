@@ -1,27 +1,23 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * PromotionUser Model
+ * PromotionClaimDetail Model
  *
- * @property Activity $Activity
- * @property Promotion $Promotion
- * @property PromotionUserDetail $PromotionUserDetail
- * @property User $User
+ * @property PromotionDetail $PromotionDetail
+ * @property PromotionClaim $PromotionClaim
  */
-class PromotionUser extends AppModel {
+class PromotionClaimDetail extends AppModel {
 
     public $actsAs = array('Containable');
 
-    public $useTable = 'promotion_user';
-    public $primaryKey = 'promotion_user_id';
+    public $useTable = 'promotion_claim_detail';
+    public $primaryKey = 'promotion_claim_detail_id';
 
     public $belongsTo = array(
-        'Activity', 'Promotion', 'User'
+        'PromotionDetail', 'PromotionClaim'
     );
 
-    public $hasMany = 'PromotionUserDetail';
-
-    public $order = 'PromotionUser.promotion_user_id DESC';
+    public $order = 'PromotionClaim.promotion_claim_detail_id DESC';
 
 
 /**
@@ -30,7 +26,7 @@ class PromotionUser extends AppModel {
  * @var array
  */
     public $validate = array(
-        'promotion_id' => array(
+        'promotion_claim_id' => array(
             'notEmpty' => array(
                 'rule' => array('notEmpty'),
                 //'message' => 'Your custom message here',
@@ -40,7 +36,17 @@ class PromotionUser extends AppModel {
                 //'on' => 'create', // Limit validation to 'create' or 'update' operations
             ),
         ),
-        'user_id' => array(
+        'promotion_detail_id' => array(
+            'notEmpty' => array(
+                'rule' => array('notEmpty'),
+                //'message' => 'Your custom message here',
+                //'allowEmpty' => false,
+                //'required' => false,
+                //'last' => false, // Stop validation after this rule
+                //'on' => 'create', // Limit validation to 'create' or 'update' operations
+            ),
+        ),
+        'quantity' => array(
             'notEmpty' => array(
                 'rule' => array('notEmpty'),
                 //'message' => 'Your custom message here',

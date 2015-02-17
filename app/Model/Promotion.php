@@ -4,7 +4,7 @@ App::uses('AppModel', 'Model');
  * Promotion Model
  *
  * @property PromotionDetail $PromotionDetail
- * @property PromotionUser $PromotionUser
+ * @property PromotionClaim $PromotionClaim
  */
 class Promotion extends AppModel {
 
@@ -14,7 +14,7 @@ class Promotion extends AppModel {
     public $primaryKey = 'promotion_id';
 
     public $hasMany = array(
-        'PromotionDetail', 'PromotionUser'
+        'PromotionDetail', 'PromotionClaim'
     );
 
     public $order = 'Promotion.promotion_id DESC';

@@ -5,7 +5,7 @@ App::uses('AppModel', 'Model');
  *
  * @property Item $Item
  * @property Promotion $Promotion
- * @property PromotionUserDetail $PromotionUserDetail
+ * @property PromotionClaimDetail $PromotionClaimDetail
  */
 class PromotionDetail extends AppModel {
 
@@ -18,7 +18,7 @@ class PromotionDetail extends AppModel {
         'Item', 'Promotion'
     );
 
-    public $hasMany = 'PromotionUserDetail';
+    public $hasMany = 'PromotionClaimDetail';
 
     public $order = 'PromotionDetail.promotion_detail_id DESC';
 
