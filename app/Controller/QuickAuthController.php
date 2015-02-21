@@ -209,7 +209,7 @@ class QuickAuthController extends AppController {
 
                         $flags = AccountUtilityComponent::LOGIN_FORCE;
 
-                        if (in_array($params['game'], $config['SkipBanCheckFromGames'])) {
+                        if (!empty($params['game']) && in_array($params['game'], $config['SkipBanCheckFromGames'])) {
                             $flags |= AccountUtilityComponent::LOGIN_SKIP_BAN_CHECK;
                         }
 
