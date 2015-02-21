@@ -28,8 +28,13 @@ class PaypalOrder extends AppModel {
         $month = date('n') - $offsetMonth;
         $startTime = mktime(0, 0, 0, $month, 1);
 
-        $lastDay = ($offsetMonth === 0) ? date('d') : date('t', $startTime);
-        $endTime = mktime(0, 0, 0, $month, $lastDay);
+        if ($offsetMonth === 0) {
+            $lastDayOfMonth = date('d');
+            $endTime = time();
+        } else {
+            $lastDayOfMonth = date('t', $startTime);
+            $endTime = mktime(0, 0, 0, $month, $lastDayOfMonth);
+        }
 
         $daysWithPurchases = array();
 
@@ -51,7 +56,7 @@ class PaypalOrder extends AppModel {
         });
 
         // add missing days with 0
-        for ($i = 1; $i <= $lastDay; $i++) {
+        for ($i = 1; $i <= $lastDayOfMonth; $i++) {
             if (!in_array($i, $daysWithPurchases)) {
                 $data[] = array(
                     date('Y-m-d', mktime(0, 0, 0, $month, $i)),
