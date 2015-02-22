@@ -222,6 +222,14 @@
 
 	Router::connect('/credit/:action', array('controller' => 'TotalCreditLog'));
 
+    Router::connect('/promotions', array('controller' => 'Promotions'));
+    Router::connect('/promotions/:action/:id', array(
+            'controller' => 'Promotions',
+        ), array(
+            'pass' => array('id'),
+            'id' => '[0-9]+'
+    ));
+
 
 	//Router::connectNamed(array('page'));
 	//Allow JSON views
