@@ -44,4 +44,26 @@ class AppModel extends Model {
         return date('Y-m-d H:i:s', !empty($time) ? $time : time());
     }
 
+    /**
+     * Checks a save result for the false value in the top level as well as child levels. It does
+     * not check grandchildren arrays.
+     *
+     * @param array $data the result of calling one of the model save methods
+     * @return bool
+     */
+    protected function wasSaveSuccessful($data) {
+
+        if (in_array(false, $data)) {
+            return false;
+        }
+
+        foreach ($data as $row) {
+            if (is_array($row) && in_array(false, $row)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }
