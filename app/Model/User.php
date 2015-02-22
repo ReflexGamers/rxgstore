@@ -362,6 +362,45 @@ class User extends AppModel {
     }
 
     /**
+     * Adds items to the user's inventory.
+     *
+     * @param int $user_id
+     * @param array $items list of item quantities indexed by item_id
+     */
+    public function addItems($user_id, $items) {
+
+        $this->query('LOCK TABLES user_item WRITE, user_item as UserItem WRITE');
+
+        // get inventory
+        $inventory = Hash::combine(
+            $this->UserItem->findAllByUserId($user_id),
+            '{n}.UserItem.item_id', '{n}.UserItem'
+        );
+
+        // add items to inventory
+        foreach ($items as $item_id => $quantity) {
+            if (!isset($inventory[$item_id])) {
+                $inventory[$item_id] = array(
+                    'user_id' => $user_id,
+                    'item_id' => $item_id,
+                    'quantity' => $quantity
+                );
+            } else {
+                $inventory[$item_id]['quantity'] += $quantity;
+            }
+        }
+
+        $saveResult = $this->UserItem->saveMany($inventory, array('atomic' => false));
+
+        $this->query('UNLOCK TABLES');
+
+        // log failure if occurred
+        if (in_array(false, $saveResult)) {
+            CakeLog::write('user_item', 'Error adding items: ' . print_r($saveResult, true));
+        }
+    }
+
+    /**
      * Returns the current and past items for the specified user. The result array consists of two keys, 'current' for
      * a list of current items, and 'past' for a list of past items. Each child array is a list of item quantities
      * indexed by item_id.
