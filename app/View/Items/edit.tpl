@@ -6,17 +6,17 @@
 
 {% macro label(_, name, label) %}
     {% if label != '' %}
-        {{ _.form.label(name, label, {'class': 'item_edit_label'}) }}
+        {{ _.form.label(name, label, {'class': 'edit_label'}) }}
     {% endif %}
 {% endmacro %}
 
 {% macro input(_, name, value, options, extra) %}
-    {{ _.form.input(name, {'value': value, 'class': 'item_edit_input'}|merge(options ?: [])) }}
+    {{ _.form.input(name, {'value': value, 'class': 'edit_input'}|merge(options ?: [])) }}
     {{ extra }}
 {% endmacro %}
 
 {% macro field(_, name, label, value, options, extra) %}
-    <div class="item_edit_field">
+    <div class="edit_field">
         {{ _self.label(_, name, label) }}
         {{ _self.input(_, name, value, options, extra) }}
     </div>
@@ -62,10 +62,10 @@
         ['Stock.maximum', 'Maximum Stock', stock.maximum]
     ]) }}
 
-    <div class="item_edit_multiple">
+    <div class="edit_multiple">
         {{ _self.label(_context, '', 'Servers') }}
         <input type="hidden" id="childServers" value="{{ childServers }}" />
-        <div class="item_edit_input">
+        <div class="edit_input">
             {{ form.input('ServerItem.server_id', {
                 'type': 'select',
                 'multiple': 'checkbox',
@@ -76,7 +76,7 @@
         </div>
     </div>
 
-    <div class="item_edit_multiple">
+    <div class="edit_multiple">
         {{ _self.label(_context, '', 'Features') }}
         <div class="item_edit_features">
         {% if features %}
@@ -85,7 +85,7 @@
                 <div class="item_edit_feature">
                     {{ form.hidden('Feature.' ~ loop.index0 ~ '.feature_id', {'value': feature.feature_id, 'class': 'item_edit_feature_id'}) }}
                     {{ form.input('Feature.' ~ loop.index0 ~ '.description', {
-                        'class': 'item_edit_input',
+                        'class': 'edit_input',
                         'value': feature.description,
                         'required': false
                     }) }}
@@ -97,7 +97,7 @@
 
             <div class="item_edit_feature">
                 {{ form.input('Feature.0.description', {
-                    'class': 'item_edit_input',
+                    'class': 'edit_input',
                     'value': feature.description,
                     'required': false
                 }) }}
