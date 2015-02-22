@@ -4,10 +4,13 @@ App::uses('AppModel', 'Model');
  * Item Model
  *
  * @property GiftDetail $GiftDetail
- * @property Rating $Rating
- * @property Stock $Stock
+ * @property Feature $Feature
  * @property OrderDetail $OrderDetail
+ * @property PromotionDetail $PromotionDetail
+ * @property PromotionClaimDetail $PromotionClaimDetail
+ * @property Rating $Rating
  * @property ServerItem $ServerItem
+ * @property Stock $Stock
  * @property UserItem $UserItem
  *
  * Magic Methods (for inspection):
@@ -23,7 +26,7 @@ class Item extends AppModel {
     public $hasOne = 'Stock';
 
     public $hasMany = array(
-        'GiftDetail', 'Feature', 'Rating', 'OrderDetail', 'ServerItem', 'UserItem'
+        'GiftDetail', 'Feature', 'OrderDetail', 'PromotionDetail', 'PromotionClaimDetail', 'Rating', 'ServerItem', 'UserItem'
     );
 
     public $order = 'display_index';

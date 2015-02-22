@@ -18,8 +18,6 @@ class PromotionDetail extends AppModel {
         'Item', 'Promotion'
     );
 
-    public $hasMany = 'PromotionClaimDetail';
-
     public $order = 'PromotionDetail.promotion_detail_id DESC';
 
 

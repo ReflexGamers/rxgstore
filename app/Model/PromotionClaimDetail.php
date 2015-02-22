@@ -3,7 +3,7 @@ App::uses('AppModel', 'Model');
 /**
  * PromotionClaimDetail Model
  *
- * @property PromotionDetail $PromotionDetail
+ * @property Item $Item
  * @property PromotionClaim $PromotionClaim
  */
 class PromotionClaimDetail extends AppModel {
@@ -13,9 +13,8 @@ class PromotionClaimDetail extends AppModel {
     public $useTable = 'promotion_claim_detail';
     public $primaryKey = 'promotion_claim_detail_id';
 
-    public $belongsTo = array(
-        'PromotionDetail', 'PromotionClaim'
-    );
+    public $belongsTo = 'PromotionClaim';
+    public $hasMany = 'Item';
 
     public $order = 'PromotionClaim.promotion_claim_detail_id DESC';
 
@@ -36,7 +35,7 @@ class PromotionClaimDetail extends AppModel {
                 //'on' => 'create', // Limit validation to 'create' or 'update' operations
             ),
         ),
-        'promotion_detail_id' => array(
+        'item_id' => array(
             'notEmpty' => array(
                 'rule' => array('notEmpty'),
                 //'message' => 'Your custom message here',
