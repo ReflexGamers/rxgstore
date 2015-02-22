@@ -8,8 +8,8 @@
     </div>
 
     <div class="pagination_nextprev">
-        {{ paginator.prev('< Next', {'class': 'page_newer', 'model': pageModel}, null, {'class': 'hidden'}) }}
-        {{ paginator.next('Previous >', {'class': 'page_older', 'model': pageModel}, null, {'class': 'hidden'}) }}
+        {{ paginator.prev('< Previous', {'class': 'page_newer', 'model': pageModel}, null, {'class': 'hidden'}) }}
+        {{ paginator.next('Next >', {'class': 'page_older', 'model': pageModel}, null, {'class': 'hidden'}) }}
     </div>
 
     <div class="pagination_numbers">
