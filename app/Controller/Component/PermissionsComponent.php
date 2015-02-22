@@ -69,17 +69,20 @@ class PermissionsComponent extends Component {
         $Aco = $this->Acl->Aco;
 
         $objects = array(
+            array('alias' => 'AdminCP'),
             array('alias' => 'Cache'),
             array('alias' => 'Chats'),
             array('alias' => 'Debug'),
             array('alias' => 'Items'),
             array('alias' => 'Logs'),
             array('alias' => 'Permissions'),
+            array('alias' => 'Promotions'),
             array('alias' => 'QuickAuth'),
             array('alias' => 'Receipts'),
             array('alias' => 'Reviews'),
             array('alias' => 'Rewards'),
-            array('alias' => 'Stock'),
+            array('alias' => 'Shipments'),
+            array('alias' => 'Stats'),
             array('alias' => 'Users')
         );
 
@@ -141,23 +144,43 @@ class PermissionsComponent extends Component {
      */
     private function createAssociations() {
 
-        $this->Acl->allow('Director', 'Debug');
-        $this->Acl->allow('Advisor', 'QuickAuth');
-        $this->Acl->allow('Advisor', 'Rewards');
-        $this->Acl->allow('Advisor', 'Permissions', 'read');
-        $this->Acl->allow('Director', 'Permissions', 'update');
+        $this->Acl->allow('Full Admin', 'AdminCP', 'read');
+
+        $this->Acl->allow('Advisor', 'Chats', 'delete');
+
         $this->Acl->allow('Advisor', 'Cache', 'read');
         $this->Acl->allow('Cabinet', 'Cache', 'update');
         $this->Acl->allow('Cabinet', 'Cache', 'delete');
-        $this->Acl->allow('Advisor', 'Chats', 'delete');
-        $this->Acl->allow('Captain', 'Items', 'create');
+
+        $this->Acl->allow('Director', 'Debug');
+
         $this->Acl->allow('Captain', 'Items', 'update');
+        $this->Acl->allow('Cabinet', 'Items', 'create');
+
         $this->Acl->allow('Advisor', 'Logs', 'read');
-        $this->Acl->allow('Advisor', 'Reviews', 'update');
-        $this->Acl->allow('Advisor', 'Reviews', 'delete');
+        $this->Acl->allow('Advisor', 'Logs', 'update');
+
+        $this->Acl->allow('Advisor', 'Permissions', 'read');
+        $this->Acl->allow('Cabinet', 'Permissions', 'update');
+
+        $this->Acl->allow('Advisor', 'Promotions', 'read');
+        $this->Acl->allow('Captain', 'Promotions', 'create');
+        $this->Acl->allow('Captain', 'Promotions', 'update');
+        $this->Acl->allow('Cabinet', 'Promotions', 'delete');
+
+        $this->Acl->allow('Advisor', 'QuickAuth', 'read');
+
         $this->Acl->allow('Advisor', 'Receipts', 'read');
 
-        $this->Acl->allow('Advisor', 'Stock');
+        $this->Acl->allow('Advisor', 'Reviews', 'update');
+        $this->Acl->allow('Advisor', 'Reviews', 'delete');
+
+        $this->Acl->allow('Advisor', 'Rewards', 'create');
+
+        $this->Acl->allow('Advisor', 'Shipments', 'create');
+
+        $this->Acl->allow('Full Admin', 'Stats', 'read');
+
         $this->Acl->allow('Advisor', 'Users', 'update');
     }
 

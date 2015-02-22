@@ -90,7 +90,7 @@
 
 <footer class="foot">
     <a href="http://reflex-gamers.com">Reflex Gamers</a> | <a href="http://steampowered.com">Powered by Steam</a>
-    {% if access.check('Stock', 'update') %}
+    {% if access.check('Shipments', 'create') %}
         | {{ html.link('Admin Control Panel', {
             'controller': 'Admin',
             'action': 'index'

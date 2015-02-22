@@ -25,7 +25,7 @@ class ShipmentsController extends AppController {
      */
     public function edit() {
 
-        if (!$this->Access->check('Stock', 'update')) {
+        if (!$this->Access->check('Shipments', 'create')) {
             $this->redirect($this->referer());
             return;
         }

@@ -60,7 +60,7 @@ class RewardsController extends AppController {
      */
     public function compose() {
 
-        if (!$this->Access->check('Rewards')) {
+        if (!$this->Access->check('Rewards', 'create')) {
             $this->redirect($this->referer());
             return;
         }
@@ -142,7 +142,7 @@ class RewardsController extends AppController {
 
         $this->request->allowMethod('post');
 
-        if (!$this->Access->check('Rewards')) {
+        if (!$this->Access->check('Rewards', 'create')) {
             $this->redirect($this->referer());
             return;
         }
@@ -226,7 +226,7 @@ class RewardsController extends AppController {
 
         $this->request->allowMethod('post');
 
-        if (!$this->Access->check('Rewards')) {
+        if (!$this->Access->check('Rewards', 'create')) {
             $this->redirect($this->referer());
             return;
         }

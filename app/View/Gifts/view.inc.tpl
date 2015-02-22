@@ -14,7 +14,7 @@
                     {% if isReward %}
                         <span class="item_browse_reward_sender">Reflex Gamers</span>
                     {% elseif gift.anonymous %}
-                        {% if access.check('Rewards') %}
+                        {% if access.check('Rewards', 'create') %}
                             <div class="activity_gift_anonymous_sender">
                                 {{ fn.player(_context, sender) }}
                             </div>

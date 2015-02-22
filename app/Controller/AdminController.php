@@ -21,7 +21,7 @@ class AdminController extends AppController {
      */
     public function index() {
 
-        if (!$this->Access->check('Stock', 'update')) {
+        if (!$this->Access->check('AdminCP', 'read')) {
             $this->redirect(array('controller' => 'Items', 'action' => 'index'));
             return;
         }
@@ -34,7 +34,7 @@ class AdminController extends AppController {
      */
     public function stats() {
 
-        if (!$this->Access->check('Stock', 'update')) {
+        if (!$this->Access->check('Stats', 'read')) {
             $this->redirect(array('controller' => 'Items', 'action' => 'index'));
             return;
         }

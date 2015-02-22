@@ -18,7 +18,7 @@
                     'id': user.steamid
                 }) }}. If you write a message with your gift, it will be displayed publicly so please keep it appropriate.</p>
 
-            {% if access.check('Rewards') %}
+            {% if access.check('Rewards', 'create') %}
                 <p>Want to send a reward from Reflex Gamers instead? {{ html.link('Click here', {'controller': 'Rewards', 'action': 'compose'}) }}.</p>
             {% endif %}
         {% endif %}

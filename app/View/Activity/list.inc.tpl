@@ -44,7 +44,7 @@
 
                 <div class="activity_player sender">
                     {% if gift.anonymous %}
-                        {% if access.check('Rewards') %}
+                        {% if access.check('Rewards', 'create') %}
                             <div class="activity_gift_anonymous_sender">
                                 {{ fn.player(_context, sender) }}
                             </div>
@@ -62,7 +62,7 @@
 
                 <div class="activity_player recipient">
                     {{ fn.player(_context, recipient) }}
-                    {% if access.check('Rewards') %}
+                    {% if access.check('Rewards', 'create') %}
                         {% if gift.accepted %}
                             <i class="fa fa-check icon_gift_accepted" title="Accepted"></i>
                         {% else %}
@@ -91,7 +91,7 @@
 
                 <div class="activity_player sender">
                     <span class="item_browse_reward_sender">Reflex Gamers</span>
-                    {% if access.check('Rewards') %}
+                    {% if access.check('Rewards', 'create') %}
                         <div class="activity_reward_sender">
                             {{ fn.player(_context, players[reward.sender_id]) }}
                         </div>
@@ -111,7 +111,7 @@
 
                         <div class="activity_player recipient">
                             {{ fn.player(_context, players[recipient.recipient_id]) }}
-                            {% if access.check('Rewards') %}
+                            {% if access.check('Rewards', 'create') %}
                                 {% if recipient.accepted %}
                                     <i class="fa fa-check icon_gift_accepted" title="Accepted"></i>
                                 {% else %}
@@ -200,7 +200,7 @@
             {% elseif activity.Shipment %}
 
                 {% set shipment = activity.Shipment %}
-                {% set showShipmentHandler = access.check('Stock', 'update') %}
+                {% set showShipmentHandler = access.check('Shipments', 'create') %}
 
                 <div class="activity_player">
                     <span class="shipment_arrived">Shipment Arrived</span>

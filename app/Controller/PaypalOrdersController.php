@@ -26,7 +26,7 @@ class PaypalOrdersController extends AppController {
      */
     public function totals(){
 
-        if (!$this->Access->check('Stock', 'update')) {
+        if (!$this->Access->check('Stats', 'read')) {
             $this->autoRender = false;
             return;
         }

@@ -20,7 +20,7 @@ class TotalCreditLogController extends AppController {
      */
     public function index() {
 
-        if (!$this->Access->check('Stock', 'update')) {
+        if (!$this->Access->check('Stats', 'read')) {
             $this->redirect(array('controller' => 'Items', 'action' => 'index'));
             return;
         }
@@ -33,7 +33,7 @@ class TotalCreditLogController extends AppController {
      */
     public function totals() {
 
-        if (!$this->Access->check('Stock', 'update')) {
+        if (!$this->Access->check('Stats', 'read')) {
             $this->autoRender = false;
             return;
         }

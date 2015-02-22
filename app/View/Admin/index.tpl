@@ -10,16 +10,19 @@
 
     <ul class="business_list">
         <li>{{ html.link('Search for Players', {'controller': 'SteamPlayerCache', 'action': 'search'}) }}</li>
-        {% if access.check('Rewards') %}
+        {% if access.check('Promotions', 'read') %}
+            <li>{{ html.link('Manage Promotions', {'controller': 'Promotions', 'action': 'index'}) }}</li>
+        {% endif %}
+        {% if access.check('Rewards', 'create') %}
             <li>{{ html.link('Send a Reward', {'controller': 'Rewards', 'action': 'compose'}) }}</li>
         {% endif %}
-        {% if access.check('Stock', 'update') %}
+        {% if access.check('Shipments', 'create') %}
             <li>{{ html.link('Receive a Shipment', {'controller': 'Shipments', 'action': 'edit'}) }}</li>
         {% endif %}
         {% if access.check('Items', 'update') %}
             <li>{{ html.link('Change Item Display Order', {'controller': 'Items', 'action': 'sort'}) }}</li>
         {% endif %}
-        {% if access.check('Stock', 'update') %}
+        {% if access.check('Stats', 'read') %}
             <li>{{ html.link('Secret Stats', {'controller': 'Admin', 'action': 'stats'}) }}</li>
         {% endif %}
         {% if access.check('Permissions', 'read') %}
@@ -28,7 +31,7 @@
         {% if access.check('Cache', 'read') %}
             <li>{{ html.link('View Steam Cache', {'controller': 'SteamPlayerCache', 'action': 'view'}) }}</li>
         {% endif %}
-        {% if access.check('QuickAuth') %}
+        {% if access.check('QuickAuth', 'read') %}
             <li>{{ html.link('View QuickAuth Records', {'controller': 'QuickAuth', 'action': 'view'}) }}</li>
         {% endif %}
     </ul>
