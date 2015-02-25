@@ -101,7 +101,7 @@
 {{ js.writeBuffer() }}
 
 {% if scripts %}
-    {{ html.script(( (scripts is iterable) ? scripts : [scripts] )|merge(['common'])) }}
+    {{ html.script(['common']|merge( (scripts is iterable) ? scripts : [scripts] )) }}
 {% else %}
     {{ html.script('common') }}
 {% endif %}

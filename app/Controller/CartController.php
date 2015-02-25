@@ -183,6 +183,7 @@ class CartController extends AppController {
 
         if ($total > $userCredit) {
             $this->Session->setFlash('You do not have enough CASH to complete this purchase!', 'flash', array('class' => 'error'));
+            $this->redirect(array('controller' => 'Cart', 'action' => 'view'));
             return;
         }
 
