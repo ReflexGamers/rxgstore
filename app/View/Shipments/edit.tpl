@@ -12,7 +12,7 @@
 
     <p>When an item has at least the "ideal" amount in stock, the item's listing page will show as simply "In Stock" and not list the number of items available.</p>
 
-    <p>On this page: Items with less than "ideal" stock will show in orange. Items with less than half of "ideal" stock will show in red.</p>
+    <p>On this page: Items with less than half of maximum stock will show in orange. Items with less than a quarter of maximum stock will show in red.</p>
 
     {{ form.create('Shipment', {
         'inputDefaults': {
@@ -46,7 +46,7 @@
                         {{ item.ideal_quantity }}
                     </td>
                     <td class="item_stock_quantity">
-                        <span class="item_stock_current {{ (item.quantity < item.ideal_quantity / 2 )? 'stock_danger' : (item.quantity < item.ideal_quantity) ? 'stock_warning' : '' }}">{{ item.quantity }}</span> / {{ item.maximum }}
+                        <span class="item_stock_current {{ (item.quantity < item.maximum / 4 )? 'stock_danger' : (item.quantity < item.maximum / 2) ? 'stock_warning' : '' }}">{{ item.quantity }}</span> / {{ item.maximum }}
                     </td>
                     <td class="item_stock_input">
                         {{ form.hidden(loop.index0 ~ '.item_id', {'value': item.item_id}) }}
