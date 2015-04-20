@@ -18,45 +18,87 @@
 
     var paypalChart = $('#paypal_chart');
 
-    $.ajax(paypalChart.data('href'), {
+    $.ajax(paypalChart.data('href-monthly'), {
         type: 'post',
         beforeSend: function () {
 
         },
         success: function (data, textStatus) {
 
-            for (var i = 0; i < data.data.length; i++) {
-                var column = data.data[i];
-                column[0] = Date.parse(column[0]);
-                column[1] = parseInt(column[1], 10) / 100;
+            data = data.data;
+
+            for (var i = 0; i < data.length; i++) {
+                var column = data[i];
+                data[i] = {
+                    name: column[0],
+                    drilldown: column[0],
+                    y: column[1] / 100
+                };
             }
 
             paypalChart.highcharts({
                 chart: {
                     type: 'column',
                     backgroundColor: null,
-                    plotBackgroundColor: null
+                    plotBackgroundColor: null,
+                    events: {
+                        drilldown: function (e) {
+                            var chart = this,
+                                url = paypalChart.data('href-daily');
+
+                            url += '?offset=' + (e.point.series.points.length - e.point.x);
+
+                            $.ajax(url, {
+                                success: function (drilldownData, textStatus) {
+
+                                    drilldownData = drilldownData.data;
+
+                                    for (var i = 0; i < drilldownData.length; i++) {
+                                        var column = drilldownData[i];
+                                        drilldownData[i] = {
+                                            name: column[0],
+                                            y: column[1] / 100
+                                        };
+                                    }
+
+                                    var pointName = e.point.name;
+
+                                    chart.addSeriesAsDrilldown(e.point, {
+                                        name: pointName,
+                                        data: drilldownData
+                                    });
+
+                                    chart.setTitle({
+                                        text: 'PayPal Income for ' + pointName
+                                    });
+                                }
+                            });
+                        },
+                        drillup: function (e) {
+                            var chart = this;
+                            chart.setTitle({
+                                text: 'PayPal Income Past Year'
+                            });
+                        }
+                    }
                 },
                 title: {
-                    text: 'PayPal Income This Month'
+                    text: 'PayPal Income Past Year'
                 },
                 yAxis: {
                     min: 0,
                     title: {
                         text: 'Dollars'
-                    }
+                    },
+                    maxPadding: 0.5
                 },
                 xAxis: {
-                    tickInterval: 1,
-                    type: 'datetime',
-                    dateTimeLabelFormats: {
-                        day: '%e'
-                    }
+                    type: 'category'
                 },
                 tooltip: {
-                    headerFormat: '<span style="font-size: 16px">{point.key:%b %e}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                                 '<td style="padding:0"><b>${point.y:,.2f}</b></td></tr>',
+                    headerFormat: '<span style="font-size: 16px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">PayPal Income: </td>' +
+                    '<td style="padding:0"><b>${point.y:,.2f}</b></td></tr>',
                     footerFormat: '</table>',
                     shared: true,
                     useHTML: true
@@ -69,11 +111,11 @@
                     }
                 },
                 series: [{
-                    name: 'PayPal Income',
-                    data: data.data,
-                    pointInterval: 24 * 3600 * 1000
+                    name: 'PayPal Income By Month',
+                    type: 'column',
+                    data: data
                 }]
-            })
+            });
         }
     });
 

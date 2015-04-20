@@ -22,16 +22,42 @@ class PaypalOrdersController extends AppController {
     }
 
     /**
-     * Returns json data for total real money spent each day.
+     * Returns json data for total real money spent each day in a month.
+     *
+     * Specify the query parameter 'offset=X' to get data for X months ago.
      */
-    public function totals(){
+    public function dailyTotals() {
 
         if (!$this->Access->check('Stats', 'read')) {
             $this->autoRender = false;
             return;
         }
 
-        $data = $this->PaypalOrder->getDailySums();
+        $offsetMonth = 0;
+
+        if (!empty($this->request->query['offset'])) {
+            $offsetMonth = $this->request->query['offset'];
+        }
+
+        $data = $this->PaypalOrder->getDailySums($offsetMonth);
+
+        $this->set(array(
+            'data' => $data,
+            '_serialize' => array('data')
+        ));
+    }
+
+    /**
+     * Returns json data for total real money spent each month.
+     */
+    public function monthlyTotals() {
+
+        if (!$this->Access->check('Stats', 'read')) {
+            $this->autoRender = false;
+            return;
+        }
+
+        $data = $this->PaypalOrder->getMonthlySums();
 
         $this->set(array(
             'data' => $data,

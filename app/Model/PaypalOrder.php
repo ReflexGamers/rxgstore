@@ -17,6 +17,101 @@ class PaypalOrder extends AppModel {
 
 
     /**
+     * Gets the monthly sums of real money spent each month in the past year and puts it in a format
+     * friendly to HighCharts.
+     *
+     * @param int $monthCount how many past months to show
+     * @return array
+     */
+    public function getMonthlySums($monthCount = 12) {
+
+        $thisMonth = date('n');
+        $startMonth = $thisMonth - $monthCount;
+        $startTime = mktime(0, 0, 0, $startMonth, 1);
+        $endTime = time();
+
+        $monthsWithPurchases = array();
+
+        $data = Hash::map($this->find('all', array(
+            'fields' => array(
+                'YEAR(date) as year, MONTH(date) as month', 'SUM(amount) as spent'
+            ),
+            'conditions' => array(
+                'date >= ' => $this->formatTimestamp($startTime),
+                'date <= ' => $this->formatTimestamp($endTime)
+            ),
+            'group' => 'YEAR(date), MONTH(date)',
+            'order' => 'YEAR(date) asc, MONTH(date) asc'
+        )), '{n}',
+            function($arr) use (&$monthsWithPurchases) {
+                $month = Hash::get($arr, '0.month');
+                $monthsWithPurchases[] = $month;
+                return array(
+                    Hash::get($arr, '0.year'),
+                    $month,
+                    (int)Hash::get($arr, '0.spent')
+                );
+            }
+        );
+
+        // add missing months with 0
+        for ($i = 1; $i <= 12; $i++) {
+            if (!in_array($i, $monthsWithPurchases)) {
+                $year = date('Y');
+                if ($i > $thisMonth) {
+                    $year--;
+                }
+                $data[] = array(
+                    "$year",
+                    "$i",
+                    0
+                );
+            }
+        }
+
+        usort($data, function($a, $b) {
+            $aYear = (int)$a[0];
+            $bYear = (int)$b[0];
+            $aMonth = (int)$a[1];
+            $bMonth = (int)$b[1];
+
+            if ($aYear > $bYear) {
+                return 1;
+            } else if ($bYear > $aYear) {
+                return -1;
+            } else {
+                return ($aMonth > $bMonth) ? 1 : -1;
+            }
+        });
+
+        for ($i = 0; $i < count($data); $i++) {
+            if (empty($data[$i])) {
+                $data[$i] = array(
+                    $data[$i][0],
+                    DateTime::createFromFormat('!m', $i)->format('M'),
+                    '0'
+                );
+            } else {
+                $row = $data[$i];
+                $data[$i] = array(
+                    $row[0],
+                    DateTime::createFromFormat('!m', $row[1])->format('M'),
+                    $row[2]
+                );
+            }
+        }
+
+        // simplify names
+        foreach ($data as $i => $row) {
+            // Example: 'Apr 2015'
+            $name = "{$row[1]} {$row[0]}";
+            $data[$i] = array($name, $row[2]);
+        }
+
+        return $data;
+    }
+
+    /**
      * Gets the daily sums of real money spent each day in a given month and puts it in a format
      * friendly to HighCharts.
      *
@@ -40,7 +135,7 @@ class PaypalOrder extends AppModel {
 
         $data = Hash::map($this->find('all', array(
             'fields' => array(
-                'DAY(date) as day', "date_format(date, '%Y-%m-%d') as date", 'SUM(amount) as spent'
+                'DAY(date) as day', 'SUM(amount) as spent'
             ),
             'conditions' => array(
                 'date >= ' => $this->formatTimestamp($startTime),
@@ -50,8 +145,8 @@ class PaypalOrder extends AppModel {
         )), '{n}', function($arr) use (&$daysWithPurchases) {
             $daysWithPurchases[] = Hash::get($arr, '0.day');
             return array(
-                Hash::get($arr, '0.date'),
-                Hash::get($arr, '0.spent')
+                (int)Hash::get($arr, '0.day'),
+                (int)Hash::get($arr, '0.spent')
             );
         });
 
@@ -59,13 +154,13 @@ class PaypalOrder extends AppModel {
         for ($i = 1; $i <= $lastDayOfMonth; $i++) {
             if (!in_array($i, $daysWithPurchases)) {
                 $data[] = array(
-                    date('Y-m-d', mktime(0, 0, 0, $month, $i)),
-                    "0"
+                    $i,
+                    0
                 );
             }
         }
 
-        $data = Hash::sort($data, '{n}.0', 'asc', 'regular');
+        $data = Hash::sort($data, '{n}.0', 'asc');
 
         return $data;
     }
