@@ -1,18 +1,23 @@
 <?php
 
 $config['Store'] = array(
-	'SavedLoginDuration' => 2592000, //1 month
+    'Stock' => array(
+        'OverStockMult' => 1.25, // multiplies suggested value by this
+        'MaxStockMult' => 1.5, // multiply suggested stock by this to get max stock (includes overstock)
+        'AntiMicroThreshold' => 0.75 // will not stock if current > this fraction of suggested (unless stock < min)
+    ),
+	'SavedLoginDuration' => 2592000, // 1 month
 	'Shoutbox' => array(
-		'PostCooldown' => 60, //1 minute
-		'UpdateInterval' => 30 //30 seconds
+		'PostCooldown' => 60, // 1 minute
+		'UpdateInterval' => 30 // 30 seconds
 	),
 	'SteamCache' => array(
-		'Duration' => 86400, //24 hours
-		'PrecacheQuickAuthTime' => 604800 //1 week
+		'Duration' => 86400, // 24 hours
+		'PrecacheQuickAuthTime' => 604800 // 1 week
 	),
-	'MaxTimeToConsiderInGame' => 300, //5 minutes
+	'MaxTimeToConsiderInGame' => 300, // 5 minutes
 	'QuickAuth' => array(
-		'TokenExpire' => 180, //expires after 3 minutes
+		'TokenExpire' => 180, // expires after 3 minutes
 		'WindowHeight' => 600,
 		'WindowWidth' => 800,
 		'PopupFromGames' => array(
@@ -26,7 +31,7 @@ $config['Store'] = array(
 		'Cost' => 100,
 		'FreeThreshold' => 2500,
 	),
-	'CurrencyMultiplier' => 100, //Cents to CASH
+	'CurrencyMultiplier' => 100, // Cents to CASH
 	'CashStackSize' => 100,
 	'Paypal' => array(
 		'EndPoint' => (getenv('CAKEPHP_DEBUG')) ? 'api.sandbox.paypal.com' : 'api.paypal.com',
@@ -40,14 +45,14 @@ $config['Store'] = array(
 	),
 	'Forums' => array(
 		'MemberGroups' => array(
-			28, //Member
-			29, //Basic Admin
-			30, //Full Admin
-			37, //Advisor
-			38, //Captain
-			39, //Cabinet
-			40, //Director
-			48 //Founder
+			28, // Member
+			29, // Basic Admin
+			30, // Full Admin
+			37, // Advisor
+			38, // Captain
+			39, // Cabinet
+			40, // Director
+			48  // Founder
 		),
 		'Divisions' => array(
 			'Counter-Strike: Global Offensive' => 'CS:GO',
