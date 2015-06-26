@@ -43,7 +43,7 @@ class ShoutboxMessagesController extends AppController {
     /**
      * Adds a new shoutbox message and renders the entire shoutbox content in the response. This happens when the user
      * submits their desired chat message. If the user recently posted a message, it will respond an inline error.
-     * Configure the allowed time between messages in Store.Shoutbox.PostCooldown in bootstrap.php.
+     * Configure the allowed time between messages in Store.Shoutbox.PostCooldown in rxgstore.php.
      */
     public function add() {
 

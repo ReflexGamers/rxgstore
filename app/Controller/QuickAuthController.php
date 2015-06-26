@@ -122,11 +122,11 @@ class QuickAuthController extends AppController {
      * Once the user is sent to the URL, the rest of the login process will be handled by this action and the user will
      * be sent to the main store page. If the user is coming from a game server that requires a popup to properly show
      * the window (e.g., a CS:GO server), the 'game' query parameter specified in the URL must be equal to one of the
-     * values in the Store.QuickAuth.PopupFromGames array in the bootstrap.php config or it will not work.
+     * values in the Store.QuickAuth.PopupFromGames array in the rxgstore.php config or it will not work.
      *
      * Note: You do not need to worry about timezones and clock synchronization because the date field is set by the
      * database when you insert the token as long as your script does not specify it. To configure the amount of time
-     * tokens are usable, edit Store.QuickAuth.TokenExpire in the bootstrap.php config.
+     * tokens are usable, edit Store.QuickAuth.TokenExpire in the rxgstore.php config.
      *
      * Note: A bug in the Source engine causes the page to be requested twice so re-using tokens is silently ignored.
      */
