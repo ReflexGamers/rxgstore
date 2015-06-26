@@ -34,35 +34,32 @@ class ShipmentsController extends AppController {
 
         if (isset($this->request->data['Shipment'])) {
 
-            $newStock = $this->request->data['Shipment'];
-            $stock = Hash::combine($this->Stock->find('all'), '{n}.Stock.item_id', '{n}.Stock');
-            $shipmentDetail = array();
+            $addStock = Hash::combine($this->request->data['Shipment'], '{n}.item_id', '{n}.quantity');
 
-            $stockChanged = false;
-
-            foreach ($newStock as &$item) {
-                $item_id = $item['item_id'];
-                if (!empty($item['quantity'])) {
-                    $quantity = $item['quantity'];
-                    $qty = $quantity > 0 ? $quantity : 0;
-                    $oldQty = $stock[$item_id]['quantity'];
-                    $stock[$item_id]['quantity'] = min($stock[$item_id]['quantity'] + $qty, $stock[$item_id]['maximum']);
-                    $shipmentDetail[] = array(
-                        'item_id' => $item_id,
-                        'quantity' => $stock[$item_id]['quantity'] - $oldQty
-                    );
-                    $stockChanged = true;
+            // remove empty values
+            foreach ($addStock as $item_id => $quantity) {
+                if (empty($quantity)) {
+                    unset($addStock[$item_id]);
                 }
             }
 
-            if ($stockChanged) {
+            // submit new stock
+            $addedStock = $this->Stock->addStock($addStock);
 
-                $this->Stock->saveMany($stock, array(
-                    'fields' => array('quantity'),
-                    'atomic' => false
-                ));
+            if (!empty($addedStock)) {
+
+                $shipmentDetail = array();
+
+                foreach ($addedStock as $item_id => $quantity) {
+                    $shipmentDetail[] = array(
+                        'item_id' => $item_id,
+                        'quantity' => $quantity
+                    );
+                }
 
                 $this->loadModel('Activity');
+
+                // save shipment
                 $this->Shipment->saveAssociated(array(
                     'Shipment' => array(
                         'shipment_id' => $this->Activity->getNewId('Shipment'),
