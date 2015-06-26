@@ -10,6 +10,7 @@ App::uses('AppModel', 'Model');
  * @property PromotionClaimDetail $PromotionClaimDetail
  * @property Rating $Rating
  * @property ServerItem $ServerItem
+ * @property ShipmentDetail $ShipmentDetail
  * @property Stock $Stock
  * @property UserItem $UserItem
  *
@@ -26,7 +27,7 @@ class Item extends AppModel {
     public $hasOne = 'Stock';
 
     public $hasMany = array(
-        'GiftDetail', 'Feature', 'OrderDetail', 'PromotionDetail', 'PromotionClaimDetail', 'Rating', 'ServerItem', 'UserItem'
+        'GiftDetail', 'Feature', 'OrderDetail', 'PromotionDetail', 'PromotionClaimDetail', 'Rating', 'ServerItem', 'ShipmentDetail', 'UserItem'
     );
 
     public $order = 'display_index';
