@@ -215,7 +215,11 @@
 
                 {% if showShipmentHandler %}
                     <div class="activity_player handler">
-                        {{ fn.player(_context, players[shipment.user_id]) }}
+                        {% if shipment.user_id == 0 %}
+                            Robots
+                        {% else %}
+                            {{ fn.player(_context, players[shipment.user_id]) }}
+                        {% endif %}
                     </div>
                 {% endif %}
 
