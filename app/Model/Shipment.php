@@ -23,6 +23,34 @@ class Shipment extends AppModel {
     public $order = 'Shipment.shipment_id DESC';
 
 
+    /**
+     * Saves a shipment with its details given an array of item quantities indexed by item_id.
+     *
+     * @param array $items list of item quantities indexed by item_id
+     * @param int $user_id the user with which to associate the shipment
+     * @return array the save result
+     */
+    public function saveShipment($items, $user_id = 0) {
+
+        $shipmentDetail = array();
+
+        // create details
+        foreach ($items as $item_id => $quantity) {
+            $shipmentDetail[] = array(
+                'item_id' => $item_id,
+                'quantity' => $quantity
+            );
+        }
+
+        return $this->saveAssociated(array(
+            'Shipment' => array(
+                'shipment_id' => $this->Activity->getNewId('Shipment'),
+                'user_id' => $user_id
+            ),
+            'ShipmentDetail' => $shipmentDetail
+        ), array('atomic' => false));
+    }
+
 /**
  * Validation rules
  *
