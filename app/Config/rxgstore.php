@@ -1,7 +1,7 @@
 <?php
 
 $config['Store'] = array(
-    'Stock' => array(
+    'AutoStock' => array(
         'OverStockMult' => 1.25, // multiplies suggested value by this
         'MaxStockMult' => 1.5, // multiply suggested stock by this to get max stock (includes overstock)
         'AntiMicroThreshold' => 0.75 // will not stock if current > this fraction of suggested (unless stock < min)
