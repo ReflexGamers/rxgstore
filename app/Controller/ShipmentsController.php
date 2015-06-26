@@ -48,26 +48,7 @@ class ShipmentsController extends AppController {
 
             if (!empty($addedStock)) {
 
-                $shipmentDetail = array();
-
-                foreach ($addedStock as $item_id => $quantity) {
-                    $shipmentDetail[] = array(
-                        'item_id' => $item_id,
-                        'quantity' => $quantity
-                    );
-                }
-
-                $this->loadModel('Activity');
-
-                // save shipment
-                $this->Shipment->saveAssociated(array(
-                    'Shipment' => array(
-                        'shipment_id' => $this->Activity->getNewId('Shipment'),
-                        'user_id' => $this->Auth->user('user_id')
-                    ),
-                    'ShipmentDetail' => $shipmentDetail
-                ), array('atomic' => false));
-
+                $this->Shipment->saveShipment($addedStock, $this->Auth->user('user_id'));
                 $this->Session->setFlash('The shipment was received successfully!', 'flash', array('class' => 'success'));
             }
         }
