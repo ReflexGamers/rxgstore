@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class CronShell
+ * Class SteamCacheShell
  *
  * @property SteamPlayerCache $SteamPlayerCache
  * @property User $User

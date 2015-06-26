@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class CronShell
+ * Class PermissionsShell
  *
  * @property ComponentCollection $components
  * @property PermissionsComponent $Permissions
