@@ -19,9 +19,9 @@ class StatsController extends AppController {
     public function index() {
 
         $this->set(array(
-            'dayAgo' => time() - 86400,
-            'weekAgo' => time() - 604800,
-            'monthAgo' => time() - 2592000
+            'dayAgo' => strtotime('-1 day'),
+            'weekAgo' => strtotime('-1 week'),
+            'monthAgo' => strtotime('-1 month')
         ));
 
         $this->loadShoutbox();
