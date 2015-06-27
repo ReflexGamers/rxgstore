@@ -191,6 +191,12 @@ class ItemsController extends AppController {
      */
     public function view($id = null) {
 
+        // allowing this simplifies putting cash in item lists
+        if ($id === 'cash' || strval($id) === '0') {
+            $this->redirect(array('controller' => 'PaypalOrders', 'action' => 'addfunds'));
+            return;
+        }
+
         $itemData = $this->Item->getWithFeatures($id);
 
         if (empty($itemData)) {
