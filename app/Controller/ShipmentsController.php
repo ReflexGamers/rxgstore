@@ -53,17 +53,17 @@ class ShipmentsController extends AppController {
             }
         }
 
-        $stock = Hash::map($this->Stock->find('all', array(
+        $stock = Hash::sort(Hash::map($this->Stock->find('all', array(
             'contain' => array(
                 'Item' => array(
                     'fields' => array(
-                        'name', 'short_name'
+                        'name', 'short_name', 'display_index'
                     )
                 )
             )
         )), '{n}', function($arr){
             return array_merge($arr['Stock'], $arr['Item']);
-        });
+        }), '{n}.display_index');
 
         $this->set('stock', $stock);
 
