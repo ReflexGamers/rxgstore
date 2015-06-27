@@ -48,7 +48,7 @@ class Stock extends AppModel {
 
         // save updated maximums
         $this->saveMany($newStock, array(
-            'fields' => array('maximum'),
+            'fieldList' => array('maximum'),
             'atomic' => false
         ));
 
@@ -267,7 +267,7 @@ class Stock extends AppModel {
         }
 
         $this->saveMany($allStock, array(
-            'fields' => array('quantity'),
+            'fieldList' => array('quantity'),
             'atomic' => false
         ));
 
