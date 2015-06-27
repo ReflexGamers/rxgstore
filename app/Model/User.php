@@ -401,6 +401,32 @@ class User extends AppModel {
     }
 
     /**
+     * Adds the specified amount of cash to the user's wallet.
+     *
+     * @param int $user_id
+     * @param int $amount
+     * @return bool the save result
+     */
+    public function addCash($user_id, $amount) {
+
+        $this->query('LOCK TABLES user WRITE');
+
+        $this->id = $user_id;
+        $currentCash = $this->field('credit');
+        $newCash = (int)$currentCash + $amount;
+
+        $saveResult = $this->saveField('credit', $newCash);
+
+        $this->query('UNLOCK TABLES');
+
+        if (!$saveResult) {
+            CakeLog::write('user', "Error adding cash $amount to user #$user_id");
+        }
+
+        return $saveResult;
+    }
+
+    /**
      * Returns the current and past items for the specified user. The result array consists of two keys, 'current' for
      * a list of current items, and 'past' for a list of past items. Each child array is a list of item quantities
      * indexed by item_id.
