@@ -156,7 +156,7 @@ class PermissionsComponent extends Component {
         $this->Acl->allow('Advisor', 'Logs', 'read');
         $this->Acl->allow('Advisor', 'Logs', 'update');
 
-        $this->Acl->allow('Advisor', 'Permissions', 'read');
+        $this->Acl->allow('Admin', 'Permissions', 'read');
         $this->Acl->allow('Cabinet', 'Permissions', 'update');
 
         $this->Acl->allow('Advisor', 'Promotions', 'read');
