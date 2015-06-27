@@ -4,7 +4,7 @@ App::uses('AppModel', 'Model');
  * RewardRecipient Model
  *
  * @property Reward $Reward
- * @property User $Recipient
+ * @property User $User
  */
 class RewardRecipient extends AppModel {
 
@@ -15,7 +15,7 @@ class RewardRecipient extends AppModel {
 
     public $belongsTo = array(
         'Reward',
-        'Recipient' => array(
+        'User' => array(
             'className' => 'User',
             'foreignKey' => 'recipient_id'
         )
