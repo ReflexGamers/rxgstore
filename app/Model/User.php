@@ -366,6 +366,7 @@ class User extends AppModel {
      *
      * @param int $user_id
      * @param array $items list of item quantities indexed by item_id
+     * @return array the save result
      */
     public function addItems($user_id, $items) {
 
@@ -398,6 +399,8 @@ class User extends AppModel {
         if (in_array(false, $saveResult)) {
             CakeLog::write('user_item', 'Error adding items: ' . print_r($saveResult, true));
         }
+
+        return $saveResult;
     }
 
     /**
