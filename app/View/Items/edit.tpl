@@ -59,6 +59,7 @@
         ['short_name', 'In-game Usage', item.short_name],
         ['Stock.item_id', '', stock.item_id,],
         ['Stock.ideal_quantity', 'Ideal Stock', stock.ideal_quantity, {}, '~' ~ suggested],
+        ['Stock.minimum', 'Minimum Stock', stock.minimum],
         ['Stock.maximum', 'Maximum Stock', stock.maximum]
     ]) }}
 

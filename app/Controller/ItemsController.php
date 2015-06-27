@@ -473,7 +473,7 @@ class ItemsController extends AppController {
 
             $stockSaveSuccess = $this->Item->Stock->save($stock, array(
                 'fieldList' => array(
-                    'ideal_quantity', 'maximum'
+                    'ideal_quantity', 'minimum', 'maximum'
                 )
             ));
 
