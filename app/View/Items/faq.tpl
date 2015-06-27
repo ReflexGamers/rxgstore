@@ -51,7 +51,7 @@
 
     <div class="faq_item">
         <div class="faq_question">The item I want is out of stock... when will it be available?</div>
-        <div class="faq_answer">Shipments typically arrive once or twice a week. We have had some instances of Space Pirates attacking our delivery ships in the past so we cannot make any promises about shipment dates.</div>
+        <div class="faq_answer">Shipments typically arrive twice a week. We have had some instances of Space Pirates attacking our delivery ships in the past so we cannot make any promises about shipment dates.</div>
     </div>
 
 {% endblock %}

@@ -65,7 +65,12 @@ class ShipmentsController extends AppController {
             return array_merge($arr['Stock'], $arr['Item']);
         }), '{n}.display_index');
 
-        $this->set('stock', $stock);
+        $config = Configure::read('Store.AutoStock');
+
+        $this->set(array(
+            'stock' => $stock,
+            'config' => $config
+        ));
 
         $this->loadShoutbox();
         $this->activity(false);
