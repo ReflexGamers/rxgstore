@@ -46,8 +46,7 @@ $config['Store'] = array(
 	'Forums' => array(
 		'MemberGroups' => array(
 			28, // Member
-			29, // Basic Admin
-			30, // Full Admin
+			30, // Admin
 			37, // Advisor
 			38, // Captain
 			39, // Cabinet

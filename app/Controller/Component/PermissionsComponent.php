@@ -104,32 +104,28 @@ class PermissionsComponent extends Component {
                 'alias' => 'Member',
             ),
             array(
-                'alias' => 'Basic Admin',
+                'alias' => 'Admin',
                 'parent_id' => 1
             ),
             array(
-                'alias' => 'Full Admin',
+                'alias' => 'Advisor',
                 'parent_id' => 2
             ),
             array(
-                'alias' => 'Advisor',
+                'alias' => 'Captain',
                 'parent_id' => 3
             ),
             array(
-                'alias' => 'Captain',
+                'alias' => 'Cabinet',
                 'parent_id' => 4
             ),
             array(
-                'alias' => 'Cabinet',
+                'alias' => 'Director',
                 'parent_id' => 5
             ),
             array(
-                'alias' => 'Director',
-                'parent_id' => 6
-            ),
-            array(
                 'alias' => 'Webmaster',
-                'parent_id' => 7
+                'parent_id' => 6
             )
         );
 
@@ -144,7 +140,7 @@ class PermissionsComponent extends Component {
      */
     private function createAssociations() {
 
-        $this->Acl->allow('Full Admin', 'AdminCP', 'read');
+        $this->Acl->allow('Admin', 'AdminCP', 'read');
 
         $this->Acl->allow('Advisor', 'Chats', 'delete');
 
@@ -179,7 +175,7 @@ class PermissionsComponent extends Component {
 
         $this->Acl->allow('Advisor', 'Shipments', 'create');
 
-        $this->Acl->allow('Full Admin', 'Stats', 'read');
+        $this->Acl->allow('Admin', 'Stats', 'read');
 
         $this->Acl->allow('Advisor', 'Users', 'update');
     }
