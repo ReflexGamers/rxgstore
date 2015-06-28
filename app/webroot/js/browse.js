@@ -10,7 +10,7 @@
 
         var el = $(this);
         var gift = el.closest('.item_browse_gift');
-        var inventory = $('#item_browse_inventory_content');
+        var inventory = $('.item_browse_inventory');
         var loader = gift.find('.item_browse_gift_loading').first();
 
         var item_ids = [];

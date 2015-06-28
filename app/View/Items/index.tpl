@@ -10,32 +10,13 @@
 
     {% if user %}
 
-        {% set userHasItems = userItems is not empty %}
-
         <div class="item_browse_inventory">
-
-            <div class="item_browse_cash">You have: {{ fn.currency(credit, {'big': true}) }}</div>
-
-            <div id="item_browse_inventory_content">
-
-                {% if userHasItems %}
-
-                    {% include 'Items/list.inc.tpl' with {
-                        'quantity': userItems,
-                        'maxColumns': 7
-                    } %}
-
-                {% else %}
-
-                    <p>... and no items!</p>
-
-                {% endif %}
-
-            </div>
-
+            {% include 'Items/browse_inventory.inc.tpl' with {
+                userItems: userItems
+            } %}
         </div>
 
-        {% if userHasItems %}
+        {% if userItems is not empty %}
 
             <div class="browse_howto">
                 <a class="browse_howto_link">How do I use items?</a>

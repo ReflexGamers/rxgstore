@@ -48,11 +48,15 @@ class RewardsController extends AppController {
         $this->loadItems();
         $this->loadModel('User');
 
+        $this->User->id = $user_id;
+        $credit = $this->User->field('credit');
+
         $this->set(array(
-            'quantity' => $this->User->getItems($user_id)
+            'credit' => $credit,
+            'userItems' => $this->User->getItems($user_id)
         ));
 
-        $this->render('/Items/list.inc');
+        $this->render('/Items/browse_inventory.inc');
     }
 
     /**
