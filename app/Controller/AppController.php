@@ -104,6 +104,13 @@ class AppController extends Controller {
             $sortedItems = $this->Item->getAllSorted();
             $items = Hash::combine($sortedItems, '{n}.item_id', '{n}');
 
+            // add cash at the beginning as item_id 0
+            array_unshift($sortedItems, array(
+                'item_id' => 0,
+                'short_name' => 'cash',
+                'name' => 'RXG Cash'
+            ));
+
             $this->set(array(
                 'sortedItems' => $sortedItems,
                 'items' => $items
