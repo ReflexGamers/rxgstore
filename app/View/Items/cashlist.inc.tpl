@@ -13,7 +13,7 @@
         {% for i in 1..stacks %}
             <li class="item_list_entry cash" data-item_id="{{ item.item_id }}">
                 <div class="item_pic" title="{{ 'CASH' }}">
-                    {{ html.image("items/money.png", {
+                    {{ html.image("items/cash.png", {
                         'url': {
                             'controller': 'PaypalOrders',
                             'action': 'addfunds'
