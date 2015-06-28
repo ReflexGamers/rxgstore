@@ -41,7 +41,7 @@ class Reward extends AppModel {
      */
     public function acceptPendingReward($reward_id, $recipient_id) {
 
-        $UserItem = $this->RewardRecipient->Recipient->UserItem;
+        $User = $this->RewardRecipient->User;
 
         $reward = $this->RewardRecipient->find('first', array(
             'conditions' => array(
@@ -55,39 +55,25 @@ class Reward extends AppModel {
         // make sure valid reward exists
         if (!empty($reward)) {
 
-            // lock user inventory
-            $UserItem->query('LOCK TABLES user_item WRITE, user_item as UserItem WRITE');
-
-            // get user inventory
-            $inventory = Hash::combine(
-                $UserItem->findAllByUserId($recipient_id),
-                '{n}.UserItem.item_id', '{n}.UserItem'
-            );
-
-            // add reward details to user inventory
-            foreach ($reward['Reward']['RewardDetail'] as $detail) {
-
-                $item_id = $detail['item_id'];
-                $quantity = $detail['quantity'];
-
-                if (empty($inventory[$item_id])) {
-                    $inventory[$item_id] = array(
-                        'user_id' => $recipient_id,
-                        'item_id' => $item_id,
-                        'quantity' => $quantity
-                    );
-                } else {
-                    $inventory[$item_id]['quantity'] += $quantity;
-                }
+            if (!empty($reward['Reward']['RewardDetail'])) {
+                $User->addItems($recipient_id, Hash::combine($reward['Reward']['RewardDetail'], '{n}.item_id', '{n}.quantity'));
             }
 
-            // save and unlock inventory
-            $UserItem->saveMany($inventory, array('atomic' => false));
-            $UserItem->query('UNLOCK TABLES');
+            $credit = $reward['Reward']['credit'];
+
+            if (!empty($credit)) {
+                $User->addCash($recipient_id, $credit);
+            }
 
             // set gift as accepted
             $this->RewardRecipient->id = $reward['RewardRecipient']['reward_recipient_id'];
             $this->RewardRecipient->saveField('accepted', 1);
+
+            // add cash at beginning as item_id 0
+            array_unshift($reward['Reward']['RewardDetail'], array(
+                'item_id' => 0,
+                'quantity' => $credit
+            ));
 
             // return reward data so controller can use it
             return $reward;

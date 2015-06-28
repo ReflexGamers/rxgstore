@@ -166,13 +166,14 @@ class RewardsController extends AppController {
         $this->addPlayers($recipients);
 
         $rewardDetails = $this->request->data['RewardDetail'];
-        $message = empty($this->request->data['Reward']['message']) ? '' : $this->request->data['Reward']['message'];
+        $message = !empty($this->request->data['Reward']['message']) ? $this->request->data['Reward']['message']: '';
+        $credit = !empty($this->request->data['Reward']['credit']) ? $this->request->data['Reward']['credit'] : 0;
 
         $user_id = $this->Auth->user('user_id');
 
         $this->loadModel('Item');
         $items = $this->loadItems();
-        $totalValue = 0;
+        $totalValue = (int)$credit;
 
         foreach ($rewardDetails as $key => $detail) {
 
@@ -188,7 +189,8 @@ class RewardsController extends AppController {
             $totalValue += $items[$item_id]['price'] * $quantity;
         }
 
-        if(empty($rewardDetails)) {
+        // redirect if no details or cash
+        if(empty($totalValue) && empty($rewardDetails)) {
             $this->redirect(array('action' => 'compose'));
             return;
         }
@@ -205,7 +207,8 @@ class RewardsController extends AppController {
             'RewardRecipient' => $rewardRecipients,
             'Reward' => array(
                 'sender_id' => $user_id,
-                'message' => $message
+                'message' => $message,
+                'credit' => $credit
             ),
             'RewardDetail' => $rewardDetails
         ));
@@ -215,6 +218,7 @@ class RewardsController extends AppController {
             'failedRecipients' => $failedRecipients,
             'details' => Hash::combine($rewardDetails, '{n}.item_id', '{n}.quantity'),
             'message' => $message,
+            'credit' => $credit,
             'totalValue' => $totalValue,
             'isReward' => true
         ));
@@ -248,7 +252,7 @@ class RewardsController extends AppController {
         $reward['Reward']['reward_id'] = $this->Activity->getNewId('Reward');
         $result = $this->Reward->saveAssociated($reward, array('atomic' => false));
 
-        if (!$result['Reward'] || in_array(false, $result['RewardDetail']) || in_array(false, $result['RewardRecipient'])) {
+        if (!$result['Reward'] || (!empty($result['RewardDetail']) && in_array(false, $result['RewardDetail'])) || in_array(false, $result['RewardRecipient'])) {
             $this->Session->setFlash('There was an error sending the reward. Please contact an administrator', 'flash', array('class' => 'error'));
         } else {
             $this->Session->setFlash("The reward has been sent! Reward number - #{$this->Reward->id}", 'flash', array('class' => 'success'));

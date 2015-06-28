@@ -136,9 +136,17 @@
             <th class="quantity">Quantity</th>
         </tr>
 
-        {% for item in sortedItems if (composing ? (isReward or userItems[item.item_id] > 0) : details[item.item_id] > 0) %}
+        {% for item in sortedItems if
+            (composing ?
+                (isReward or userItems[item.item_id] > 0) :
+                (isReward and item.item_id == 0 and credit or details[item.item_id] > 0))
+        %}
 
             {% set quantity = (details) ? details[item.item_id] : '' %}
+
+            {% if item.item_id == 0 %}
+                {% set quantity = credit %}
+            {% endif %}
 
             {% if showUserQuantity %}
                 {% set userQuantity = userItems[item.item_id] %}
@@ -159,12 +167,19 @@
                 {% endif %}
                 <td class="gift_item_input quantity">
                     {% if composing %}
-                        {{ form.hidden(loop.index0 ~ '.item_id', {'value': item.item_id}) }}
-                        {{ form.input(loop.index0 ~ '.quantity', {
-                            'min': 0,
-                            'max': userQuantity,
-                            'value': quantity
-                        }) }}
+                        {% if item.item_id == 0 %}
+                            {{ form.input('Reward.credit', {
+                                'min': 0,
+                                'value': quantity
+                            }) }}
+                        {% else %}
+                            {{ form.hidden(loop.index0 ~ '.item_id', {'value': item.item_id}) }}
+                            {{ form.input(loop.index0 ~ '.quantity', {
+                                'min': 0,
+                                'max': userQuantity,
+                                'value': quantity
+                            }) }}
+                        {% endif %}
                     {% else %}
                         {{ quantity }}
                     {% endif %}
