@@ -201,6 +201,9 @@ class User extends AppModel {
                 $reward['Reward']['RewardDetail'],
                 '{n}.item_id', '{n}.quantity'
             );
+
+            // add cash as item_id 0
+            $reward['Reward']['RewardDetail'][0] = $reward['Reward']['credit'];
         }
 
         return $rewards;

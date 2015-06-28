@@ -112,11 +112,13 @@ class RewardsController extends AppController {
 
         // organize results
         foreach ($rewards as &$reward) {
-
             $reward['RewardDetail'] = Hash::combine(
                 $reward['RewardDetail'],
                 '{n}.item_id', '{n}.quantity'
             );
+
+            // add cash as item_id 0
+            $reward['RewardDetail'][0] = $reward['Reward']['credit'];
         }
 
         $this->addPlayers($rewards, '{n}.{s}.sender_id');

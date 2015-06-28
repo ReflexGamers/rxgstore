@@ -391,6 +391,9 @@ class Activity extends AppModel {
                     '{n}.item_id', '{n}.quantity'
                 );
 
+                // add cash as item_id 0
+                $activity['RewardDetail'][0] = $activity['Reward']['credit'];
+
             } else if (isset($activity['ShipmentDetail'])) {
 
                 $activity['ShipmentDetail'] = Hash::combine(
