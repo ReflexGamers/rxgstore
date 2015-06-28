@@ -108,7 +108,8 @@ class AppController extends Controller {
             array_unshift($sortedItems, array(
                 'item_id' => 0,
                 'short_name' => 'cash',
-                'name' => 'RXG Cash'
+                'name' => 'RXG Cash',
+                'price' => 1
             ));
 
             $this->set(array(
