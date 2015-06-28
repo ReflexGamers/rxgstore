@@ -39,7 +39,11 @@ class Item extends AppModel {
      * @return array
      */
     public function getAllSorted() {
-        return Hash::extract($this->find('all'), '{n}.Item');
+        return Hash::extract($this->find('all', array(
+            'fields' => array(
+                'item_id', 'display_index', 'name', 'plural', 'short_name', 'buyable', 'price'
+            )
+        )), '{n}.Item');
     }
 
     /**
