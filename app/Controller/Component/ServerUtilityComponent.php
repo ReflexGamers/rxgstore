@@ -69,8 +69,17 @@ class ServerUtilityComponent extends Component {
             )
         )), '{n}.Item.item_id', '{n}.Item');
 
+        // add cash as item_id 0
+        $items[0] = array(
+            'name' => 'CASH',
+            'plural' => 'CASH'
+        );
+
         $serverItems = $this->Item->ServerItem->Server->getUsableItems($server_ip);
         $args = array();
+
+        // add cash as item_id 0 since all servers should support it
+        $serverItems[] = 0;
 
         foreach ($list as $item) {
             $item_id = $item['item_id'];
