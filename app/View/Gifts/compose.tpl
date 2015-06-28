@@ -126,11 +126,11 @@
 
     <table class="gift_item_table {{ composing ? '' : 'gift_preview' }}">
 
-        {% set showUserQuantity = composing and not isReward %}
-
         <tr>
             <th class="gift_item_heading">Item</th>
-            {% if showUserQuantity %}
+            {% if isReward %}
+                <th>Value</th>
+            {% elseif composing %}
                 <th>You Have</th>
             {% endif %}
             <th class="quantity">Quantity</th>
@@ -148,9 +148,7 @@
                 {% set quantity = credit %}
             {% endif %}
 
-            {% if showUserQuantity %}
-                {% set userQuantity = userItems[item.item_id] %}
-            {% endif %}
+            {% set userQuantity = userItems[item.item_id] %}
 
             <tr>
                 <td class="gift_item_name">
@@ -160,7 +158,11 @@
                     }) }}
                     {{ html.link(item.name, {'controller': 'Items', 'action': 'view', 'id': item.short_name}) }}
                 </td>
-                {% if showUserQuantity %}
+                {% if isReward %}
+                    <td class="gift_item_price">
+                        {{ fn.currency(item.price) }}
+                    </td>
+                {% elseif composing %}
                     <td class="gift_item_available">
                         {{ userQuantity }}
                     </td>

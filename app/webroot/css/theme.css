@@ -2264,6 +2264,11 @@ th.gift_item_heading {
     width: 60px;
 }
 
+.gift_item_price {
+    text-align: left;
+    width: 60px;
+}
+
 .gift_item_input {
 
 }
