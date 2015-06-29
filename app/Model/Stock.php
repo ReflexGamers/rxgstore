@@ -24,7 +24,7 @@ class Stock extends AppModel {
      * Performs automatic stocking. Updates current and maximum stock. Uses getAutoStockAmounts() to
      * determine quantities.
      *
-     * @log [auto_stock.log] for each item that the maximum is updated
+     * @log [auto_stock.log] each time this runs and for each item that the maximum is updated
      * @param int [$days=7] the number of days for which to suggest stock
      * @return array
      */
@@ -36,13 +36,15 @@ class Stock extends AppModel {
         $newStock = $amounts['new'];
         $addStock = $amounts['add'];
 
+        CakeLog::write('auto_stock', 'Performed automatic stocking.');
+
         // log changes to maximum stock
         foreach ($newStock as $item_id => $item) {
             $oldMax = $oldStock[$item_id]['maximum'];
             $newMax = $item['maximum'];
 
             if ($newMax != $oldMax) {
-                CakeLog::write('auto_stock', "Updated maximum stock for item #$item_id from $oldMax to $newMax");
+                CakeLog::write('auto_stock', " - Updated maximum stock for item #$item_id from $oldMax to $newMax");
             }
         }
 
