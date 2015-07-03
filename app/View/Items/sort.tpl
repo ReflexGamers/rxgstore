@@ -14,7 +14,7 @@
 
     <div id="item_sort">
 
-        {% for item in sortedItems %}
+        {% for item in sortedItems if item.item_id != 0 %}
 
             <div class="item_sort_draggable">
                 {{ form.hidden(loop.index0 ~ '.display_index', {'value': loop.index0, 'data-original': loop.index0, 'class': 'item_sort_index'}) }}
