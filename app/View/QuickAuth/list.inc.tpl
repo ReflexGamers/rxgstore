@@ -10,7 +10,7 @@
 
 {% if quickauth %}
 
-    <p class="list_total">{{ paginator.counter('{:count}') }} total records</p>
+    <p class="list_total">{{ paginator.counter('{:count}')|number_format }} total records</p>
 
     <table class="player_list striped quickauth_list">
 
