@@ -3,8 +3,7 @@
 {% endif %}
 
 {% set numItems = quantity|length %}
-{% set cols = numItems > maxColumns ? (numItems / 2)|round(0, 'ceil') : numItems %}
-{% set cols = cols > maxColumns ? maxColumns : cols %}
+{% set cols = itemFuncs.calcColumns(numItems, maxColumns) %}
 
 <div class="item_list_group">
 

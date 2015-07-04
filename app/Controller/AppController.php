@@ -59,6 +59,9 @@ class AppController extends Controller {
             )
         )
     );
+    public $helpers = array(
+        'ItemFuncs'
+    );
 
     protected $players = array();
     protected $items = null;
