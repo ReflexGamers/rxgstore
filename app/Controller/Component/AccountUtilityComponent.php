@@ -215,6 +215,13 @@ class AccountUtilityComponent extends Component {
 
         $accounts = array_unique($accounts);
 
+        // remove user_id 0 (fake user)
+        $index = array_search(0, $accounts);
+
+        if ($index >= 0) {
+            unset($accounts[$index]);
+        }
+
         $steamPlayers = $this->SteamPlayer->getPlayers($accounts);
         $members = $this->Access->getMemberInfo($accounts);
         $playerServers = $this->User->getIngamePlayerServers();
