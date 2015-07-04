@@ -218,7 +218,7 @@ class AccountUtilityComponent extends Component {
         // remove user_id 0 (fake user)
         $index = array_search(0, $accounts);
 
-        if ($index >= 0) {
+        if ($index !== false) {
             unset($accounts[$index]);
         }
 
