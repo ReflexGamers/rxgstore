@@ -70,7 +70,7 @@
             <th class="quantity">Quantity</th>
         </tr>
 
-        {% for item in sortedItems %}
+        {% for item in sortedItems if item.item_id != 0 %}
 
             {% set namePrefix = 'PromotionDetail.' ~ item.item_id %}
             {% set lineItem = data.PromotionDetail[item.item_id] %}
