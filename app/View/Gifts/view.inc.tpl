@@ -31,7 +31,8 @@
                 </div>
 
                 {% include 'Items/list.inc.tpl' with {
-                    'quantity': detail
+                    'quantity': detail,
+                    'maxColumns': 5
                 } %}
 
                 {% if gift.message %}
