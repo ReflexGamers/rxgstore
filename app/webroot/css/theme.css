@@ -2860,13 +2860,50 @@ code {
     font-size: 18px;
 }
 
-.promotion_table_wrapper {
+.giveaway_table_wrapper {
     border-bottom: 1px solid #ccc;
     padding-bottom: 10px;
     margin: 20px 0;
 }
 
-.promotion_save_button {
+.giveaway_save_button {
     float: right;
     clear: right;
+}
+
+.giveaway_add {
+    font-weight: 400;
+}
+
+.giveaway_table {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.giveaway_table th {
+    text-align: left;
+}
+
+.giveaway_table th,
+.giveaway_table td {
+    padding: 5px;
+}
+
+.giveaway_row_name {
+    font-weight: 400;
+}
+
+.giveaway_status_upcoming {
+    font-weight: 400;
+    color: #1177bb;
+}
+
+.giveaway_status_expired {
+    font-weight: 400;
+    color: #991111;
+}
+
+.giveaway_status_active {
+    font-weight: 400;
+    color: #191;
 }
