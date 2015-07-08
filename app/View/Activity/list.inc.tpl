@@ -136,6 +136,29 @@
                 {% endif %}
 
 
+            {% elseif activity.GiveawayClaim %}
+
+                {% set claim = activity.GiveawayClaim %}
+                {% set promo = activity.Giveaway %}
+
+                <div class="activity_player">
+                    {{ fn.player(_context, players[claim.user_id]) }}
+                </div>
+
+                <div class="activity_date">
+                    accepted a giveaway {{ fn.formatTime(_context, claim.date) }}
+                </div>
+
+                {% include 'Items/list.inc.tpl' with {
+                    'quantity': activity.GiveawayClaimDetail,
+                    'maxColumns': 6
+                } %}
+
+                <div class="activity_message">
+                    {{ promo.name }}
+                </div>
+
+
             {% elseif activity.PaypalOrder %}
 
                 {% set order = activity.PaypalOrder %}

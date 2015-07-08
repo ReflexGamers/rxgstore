@@ -6,6 +6,7 @@ App::uses('AppModel', 'Model');
  * @property Gift $Gift
  * @property Order $Order
  * @property PaypalOrder $PaypalOrder
+ * @property GiveawayClaim $GiveawayClaim
  * @property Review $Review
  * @property Reward $Reward
  * @property Shipment $Shipment
@@ -18,7 +19,7 @@ class Activity extends AppModel {
     public $primaryKey = 'activity_id';
 
     public $hasOne = array(
-        'Gift', 'Order', 'PaypalOrder', 'Review', 'Reward', 'Shipment'
+        'Gift', 'Order', 'PaypalOrder', 'GiveawayClaim', 'Review', 'Reward', 'Shipment'
     );
 
     public $order = 'Activity.activity_id desc';
@@ -40,6 +41,9 @@ class Activity extends AppModel {
         return parent::_findCount($state, $query, $results);
     }
 
+    /*
+     * Overriden findType for `findType => byItem`. Used for getting activity for Items.
+     */
     public function _findByItem($state, $query, $results = array()) {
 
         if ($state == 'before' && (!isset($query['operation']) || $query['operation'] != 'count')) {
@@ -57,11 +61,11 @@ class Activity extends AppModel {
             'table' => $db->fullTableName($this->Order),
             'alias' => 'Order',
             'conditions' => array(
-                'item_id' => $item_id
+                'OrderDetail.item_id' => $item_id
             ),
             'joins' => array(
                 array(
-                    'table' => 'order_detail',
+                    'table' => $db->fullTableName($this->Order->OrderDetail),
                     'alias' => 'OrderDetail',
                     'conditions' => array(
                         'Order.order_id = OrderDetail.order_id'
@@ -77,11 +81,11 @@ class Activity extends AppModel {
             'table' => $db->fullTableName($this->Gift),
             'alias' => 'Gift',
             'conditions' => array(
-                'item_id' => $item_id
+                'GiftDetail.item_id' => $item_id
             ),
             'joins' => array(
                 array(
-                    'table' => 'gift_detail',
+                    'table' => $db->fullTableName($this->Gift->GiftDetail),
                     'alias' => 'GiftDetail',
                     'conditions' => array(
                         'Gift.gift_id = GiftDetail.gift_id'
@@ -97,11 +101,11 @@ class Activity extends AppModel {
             'table' => $db->fullTableName($this->Reward),
             'alias' => 'Reward',
             'conditions' => array(
-                'item_id' => $item_id
+                'RewardDetail.item_id' => $item_id
             ),
             'joins' => array(
                 array(
-                    'table' => 'reward_detail',
+                    'table' => $db->fullTableName($this->Reward->RewardDetail),
                     'alias' => 'RewardDetail',
                     'conditions' => array(
                         'Reward.reward_id = RewardDetail.reward_id'
@@ -121,7 +125,7 @@ class Activity extends AppModel {
             ),
             'joins' => array(
                 array(
-                    'table' => 'rating',
+                    'table' => $db->fullTableName($this->Review->Rating),
                     'alias' => 'Rating',
                     'conditions' => array(
                         'Review.rating_id = Rating.rating_id'
@@ -137,11 +141,11 @@ class Activity extends AppModel {
             'table' => $db->fullTableName($this->Shipment),
             'alias' => 'Shipment',
             'conditions' => array(
-                'item_id' => $item_id
+                'ShipmentDetail.item_id' => $item_id
             ),
             'joins' => array(
                 array(
-                    'table' => 'shipment_detail',
+                    'table' => $db->fullTableName($this->Shipment->ShipmentDetail),
                     'alias' => 'ShipmentDetail',
                     'conditions' => array(
                         'Shipment.shipment_id = ShipmentDetail.shipment_id'
@@ -150,6 +154,25 @@ class Activity extends AppModel {
             )
         ), $this->Shipment);
 
+        $giveawayClaimQuery = $db->buildStatement(array(
+            'fields' => array(
+                "GiveawayClaim.giveaway_claim_id as activity_id, 'GiveawayClaim' as model"
+            ),
+            'table' => $db->fullTableName($this->GiveawayClaim),
+            'alias' => 'GiveawayClaim',
+            'conditions' => array(
+                'GiveawayClaimDetail.item_id' => $item_id
+            ),
+            'joins' => array(
+                array(
+                    'table' => $db->fullTableName($this->GiveawayClaim->GiveawayClaimDetail),
+                    'alias' => 'GiveawayClaimDetail',
+                    'conditions' => array(
+                        'GiveawayClaim.giveaway_claim_id = GiveawayClaimDetail.giveaway_claim_id'
+                    )
+                )
+            )
+        ), $this->GiveawayClaim);
 
         if (isset($query['limit'])) {
             $offset = isset($query['offset']) ? $query['offset'] : 0;
@@ -158,7 +181,7 @@ class Activity extends AppModel {
             $limit = '';
         }
 
-        $rawQuery = "select * from ($orderQuery union all $giftQuery union all $rewardQuery union all $reviewQuery union all $shipmentQuery) as Activity order by activity_id desc $limit";
+        $rawQuery = "select * from ($orderQuery union all $giftQuery union all $rewardQuery union all $reviewQuery union all $shipmentQuery union all $giveawayClaimQuery) as Activity order by activity_id desc $limit";
 
         if ($state == 'before' && isset($query['operation']) && $query['operation'] == 'count') {
             $query['raw'] = $rawQuery;
@@ -168,6 +191,9 @@ class Activity extends AppModel {
         return $db->fetchAll($rawQuery);
     }
 
+    /*
+     * Overriden findType for `findType => byUser`. Used for getting activity for Users.
+     */
     public function _findByUser($state, $query, $results = array()) {
 
         if ($state == 'before' && (!isset($query['operation']) || $query['operation'] != 'count')) {
@@ -224,7 +250,7 @@ class Activity extends AppModel {
             'table' => $db->fullTableName($this->Reward->RewardRecipient),
             'alias' => 'RewardRecipient',
             'conditions' => array(
-                'recipient_id' => $user_id
+                'RewardRecipient.recipient_id' => $user_id
             )
         ), $this->Reward->RewardRecipient);
 
@@ -239,15 +265,25 @@ class Activity extends AppModel {
             ),
             'joins' => array(
                 array(
-                    'table' => 'rating',
+                    'table' => $db->fullTableName($this->Review->Rating),
                     'alias' => 'Rating',
                     'conditions' => array(
                         'Review.rating_id = Rating.rating_id'
                     )
                 )
-            ),
+            )
         ), $this->Review);
 
+        $giveawayClaimQuery = $db->buildStatement(array(
+            'fields' => array(
+                "GiveawayClaim.giveaway_claim_id as activity_id, 'GiveawayClaim' as model"
+            ),
+            'table' => $db->fullTableName($this->GiveawayClaim),
+            'alias' => 'GiveawayClaim',
+            'conditions' => array(
+                'GiveawayClaim.user_id' => $user_id
+            )
+        ), $this->GiveawayClaim);
 
         if (isset($query['limit'])) {
             $offset = isset($query['offset']) ? $query['offset'] : 0;
@@ -256,7 +292,7 @@ class Activity extends AppModel {
             $limit = '';
         }
 
-        $rawQuery = "select * from ($orderQuery union all $paypalQuery union all $giftQuery union all $rewardQuery union all $reviewQuery) as Activity order by activity_id desc $limit";
+        $rawQuery = "select * from ($orderQuery union all $paypalQuery union all $giftQuery union all $rewardQuery union all $reviewQuery union all $giveawayClaimQuery) as Activity order by activity_id desc $limit";
 
         if ($state == 'before' && isset($query['operation']) && $query['operation'] == 'count') {
             $query['raw'] = $rawQuery;
@@ -266,11 +302,15 @@ class Activity extends AppModel {
         return $db->fetchAll($rawQuery);
     }
 
+    /**
+     * Given a list of Activity records, this extracts the ids and models and then runs a query on
+     * each of those models to get their full records. The details of each model are then flattened
+     * into the `item_id => quantity` format for easy consumption.
+     *
+     * @param array $data list of Activity records containing `activity_id` and `model`
+     * @return array
+     */
     public function getRecent($data) {
-
-        /*$data = Hash::extract($this->find('all', array(
-            'limit' => $limit
-        )), '{n}.Activity');*/
 
         $models = Hash::extract($data, '{n}.Activity.model');
         $ids = Hash::extract($data, '{n}.Activity.activity_id');
@@ -357,9 +397,28 @@ class Activity extends AppModel {
             ));
         }
 
+        if (in_array('GiveawayClaim', $models)) {
+            $activities = array_merge(
+                $activities,
+                $this->GiveawayClaim->find('all', array(
+                        'fields' => array(
+                            'Giveaway.name', 'GiveawayClaim.user_id', 'GiveawayClaim.date'
+                        ),
+                        'conditions' => array(
+                            'giveaway_claim_id' => $ids
+                        ),
+                        'contain' => array(
+                            'Giveaway',
+                            'GiveawayClaimDetail'
+                        )
+                    ))
+            );
+        }
+
 
         $activities = Hash::sort($activities, '{n}.{s}.date', 'desc');
 
+        // squash all details to `item_id => quantity`
         foreach ($activities as &$activity) {
 
             if (isset($activity['Order'])) {
@@ -398,6 +457,13 @@ class Activity extends AppModel {
 
                 $activity['ShipmentDetail'] = Hash::combine(
                     $activity['ShipmentDetail'],
+                    '{n}.item_id', '{n}.quantity'
+                );
+
+            } else if (isset($activity['GiveawayClaimDetail'])) {
+
+                $activity['GiveawayClaimDetail'] = Hash::combine(
+                    $activity['GiveawayClaimDetail'],
                     '{n}.item_id', '{n}.quantity'
                 );
             }
