@@ -70,6 +70,12 @@
 
         {% endif %}
 
+        {% if giveaways %}
+
+            {% include 'Giveaways/pending.inc.tpl' %}
+
+        {% endif %}
+
     {% endif %}
 
     <div class="server_select" data-child-servers="{{ childServers }}">

@@ -12,6 +12,7 @@ App::import('Vendor', 'Parsedown');
  * Magic Properties (for inspection):
  * @property Activity $Activity
  * @property Feature $Feature
+ * @property Giveaway $Giveaway
  * @property Server $Server
  * @property ServerItem $ServerItem
  * @property User $User
@@ -56,18 +57,22 @@ class ItemsController extends AppController {
 
             $this->loadModel('User');
             $this->loadModel('Gift');
+            $this->loadModel('Giveaway');
 
             $this->User->id = $user_id;
             $userItems = $this->User->getItems($user_id);
             $gifts = $this->User->getPendingGifts($user_id);
             $rewards = $this->User->getPendingRewards($user_id);
+            $giveaways = $this->User->getEligibleGiveaways($user_id, $this->Access->checkIsMember($user_id));
+
             $this->addPlayers($gifts, '{n}.Gift.sender_id');
 
             $this->set(array(
                 'userItems' => $userItems,
                 'credit' => $this->User->field('credit'),
                 'gifts' => $gifts,
-                'rewards' => $rewards
+                'rewards' => $rewards,
+                'giveaways' => $giveaways
             ));
         }
 

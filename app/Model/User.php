@@ -7,6 +7,7 @@ App::uses('AppModel', 'Model');
  * @property Gift $Gift
  * @property Order $Order
  * @property PaypalOrder $PaypalOrder
+ * @property GiveawayClaim $GiveawayClaim
  * @property Rating $Rating
  * @property RewardRecipient $RewardRecipient
  * @property QuickAuth $QuickAuth
@@ -25,7 +26,7 @@ class User extends AppModel {
     );
 
     public $hasMany = array(
-        'Gift', 'Order', 'PaypalOrder', 'QuickAuth', 'Rating', 'RewardRecipient', 'SavedLogin', 'ShoutboxMessage', 'UserItem'
+        'Gift', 'Order', 'PaypalOrder', 'GiveawayClaim', 'QuickAuth', 'Rating', 'RewardRecipient', 'SavedLogin', 'ShoutboxMessage', 'UserItem'
     );
 
     /**
@@ -207,6 +208,18 @@ class User extends AppModel {
         }
 
         return $rewards;
+    }
+
+    /**
+     * Returns an array of all giveaways that the specified user is eligible to claim.
+     *
+     * @param int $user_id
+     * @param bool $isMember whether the user is a member
+     * @return array of pending giveaways
+     */
+    public function getEligibleGiveaways($user_id, $isMember = false) {
+
+        return $this->GiveawayClaim->Giveaway->getEligibleForUser($user_id, $isMember);
     }
 
     /**
