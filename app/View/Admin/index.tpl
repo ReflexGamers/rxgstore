@@ -10,8 +10,8 @@
 
     <ul class="business_list">
         <li>{{ html.link('Search for Players', {'controller': 'SteamPlayerCache', 'action': 'search'}) }}</li>
-        {% if access.check('Promotions', 'read') %}
-            <li>{{ html.link('Manage Promotions', {'controller': 'Promotions', 'action': 'index'}) }}</li>
+        {% if access.check('Giveaways', 'read') %}
+            <li>{{ html.link('Manage Givewaways', {'controller': 'Giveaways', 'action': 'index'}) }}</li>
         {% endif %}
         {% if access.check('Rewards', 'create') %}
             <li>{{ html.link('Send a Reward', {'controller': 'Rewards', 'action': 'compose'}) }}</li>

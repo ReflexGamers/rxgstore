@@ -76,7 +76,7 @@ class PermissionsComponent extends Component {
             array('alias' => 'Items'),
             array('alias' => 'Logs'),
             array('alias' => 'Permissions'),
-            array('alias' => 'Promotions'),
+            array('alias' => 'Giveaways'),
             array('alias' => 'QuickAuth'),
             array('alias' => 'Receipts'),
             array('alias' => 'Reviews'),
@@ -159,10 +159,10 @@ class PermissionsComponent extends Component {
         $this->Acl->allow('Admin', 'Permissions', 'read');
         $this->Acl->allow('Cabinet', 'Permissions', 'update');
 
-        $this->Acl->allow('Advisor', 'Promotions', 'read');
-        $this->Acl->allow('Captain', 'Promotions', 'create');
-        $this->Acl->allow('Captain', 'Promotions', 'update');
-        $this->Acl->allow('Cabinet', 'Promotions', 'delete');
+        $this->Acl->allow('Admin', 'Giveaways', 'read');
+        $this->Acl->allow('Captain', 'Giveaways', 'create');
+        $this->Acl->allow('Captain', 'Giveaways', 'update');
+        $this->Acl->allow('Cabinet', 'Giveaways', 'delete');
 
         $this->Acl->allow('Advisor', 'QuickAuth', 'read');
 

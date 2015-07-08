@@ -1,22 +1,24 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * PromotionClaimDetail Model
+ * GiveawayDetail Model
  *
  * @property Item $Item
- * @property PromotionClaim $PromotionClaim
+ * @property Giveaway $Giveaway
+ * @property GiveawayClaimDetail $GiveawayClaimDetail
  */
-class PromotionClaimDetail extends AppModel {
+class GiveawayDetail extends AppModel {
 
     public $actsAs = array('Containable');
 
-    public $useTable = 'promotion_claim_detail';
-    public $primaryKey = 'promotion_claim_detail_id';
+    public $useTable = 'giveaway_detail';
+    public $primaryKey = 'giveaway_detail_id';
 
-    public $belongsTo = 'PromotionClaim';
-    public $hasMany = 'Item';
+    public $belongsTo = array(
+        'Item', 'Giveaway'
+    );
 
-    public $order = 'PromotionClaim.promotion_claim_detail_id DESC';
+    public $order = 'GiveawayDetail.giveaway_detail_id DESC';
 
 
 /**
@@ -25,7 +27,7 @@ class PromotionClaimDetail extends AppModel {
  * @var array
  */
     public $validate = array(
-        'promotion_claim_id' => array(
+        'giveaway_id' => array(
             'notEmpty' => array(
                 'rule' => array('notEmpty'),
                 //'message' => 'Your custom message here',

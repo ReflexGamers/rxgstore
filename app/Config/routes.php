@@ -222,13 +222,14 @@
 
 	Router::connect('/credit/:action', array('controller' => 'TotalCreditLog'));
 
-    Router::connect('/promotions', array('controller' => 'Promotions'));
-    Router::connect('/promotions/:action/:id', array(
-            'controller' => 'Promotions',
+    Router::connect('/giveaways', array('controller' => 'Giveaways'));
+    Router::connect('/giveaways/:action/:id/*', array(
+            'controller' => 'Giveaways',
         ), array(
             'pass' => array('id'),
             'id' => '[0-9]+'
     ));
+    Router::connect('/giveaways/:action/*', array('controller' => 'Giveaways'));
 
 
 	//Router::connectNamed(array('page'));
