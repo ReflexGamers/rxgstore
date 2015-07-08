@@ -139,7 +139,7 @@
             {% elseif activity.GiveawayClaim %}
 
                 {% set claim = activity.GiveawayClaim %}
-                {% set promo = activity.Giveaway %}
+                {% set giveaway = activity.Giveaway %}
 
                 <div class="activity_player">
                     {{ fn.player(_context, players[claim.user_id]) }}
@@ -155,7 +155,7 @@
                 } %}
 
                 <div class="activity_message">
-                    {{ promo.name }}
+                    {{ giveaway.name }}
                 </div>
 
 

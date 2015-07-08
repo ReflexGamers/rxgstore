@@ -32,13 +32,13 @@ class Giveaway extends AppModel {
 
         $data = Hash::extract($this->find('all'), '{n}.Giveaway');
 
-        foreach ($data as &$promo) {
-            if (CakeTime::isFuture($promo['start_date'])) {
-                $promo['status'] = 1;
-            } else if (CakeTime::isPast($promo['end_date'])) {
-                $promo['status'] = -1;
+        foreach ($data as &$giveaway) {
+            if (CakeTime::isFuture($giveaway['start_date'])) {
+                $giveaway['status'] = 1;
+            } else if (CakeTime::isPast($giveaway['end_date'])) {
+                $giveaway['status'] = -1;
             } else {
-                $promo['status'] = 0;
+                $giveaway['status'] = 0;
             }
         }
 
@@ -165,10 +165,10 @@ class Giveaway extends AppModel {
         $giveaways = Hash::combine($results, '{n}.Giveaway.giveaway_id', '{n}');
 
         foreach ($results as $row) {
-            $promo = $row['Giveaway'];
-            $giveaway_id = $promo['giveaway_id'];
+            $giveaway = $row['Giveaway'];
+            $giveaway_id = $giveaway['giveaway_id'];
             $giveaways[$giveaway_id] = array(
-                'Giveaway' => $promo
+                'Giveaway' => $giveaway
             );
         }
 
@@ -176,13 +176,13 @@ class Giveaway extends AppModel {
         foreach ($results as $row) {
             $giveaway_id = Hash::get($row, 'Giveaway.giveaway_id');
             $item_id = Hash::get($row, 'GiveawayDetail.item_id');
-            $promo = &$giveaways[$giveaway_id];
+            $giveaway = &$giveaways[$giveaway_id];
 
-            if (empty($promo['GiveawayDetail'])) {
-                $promo['GiveawayDetail'] = array();
+            if (empty($giveaway['GiveawayDetail'])) {
+                $giveaway['GiveawayDetail'] = array();
             }
 
-            $promo['GiveawayDetail'][$item_id] = Hash::get($row, '0.quantity');
+            $giveaway['GiveawayDetail'][$item_id] = Hash::get($row, '0.quantity');
         }
 
         return $giveaways;

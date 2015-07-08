@@ -2,7 +2,7 @@
 
     {% for data in giveaways %}
 
-        {% set promo = data.Giveaway %}
+        {% set giveaway = data.Giveaway %}
         {% set detail = data.GiveawayDetail %}
 
         <div class="item_browse_gift">
@@ -17,7 +17,7 @@
                     offers you the
                 </div>
                 <div class="giveaway_pending_name activity_message">
-                    {{ promo.name }}
+                    {{ giveaway.name }}
                 </div>
 
                 {% include 'Items/list.inc.tpl' with {
@@ -29,7 +29,7 @@
                     <input type="button" value="Click to Claim" class="item_browse_gift_accept btn-primary" data-href="{{ html.url({
                         'controller': 'Giveaways',
                         'action': 'claim',
-                        'id': promo.giveaway_id
+                        'id': giveaway.giveaway_id
                     }) }}">
                     {{ html.image('misc/ajax-loader.gif', {
                         'class': 'ajax-loader item_browse_gift_loading'

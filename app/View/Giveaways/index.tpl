@@ -28,35 +28,35 @@
             <th>Restriction</th>
             <th>Status</th>
         </tr>
-        {% for promo in giveaway %}
+        {% for giveaway in giveaway %}
             <tr>
                 <td class="giveaway_row_name">
                     {% if access.check('Giveaway', 'update') %}
-                        {{ html.link(promo.name, {
+                        {{ html.link(giveaway.name, {
                             action: 'edit',
-                            id: promo.giveaway_id
+                            id: giveaway.giveaway_id
                         }) }}
                     {% else %}
-                        {{ promo.name }}
+                        {{ giveaway.name }}
                     {% endif %}
                 </td>
                 <td>
-                    {{ promo.start_date ? time.format(promo.start_date, '%m-%d-%Y') : '' }}
+                    {{ giveaway.start_date ? time.format(giveaway.start_date, '%m-%d-%Y') : '' }}
                 </td>
                 <td>
-                    {{ promo.end_date ? time.format(promo.end_date, '%m-%d-%Y') : 'Never' }}
+                    {{ giveaway.end_date ? time.format(giveaway.end_date, '%m-%d-%Y') : 'Never' }}
                 </td>
                 <td>
-                    {% if promo.is_member_only %}
+                    {% if giveaway.is_member_only %}
                         <span class="member-tag">Member</span>
                     {% else %}
                         None
                     {% endif %}
                 </td>
                 <td>
-                    {% if promo.status > 1 %}
+                    {% if giveaway.status > 1 %}
                         <span class="giveaway_status_upcoming">Upcoming</span>
-                    {% elseif promo.status < 0 %}
+                    {% elseif giveaway.status < 0 %}
                         <span class="giveaway_status_expired">Expired</span>
                     {% else %}
                         <span class="giveaway_status_active">Active</span>
