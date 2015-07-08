@@ -32,7 +32,7 @@
 
                 {% include 'Items/list.inc.tpl' with {
                     'quantity': activity.OrderDetail,
-                    'maxColumns': 7
+                    'maxColumns': 6
                 } %}
 
 
