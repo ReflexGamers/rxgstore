@@ -155,7 +155,7 @@ class GiveawaysController extends AppController {
 
         $user_id = $this->Auth->user('user_id');
 
-        $acceptedItems = $this->Giveaway->claim($giveaway_id, $user_id);
+        $acceptedItems = $this->Giveaway->claim($giveaway_id, $user_id, $this->Access->checkIsMember($user_id));
 
 //        if (!empty($acceptedItems)) {
 //

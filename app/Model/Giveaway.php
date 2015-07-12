@@ -281,11 +281,12 @@ class Giveaway extends AppModel {
      *
      * @param int $giveaway_id
      * @param int $user_id
+     * @param bool $isMember whether the user is a member
      * @return mixed false if the giveaway was already claimed, or an array of claimed items
      */
-    public function claim($giveaway_id, $user_id) {
+    public function claim($giveaway_id, $user_id, $isMember = false) {
 
-        $remainingItems = $this->getRemainingItems($giveaway_id, $user_id);
+        $remainingItems = $this->getRemainingItems($giveaway_id, $user_id, $isMember);
 
         // check if already fully claimed
         if (empty($remainingItems)) {
