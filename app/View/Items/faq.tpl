@@ -21,7 +21,7 @@
 
     <div class="faq_item">
         <div class="faq_question">How can I earn free items?</div>
-        <div class="faq_answer">Sometimes leadership rewards players or members with free items for attending events such as our weekly CS:GO Scrims. Participate in an eligible event to receive a reward.</div>
+        <div class="faq_answer">Sometimes leadership rewards players or members with free items for attending events such as our weekly CS:GO Scrims. Participate in an eligible event to receive a reward. All members also receive a one-time Member Gift Basket containing an array of free items.</div>
     </div>
 
     <div class="faq_item">
