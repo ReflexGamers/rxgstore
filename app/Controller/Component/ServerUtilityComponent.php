@@ -55,11 +55,10 @@ class ServerUtilityComponent extends Component {
      * only the ones that can be used in that server.
      *
      * @param string $server_ip
-     * @param int $user_id
      * @param array $list list of arrays that should each have keys for both 'item_id' and 'quantity'
      * @return string[] list of arguments that each look like "id name"
      */
-    protected function buildItemArgs($server_ip, $user_id, $list) {
+    protected function buildItemArgs($server_ip, $list) {
 
         $this->loadItemModel();
 
@@ -91,26 +90,32 @@ class ServerUtilityComponent extends Component {
             }
         }
 
-        if (!empty($args)) {
-            array_unshift($args, $user_id);
-        }
-
         return $args;
     }
 
     /**
      * Builds a command for the specified server given a list of items. Shortcut for calling @buildCmd with the result
-     * of @buildItemArgs as the 2nd argument. Limit the items to only the ones that can be used in that server.
+     * of @buildItemArgs as the 2nd argument. Limits the items to only the ones that can be used in that server.
      *
      * @param string $server_ip
      * @param string $command
      * @param int $user_id
      * @param array $items list of arrays that should each have keys for both 'item_id' and 'quantity'
+     * @param array|string $prependArgs prepend a list of arguments before the items
      * @return string the full command
      */
-    protected function buildItemCmd($server_ip, $command, $user_id, $items) {
+    protected function buildItemCmd($server_ip, $command, $user_id, $items, $prependArgs = '') {
 
-        return $this->buildCmd($command, $this->buildItemArgs($server_ip, $user_id, $items));
+        $args = $this->buildItemArgs($server_ip, $items);
+
+        if (!empty($prependArgs)) {
+            array_unshift($args, $prependArgs);
+        }
+
+        // user_id should always be the first argument, right before $prependArgs
+        array_unshift($args, $user_id);
+
+        return $this->buildCmd($command, $args);
     }
 
     /**
