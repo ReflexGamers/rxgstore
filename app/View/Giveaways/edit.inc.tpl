@@ -43,7 +43,7 @@
 </div>
 
 <div class="edit_field">
-    {{ form.label('name', 'End Date:', {
+    {{ form.label('name', 'Thru Date:', {
         class: 'edit_label'
     }) }}
     {{ form.input('end_date', {

@@ -74,6 +74,13 @@ class Giveaway extends AppModel {
      */
     public function saveWithDetails($data) {
 
+        // set end date active through the end of the day
+        $data['Giveaway']['end_date'] = array_merge($data['Giveaway']['end_date'], array(
+            'hour' => 23,
+            'min' => 59,
+            'sec' => 59
+        ));
+
         $isUpdate = !empty($data['Giveaway']['giveaway_id']);
         $giveaway_id = ($isUpdate) ? $data['Giveaway']['giveaway_id'] : null;
 

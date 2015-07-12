@@ -24,7 +24,7 @@
         <tr>
             <th>Name</th>
             <th>Start</th>
-            <th>End</th>
+            <th>Thru</th>
             <th>Restriction</th>
             <th>Status</th>
         </tr>
@@ -41,10 +41,14 @@
                     {% endif %}
                 </td>
                 <td>
-                    {{ giveaway.start_date ? time.format(giveaway.start_date, '%m-%d-%Y') : '' }}
+                    <abbr title="{{ fn.formatTime(_context, giveaway.start_date) }}">
+                        {{ giveaway.start_date ? time.format(giveaway.start_date, '%m-%d-%Y') : '' }}
+                    </abbr>
                 </td>
                 <td>
-                    {{ giveaway.end_date ? time.format(giveaway.end_date, '%m-%d-%Y') : 'Never' }}
+                    <abbr title="{{ fn.formatTime(_context, giveaway.end_date) }}">
+                        {{ giveaway.end_date ? time.format(giveaway.end_date, '%m-%d-%Y') : 'Never' }}
+                    </abbr>
                 </td>
                 <td>
                     {% if giveaway.is_member_only %}
@@ -54,7 +58,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if giveaway.status > 1 %}
+                    {% if giveaway.status > 0 %}
                         <span class="giveaway_status_upcoming">Upcoming</span>
                     {% elseif giveaway.status < 0 %}
                         <span class="giveaway_status_expired">Expired</span>
