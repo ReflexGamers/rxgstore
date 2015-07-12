@@ -215,6 +215,30 @@ class ServerUtilityComponent extends Component {
     }
 
     /**
+     * Broadcasts to the specified server that the user has claimed a giveaway, and reloads the
+     * player's in-game inventory.
+     *
+     * @param int $server_ip
+     * @param int $user_id
+     * @param array $giveaway the details of the giveaway used to build the command
+     * @return bool result of exec()
+     */
+    public function broadcastGiveawayClaim($server_ip, $user_id, $giveaway) {
+
+        $itemCmd = $this->buildItemCmd(
+            $server_ip, 'sm_store_broadcast_giveaway_claim', $user_id,
+            $giveaway['GiveawayDetail'], $giveaway['Giveaway']['name']
+        );
+
+        $commands = empty($itemCmd) ? '' : array(
+            "sm_store_reload_inventory $user_id",
+            $itemCmd
+        );
+
+        return $this->exec($server_ip, $commands);
+    }
+
+    /**
      * Broadcasts to the specified server that a specific user wrote a review about an item.
      *
      * @param string $server_ip

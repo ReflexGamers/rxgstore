@@ -157,16 +157,27 @@ class GiveawaysController extends AppController {
 
         $acceptedItems = $this->Giveaway->claim($giveaway_id, $user_id, $this->Access->checkIsMember($user_id));
 
-//        if (!empty($acceptedItems)) {
-//
-//            // broadcast & refresh user's inventory
-//            $this->loadModel('User');
-//            $server = $this->User->getCurrentServer($user_id);
-//
-//            if ($server) {
-//                $this->ServerUtility->broadcastGiveawayClaim($server, $user_id, $acceptedItems);
-//            }
-//        }
+        if (!empty($acceptedItems)) {
+
+            // broadcast & refresh user's inventory
+            $this->loadModel('User');
+            $server = $this->User->getCurrentServer($user_id);
+
+            if ($server) {
+                $giveaway = $this->Giveaway->find('first', array(
+                    'fields' => array('name'),
+                    'conditions' => array('giveaway_id' => $giveaway_id)
+                ));
+                $giveaway['GiveawayDetail'] = array_map(function($item_id, $quantity) {
+                    return array(
+                        'item_id' => $item_id,
+                        'quantity' => $quantity
+                    );
+                }, array_keys($acceptedItems), $acceptedItems);
+
+                $this->ServerUtility->broadcastGiveawayClaim($server, $user_id, $giveaway);
+            }
+        }
 
         $this->loadItems();
         $this->loadModel('User');
