@@ -11,7 +11,7 @@
     <p>If items are added to a giveaway after a user claims it, the remaining items will be claimable by the user again for the duration of the giveaway.</p>
 
     <p>
-        {% if access.check('Giveaway', 'create') %}
+        {% if access.check('Giveaways', 'create') %}
             {{ html.link('+ Create a new Givewaway', {
                 action: 'add'
             }, {
@@ -28,10 +28,10 @@
             <th>Restriction</th>
             <th>Status</th>
         </tr>
-        {% for giveaway in giveaway %}
+        {% for giveaway in giveaways %}
             <tr>
                 <td class="giveaway_row_name">
-                    {% if access.check('Giveaway', 'update') %}
+                    {% if access.check('Giveaways', 'update') %}
                         {{ html.link(giveaway.name, {
                             action: 'edit',
                             id: giveaway.giveaway_id
