@@ -160,9 +160,9 @@ class PermissionsComponent extends Component {
         $this->Acl->allow('Cabinet', 'Permissions', 'update');
 
         $this->Acl->allow('Admin', 'Giveaways', 'read');
-        $this->Acl->allow('Captain', 'Giveaways', 'create');
-        $this->Acl->allow('Captain', 'Giveaways', 'update');
-        $this->Acl->allow('Cabinet', 'Giveaways', 'delete');
+        $this->Acl->allow('Director', 'Giveaways', 'create');
+        $this->Acl->allow('Director', 'Giveaways', 'update');
+        $this->Acl->allow('Director', 'Giveaways', 'delete');
 
         $this->Acl->allow('Advisor', 'QuickAuth', 'read');
 
