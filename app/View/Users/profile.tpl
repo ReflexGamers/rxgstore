@@ -31,6 +31,9 @@
             {% endif %}
             <div class="player_links">
                 <a href="{{ player.profile }}">view steam profile</a>
+                {% if canImpersonate and user.user_id != user_id %}
+                    <br>{{ html.link('impersonate', {'controller': 'Users', 'action': 'impersonate', 'id': player.steamid}) }}
+                {% endif %}
                 {% if user and user.user_id != user_id %}
                     <br>{{ html.link('send a gift', {'controller': 'Gifts', 'action': 'compose', 'id': player.steamid}) }} <i class="fa fa-gift icon_gift"></i>
                 {% endif %}

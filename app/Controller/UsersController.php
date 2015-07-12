@@ -38,7 +38,8 @@ class UsersController extends AppController {
             'user_id' => $user_id,
             'userItems' => $itemData['current'],
             'pastItems' => $itemData['past'],
-            'totalSpent' => $this->User->getTotalSpent($user_id)
+            'totalSpent' => $this->User->getTotalSpent($user_id),
+            'canImpersonate' => $this->Auth->user('impersonating') || $this->Access->check('Debug')
         ));
 
         $this->loadShoutbox();
@@ -133,8 +134,8 @@ class UsersController extends AppController {
      */
     public function impersonate($steamid) {
 
-        if ($this->Access->check('Debug')) {
-            $this->AccountUtility->loginSteamid($steamid);
+        if ($this->Auth->user('impersonating') || $this->Access->check('Debug')) {
+            $this->AccountUtility->loginSteamid($steamid, AccountUtilityComponent::LOGIN_IMPERSONATE);
         }
 
         $this->redirect(array('controller' => 'Users', 'action' => 'profile', 'id' => $steamid));

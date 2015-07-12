@@ -21,6 +21,7 @@ class AccountUtilityComponent extends Component {
     const LOGIN_FORCE = 1;
     const LOGIN_SAVE = 2;
     const LOGIN_SKIP_BAN_CHECK = 4;
+    const LOGIN_IMPERSONATE = 8;
 
     public $components = array('Access', 'Auth', 'Cookie', 'Permissions', 'RequestHandler', 'Session');
 
@@ -90,7 +91,8 @@ class AccountUtilityComponent extends Component {
             ));
         }
 
-        $loginSuccess = $this->Auth->login(array(
+        // info saved to session
+        $sessionInfo = array(
             'steamid' => $steamid,
             'user_id' => $user_id,
             'name' => $steaminfo['personaname'],
@@ -98,7 +100,14 @@ class AccountUtilityComponent extends Component {
             'avatarmedium' => $steaminfo['avatarmedium'],
             'avatarfull' => $steaminfo['avatarfull'],
             'profile' => $steaminfo['profileurl']
-        ));
+        );
+
+        // keep track of the impersonation
+        if ($flags & self::LOGIN_IMPERSONATE) {
+            $sessionInfo['impersonating'] = true;
+        }
+
+        $loginSuccess = $this->Auth->login($sessionInfo);
 
         if ($flags & self::LOGIN_SAVE) {
             $this->saveLogin($user_id);
