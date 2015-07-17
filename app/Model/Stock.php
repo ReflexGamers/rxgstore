@@ -206,7 +206,9 @@ class Stock extends AppModel {
      * @return int the rounded number
      */
     private function dynamicRound($num) {
-        if ($num < 50) {
+        if ($num < 5) {
+            // no rounding
+        } else if ($num < 50) {
             return ceil($num / 5) * 5;
         } else if ($num < 100) {
             return ceil($num / 10) * 10;
