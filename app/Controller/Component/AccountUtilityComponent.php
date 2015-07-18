@@ -246,7 +246,7 @@ class AccountUtilityComponent extends Component {
                 'avatarfull' => $player['avatarfull'],
                 'profile' => $player['profileurl'],
                 'member' => !empty($members[$user_id]),
-                'division' => !empty($members[$user_id]['division']) ? $members[$user_id]['division'] : '',
+                'division_id' => !empty($members[$user_id]['division']) ? $members[$user_id]['division'] : '',
                 'server' => !empty($playerServers[$user_id]) ? $playerServers[$user_id] : ''
             );
         }

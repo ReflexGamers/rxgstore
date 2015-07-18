@@ -65,6 +65,7 @@ class AppController extends Controller {
 
     protected $players = array();
     protected $items = null;
+    protected $divisions = null;
 
     /**
      * Adds a single player or list of players to the player buffer. The beforeRender() method will pull all players out
@@ -91,13 +92,27 @@ class AppController extends Controller {
     }
 
     /**
+     * Loads division data from the config, passes it to the view and alsoi returns the result to
+     * the controller that called this method.
+     *
+     * @return array the division data
+     */
+    public function loadDivisions() {
+        if (empty($this->divisions)) {
+            $this->divisions = Hash::combine(Configure::read('Store.Divisions'), '{n}.division_id', '{n}');
+            $this->set('divisions', $this->divisions);
+        }
+        return $this->divisions;
+    }
+
+    /**
      * Loads basic Item Data for all items, passes it to the view and also returns the result to the controller that
      * called this method. Should be used in most instances where Item Data is needed unless additional data is needed.
      *
      * Once called, the items are cached in the $items property in case they are called later in the same request which
      * can happen when controller actions call each other.
      *
-     * @return array|null the item data
+     * @return array the item data
      */
     public function loadItems() {
 

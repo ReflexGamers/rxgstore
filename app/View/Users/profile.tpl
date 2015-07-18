@@ -21,7 +21,8 @@
             <a href="{{ player.profile }}"><img src="{{ player.avatarfull }}"></a>
             {% if player.member %}
                 <div class="player_member">
-                    {{ player.division ? "RXG #{player.division} Division" : 'RXG Member' }}
+                    {% set division = divisions[player.division_id] %}
+                    {{ division.abbr ? "RXG #{division.abbr} Division" : 'RXG Member' }}
                 </div>
             {% endif %}
             {% if player.server %}

@@ -272,7 +272,9 @@ class PermissionsComponent extends Component {
         $config = Configure::read('Store.Forums');
 
         $groups = implode(',', $config['MemberGroups']);
-        $divisions = $config['Divisions'];
+
+        // use divisions like 'Counter-Strike: Global Offensive' => 'csgo'
+        $divisions = Hash::combine(Configure::read('Store.Divisions'), '{n}.name', '{n}.division_id');
 
         $result = $db->rawQuery("SELECT steamid, user.username, steamuser.steamid, userfield.field5 FROM steamuser JOIN user ON steamuser.userid = user.userid JOIN userfield on userfield.userid = user.userid WHERE user.usergroupid IN ($groups)");
 

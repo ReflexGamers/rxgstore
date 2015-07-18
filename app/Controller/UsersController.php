@@ -43,6 +43,7 @@ class UsersController extends AppController {
         ));
 
         $this->loadShoutbox();
+        $this->loadDivisions();
 
         $this->reviews($steamid, false);
         $this->activity($steamid, false);
