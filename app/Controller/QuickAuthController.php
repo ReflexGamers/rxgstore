@@ -238,7 +238,7 @@ class QuickAuthController extends AppController {
 
         // check if coming from a web server or in-game
         if (!empty($params['game'])) {
-            $this->Session->write('Auth.user.ingame', $params['game']);
+            $this->Session->write('Auth.User.ingame', $params['game']);
             $this->Session->setFlash('You may also visit the store at store.reflex-gamers.com', 'flash', array('class' => 'info'), 'quickauth');
         } else {
             // go straight to store if game not specified
