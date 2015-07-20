@@ -107,11 +107,11 @@ class Stock extends AppModel {
             $minimum = $item['minimum'];
             $suggested = $suggestedStock[$item_id];
 
-            $newMaximum = $this->dynamicRound($suggested * $config['MaxStockMult']);
+            $newMaximum = $this->dynamicRound(max($suggested, $minimum) * $config['MaxStockMult']);
 
             $newStock[$item_id] = array(
                 'item_id' => $item_id,
-                'quantity' => $suggested,
+                'quantity' => max($suggested, $quantity),
                 'maximum' => $newMaximum
             );
 
