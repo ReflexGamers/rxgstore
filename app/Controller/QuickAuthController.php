@@ -225,7 +225,7 @@ class QuickAuthController extends AppController {
                 } else {
 
                     // user already logged in
-                    CakeLog::write('quickauth', "Authentication for token $tokenId-$tokenValue skipped. User already logged in.");
+                    CakeLog::write('quickauth_skip', "Authentication for token $tokenId-$tokenValue skipped. User already logged in.");
                 }
             }
 
