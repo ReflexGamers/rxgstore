@@ -4,11 +4,13 @@
 
 {% block content %}
 
-    <p>A giveaway is a set of items that we give away for free to users for a specific period of time. For example, we could give away free pumpkins to all users during the week of Halloween.</p>
+    <p>A giveaway is a set of items that we give away for free to players for a specific period of time. For example, we could give away free pumpkins to all TF2 players during the week of Halloween.</p>
 
-    <p>Each giveaway can be restricted to only members or be open to all users. If you are eligible to claim any current giveaway, each one will be listed on the home page like a gift but with a 'Claim' button.</p>
+    <p>Each giveaway is specific to a game/division and can optionally be restricted to only members. If you are eligible to claim any current giveaways, each one will be listed on the home page like a gift but with a 'Claim' button.</p>
 
-    <p>If items are added to a giveaway after a user claims it, the remaining items will be claimable by the user again for the duration of the giveaway.</p>
+    <p>If items are added to a giveaway after a player claims it, the remaining items will be claimable by the player again for the duration of the giveaway.</p>
+
+    <p>Regarding game-specific giveaways, if a user connects with <code>!store</code> from a game server, that game will be used to look up related giveaways. If the user connects from somewhere else, the user's division will be used if applicable.</p>
 
     <p>
         {% if access.check('Giveaways', 'create') %}
@@ -52,10 +54,9 @@
                 </td>
                 <td>
                     {% if giveaway.is_member_only %}
-                        <span class="member-tag">Member</span>
-                    {% else %}
-                        None
+                        <span class="member-tag">rxg</span>
                     {% endif %}
+                    {{ divisions[giveaway.game].abbr }}
                 </td>
                 <td>
                     {% if giveaway.status > 0 %}

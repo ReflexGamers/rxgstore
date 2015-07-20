@@ -154,12 +154,13 @@ class Giveaway extends AppModel {
      * Returns an array of all giveaways that the specified user is eligible to claim.
      *
      * @param int $user_id
+     * @param string $game example: 'csgo', 'tf2'
      * @param bool $isMember whether the user is a member
      * @return array
      */
-    public function getEligibleForUser($user_id, $isMember = false) {
+    public function getEligibleForUser($user_id, $game, $isMember = false) {
 
-        $options = $this->getRemainingItemsBaseQuery($user_id, $isMember);
+        $options = $this->getRemainingItemsBaseQuery($user_id, $game, $isMember);
 
         $options['fields'] = array(
             'Giveaway.giveaway_id', 'Giveaway.name', 'Giveaway.is_member_only', 'GiveawayDetail.item_id',
@@ -201,12 +202,13 @@ class Giveaway extends AppModel {
      *
      * @param int $giveaway_id
      * @param int $user_id
+     * @param string $game example: 'csgo', 'tf2'
      * @param bool $isMember whether the user is a member
      * @return array of unclaimed items
      */
-    public function getRemainingItems($giveaway_id, $user_id, $isMember = false) {
+    public function getRemainingItems($giveaway_id, $user_id, $game, $isMember = false) {
 
-        $options = $this->getRemainingItemsBaseQuery($user_id, $isMember);
+        $options = $this->getRemainingItemsBaseQuery($user_id, $game, $isMember);
 
         $options['conditions']['Giveaway.giveaway_id'] = $giveaway_id;
         $options['fields'] = array(
@@ -220,13 +222,15 @@ class Giveaway extends AppModel {
      * Returns base query for getting the remaining items of one or multiple giveaways for a user.
      *
      * @param int $user_id
+     * @param string $game example: 'csgo', 'tf2'
      * @param bool $isMember whether the user is a member
      * @return array
      */
-    private function getRemainingItemsBaseQuery($user_id, $isMember = false) {
+    private function getRemainingItemsBaseQuery($user_id, $game, $isMember = false) {
 
         $options = array(
             'conditions' => array(
+                'game' => $game,
                 array(
                     'OR' => array(
                         'GiveawayClaimDetail.quantity IS NULL',
@@ -288,12 +292,13 @@ class Giveaway extends AppModel {
      *
      * @param int $giveaway_id
      * @param int $user_id
+     * @param string $game example: 'csgo', 'tf2'
      * @param bool $isMember whether the user is a member
      * @return mixed false if the giveaway was already claimed, or an array of claimed items
      */
-    public function claim($giveaway_id, $user_id, $isMember = false) {
+    public function claim($giveaway_id, $user_id, $game, $isMember = false) {
 
-        $remainingItems = $this->getRemainingItems($giveaway_id, $user_id, $isMember);
+        $remainingItems = $this->getRemainingItems($giveaway_id, $user_id, $game, $isMember);
 
         // check if already fully claimed
         if (empty($remainingItems)) {

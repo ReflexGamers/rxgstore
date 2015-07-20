@@ -55,6 +55,17 @@
 </div>
 
 <div class="edit_field">
+    {{ form.label('game', 'Select Game:', {
+        class: 'edit_label'
+    }) }}
+    {{ form.input('game', {
+        options: divisionOptions,
+        selected: data.Giveaway.game,
+        class: 'edit_input'
+    }) }}
+</div>
+
+<div class="edit_field">
     {{ form.label('is_member_only', 'Member Only:', {
         class: 'edit_label'
     }) }}

@@ -63,7 +63,21 @@ class ItemsController extends AppController {
             $userItems = $this->User->getItems($user_id);
             $gifts = $this->User->getPendingGifts($user_id);
             $rewards = $this->User->getPendingRewards($user_id);
-            $giveaways = $this->User->getEligibleGiveaways($user_id, $this->Access->checkIsMember($user_id));
+
+            // giveaways
+            $memberInfo = $this->Access->getMemberInfo(array($user_id));
+            $isMember = isset($memberInfo[$user_id]);
+            $game = $this->Auth->user('ingame');
+
+            if (empty($game) && !empty($memberInfo[$user_id])) {
+                // use the member's division id as the game
+                $game = $memberInfo[$user_id]['division'];
+            }
+
+            if (!empty($game)) {
+                $giveaways = $this->User->getEligibleGiveaways($user_id, $game, $isMember);
+                $this->set('giveaways', $giveaways);
+            }
 
             $this->addPlayers($gifts, '{n}.Gift.sender_id');
 
@@ -71,8 +85,7 @@ class ItemsController extends AppController {
                 'userItems' => $userItems,
                 'credit' => $this->User->field('credit'),
                 'gifts' => $gifts,
-                'rewards' => $rewards,
-                'giveaways' => $giveaways
+                'rewards' => $rewards
             ));
         }
 

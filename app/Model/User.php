@@ -214,12 +214,13 @@ class User extends AppModel {
      * Returns an array of all giveaways that the specified user is eligible to claim.
      *
      * @param int $user_id
+     * @param string $game example: 'csgo', 'tf2'
      * @param bool $isMember whether the user is a member
      * @return array of pending giveaways
      */
-    public function getEligibleGiveaways($user_id, $isMember = false) {
+    public function getEligibleGiveaways($user_id, $game, $isMember = false) {
 
-        return $this->GiveawayClaim->Giveaway->getEligibleForUser($user_id, $isMember);
+        return $this->GiveawayClaim->Giveaway->getEligibleForUser($user_id, $game, $isMember);
     }
 
     /**

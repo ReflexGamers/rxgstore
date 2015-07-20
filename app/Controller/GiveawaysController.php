@@ -29,6 +29,7 @@ class GiveawaysController extends AppController {
         $giveaways = $this->Giveaway->getList();
 
         $this->loadItems();
+        $this->loadDivisions();
 
         $this->set(array(
             'giveaways' => $giveaways
@@ -155,7 +156,16 @@ class GiveawaysController extends AppController {
 
         $user_id = $this->Auth->user('user_id');
 
-        $acceptedItems = $this->Giveaway->claim($giveaway_id, $user_id, $this->Access->checkIsMember($user_id));
+        $memberInfo = $this->Access->getMemberInfo(array($user_id));
+        $isMember = isset($memberInfo[$user_id]);
+        $game = $this->Auth->user('ingame');
+
+        if (empty($game) && !empty($memberInfo[$user_id])) {
+            // use the member's division id as the game
+            $game = $memberInfo[$user_id]['division'];
+        }
+
+        $acceptedItems = $this->Giveaway->claim($giveaway_id, $user_id, $game, $isMember);
 
         if (!empty($acceptedItems)) {
 
@@ -261,6 +271,16 @@ class GiveawaysController extends AppController {
         }
 
         $this->loadItems();
+
+        // format like 'tf2' => 'Team Fortress 2'
+        $divisions = Hash::combine(array_filter(Configure::read('Store.Divisions'), function($division) {
+            // divisions are supported unless 'supported' is false
+            return !isset($division['supported']) || $division['supported'] !== false;
+        }), '{n}.division_id', '{n}.name');
+
+        $this->set(array(
+            'divisionOptions' => $divisions
+        ));
     }
 
     /**
@@ -300,8 +320,15 @@ class GiveawaysController extends AppController {
         // fetch it all again since saving it could have modified it slightly
         $giveaway = $this->Giveaway->getWithDetails($giveaway_id);
 
+        // format like 'tf2' => 'Team Fortress 2'
+        $divisions = Hash::combine(array_filter(Configure::read('Store.Divisions'), function($division) {
+            // divisions are supported unless 'supported' is false
+            return !isset($division['supported']) || $division['supported'] !== false;
+        }), '{n}.division_id', '{n}.name');
+
         $this->set(array(
-            'data' => $giveaway
+            'data' => $giveaway,
+            'divisionOptions' => $divisions
         ));
 
         $this->activity($giveaway, false);
