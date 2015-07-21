@@ -110,7 +110,7 @@ class SteamCacheShell extends AppShell {
 		$total = count($accounts);
 		$succeeded = count($this->SteamPlayerCache->refreshPlayers($accounts, false, 120));
 		$failed = $total - $succeeded;
-		$failedMessage = ($failed > 0) ? "Failed to fetch $failed players." : '';
+		$failedMessage = ($failed > 0) ? " Failed to fetch $failed players." : '';
 		$message = "Successfully refreshed $succeeded of $total known players.$failedMessage";
 
 		CakeLog::write('steam_refresh', $message);
