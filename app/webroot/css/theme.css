@@ -597,6 +597,7 @@ table.addfunds td {
     color: #ffffff;
     max-width: 150px;
     overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
     display: inline-block;
 }
