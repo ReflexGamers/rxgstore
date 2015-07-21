@@ -125,8 +125,8 @@ class SteamPlayerCache extends AppModel {
     }
 
     /**
-     * Returns a list of steamids for all known players. Known players are members, have completed purchases or received
-     * rewards.
+     * Returns a list of steamids for all known players. Known players are either members, have
+     * completed purchases in the past 6 months, or have been sent rewards.
      *
      * @return array of signed 32-bit steamids (user_id)
      */
@@ -139,7 +139,10 @@ class SteamPlayerCache extends AppModel {
                 'user_id'
             ),
             'table' => $db->fullTableName($this->User->Order),
-            'alias' => 'Order'
+            'alias' => 'Order',
+            'conditions' => array(
+                'Order.date >' => $this->formatTimestamp(strtotime('-6 months'))
+            )
         ), $this->User->Order);
 
 //        $quickauthQuery = $db->buildStatement(array(
