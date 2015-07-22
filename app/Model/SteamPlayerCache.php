@@ -141,7 +141,7 @@ class SteamPlayerCache extends AppModel {
             'table' => $db->fullTableName($this->User->Order),
             'alias' => 'Order',
             'conditions' => array(
-                'Order.date >' => $this->formatTimestamp(strtotime('-6 months'))
+                'Order.date >' => $this->formatTimestamp(strtotime('-1 year'))
             )
         ), $this->User->Order);
 
