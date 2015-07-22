@@ -10,7 +10,7 @@
 
 {% if cache %}
 
-    <p class="list_total">{{ paginator.counter('{:count}') }} players in cache</p>
+    <p class="list_total">{{ paginator.counter('{:count}')|number_format }} players in cache</p>
 
     <ul class="player_list striped">
 
