@@ -144,7 +144,7 @@ class PermissionsComponent extends Component {
 
         $this->Acl->allow('Advisor', 'Chats', 'delete');
 
-        $this->Acl->allow('Advisor', 'Cache', 'read');
+        $this->Acl->allow('Admin', 'Cache', 'read');
         $this->Acl->allow('Cabinet', 'Cache', 'update');
         $this->Acl->allow('Cabinet', 'Cache', 'delete');
 
@@ -164,7 +164,7 @@ class PermissionsComponent extends Component {
         $this->Acl->allow('Director', 'Giveaways', 'update');
         $this->Acl->allow('Director', 'Giveaways', 'delete');
 
-        $this->Acl->allow('Advisor', 'QuickAuth', 'read');
+        $this->Acl->allow('Admin', 'QuickAuth', 'read');
 
         $this->Acl->allow('Advisor', 'Receipts', 'read');
 
