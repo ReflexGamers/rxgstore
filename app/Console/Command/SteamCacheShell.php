@@ -98,10 +98,9 @@ class SteamCacheShell extends AppShell {
 	}
 
 	/**
-	 * Precaches all known players who have purchased items or used QuickAuth since
-	 * Store.SteamCache.PrecacheQuickAuthTime seconds ago.
+	 * Refreshes all "known" players.
 	 */
-	public function precache_known() {
+	public function refresh_known() {
 
 		set_time_limit(90);
 
