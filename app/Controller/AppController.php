@@ -188,7 +188,7 @@ class AppController extends Controller {
         $this->Auth->allow();
 
         $user = $this->Auth->user();
-        $loggedIn = isset($user);
+        $loggedIn = !empty($user['user_id']);
 
         if ($this->AccountUtility->trySavedLogin($loggedIn) && !$loggedIn) {
 
