@@ -231,7 +231,7 @@ class QuickAuthController extends AppController {
 
         } else if (empty($user)) {
 
-            // token not found in db, nor is used logged in already
+            // token not found in db, nor is user logged in already
             CakeLog::write('quickauth', "Requested token $tokenId-$tokenValue was not found.");
             $this->Session->setFlash('Invalid Authentication token. Please contact an administrator.', 'flash', array('class' => 'error'));
         }
