@@ -48,7 +48,7 @@ class AccessComponent extends Component {
     public function check($aco, $action = '*') {
 
         // no user means no special access
-        if (empty($this->user)) return false;
+        if (empty($this->user['user_id'])) return false;
 
         // return cached perm if available in this request
         if (isset($this->cache[$aco][$action])) {
