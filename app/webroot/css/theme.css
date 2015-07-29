@@ -1893,6 +1893,7 @@ input[type="checkbox"].edit_input {
     padding: 0 5px;
     margin: 0;
     border-bottom: 1px dashed #ddd;
+    word-wrap: break-word;
 }
 
 .shoutbox_item:first-child {
