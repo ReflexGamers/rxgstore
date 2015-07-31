@@ -8,7 +8,11 @@
     {% if composing %}
 
         {% if isReward %}
-            <p>Please provide a list of recipients (one per line) and then choose which items they should receive. Multiple formats are allowed and you can even paste in a status print-out. If you want to send a reward to yourself, you need simply use the "me" keyword.</p>
+            <p>The Reward system is a way to give free items to specific players for attending events, recruiting, or anything else that leadership deems reasonable. If you want to send a reward for something that we do not have a history of rewarding, you should discuss it with other leadership first.</p>
+
+            <p>To send a reward, simply provide a list of recipients (one per line) and then choose which items they should receive. All Steam ID formats (including profile urls) are accepted and you can even paste in a status print-out. If you want to send a reward to yourself, you need simply use the "me" keyword.</p>
+
+            <p>Do not send random rewards to yourself or others just because you feel like it. If you want to send items to a player, it may be more appropriate to send a gift from yourself instead of from Reflex Gamers. You can search for players {{ html.link('here', { 'controller': 'SteamPlayerCache', 'action': 'search' }) }}.</p>
         {% else %}
             <p>Please choose items from your inventory below to give to the specified recipient. When the gift is sent, the items you include will be removed from your inventory. If you are in-game in a store-enabled server, it will temporarily unload your inventory and then reload it immediately after the gift is successfully sent.</p>
 
@@ -192,7 +196,7 @@
 
     </table>
 
-    <h2 class="gift_subheading">Message (Optional)</h2>
+    <h2 class="gift_subheading">Message {{ isReward ? '' : '(Optional)' }}</h2>
 
     {{ form.input((isReward ? 'Reward' : 'Gift') ~ '.message', {
         'class': 'gift_message_input',
