@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <p>Here you can find players in our database. This includes all players who have made purchases or recently played in store-powered servers.</p>
+    <p>Here you can find players in our database by name or Steam ID (many formats supported). This includes all players who have made purchases or recently played in store-powered servers.</p>
 
     <form method="get">
         <input type="text" name="term" placeholder="Search for players..." class="search_box">

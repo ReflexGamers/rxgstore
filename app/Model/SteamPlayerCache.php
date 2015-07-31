@@ -29,24 +29,22 @@ class SteamPlayerCache extends AppModel {
     protected $expireTime = null;
 
     /**
-     * Returns a query that can be used to fetch a page of search results for a specific term.
+     * Returns a query that can be used to fetch a page of search results based on some conditions.
      *
      * Note: This does not return data; it simply returns the query as an array.
      *
-     * @param string $term search term
+     * @param array $conditions search conditions
      * @param int $limit optional limit for number of reviews to return
      * @return array query to be passed into paginator
      */
-    public function getSearchQueryPage($term = '', $limit = 10) {
+    public function getSearchQueryPage($conditions, $limit = 10) {
 
         return array(
             'SteamPlayerCache' => array(
                 'fields' => array(
                     'user_id'
                 ),
-                'conditions' => array(
-                    'personaname like' => "%$term%"
-                ),
+                'conditions' => $conditions,
                 'limit' => $limit
             )
         );

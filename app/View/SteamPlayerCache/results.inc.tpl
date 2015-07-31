@@ -15,7 +15,13 @@
 
         {% set resultCount = paginator.counter('{:count}') %}
 
-        <p class="list_total">Found {{ paginator.counter('{:count}') }} result{{ resultCount > 1 ? 's' : '' }} for '{{ term }}'</p>
+        <p class="list_total">
+        {% if steamidMatch %}
+            Found Steam ID match for '{{ term }}'
+        {% else %}
+            Found {{ paginator.counter('{:count}') }} result{{ resultCount > 1 ? 's' : '' }} for '{{ term }}'
+        {% endif %}
+        </p>
 
     {% else %}
 

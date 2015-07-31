@@ -55,7 +55,21 @@ class SteamPlayerCacheController extends AppController {
      */
     public function search_results($term = '', $forceRender = true) {
 
-        $this->Paginator->settings = $this->SteamPlayerCache->getSearchQueryPage($term);
+        $steamid = SteamID::Parse($term, SteamID::FORMAT_AUTO);
+
+        // attempt steamid match or fall back to name search
+        if ($steamid === false) {
+            $conditions = array(
+                'personaname like' => "%$term%"
+            );
+        } else {
+            $conditions = array(
+                'user_id' => $steamid->Format(SteamID::FORMAT_S32)
+            );
+            $this->set('steamidMatch', true);
+        }
+
+        $this->Paginator->settings = $this->SteamPlayerCache->getSearchQueryPage($conditions);
         $results = Hash::extract($this->Paginator->paginate('SteamPlayerCache'), '{n}.SteamPlayerCache.user_id');
         $this->addPlayers($results);
 
