@@ -14,6 +14,13 @@ class ServerUtilityComponent extends Component {
     protected $Item = null;
 
     public function initialize(Controller $controller) {
+        $this->initServers();
+    }
+
+    /**
+     * Separate function from initialize so it can be called without a controller.
+     */
+    public function initServers() {
         App::import('Vendor', 'SteamCondenser', array('file' => 'SteamCondenser/Servers/SourceServer.php'));
         $this->passwords = ConnectionManager::enumConnectionObjects()['gameServer']['passwords'];
     }
@@ -270,6 +277,32 @@ class ServerUtilityComponent extends Component {
     public function unloadUserInventory($server_ip, $user_id) {
 
         return $this->exec($server_ip, "sm_store_unload_inventory $user_id");
+    }
+
+    /**
+     * Tests RCON passwords for all servers and returns the status of each one.
+     *
+     * @return array
+     */
+    public function testServers() {
+
+        $servers = array();
+
+        foreach ($this->passwords as $server_ip => $password) {
+
+            $server = new SteamCondenser\Servers\SourceServer($server_ip);
+
+            try {
+                $server->rconAuth($password);
+                $servers[$server_ip] = 2;
+            } catch (SteamCondenser\Exceptions\RCONNoAuthException $e) {
+                $servers[$server_ip] = 1;
+            } catch (Exception $e) {
+                $servers[$server_ip] = 0;
+            }
+        }
+
+        return $servers;
     }
 
     /**
