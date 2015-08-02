@@ -49,7 +49,7 @@
             },
             xAxis: {
                 type: 'datetime',
-                minRange: 24 * 3600000 // 1 day
+                minRange: 5 * 24 * 3600000 // 5 days
             },
             yAxis: {
                 title: {
@@ -84,7 +84,7 @@
             series: [{
                 type: 'area',
                 name: 'CASH',
-                pointInterval: 4 * 3600 * 1000,    // 4 hours each point
+                pointInterval: 24 * 3600 * 1000,    // 1 day each point
                 pointStart: Date.parse(startDate),
                 data: data
             }]
