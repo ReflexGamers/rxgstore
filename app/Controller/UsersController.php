@@ -151,6 +151,7 @@ class UsersController extends AppController {
 
         if ($this->Auth->user()) {
             $this->redirect($this->referer());
+            return;
         }
 
         App::import('Vendor', 'Openid');
@@ -167,6 +168,7 @@ class UsersController extends AppController {
                 $openid->identity = 'http://steamcommunity.com/openid';
                 $this->Session->write('Auth.redirect', $this->referer());
                 $this->redirect($openid->authUrl());
+                return;
 
             } else if ($openid->mode == 'cancel') {
 

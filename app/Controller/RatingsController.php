@@ -32,6 +32,7 @@ class RatingsController extends AppController {
 
         if (!$this->request->is('ajax')) {
             $this->redirect($this->referer());
+            return;
         }
 
         $user_id = $this->Auth->user('user_id');

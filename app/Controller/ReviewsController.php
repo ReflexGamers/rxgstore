@@ -42,6 +42,7 @@ class ReviewsController extends AppController {
 
         if (!$this->request->is('ajax')) {
             $this->redirect($this->referer());
+            return;
         }
 
         $user_id = $this->Auth->user('user_id');
@@ -129,6 +130,7 @@ class ReviewsController extends AppController {
 
         if (!$this->request->is('ajax')) {
             $this->redirect($this->referer());
+            return;
         }
 
         $item = $this->Review->getItemByReviewId($review_id);
@@ -201,6 +203,7 @@ class ReviewsController extends AppController {
 
         if (!$this->request->is('ajax')) {
             $this->redirect($this->referer());
+            return;
         }
 
         $reviewData = $this->Review->getWithRating($review_id);

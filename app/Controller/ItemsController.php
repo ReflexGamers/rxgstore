@@ -154,6 +154,7 @@ class ItemsController extends AppController {
             //Redirect on unrecognized game if not ajax
             if (empty($serverItems) && !$this->request->is('ajax')) {
                 $this->redirect(array('controller' => 'Items', 'action' => 'index'));
+                return;
             }
         }
 
@@ -376,6 +377,7 @@ class ItemsController extends AppController {
 
         if (!$this->Access->check('Items', 'update')) {
             $this->redirect(array('controller' => 'items', 'action' => 'view', 'id' => $id));
+            return;
         }
 
         $itemData = $this->Item->find('first', array(

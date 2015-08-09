@@ -273,6 +273,7 @@ class GiftsController extends AppController {
                 $this->Session->setFlash('Oops! Our records show you are connected to a server but we are unable to contact it. You will not be able to send a gift until we can contact your server.', 'flash', array('class' => 'error'));
                 $this->User->saveField('locked', 0);
                 $this->redirect(array('action' => 'compose', 'id' => $steamid));
+                return;
             };
         }
 
