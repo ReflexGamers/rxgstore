@@ -69,11 +69,13 @@ class Reward extends AppModel {
             $this->RewardRecipient->id = $reward['RewardRecipient']['reward_recipient_id'];
             $this->RewardRecipient->saveField('accepted', 1);
 
-            // add cash at beginning as item_id 0
-            array_unshift($reward['Reward']['RewardDetail'], array(
-                'item_id' => 0,
-                'quantity' => $credit
-            ));
+            if ($credit > 0) {
+                // add cash at beginning as item_id 0
+                array_unshift($reward['Reward']['RewardDetail'], array(
+                    'item_id' => 0,
+                    'quantity' => $credit
+                ));
+            }
 
             // return reward data so controller can use it
             return $reward;
