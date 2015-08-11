@@ -237,6 +237,12 @@ class ItemsController extends AppController {
         $topHoarders = $this->Item->getTopHoarders($item_id);
         $this->addPlayers(array_keys($topHoarders));
 
+        // show logged-in user's rating
+        $user_id = $this->Auth->user('user_id');
+        if ($user_id) {
+            $this->set('userRating', $this->Item->getUserRating($item_id, $user_id));
+        }
+
         $this->set(array(
             'item' => $item,
             'stock' => $this->Item->getStock($item_id),

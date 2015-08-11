@@ -309,6 +309,20 @@ class Item extends AppModel {
     }
 
     /**
+     * Returns the user's rating for the item.
+     *
+     * @param int $item_id
+     * @param int $user_id
+     * @return int the rating
+     */
+    public function getUserRating($item_id, $user_id) {
+        return $this->Rating->field('rating', array(
+            'item_id' => $item_id,
+            'user_id' => $user_id
+        ));
+    }
+
+    /**
      * Returns an array of the total ratings for all items indexed by item_id.
      *
      * @return array of ratings (decimals) indexed by item_id
