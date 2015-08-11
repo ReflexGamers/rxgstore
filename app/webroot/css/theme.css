@@ -1438,8 +1438,10 @@ input[type="checkbox"].edit_input {
 
 .item_edit_link {
     float: right;
-    font-size: 20px;
     padding: 8px 15px 8px 0;
+
+    font-size: 20px;
+    font-weight: 200;
 }
 
 

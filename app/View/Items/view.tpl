@@ -4,8 +4,7 @@
 {% set styles = 'rateit' %}
 {% set scripts = ['jquery.rateit.min', 'items'] %}
 
-{% block preheader %}
-
+{% block title %}
     {% if access.check('Items', 'update') %}
         <div class="item_edit_link">
             <i class="fa fa-pencil"></i>
@@ -15,7 +14,7 @@
             }) }}
         </div>
     {% endif %}
-
+    {{ title }}
 {% endblock %}
 
 {% block content %}
