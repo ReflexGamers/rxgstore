@@ -93,7 +93,13 @@
                     <span class="item_browse_reward_sender">Reflex Gamers</span>
                     {% if access.check('Rewards', 'create') %}
                         <div class="activity_reward_sender">
-                            {{ fn.player(_context, players[reward.sender_id]) }}
+                            {% if reward.sender_id == 0 %}
+                                {{ html.image('/img/misc/robots.png') }}
+                                Robots
+                                {{ html.image('/img/misc/robots.png') }}
+                            {% else %}
+                                {{ fn.player(_context, players[reward.sender_id]) }}
+                            {% endif %}
                         </div>
                     {% endif %}
                 </div>
@@ -239,7 +245,11 @@
                 {% if showShipmentHandler %}
                     <div class="activity_player handler">
                         {% if shipment.user_id == 0 %}
-                            Robots
+                            <div class="activity_reward_sender">
+                                {{ html.image('/img/misc/robots.png') }}
+                                Robots
+                                {{ html.image('/img/misc/robots.png') }}
+                            </div>
                         {% else %}
                             {{ fn.player(_context, players[shipment.user_id]) }}
                         {% endif %}
