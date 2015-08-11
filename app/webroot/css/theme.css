@@ -965,6 +965,7 @@ input.cart_quantity_input:focus {
     margin: 0 0 10px;
     padding: 1px 5px;
     overflow-x: hidden;
+    text-overflow: ellipsis;
 }
 
 .page_heading {
