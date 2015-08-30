@@ -14,6 +14,8 @@
             ) }}
         </div>
 
+        {% include 'Items/howto.inc.tpl' %}
+
         {% include 'Orders/receipt.inc.tpl' with {'data': order} %}
 
     {% endif %}

@@ -1,11 +1,5 @@
 (function($){
 
-    // how to use items toggle
-    $('.browse_howto_link').on('click', function () {
-        $(this).closest('.browse_howto').find('.browse_howto_content').slideToggle(500);
-    });
-
-
     $('.item_browse_gift_accept').on('click', function(){
 
         var el = $(this);

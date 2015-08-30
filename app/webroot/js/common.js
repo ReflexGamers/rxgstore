@@ -1,5 +1,11 @@
 (function($){
 
+    // how to use items toggle
+    $('.items_howto_link').on('click', function () {
+        $(this).closest('.items_howto').find('.items_howto_content').slideToggle(500);
+    });
+
+
     $.fn.scrollTo = function( target, options, callback ){
         if(typeof options == 'function' && arguments.length == 2){ callback = options; options = target; }
         var settings = $.extend({
