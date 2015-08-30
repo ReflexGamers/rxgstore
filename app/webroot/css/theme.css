@@ -2,6 +2,8 @@
 body {
     margin: 0;
 
+    line-height: 1.3;
+
     font-family: roboto,arial;
     font-size: 16px;
     font-weight: 300;
@@ -1207,9 +1209,10 @@ input.cart_quantity_input:focus {
 
 .review_quantity {
     font-size: 20px;
+    font-weight: bold;
     text-align: center;
     margin-top: 4px;
-    font-weight: bold;
+    cursor: default;
 }
 
 .review_content {
@@ -1884,7 +1887,7 @@ input[type="checkbox"].edit_input {
 }
 
 #shoutbox_content {
-    height: 112px;
+    height: 110px;
     background: #eee;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
     list-style: none;
@@ -2791,7 +2794,7 @@ button::-moz-focus-inner {
 
 code {
     background: rgba(0, 128, 255, 0.08);
-    padding: 1px 5px 0;
+    padding: 0 5px;
     border-radius: 2px;
     border: 1px dashed rgba(0, 128, 255, 0.25);
 }
