@@ -10,10 +10,6 @@
     <ul class="item_list">
         {% for item in sortedItems if quantity[item.item_id] > 0 %}
             <li class="item_list_entry" data-item_id="{{ item.item_id }}">
-                {% set qty = quantity[item.item_id] %}
-                {% if item.item_id == 0 and qty >= 1000 %}
-                    {% set qty = (qty / 1000)|round(1, 'floor') ~ 'K' %}
-                {% endif %}
                 <div class="item_pic" title="{{ item.name }}">
                     {{ html.image("items/#{item.short_name}.png", {
                         'url': {
@@ -23,7 +19,7 @@
                         }
                     }) }}
                     <div class="item_amt">
-                        {{ qty }}
+                        {{ fn.formatItemQty(item.item_id, quantity[item.item_id]) }}
                     </div>
                 </div>
             </li>

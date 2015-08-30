@@ -20,8 +20,8 @@
     {% endif %}
 
     {% if review.quantity %}
-        <div class="review_quantity" title="This player purchased {{ review.quantity }} of this item">
-            {{ review.quantity }}
+        <div class="review_quantity" title="This player purchased {{ fn.formatInteger(review.quantity) }} of this item">
+            {{ fn.formatItemQty(item.item_id, review.quantity) }}
         </div>
     {% endif %}
 </div>
