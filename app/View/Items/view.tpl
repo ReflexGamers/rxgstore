@@ -146,7 +146,7 @@
                         <span class="top_player_name">
                             {{ fn.player(_context, players[buyer]) }}
                         </span>
-                        bought <span class="top_player_amount">{{ data.quantity }}</span> for <span class="top_player_cost">{{ fn.currency(data.total, {'big': true}) }}</span>
+                        bought <span class="top_player_amount">{{ fn.formatInteger(data.quantity) }}</span> for <span class="top_player_cost">{{ fn.currency(data.total, {'big': true}) }}</span>
                     </li>
 
                 {% endfor %}
@@ -172,7 +172,7 @@
                         <span class="top_player_name">
                             {{ fn.player(_context, players[buyer]) }}
                         </span>
-                        is hoarding <span class="top_player_amount">{{ data.quantity }}</span>
+                        is hoarding <span class="top_player_amount">{{ fn.formatInteger(data.quantity) }}</span>
                     </li>
 
                 {% endfor %}
