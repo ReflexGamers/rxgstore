@@ -105,19 +105,19 @@ class Stock extends AppModel {
         foreach ($currentStock as $item_id => $item) {
             $quantity = $item['quantity'];
             $minimum = $item['minimum'];
-            $suggested = $suggestedStock[$item_id];
+            $desired = max($suggestedStock[$item_id], $minimum);
 
-            $newMaximum = $this->dynamicRound(max($suggested, $minimum) * $config['MaxStockMult']);
+            $newMaximum = $this->dynamicRound($desired * $config['MaxStockMult']);
 
             $newStock[$item_id] = array(
                 'item_id' => $item_id,
-                'quantity' => max($suggested, $quantity),
+                'quantity' => max($desired, $quantity),
                 'maximum' => $newMaximum
             );
 
             // avoid micro stocking
-            if ($quantity < $minimum || $quantity < $suggested * $config['AntiMicroThreshold']) {
-                $addStock[$item_id] = $suggested - $quantity;
+            if ($quantity < $minimum || $quantity < $desired * $config['AntiMicroThreshold']) {
+                $addStock[$item_id] = $desired - $quantity;
             }
         }
 
