@@ -106,10 +106,14 @@ class StockShell extends AppShell {
     /**
      * Prints the suggested stock values based on sales including the OverStockMult. Does not factor
      * in minimum stock.
+     *
+     * Takes a command line argument of the number of days for which to suggest. Default 7 days.
      */
     public function suggested() {
 
-        $suggested = $this->Stock->getSuggestedStock();
+        $days = !empty($this->args[0]) ? $this->args[0] : 7;
+
+        $suggested = $this->Stock->getSuggestedStock($days);
         $itemNames = $this->getItemNames(array_keys($suggested));
 
         $this->out("Suggested stock values based on sales including OverStockMult:\n");
