@@ -246,15 +246,19 @@ class QuickAuthController extends AppController {
             return;
         }
 
-        // find name of server for url
-        if (!empty($auth)) {
-            $this->loadModel('Server');
-            $server = Hash::extract($this->Server->findByServerIp($auth['server'], array('short_name')), 'Server');
-        }
+        // construct page from server if no `page` param
+        if (empty($params['page'])) {
 
-        // if server not found, use game from url
-        $server = !empty($server) ? $server['short_name'] : $params['game'];
-        $redirLoc = array('controller' => 'Items', 'action' => 'index', 'server' => $server);
+            // find name of server for url
+            if (!empty($auth)) {
+                $this->loadModel('Server');
+                $server = Hash::extract($this->Server->findByServerIp($auth['server'], array('short_name')), 'Server');
+            }
+
+            // if server not found, use game from url
+            $server = !empty($server) ? $server['short_name'] : $params['game'];
+            $redirLoc = array('controller' => 'Items', 'action' => 'index', 'server' => $server);
+        }
 
         // if server is not in the popup list, send user straight to store
         if (!in_array($params['game'], $config['PopupFromGames'])) {
