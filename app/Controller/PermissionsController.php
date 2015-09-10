@@ -32,7 +32,7 @@ class PermissionsController extends AppController {
 
         $admins = Hash::map($aro->find('all', array(
             'fields' => array(
-                'Aro.foreign_key as user_id', 'Aro.alias as name', 'AroParent.alias as rank'
+                'Aro.foreign_key as user_id', 'Aro.alias as name', 'Aro.division as division_id', 'AroParent.alias as rank'
             ),
             'conditions' => array(
                 'Aro.foreign_key is not null'
@@ -46,7 +46,7 @@ class PermissionsController extends AppController {
                     )
                 )
             ),
-            'order' => 'AroParent.id desc',
+            'order' => 'AroParent.id desc, Aro.alias asc',
             'recursive' => -1
         )), '{n}', function($admin){
             return array_merge($admin['Aro'], $admin['AroParent']);
@@ -59,6 +59,7 @@ class PermissionsController extends AppController {
         ));
 
         $this->loadShoutbox();
+        $this->loadDivisions();
 
         if (!empty($view)) {
             $this->render($view);

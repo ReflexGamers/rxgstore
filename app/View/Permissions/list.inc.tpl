@@ -29,6 +29,9 @@
             {% set memberName = member.name|lower() %}
             {% set playerName = fn.stripTag(player)|lower() %}
             {{ memberName in playerName or playerName in memberName ? '' : "(#{member.name})" }}
+            {% if member.division_id %}
+                - <em>{{ divisions[member.division_id].abbr }}</em>
+            {% endif %}
         </li>
 
     {% endfor %}
