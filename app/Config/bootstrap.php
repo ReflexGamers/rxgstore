@@ -117,6 +117,8 @@ if (getenv('CAKEPHP_DEBUG')) {
 	Configure::write('debug', 0);
 }
 
+Configure::write('Exception.renderer', 'AppExceptionRenderer');
+
 CakeLog::config('error', array(
 	'engine' => 'File',
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
