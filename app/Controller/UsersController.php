@@ -149,7 +149,7 @@ class UsersController extends AppController {
      */
     public function login() {
 
-        if ($this->Auth->user()) {
+        if ($this->Auth->user('user_id')) {
             $this->redirect($this->referer());
             return;
         }
