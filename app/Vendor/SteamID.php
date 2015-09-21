@@ -261,7 +261,7 @@ class SteamID {
 			
 			// try a full URL.
 			if( preg_match( 
-					'/^(?:https?:\/\/)?(?:www.)?steamcommunity.com\/id\/([a-zA-Z0-9_-]{2,})$/',
+					'/^(?:https?:\/\/)?(?:www.)?steamcommunity.com\/id\/([a-zA-Z0-9_-]{2,})\/?$/',
 					$input, $matches ) ) {
 					
 				$result = self::ConvertVanityURL( $matches[1] );
