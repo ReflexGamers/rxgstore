@@ -16,8 +16,8 @@ class RatingsController extends AppController {
     }
 
     /**
-     * Rates the item specified by item_id, then returns partial view of summed ratings for that item. If the user is
-     * unable to rate the item for some reason, it will simply render the view.
+     * Rates the item specified by item_id, then returns partial view of summed ratings for that
+     * item. If the user is unable to rate the item for some reason, it will simply render the view.
      *
      * @param int $item_id the item to rate
      */
@@ -39,20 +39,7 @@ class RatingsController extends AppController {
         $userCanRate = $this->Rating->User->canRateItem($user_id, $item_id);
 
         if ($userCanRate) {
-
-            $newValue = $this->request->data['rating'];
-            $oldRating = $this->Rating->findByItemIdAndUserId($item_id, $user_id);
-
-            if (empty($oldRating)) {
-                $this->Rating->save(array(
-                    'item_id' => $item_id,
-                    'user_id' => $user_id,
-                    'rating' => $newValue
-                ));
-            } else if ($newValue != $oldRating['Rating']['rating']) {
-                $oldRating['Rating']['rating'] = $newValue;
-                $this->Rating->save($oldRating);
-            }
+            $this->Rating->rateItem($item_id, $user_id, (int)$this->request->data['rating']);
 
             $this->set(array(
                 'item' => array('item_id' => $item_id),

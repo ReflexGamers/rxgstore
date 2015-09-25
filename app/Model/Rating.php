@@ -7,7 +7,7 @@ App::uses('AppModel', 'Model');
  * @property User $User
  *
  * Magic Methods (for inspection):
- * @method findByItemIdAndUserId
+ * @method findByItemIdAndUserId($item_id, $user_id)
  */
 class Rating extends AppModel {
 
@@ -24,6 +24,14 @@ class Rating extends AppModel {
 
     public $order = 'Rating.rating desc';
 
+    /**
+     * Gets a user's Rating and associated Review for an item.
+     *
+     * @param int $item_id
+     * @param int $user_id
+     *
+     * @return array the rating/review info merged into a single hash
+     */
     public function getByItemAndUser($item_id, $user_id) {
 
         $rating = $this->find('first', array(
@@ -44,6 +52,38 @@ class Rating extends AppModel {
         ));
 
         return empty($rating) ? array() : array_merge($rating['Rating'], $rating['Review']);
+    }
+
+    /**
+     * Saves a user's rating for an item.
+     *
+     * @param int $item_id
+     * @param int $user_id
+     * @param int $rating
+     *
+     * @return boolean whether the save was successful
+     */
+    public function rateItem($item_id, $user_id, $rating) {
+
+        // get current rating if one exists
+        $oldRating = $this->findByItemIdAndUserId($item_id, $user_id);
+
+        // coerce to range 1-10 (0.5 to 5)
+        $rating = min(max($rating, 1), 10);
+
+        if (empty($oldRating)) {
+            return $this->save(array(
+                'item_id' => $item_id,
+                'user_id' => $user_id,
+                'rating' => $rating
+            ));
+        } else if ($rating != $oldRating['Rating']['rating']) {
+            $oldRating['Rating']['rating'] = $rating;
+            return $this->save($oldRating);
+        } else {
+            // new rating matched old one
+            return true;
+        }
     }
 
 /**
