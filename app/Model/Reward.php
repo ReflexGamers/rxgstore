@@ -31,6 +31,37 @@ class Reward extends AppModel {
 
 
     /**
+     * Sends a simple cash reward.
+     *
+     * @param int $sender_id
+     * @param int $recipient_id
+     * @param string $message
+     * @param int $amount
+     * @return boolean
+     */
+    public function sendCashReward($sender_id, $recipient_id, $message, $amount) {
+        $reward_id = $this->Activity->getNewId($this->name);
+
+        $saveResult = $this->saveAssociated(array(
+            'RewardRecipient' => array(
+                array('recipient_id' => $recipient_id)
+            ),
+            'Reward' => array(
+                'reward_id' => $reward_id,
+                'sender_id' => $sender_id,
+                'message' => $message,
+                'credit' => $amount
+            )
+        ), array('atomic' => false));
+
+        if (!$saveResult['Reward'] || in_array(false, $saveResult['RewardRecipient'])) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Accepts a pending reward specified by $reward_id for the provided $recipient_id if one exists. This will add the
      * items from the reward details to the user's inventory. If the $reward_id does not match the $user_id or if it was
      * already accepted (or not found), this will return false instead of the reward data.
