@@ -20,7 +20,7 @@
     {% endif %}
 
 
-    {% for review in reviews if review.content %}
+    {% for review in reviews %}
 
         {% if displayType == 'user' %}
 
