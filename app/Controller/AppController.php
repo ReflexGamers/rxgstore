@@ -159,6 +159,10 @@ class AppController extends Controller {
      */
     public function loadShoutbox() {
 
+        if (!Configure::read('Store.Shoutbox.Enabled')) {
+            return;
+        }
+
         $this->loadModel('ShoutboxMessage');
         $messages = $this->ShoutboxMessage->getRecent();
         $this->addPlayers($messages, '{n}.user_id');

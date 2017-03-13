@@ -8,6 +8,8 @@ $config['Store'] = array(
     ),
     'SavedLoginDuration' => 2592000, // 1 month
     'Shoutbox' => array(
+        // TODO: Enable shoutbox when we can moderate it better
+        'Enabled' => false,
         'PostCooldown' => 60, // 1 minute
         'UpdateInterval' => 30 // 30 seconds
     ),
