@@ -30,8 +30,13 @@ class PermissionsComponent extends Component {
         preg_match('/STEAM_1:([0-1]:[0-9]+)/', $steamid32, $matches);
         $steamPattern = 'STEAM_[0-1]:' . $matches[1];
 
+        try {
+            $db = ConnectionManager::getDataSource('sourcebans');
+        } catch (MissingDatasourceConfigException $e) {
+            return false;
+        }
+
         // query sourcebans
-        $db = ConnectionManager::getDataSource('sourcebans');
         $result = $db->fetchAll(
             "SELECT * FROM rxg__bans WHERE (ends > :time OR length = 0) AND RemovedOn is null AND rxg__bans.authid RLIKE :steamPattern ORDER BY ends limit 1",
             array(
