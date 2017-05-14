@@ -1,0 +1,10 @@
+<?php
+
+/**
+ * Permission overrides are applied during sync. You can run a sync from command line or via the admin panel.
+ */
+$config['Store']['PermissionOverrides'] = array(
+
+	// alias => rank
+	// 'ExampleUserAlias' => 'ExampleRoleAlias'
+);
