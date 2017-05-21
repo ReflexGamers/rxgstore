@@ -102,7 +102,11 @@ class UsersController extends AppController {
         $user_id = $this->AccountUtility->AccountIDFromSteamID64($steamid);
 
         $this->loadModel('Activity');
-        $this->Paginator->settings = $this->Activity->getUserPageQuery($user_id, 5);
+        $this->Paginator->settings = $this->Activity->getUserPageQuery(
+            $user_id,
+            $this->Access->check('Rewards', 'create'),
+            5
+        );
 
         $activities = $this->Activity->getRecent(
             $this->Paginator->paginate('Activity')

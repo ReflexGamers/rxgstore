@@ -234,9 +234,9 @@ class Activity extends AppModel {
             'alias' => 'Gift',
             'conditions' => array(
                 'OR' => array(
-                    'AND' => array(
-                        'sender_id' => $user_id,
-                        'anonymous = 0'
+                    'AND' => array_merge(
+                        array('sender_id' => $user_id),
+                        $query['showAnonymousGiftSenders'] ? array() : array('anonymous = 0')
                     ),
                     'recipient_id' => $user_id
                 )
@@ -498,15 +498,17 @@ class Activity extends AppModel {
      * Note: This does not return data; it simply returns the query as an array.
      *
      * @param int $user_id
+     * @param bool $showAnonymousGiftSenders whether the current user should see anonymous gifts
      * @param int $limit optional limit for number of events to return
      * @return array
      */
-    public function getUserPageQuery($user_id, $limit = 5) {
+    public function getUserPageQuery($user_id, $showAnonymousGiftSenders = false, $limit = 5) {
 
         return array(
             'Activity' => array(
                 'findType' => 'byUser',
                 'user_id' => $user_id,
+                'showAnonymousGiftSenders' => $showAnonymousGiftSenders,
                 'limit' => $limit
             )
         );
