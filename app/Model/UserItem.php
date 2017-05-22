@@ -18,11 +18,11 @@ class UserItem extends AppModel {
         'Item', 'User'
     );
 
-/**
- * Validation rules
- *
- * @var array
- */
+    /**
+     * Validation rules
+     *
+     * @var array
+     */
     public $validate = array(
         'user_id' => array(
             'numeric' => array(
