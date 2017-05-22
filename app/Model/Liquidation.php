@@ -20,7 +20,7 @@ class Liquidation extends AppModel {
     public $hasMany = 'LiquidationDetail';
     public $belongsTo = array('Activity', 'User');
 
-    public $order = 'liquidation.liquidation_id DESC';
+    public $order = 'Liquidation.liquidation_id DESC';
 
 
     /**
