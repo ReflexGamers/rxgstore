@@ -612,13 +612,8 @@ table.addfunds td {
 table.cart {
     border-collapse:collapse;
     border-radius: 10px;
-    /*background: #e5e5e5;*/
     width: 100%;
     margin: 10px 0;
-}
-
-table.cart tr {
-
 }
 
 table.cart th,
@@ -626,15 +621,10 @@ table.cart td {
     text-align: left;
     padding: 5px;
     font-size: 18px;
-    /*border: 1px solid #ccc;*/
-}
-
-table.cart td {
-
 }
 
 .cart td.image {
-    width:48px;
+    width: 48px;
     padding: 5px 0;
 }
 
@@ -714,6 +704,82 @@ input.cart_quantity_input:focus {
     box-shadow: 0 0 5px rgba(255, 127, 127, 1);
 }
 
+
+.liquidate_table {
+    border-spacing: 0;
+    width: 100%;
+}
+
+.liquidate_table td {
+    padding: 3px 5px;
+}
+
+.liquidate_table th {
+    padding: 5px;
+}
+
+.liquidate_item_heading {
+    text-align: left;
+}
+
+.liquidate_image img {
+    display: inline-block;
+    vertical-align: top;
+    height: 32px;
+    width: 32px;
+}
+
+.liquidate_name {
+    display: inline-block;
+    padding: 0 10px;
+    font-size: 20px;
+    line-height: 32px;
+    width: 300px;
+}
+
+.liquidate_quantity_input {
+    transition: all 0.2s;
+    width: 60px;
+}
+
+.liquidate_quantity_input:focus {
+    box-shadow: 0 0 5px rgba(64, 127, 255, 0.5);
+    border: 1px solid #6cf;
+    outline: none;
+}
+
+.liquidate_price {
+    width: 100px;
+}
+
+.liquidate_available {
+    width: 60px;
+    text-align: center;
+}
+
+.liquidate_item_total {
+    width: 110px;
+}
+
+tr.liquidate_separator td {
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+}
+
+.liquidate_totals {
+    text-align: right;
+    padding-right: 10px;
+}
+
+#liquidate_total {
+    font-weight: bold;
+}
+
+#liquidate_confirm_button {
+    margin-top: 10px;
+    float: right;
+    clear: right;
+}
 
 
 .recent_heading {
@@ -1473,6 +1539,13 @@ input[type="checkbox"].edit_input {
     display: inline-block;
     padding: 10px 20px;
     font-size: 20px;
+}
+
+.btn-liquidate-items {
+    display: inline-block;
+    margin: 12px 0 0;
+    padding: 8px 16px;
+    font-size: 18px;
 }
 
 .btn-success {
@@ -2619,7 +2692,7 @@ button::-moz-focus-inner {
     border: none;
 }
 
-.   activity_player {
+.activity_player {
     line-height: 32px;
 }
 

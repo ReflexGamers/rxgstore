@@ -123,6 +123,9 @@
 			'time' => '[0-9]+'
 	));
 
+    Router::connect('/returns/:action', array('controller' => 'Liquidations'));
+    Router::connect('/returns/activity/*', array('controller' => 'Liquidations', 'action' => 'activity'));
+
 	Router::connect('/shout', array('controller' => 'ShoutboxMessages', 'action' => 'add'));
 	Router::connect('/shout/check/:time', array(
 			'controller' => 'ShoutboxMessages', 'action' => 'view'
