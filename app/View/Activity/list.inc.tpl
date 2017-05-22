@@ -35,6 +35,22 @@
                     'maxColumns': 6
                 } %}
 
+            {% elseif activity.Liquidation %}
+
+                {% set liquidation = activity.Liquidation %}
+
+                <div class="activity_player">
+                    {{ fn.player(_context, players[liquidation.user_id]) }}
+                </div>
+
+                <div class="activity_date">
+                    returned items for {{ fn.currency(liquidation.total, {'wrap': true, 'big': true}) }} ({{ fn.formatTime(_context, liquidation.date) }})
+                </div>
+
+                {% include 'Items/list.inc.tpl' with {
+                    'quantity': activity.LiquidationDetail,
+                    'maxColumns': 6
+                } %}
 
             {% elseif activity.Gift %}
 
