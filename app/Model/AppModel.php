@@ -28,6 +28,9 @@ App::uses('Model', 'Model');
  * will inherit them.
  *
  * @package       app.Model
+ *
+ * Magic Methods (for inspection):
+ * @method query(string $query)
  */
 class AppModel extends Model {
 
