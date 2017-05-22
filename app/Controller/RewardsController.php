@@ -249,6 +249,12 @@ class RewardsController extends AppController {
             return;
         }
 
+        if (empty($reward['RewardRecipient'])) {
+            $this->Session->setFlash('You did not specify any valid recipients.', 'flash', array('class' => 'error'));
+            $this->redirect(array('action' => 'compose'));
+            return;
+        }
+
         $this->loadModel('Activity');
 
         $reward['Reward']['reward_id'] = $this->Activity->getNewId('Reward');

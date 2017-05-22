@@ -220,10 +220,13 @@
         </div>
     {% endif %}
 
+    {% set disableSubmit = (isReward and not composing and not recipients|length) %}
+
     {{ form.submit((composing ? 'Package ' : 'Send ') ~ (isReward ? 'Reward' : 'Gift'), {
         'div': false,
-        'class': 'btn-primary',
-        'id': 'gift_package_button'
+        'class': 'btn-primary ' ~ (disableSubmit ? 'disabled' : ''),
+        'id': 'gift_package_button',
+        'disabled': disableSubmit
     }) }}
 
     {{ form.end() }}
