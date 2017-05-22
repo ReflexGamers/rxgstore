@@ -1,13 +1,16 @@
 <?php
 App::uses('AppModel', 'Model');
+
+class InsufficientItemsException extends Exception {}
 /**
  * User Model
  *
  * @property Aro $Aro
  * @property Gift $Gift
+ * @property GiveawayClaim $GiveawayClaim
+ * @property Liquidation $Liquidation
  * @property Order $Order
  * @property PaypalOrder $PaypalOrder
- * @property GiveawayClaim $GiveawayClaim
  * @property Rating $Rating
  * @property RewardRecipient $RewardRecipient
  * @property QuickAuth $QuickAuth
@@ -26,7 +29,8 @@ class User extends AppModel {
     );
 
     public $hasMany = array(
-        'Gift', 'Order', 'PaypalOrder', 'GiveawayClaim', 'QuickAuth', 'Rating', 'RewardRecipient', 'SavedLogin', 'ShoutboxMessage', 'UserItem'
+        'Gift', 'GiveawayClaim', 'Liquidation', 'Order', 'PaypalOrder', 'QuickAuth', 'Rating',
+        'RewardRecipient', 'SavedLogin', 'ShoutboxMessage', 'UserItem'
     );
 
     /**
@@ -375,6 +379,98 @@ class User extends AppModel {
                 'user_id' => $user_id,
                 'quantity > 0'
             )
+        ));
+    }
+
+    /**
+     * Returns a list of the user's items for updating.
+     *
+     * @param int $user_id
+     * @param array $item_ids list of item ids
+     * @return array list of items with fields ['user_item_id', 'item_id', 'quantity']
+     */
+    private function getItemsForUpdating($user_id, $item_ids) {
+        return $this->UserItem->find('all', array(
+                'conditions' => array(
+                    'user_id' => $user_id,
+                    'item_id' => $item_ids
+                ),
+                'fields' => array('user_item_id', 'item_id', 'quantity')
+            )
+        );
+    }
+
+    /**
+     * Tests whether the user has the desired quantity of each item.
+     *
+     * @param array $userItems list of user's item quantities indexed by item_id
+     * @param array $items list of desired item quantities indexed by item_id
+     * @return boolean true if there are enough items, false if not
+     */
+    public function hasItemQuantities($userItems, $items) {
+        foreach ($items as $item_id => $quantity) {
+            if (!isset($userItems[$item_id]) || $userItems[$item_id] < $quantity) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns a copy of the provided user items array where the 'quantity' field of each item has
+     * been reduced by the corresponding value in $items.
+     *
+     * @param array $userItems list of user items containing at least fields ['item_id', 'quantity']
+     * @param array $items list of item quantities to remove indexed by item_id
+     * @return array
+     */
+    private function getUpdatedUserItems($userItems, $items) {
+        return array_map(function($userItem) use ($items) {
+            $item_id = $userItem['item_id'];
+
+            return array_merge($userItem, array(
+                'quantity' => $userItem['quantity'] - $items[$item_id]
+            ));
+        }, $userItems);
+    }
+
+    /**
+     * Removes items from the user's inventory in the quantities specified.
+     *
+     * @throws InsufficientItemsException
+     *
+     * @param int $user_id
+     * @param array $items list of quantities to remove indexed by item_id
+     * @return mixed result of Model::saveMany()
+     */
+    public function removeItems($user_id, $items) {
+        $this->query('LOCK TABLES user_item WRITE, user_item as UserItem WRITE');
+        $userItems = Hash::extract($this->getItemsForUpdating($user_id, array_keys($items)), '{n}.UserItem');
+        $userItemQuantities = Hash::combine($userItems, '{n}.item_id', '{n}.quantity');
+
+        if (!$this->hasItemQuantities($userItemQuantities, $items)) {
+            $this->query('UNLOCK TABLES');
+            throw new InsufficientItemsException(__('User has insufficient items'));
+        }
+
+        $updatedUserItems = $this->getUpdatedUserItems($userItems, $items);
+        $result = $this->updateItems($updatedUserItems);
+        $this->query('UNLOCK TABLES');
+
+        return $result;
+    }
+
+    /**
+     * Update a list of UserItem records.
+     *
+     * @param array $items list of UserItem records with at least fields ['user_item_id', 'quantity']
+     * @return mixed result of Model::saveMany()
+     */
+    public function updateItems($items) {
+        return $this->UserItem->saveMany($items, array(
+            'fieldList' => array('user_item_id', 'quantity'),
+            'atomic' => false
         ));
     }
 

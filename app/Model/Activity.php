@@ -4,9 +4,10 @@ App::uses('AppModel', 'Model');
  * Activity Model
  *
  * @property Gift $Gift
+ * @property GiveawayClaim $GiveawayClaim
+ * @property Liquidation $Liquidation
  * @property Order $Order
  * @property PaypalOrder $PaypalOrder
- * @property GiveawayClaim $GiveawayClaim
  * @property Review $Review
  * @property Reward $Reward
  * @property Shipment $Shipment
@@ -19,11 +20,18 @@ class Activity extends AppModel {
     public $primaryKey = 'activity_id';
 
     public $hasOne = array(
-        'Gift', 'Order', 'PaypalOrder', 'GiveawayClaim', 'Review', 'Reward', 'Shipment'
+        'Gift', 'GiveawayClaim', 'Liquidation', 'Order', 'PaypalOrder',
+        'Review', 'Reward', 'Shipment'
     );
 
     public $order = 'Activity.activity_id desc';
 
+    /**
+     * Inserts an Activity record with the specified $modelName and returns the new unique id.
+     *
+     * @param string $modelName the name of the model for which to create the Activity
+     * @return int the generated id
+     */
     public function getNewId($modelName) {
         return $this->query('select NewActivity(' . $this->getDataSource()->value($modelName) . ') as id', false)[0][0]['id'];
     }
@@ -73,6 +81,26 @@ class Activity extends AppModel {
                 )
             )
         ), $this->Order);
+
+        $liquidationQuery = $db->buildStatement(array(
+            'fields' => array(
+                "Liquidation.liquidation_id as activity_id, 'Liquidation' as model"
+            ),
+            'table' => $db->fullTableName($this->Liquidation),
+            'alias' => 'Liquidation',
+            'conditions' => array(
+                'LiquidationDetail.item_id' => $item_id
+            ),
+            'joins' => array(
+                array(
+                    'table' => $db->fullTableName($this->Liquidation->LiquidationDetail),
+                    'alias' => 'LiquidationDetail',
+                    'conditions' => array(
+                        'Liquidation.liquidation_id = LiquidationDetail.liquidation_id'
+                    )
+                )
+            )
+        ), $this->Liquidation);
 
         $giftQuery = $db->buildStatement(array(
             'fields' => array(
@@ -181,7 +209,17 @@ class Activity extends AppModel {
             $limit = '';
         }
 
-        $rawQuery = "select * from ($orderQuery union all $giftQuery union all $rewardQuery union all $reviewQuery union all $shipmentQuery union all $giveawayClaimQuery) as Activity order by activity_id desc $limit";
+        $unions = implode(' union all ', array(
+            $orderQuery,
+            $liquidationQuery,
+            $giftQuery,
+            $rewardQuery,
+            $reviewQuery,
+            $shipmentQuery,
+            $giveawayClaimQuery
+        ));
+
+        $rawQuery = "select * from ($unions) as Activity order by activity_id desc $limit";
 
         if ($state == 'before' && isset($query['operation']) && $query['operation'] == 'count') {
             $query['raw'] = $rawQuery;
@@ -214,6 +252,17 @@ class Activity extends AppModel {
                 'user_id' => $user_id
             )
         ), $this->Order);
+
+        $liquidationQuery = $db->buildStatement(array(
+            'fields' => array(
+                "liquidation_id as activity_id, 'Liquidation' as model"
+            ),
+            'table' => $db->fullTableName($this->Liquidation),
+            'alias' => 'Liquidation',
+            'conditions' => array(
+                'user_id' => $user_id
+            )
+        ), $this->Liquidation);
 
         $paypalQuery = $db->buildStatement(array(
             'fields' => array(
@@ -292,7 +341,17 @@ class Activity extends AppModel {
             $limit = '';
         }
 
-        $rawQuery = "select * from ($orderQuery union all $paypalQuery union all $giftQuery union all $rewardQuery union all $reviewQuery union all $giveawayClaimQuery) as Activity order by activity_id desc $limit";
+        $unions = implode(' union all ', array(
+            $orderQuery,
+            $liquidationQuery,
+            $paypalQuery,
+            $giftQuery,
+            $rewardQuery,
+            $reviewQuery,
+            $giveawayClaimQuery
+        ));
+
+        $rawQuery = "select * from ($unions) as Activity order by activity_id desc $limit";
 
         if ($state == 'before' && isset($query['operation']) && $query['operation'] == 'count') {
             $query['raw'] = $rawQuery;
@@ -312,52 +371,74 @@ class Activity extends AppModel {
      */
     public function getRecent($data) {
 
-        $models = Hash::extract($data, '{n}.Activity.model');
-        $ids = Hash::extract($data, '{n}.Activity.activity_id');
+        $modelIds = Hash::reduce($data, '{n}.Activity', function($idMap, $activity) {
+            $modelName = $activity['model'];
+            $id = $activity['activity_id'];
+
+            if (empty($idMap[$modelName])) {
+                $idMap[$modelName] = array($id);
+            } else {
+                array_push($idMap[$modelName], $id);
+            }
+
+            return $idMap;
+        }, array());
 
         $activities = array();
 
-        if (in_array('Order', $models)) {
+        if (!empty($modelIds['Order'])) {
             $activities = array_merge(
                 $activities,
                 $this->Order->find('all', array(
                     'conditions' => array(
-                        'order_id' => $ids
+                        'order_id' => $modelIds['Order']
                     ),
                     'contain' => 'OrderDetail'
                 )
             ));
         }
 
-        if (in_array('PaypalOrder', $models)) {
+        if (!empty($modelIds['Liquidation'])) {
+            $activities = array_merge(
+                $activities,
+                $this->Liquidation->find('all', array(
+                    'conditions' => array(
+                        'liquidation_id' => $modelIds['Liquidation']
+                    ),
+                    'contain' => 'LiquidationDetail'
+                ))
+            );
+        }
+
+        if (!empty($modelIds['PaypalOrder'])) {
             $activities = array_merge(
                 $activities,
                 $this->PaypalOrder->find('all', array(
                     'conditions' => array(
-                        'paypal_order_id' => $ids
+                        'paypal_order_id' => $modelIds['PaypalOrder']
                     )
                 )
             ));
         }
 
-        if (in_array('Gift', $models)) {
+        if (!empty($modelIds['Gift'])) {
             $activities = array_merge(
                 $activities,
                 $this->Gift->find('all', array(
                     'conditions' => array(
-                        'gift_id' => $ids
+                        'gift_id' => $modelIds['Gift']
                     ),
                     'contain' => 'GiftDetail'
                 )
             ));
         }
 
-        if (in_array('Reward', $models)) {
+        if (!empty($modelIds['Reward'])) {
             $activities = array_merge(
                 $activities,
                 $this->Reward->find('all', array(
                         'conditions' => array(
-                            'reward_id' => $ids
+                            'reward_id' => $modelIds['Reward']
                         ),
                         'contain' => array(
                             'RewardDetail',
@@ -367,13 +448,13 @@ class Activity extends AppModel {
             ));
         }
 
-        if (in_array('Review', $models)) {
+        if (!empty($modelIds['Review'])) {
             $activities = array_merge($activities, $this->Review->find('all', array(
                 'fields' => array(
                     'review_id', 'rating_id', 'created as date', 'created', 'modified', 'content'
                 ),
                 'conditions' => array(
-                    'review_id' => $ids
+                    'review_id' => $modelIds['Review']
                 ),
                 'contain' => array(
                     'Rating' => array(
@@ -385,19 +466,19 @@ class Activity extends AppModel {
             )));
         }
 
-        if (in_array('Shipment', $models)) {
+        if (!empty($modelIds['Shipment'])) {
             $activities = array_merge(
                 $activities,
                 $this->Shipment->find('all', array(
                         'conditions' => array(
-                            'shipment_id' => $ids
+                            'shipment_id' => $modelIds['Shipment']
                         ),
                         'contain' => 'ShipmentDetail',
                     )
             ));
         }
 
-        if (in_array('GiveawayClaim', $models)) {
+        if (!empty($modelIds['GiveawayClaim'])) {
             $activities = array_merge(
                 $activities,
                 $this->GiveawayClaim->find('all', array(
@@ -405,7 +486,7 @@ class Activity extends AppModel {
                             'Giveaway.name', 'GiveawayClaim.user_id', 'GiveawayClaim.date'
                         ),
                         'conditions' => array(
-                            'giveaway_claim_id' => $ids
+                            'giveaway_claim_id' => $modelIds['GiveawayClaim']
                         ),
                         'contain' => array(
                             'Giveaway',
@@ -433,6 +514,21 @@ class Activity extends AppModel {
 
                 $activity['OrderDetail'] = Hash::combine(
                     $activity['OrderDetail'],
+                    '{n}.item_id', '{n}.quantity'
+                );
+
+            } else if (isset($activity['Liquidation'])) {
+
+                $total = 0;
+
+                foreach ($activity['LiquidationDetail'] as $detail) {
+                    $total += $detail['price'] * $detail['quantity'];
+                }
+
+                $activity['Liquidation']['total'] = $total;
+
+                $activity['LiquidationDetail'] = Hash::combine(
+                    $activity['LiquidationDetail'],
                     '{n}.item_id', '{n}.quantity'
                 );
 

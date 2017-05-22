@@ -3,11 +3,12 @@ App::uses('AppModel', 'Model');
 /**
  * Item Model
  *
- * @property GiftDetail $GiftDetail
  * @property Feature $Feature
- * @property OrderDetail $OrderDetail
+ * @property GiftDetail $GiftDetail
  * @property GiveawayDetail $GiveawayDetail
  * @property GiveawayClaimDetail $GiveawayClaimDetail
+ * @property LiquidationDetail $LiquidationDetail
+ * @property OrderDetail $OrderDetail
  * @property Rating $Rating
  * @property ServerItem $ServerItem
  * @property ShipmentDetail $ShipmentDetail
@@ -27,7 +28,8 @@ class Item extends AppModel {
     public $hasOne = 'Stock';
 
     public $hasMany = array(
-        'GiftDetail', 'Feature', 'OrderDetail', 'GiveawayDetail', 'GiveawayClaimDetail', 'Rating', 'ServerItem', 'ShipmentDetail', 'UserItem'
+        'Feature', 'GiftDetail', 'GiveawayDetail', 'GiveawayClaimDetail', 'LiquidationDetail',
+        'OrderDetail', 'Rating', 'ServerItem', 'ShipmentDetail', 'UserItem'
     );
 
     public $order = 'display_index';
@@ -341,6 +343,24 @@ class Item extends AppModel {
                 return array_merge($arr['Rating'], $arr[0]);
             }
         ), '{n}.item_id', '{n}');
+    }
+
+    /**
+     * Returns an array of prices indexed by item_id.
+     *
+     * @param array [$item_ids=[]] optional list of item ids
+     * @return array list of prices indexed by item_id.
+     */
+    public function getPrices($item_ids = array()) {
+        $query = array(
+            'fields' => array('item_id', 'price')
+        );
+
+        if ($item_ids) {
+            $query['conditions'] = array('item_id' => $item_ids);
+        }
+
+        return $this->find('list', $query);
     }
 
 
