@@ -52,6 +52,15 @@
                 } %}
             </div>
 
+            {% if user.user_id == user_id %}
+                {{ html.link('Return items for CASH', {
+                    'controller': 'Liquidations',
+                    'action': 'compose'
+                }, {
+                    'class': 'btn-primary btn-liquidate-items'
+                }) }}
+            {% endif %}
+
         {% else %}
 
             <p>This player currently has no items.</p>
