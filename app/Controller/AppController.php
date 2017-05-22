@@ -32,11 +32,19 @@ App::uses('Controller', 'Controller');
  *
  * @property AccessComponent $Access
  * @property AccountUtilityComponent $AccountUtility
+ * @property AuthComponent $Auth
+ * @property SessionComponent $Session
  *
  * Magic Properties (for inspection):
+ * @property CakeRequest $request
  * @property Item $Item
  * @property ShoutboxMessage $ShoutboxMessage
  * @property User $User
+ *
+ * Magic Methods (for inspection):
+ * @method loadModel(string $modelName)
+ * @method set(array $data)
+ * @method redirect(array $route)
  */
 class AppController extends Controller {
     public $viewClass = 'TwigView.Twig';
@@ -76,7 +84,7 @@ class AppController extends Controller {
      * Make sure to only pass signed 32-bit SteamIDs. If you have SteamIDs in another format, convert them first.
      *
      * @param array $users list of account ids (aka user_id)
-     * @param string $extractPath optional path uses to extract ids from a nested array (2nd param of Hash::extract())
+     * @param string [$extractPath=''] optional path uses to extract ids from a nested array (2nd param of Hash::extract())
      */
     public function addPlayers($users, $extractPath = '') {
 
@@ -92,7 +100,7 @@ class AppController extends Controller {
     }
 
     /**
-     * Loads division data from the config, passes it to the view and alsoi returns the result to
+     * Loads division data from the config, passes it to the view and also returns the result to
      * the controller that called this method.
      *
      * @return array the division data
@@ -159,14 +167,15 @@ class AppController extends Controller {
      */
     public function loadShoutbox() {
 
-        if (!Configure::read('Store.Shoutbox.Enabled')) {
+        $shoutConfig = Configure::read('Store.Shoutbox');
+
+        if (!$shoutConfig['Enabled']) {
             return;
         }
 
         $this->loadModel('ShoutboxMessage');
         $messages = $this->ShoutboxMessage->getRecent();
         $this->addPlayers($messages, '{n}.user_id');
-        $shoutConfig = Configure::read('Store.Shoutbox');
 
         $this->set(array(
             'showShoutbox' => true,
@@ -193,8 +202,9 @@ class AppController extends Controller {
 
         $user = $this->Auth->user();
         $loggedIn = !empty($user['user_id']);
+        $savedLoginFound = $this->AccountUtility->trySavedLogin($loggedIn);
 
-        if ($this->AccountUtility->trySavedLogin($loggedIn) && !$loggedIn) {
+        if ($savedLoginFound && !$loggedIn) {
 
             // fetch user again after logging in
             $user = $this->Auth->user();
@@ -214,9 +224,6 @@ class AppController extends Controller {
             'user' => $user,
             'access' => $this->Access
         ));
-
-//        $log = $this->Item->getDataSource()->getLog(false, false);
-//        debug($log);
     }
 
     /**
