@@ -15,7 +15,11 @@
         <div class="chart_inner"></div>
     </div>
 
-    <div id="paypal_chart" class="chart_container" data-href-monthly="{{ html.url({
+    <div id="paypal_chart" class="chart_container" data-href-yearly="{{ html.url({
+        'controller': 'PaypalOrders',
+        'action': 'yearlyTotals',
+        'ext': 'json'
+    }) }}" data-href-monthly="{{ html.url({
         'controller': 'PaypalOrders',
         'action': 'monthlyTotals',
         'ext': 'json'

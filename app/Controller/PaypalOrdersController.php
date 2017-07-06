@@ -33,13 +33,18 @@ class PaypalOrdersController extends AppController {
             return;
         }
 
-        $offsetMonth = 0;
+        $year = date('Y');
+        $month = date('n');
 
-        if (!empty($this->request->query['offset'])) {
-            $offsetMonth = $this->request->query['offset'];
+        if (!empty($this->request->query['year'])) {
+            $year = $this->request->query['year'];
         }
 
-        $data = $this->PaypalOrder->getDailySums($offsetMonth);
+        if (!empty($this->request->query['month'])) {
+            $month = $this->request->query['month'];
+        }
+
+        $data = $this->PaypalOrder->getDailySums($year, $month);
 
         $this->set(array(
             'data' => $data,
@@ -57,7 +62,28 @@ class PaypalOrdersController extends AppController {
             return;
         }
 
-        $data = $this->PaypalOrder->getMonthlySums();
+        $year = date('Y');
+
+        if (!empty($this->request->query['year'])) {
+            $year = $this->request->query['year'];
+        }
+
+        $data = $this->PaypalOrder->getMonthlySums($year);
+
+        $this->set(array(
+            'data' => $data,
+            '_serialize' => array('data')
+        ));
+    }
+
+    public function yearlyTotals() {
+
+        if (!$this->Access->check('Stats', 'read')) {
+            $this->autoRender = false;
+            return;
+        }
+
+        $data = $this->PaypalOrder->getYearlySums();
 
         $this->set(array(
             'data' => $data,

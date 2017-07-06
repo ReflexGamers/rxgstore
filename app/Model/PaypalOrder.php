@@ -17,146 +17,147 @@ class PaypalOrder extends AppModel {
 
 
     /**
-     * Gets the monthly sums of real money spent each month in the past year and puts it in a format
-     * friendly to HighCharts.
+     * Gets the yearly sums of real money spent each month and puts it in a format friendly to
+     * HighCharts.
      *
-     * @param int $monthCount how many past months to show
+     * @param int $yearCount maximum years of data
      * @return array
      */
-    public function getMonthlySums($monthCount = 12) {
-
-        $thisMonth = date('n');
-        $startMonth = $thisMonth - $monthCount;
-        $startTime = mktime(0, 0, 0, $startMonth, 1);
+    public function getYearlySums($yearCount = 10) {
+        $thisYear = date('Y');
+        $startYear = $thisYear - $yearCount + 1;
+        $startTime = mktime(0, 0, 0, 1, 1, $startYear);
         $endTime = time();
+
+        $yearsWithPurchases = array();
+
+        $data = Hash::map(
+            $this->find('all',
+                array(
+                    'fields' => array(
+                        'YEAR(date) as year, SUM(amount) as spent'
+                    ),
+                    'conditions' => array(
+                        'date >= ' => $this->formatTimestamp($startTime),
+                        'date <= ' => $this->formatTimestamp($endTime)
+                    ),
+                    'group' => 'YEAR(date)',
+                    'order' => 'date asc'
+                )
+            ),
+            '{n}',
+            function($arr) use (&$yearsWithPurchases) {
+                $year = Hash::get($arr, '0.year');
+                $amount = (int)Hash::get($arr, '0.spent');
+                $yearsWithPurchases[] = $year;
+                return array($year, $amount);
+            });
+
+        return $data;
+    }
+
+    /**
+     * Gets the monthly sums of real money spent each month for the given year and puts it in a
+     * format friendly to HighCharts.
+     *
+     * @param int $year
+     * @return array
+     */
+    public function getMonthlySums($year) {
+
+        $startTime = mktime(0, 0, 0, 1, 1, $year);
+        $endTime = mktime(0, 0, 0, 1, 1, $year+1);
 
         $monthsWithPurchases = array();
 
-        $data = Hash::map($this->find('all', array(
-            'fields' => array(
-                'YEAR(date) as year, MONTH(date) as month', 'SUM(amount) as spent'
+        $data = Hash::map(
+            $this->find('all',
+                array(
+                    'fields' => array(
+                        'MONTH(date) as month', 'SUM(amount) as spent'
+                    ),
+                    'conditions' => array(
+                        'date >= ' => $this->formatTimestamp($startTime),
+                        'date < ' => $this->formatTimestamp($endTime)
+                    ),
+                    'group' => 'MONTH(date)',
+                    'order' => 'date asc'
+                )
             ),
-            'conditions' => array(
-                'date >= ' => $this->formatTimestamp($startTime),
-                'date <= ' => $this->formatTimestamp($endTime)
-            ),
-            'group' => 'YEAR(date), MONTH(date)',
-            'order' => 'YEAR(date) asc, MONTH(date) asc'
-        )), '{n}',
+            '{n}',
             function($arr) use (&$monthsWithPurchases) {
                 $month = Hash::get($arr, '0.month');
+                $amount = (int)Hash::get($arr, '0.spent');
                 $monthsWithPurchases[] = $month;
-                return array(
-                    Hash::get($arr, '0.year'),
-                    $month,
-                    (int)Hash::get($arr, '0.spent')
-                );
+                return array($month, $amount);
             }
         );
 
-        // add missing months with 0
+        // add missing months with amount = 0
         for ($i = 1; $i <= 12; $i++) {
             if (!in_array($i, $monthsWithPurchases)) {
-                $year = date('Y');
-                if ($i > $thisMonth) {
-                    $year--;
-                }
-                $data[] = array(
-                    "$year",
-                    "$i",
-                    0
-                );
+                $data[] = array($i, 0);
             }
         }
 
-        usort($data, function($a, $b) {
-            $aYear = (int)$a[0];
-            $bYear = (int)$b[0];
-            $aMonth = (int)$a[1];
-            $bMonth = (int)$b[1];
+        $data = Hash::sort($data, '{n}.0', 'asc');
 
-            if ($aYear > $bYear) {
-                return 1;
-            } else if ($bYear > $aYear) {
-                return -1;
-            } else {
-                return ($aMonth > $bMonth) ? 1 : -1;
-            }
-        });
+        $newData = array();
 
-        for ($i = 0; $i < count($data); $i++) {
-            if (empty($data[$i])) {
-                $data[$i] = array(
-                    $data[$i][0],
-                    DateTime::createFromFormat('!m', $i)->format('M'),
-                    '0'
-                );
-            } else {
-                $row = $data[$i];
-                $data[$i] = array(
-                    $row[0],
-                    DateTime::createFromFormat('!m', $row[1])->format('M'),
-                    $row[2]
-                );
-            }
-        }
-
-        // simplify names
+        // month numbers to abbreviated names
         foreach ($data as $i => $row) {
-            // Example: 'Apr 2015'
-            $name = "{$row[1]} {$row[0]}";
-            $data[$i] = array($name, $row[2]);
+            // Example: 'Apr'
+            $month = DateTime::createFromFormat('!m', $row[0])->format('M');
+            $amount = $row[1];
+            $newData[] = array($month, $amount);
         }
 
-        return $data;
+        return $newData;
     }
 
     /**
      * Gets the daily sums of real money spent each day in a given month and puts it in a format
      * friendly to HighCharts.
      *
-     * @param int $offsetMonth how many months ago (default 0)
+     * @param int $year
+     * @param int $month
      * @return array
      */
-    public function getDailySums($offsetMonth = 0) {
+    public function getDailySums($year, $month) {
 
-        $month = date('n') - $offsetMonth;
-        $startTime = mktime(0, 0, 0, $month, 1);
+        $startTime = mktime(0, 0, 0, $month, 1, $year);
+        $endTime = mktime(0, 0, 0, $month + 1, 1, $year);
 
-        if ($offsetMonth === 0) {
-            $lastDayOfMonth = date('d');
-            $endTime = time();
-        } else {
-            $lastDayOfMonth = date('t', $startTime);
-            $endTime = mktime(0, 0, 0, $month, $lastDayOfMonth);
-        }
+        $lastDayOfMonth = date('t', $startTime);
 
         $daysWithPurchases = array();
 
-        $data = Hash::map($this->find('all', array(
-            'fields' => array(
-                'DAY(date) as day', 'SUM(amount) as spent'
+        $data = Hash::map(
+            $this->find('all',
+                array(
+                    'fields' => array(
+                        'DAY(date) as day', 'SUM(amount) as spent'
+                    ),
+                    'conditions' => array(
+                        'date >= ' => $this->formatTimestamp($startTime),
+                        'date < ' => $this->formatTimestamp($endTime)
+                    ),
+                    'group' => 'DAY(date)',
+                    'order' => 'date asc'
+                )
             ),
-            'conditions' => array(
-                'date >= ' => $this->formatTimestamp($startTime),
-                'date <= ' => $this->formatTimestamp($endTime)
-            ),
-            'group' => 'DATE(date)'
-        )), '{n}', function($arr) use (&$daysWithPurchases) {
-            $daysWithPurchases[] = Hash::get($arr, '0.day');
-            return array(
-                (int)Hash::get($arr, '0.day'),
-                (int)Hash::get($arr, '0.spent')
-            );
-        });
+            '{n}',
+            function($arr) use (&$daysWithPurchases) {
+                $day = (int)Hash::get($arr, '0.day');
+                $amount = (int)Hash::get($arr, '0.spent');
+                $daysWithPurchases[] = $day;
+                return array($day, $amount);
+            });
 
         // add missing days with 0
         for ($i = 1; $i <= $lastDayOfMonth; $i++) {
             if (!in_array($i, $daysWithPurchases)) {
-                $data[] = array(
-                    $i,
-                    0
-                );
+                $data[] = array($i, 0);
             }
         }
 
