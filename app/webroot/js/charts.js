@@ -119,13 +119,15 @@
                 row[1] = parseInt(row[1], 10);
             }
 
-            // slice 2nd piece (should be 2nd biggest)
-            data[1] = {
-                name: data[1][0],
-                y: data[1][1],
-                sliced: true,
-                selected: true
-            };
+            if (data.length) {
+                // slice 2nd piece (should be 2nd biggest)
+                data[1] = {
+                    name: data[1][0],
+                    y: data[1][1],
+                    sliced: true,
+                    selected: true
+                };
+            }
 
             el.highcharts($.extend(true, {
                 chart: {
