@@ -11,10 +11,20 @@
 /build
 /dist
 /tags
-/.idea
+*.mo
+
 /app/webroot/deploy.php
+/app/webroot/maintenance.php
 /cake
 /logs
+
+# IDE and editor specific files #
+#################################
+/nbproject
+.idea
+/.project
+/.buildpath
+/.settings/
 
 # OS generated files #
 ######################
