@@ -88,7 +88,7 @@
 
         if (!lastFeature.length) {
             lastFeature = featureTemplate.clone();
-        } else if (lastFeature.find('.item_edit_input').first().val() == '') {
+        } else if (lastFeature.find('.edit_input').first().val() == '') {
             return;
         }
 
@@ -99,7 +99,7 @@
             featureTemplate = newFeature.clone();
         }
 
-        var newInput = newFeature.find('.item_edit_input');
+        var newInput = newFeature.find('.edit_input');
         incrementFeatureProps(newInput, ['id', 'name']);
         newInput.val('');
 
