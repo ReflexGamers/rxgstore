@@ -1,7 +1,7 @@
 
-{% if closable is not defined %}
-    {% set closable = true %}
-{% endif %}
+{% set class = params.class %}
+{% set isCart = params.isCart %}
+{% set closable = (params.closable is defined) ? params.closable : true %}
 
 <div class="flash_outer">
     <div id="flashMessage" class="flashMessage {{ class }}">

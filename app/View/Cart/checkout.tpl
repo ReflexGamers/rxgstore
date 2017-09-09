@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    {% set flash = session.flash('error') %}
+    {% set flash = flash.render('error') %}
 
     {% if flash %}
 

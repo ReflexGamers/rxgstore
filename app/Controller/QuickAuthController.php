@@ -203,7 +203,7 @@ class QuickAuthController extends AppController {
                         // token expired
                         $diff = abs($diff);
                         CakeLog::write('quickauth', "Attempted usage of token $tokenId-$tokenValue which expired $diff seconds ago.");
-                        $this->Session->setFlash('Authentication token expired. Please contact an administrator.', 'flash', array('class' => 'error'));
+                        $this->Flash->set('Authentication token expired. Please contact an administrator.', ['params' => ['class' => 'error']]);
 
                     } else {
 
@@ -218,7 +218,7 @@ class QuickAuthController extends AppController {
 
                             // failed to login user
                             CakeLog::write('quickauth', "Failed to login user $user_id with token $tokenId-$tokenValue.");
-                            $this->Session->setFlash('Login failed. Please contact an administrator.', 'flash', array('class' => 'error'));
+                            $this->Flash->set('Login failed. Please contact an administrator.', ['params' => ['class' => 'error']]);
                         }
                     }
 
@@ -233,13 +233,13 @@ class QuickAuthController extends AppController {
 
             // token not found in db, nor is user logged in already
             CakeLog::write('quickauth', "Requested token $tokenId-$tokenValue was not found.");
-            $this->Session->setFlash('Invalid Authentication token. Please contact an administrator.', 'flash', array('class' => 'error'));
+            $this->Flash->set('Invalid Authentication token. Please contact an administrator.', ['params' => ['class' => 'error']]);
         }
 
         // check if coming from a web server or in-game
         if (!empty($params['game'])) {
             $this->Session->write('Auth.User.ingame', $params['game']);
-            $this->Session->setFlash('You may also visit the store at store.reflex-gamers.com', 'flash', array('class' => 'info'), 'quickauth');
+            $this->Flash->set('You may also visit the store at store.reflex-gamers.com', ['key' => 'quickauth', 'params' => ['class' => 'info']]);
         } else {
             // go straight to store if game not specified
             $this->redirect($redirLoc);

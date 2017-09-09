@@ -1,1 +1,1 @@
-{{ session.flash() }}
+{{ flash.render() }}

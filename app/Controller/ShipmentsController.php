@@ -49,7 +49,7 @@ class ShipmentsController extends AppController {
             if (!empty($addedStock)) {
 
                 $this->Shipment->saveShipment($addedStock, $this->Auth->user('user_id'));
-                $this->Session->setFlash('The shipment was received successfully!', 'flash', array('class' => 'success'));
+                $this->Flash->set('The shipment was received successfully!', ['params' => ['class' => 'success']]);
             }
         }
 

@@ -33,6 +33,7 @@ App::uses('Controller', 'Controller');
  * @property AccessComponent $Access
  * @property AccountUtilityComponent $AccountUtility
  * @property AuthComponent $Auth
+ * @property FlashComponent $Flash
  * @property SessionComponent $Session
  *
  * Magic Properties (for inspection):
@@ -52,6 +53,7 @@ class AppController extends Controller {
     public $layout = '';
     public $components = array(
         'Session',
+        'Flash',
         'Cookie',
         'AccountUtility',
         'Acl',
@@ -68,6 +70,7 @@ class AppController extends Controller {
         )
     );
     public $helpers = array(
+        'Flash',
         'ItemFuncs'
     );
 

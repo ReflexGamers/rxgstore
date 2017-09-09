@@ -89,7 +89,7 @@ class CartController extends AppController {
         $this->autoRender = false;
 
         if (empty($this->request->data['ProcessAction'])) {
-            $this->Session->setFlash('Oops! There was an error processing your cart.', 'flash', array('class' => 'error'));
+            $this->Flash->set('Oops! There was an error processing your cart.', ['params' => ['class' => 'error']]);
             $this->redirect(array('controller' => 'Cart', 'action' => 'view'));
             return;
         }
@@ -98,13 +98,13 @@ class CartController extends AppController {
 
         if ($processAction == 'empty') {
             $this->Session->delete('cart');
-            $this->Session->setFlash('Your cart has been emptied.', 'flash', array('class' => 'success'));
+            $this->Flash->set('Your cart has been emptied.', ['params' => ['class' => 'success']]);
             $this->redirect(array('controller' => 'Items', 'action' => 'index'));
             return;
         }
 
         if (empty($this->request->data['OrderDetail'])) {
-            $this->Session->setFlash('Oops! You do not have any items in your shopping cart.', 'flash', array('class' => 'error'));
+            $this->Flash->set('Oops! You do not have any items in your shopping cart.', ['params' => ['class' => 'error']]);
             $this->redirect(array('controller' => 'Cart', 'action' => 'view'));
             return;
         }
@@ -147,7 +147,7 @@ class CartController extends AppController {
 
             if ($stock[$item_id] < $quantity) {
                 if ($processAction == 'checkout') {
-                    $this->Session->setFlash("There are no longer enough {$items[$item_id]['plural']} in stock to complete your purchase.", 'flash', array('class' => 'error'), 'error');
+                    $this->Flash->set("There are no longer enough {$items[$item_id]['plural']} in stock to complete your purchase.", ['key' => 'error', 'params' => ['class' => 'error']]);
                     $this->render('checkout');
                     return;
                 } else {
@@ -162,7 +162,7 @@ class CartController extends AppController {
         }
 
         if ($processAction == 'checkout' && empty($orderDetails)) {
-            $this->Session->setFlash('Oops! You do not have any items in your shopping cart.', 'flash', array('class' => 'error'), 'error');
+            $this->Flash->set('Oops! You do not have any items in your shopping cart.', ['key' => 'error', 'params' => ['class' => 'error']]);
             $this->redirect(array('controller' => 'Cart', 'action' => 'view'));
             return;
         }
@@ -170,7 +170,7 @@ class CartController extends AppController {
         $this->Session->write('cart', $cart);
 
         if ($processAction == 'update') {
-            $this->Session->setFlash('Your cart has been updated.', 'flash', array('class' => 'success'));
+            $this->Flash->set('Your cart has been updated.', ['params' => ['class' => 'success']]);
             $this->redirect(array('controller' => 'Cart', 'action' => 'view'));
             return;
         }
@@ -182,7 +182,7 @@ class CartController extends AppController {
         $total = $subTotal + $shipping;
 
         if ($total > $userCredit) {
-            $this->Session->setFlash('You do not have enough CASH to complete this purchase!', 'flash', array('class' => 'error'));
+            $this->Flash->set('You do not have enough CASH to complete this purchase!', ['params' => ['class' => 'error']]);
             $this->redirect(array('controller' => 'Cart', 'action' => 'view'));
             return;
         }
@@ -207,7 +207,7 @@ class CartController extends AppController {
             'credit' => $userCredit
         ));
 
-        $this->Session->setFlash('Please confirm the contents of your order below.');
+        $this->Flash->set('Please confirm the contents of your order below.');
         $this->render('checkout');
     }
 
@@ -247,11 +247,11 @@ class CartController extends AppController {
             $this->Session->write('cart', $cart);
 
             $name = $quantity > 1 ? $item['plural'] : $item['name'];
-            $this->Session->setFlash("$quantity $name added to cart!", 'flash', array('class' => 'success', 'isCart' => true));
+            $this->Flash->set("$quantity $name added to cart!", ['params' => ['class' => 'success', 'isCart' => true]]);
 
         } else {
 
-            $this->Session->setFlash('Oops! That item is no longer for sale.', 'flash', array('class' => 'error'));
+            $this->Flash->set('Oops! That item is no longer for sale.', ['params' => ['class' => 'error']]);
         }
 
         if ($this->request->is('ajax')) {

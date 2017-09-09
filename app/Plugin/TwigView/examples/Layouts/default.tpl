@@ -15,7 +15,7 @@
 			}}</h1>
 		</div>
 		<div id="content">
-			{{ session.flash() }}
+			{{ flash.render() }}
 			{{ content_for_layout }}
 		</div>
 		<div id="footer">

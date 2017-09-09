@@ -257,13 +257,13 @@ class GiveawaysController extends AppController {
             $admin_steamid = $this->Auth->user('steamid');
 
             if ($saveSuccessful) {
-                $this->Session->setFlash('Giveaway created successfully.', 'flash', array('class' => 'success'));
+                $this->Flash->set('Giveaway created successfully.', ['params' => ['class' => 'success']]);
                 CakeLog::write('giveaways', "$admin_steamid created giveaway '{$data['Giveaway']['name']}'.");
 //                $this->redirect(array('action' => 'view', 'id' => $this->Giveaway->id));
                 $this->redirect(array('action' => 'index'));
                 return;
             } else {
-                $this->Session->setFlash('There was an error creating the giveaway.', 'flash', array('class' => 'error'));
+                $this->Flash->set('There was an error creating the giveaway.', ['params' => ['class' => 'error']]);
                 CakeLog::write('giveaways', "$admin_steamid failed to create giveaway '{$data['Giveaway']['name']}'.");
                 $this->redirect(array('action' => 'index'));
                 return;
@@ -307,10 +307,10 @@ class GiveawaysController extends AppController {
             $admin_steamid = $this->Auth->user('steamid');
 
             if ($saveSuccessful) {
-                $this->Session->setFlash('Giveaway updated successfully.', 'flash', array('class' => 'success'));
+                $this->Flash->set('Giveaway updated successfully.', ['params' => ['class' => 'success']]);
                 CakeLog::write('giveaways', "$admin_steamid updated giveaway #$giveaway_id ('{$data['Giveaway']['name']}').");
             } else {
-                $this->Session->setFlash('There was an error updating the giveaway.', 'flash', array('class' => 'error'));
+                $this->Flash->set('There was an error updating the giveaway.', ['params' => ['class' => 'error']]);
                 CakeLog::write('giveaways', "$admin_steamid failed to update giveaway #$giveaway_id ('{$data['Giveaway']['name']}').");
             }
         }
@@ -355,7 +355,7 @@ class GiveawaysController extends AppController {
         $admin_steamid = $this->Auth->user('steamid');
 
         $this->Giveaway->deleteWithDetails($giveaway_id);
-        $this->Session->setFlash('The Giveaway was deleted.', 'flash', array('class' => 'success'));
+        $this->Flash->set('The Giveaway was deleted.', ['params' => ['class' => 'success']]);
         CakeLog::write('giveaways', "$admin_steamid deleted giveaway #$giveaway_id.");
 
         $this->redirect(array('action' => 'index'));

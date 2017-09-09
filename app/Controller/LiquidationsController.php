@@ -72,7 +72,7 @@ class LiquidationsController extends AppController {
         $userItems = $this->User->getItems($user_id);
 
         if (!$this->Liquidation->User->hasItemQuantities($userItems, $liquidationDetails)) {
-            $this->Session->setFlash('You no longer have enough items for this return.', 'flash', array('class' => 'error'));
+            $this->Flash->set('You no longer have enough items for this return.', ['params' => ['class' => 'error']]);
             $this->redirect(array('action' => 'compose'));
             return;
         }
@@ -84,7 +84,7 @@ class LiquidationsController extends AppController {
             'details' => $liquidationDetails
         ));
 
-        $this->Session->setFlash('Please check these details and then click confirm.');
+        $this->Flash->set('Please check these details and then click confirm.');
         $this->render('compose');
     }
 
@@ -98,7 +98,7 @@ class LiquidationsController extends AppController {
         $liquidationDetails = $this->Session->read('liquidationDetails');
 
         if (empty($liquidationDetails)) {
-            $this->Session->setFlash('Oops! You do not have any items selected.', 'flash', array('class' => 'error'));
+            $this->Flash->set('Oops! You do not have any items selected.', ['params' => ['class' => 'error']]);
             $this->redirect(array('action' => 'compose'));
             return;
         }
@@ -108,20 +108,20 @@ class LiquidationsController extends AppController {
         try {
             $result = $this->Liquidation->performLiquidation($user_id, $liquidationDetails);
         } catch (InsufficientItemsException $e) {
-            $this->Session->setFlash('You no longer have enough items for this return.', 'flash', array('class' => 'error'));
+            $this->Flash->set('You no longer have enough items for this return.', ['params' => ['class' => 'error']]);
             $this->redirect(array('action' => 'compose'));
             return;
         }
 
         if (!$result['Liquidation'] || in_array(false, $result['LiquidationDetail'])) {
-            $this->Session->setFlash('There was an error performing the return. Please contact an administrator', 'flash', array('class' => 'error'));
+            $this->Flash->set('There was an error performing the return. Please contact an administrator', ['params' => ['class' => 'error']]);
             $this->redirect(array('action' => 'compose'));
             return;
         }
 
         $this->Session->delete('liquidationDetails');
 
-        $this->Session->setFlash('Your items were successfully returned.', 'flash', array('class' => 'success'));
+        $this->Flash->set('Your items were successfully returned.', ['params' => ['class' => 'success']]);
         $this->redirect(array('action' => 'compose'));
     }
 

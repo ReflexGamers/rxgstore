@@ -82,7 +82,7 @@
         {% include '/ShoutboxMessages/shoutbox.inc.tpl' %}
     {% endif %}
 
-    {{ session.flash() }}
+    {{ flash.render() }}
 
     {% block content %}{% endblock %}
 

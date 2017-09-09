@@ -510,11 +510,11 @@ class ItemsController extends AppController {
             ));
 
             if ($itemSaveSuccess && $stockSaveSuccess && $insertServerSuccess && $deleteServerSuccess && $saveFeatureSuccess && $deleteFeatureSuccess) {
-                $this->Session->setFlash('The item has been saved.', 'flash', array('class' => 'success'));
+                $this->Flash->set('The item has been saved.', ['params' => ['class' => 'success']]);
                 $this->redirect(array('action' => 'edit', 'id' => $item['short_name']));
                 return;
             } else {
-                $this->Session->setFlash('Something went wrong. The item could not be fully saved.', 'flash', array('class' => 'error'));
+                $this->Flash->set('Something went wrong. The item could not be fully saved.', ['params' => ['class' => 'error']]);
                 $done = false;
             }
         }
@@ -611,7 +611,7 @@ class ItemsController extends AppController {
             $admin_steamid = $this->AccountUtility->SteamID64FromAccountID($this->Auth->user('user_id'));
             CakeLog::write('admin', "$admin_steamid updated the item display order.");
 
-            $this->Session->setFlash('The item display order you provided has been saved!', 'flash', array('class' => 'success'));
+            $this->Flash->set('The item display order you provided has been saved!', ['params' => ['class' => 'success']]);
         }
 
         $this->loadItems();

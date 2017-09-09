@@ -157,7 +157,7 @@ class RewardsController extends AppController {
         $recipientData = empty($rewardData['recipients']) ? '' : preg_split("/\s*\n\s*/", $rewardData['recipients']);
 
         if (empty($recipientData)) {
-            $this->Session->setFlash('You did not specify any recipients.', 'flash', array('class' => 'error'));
+            $this->Flash->set('You did not specify any recipients.', ['params' => ['class' => 'error']]);
             $this->redirect(array('action' => 'compose'));
             return;
         }
@@ -225,7 +225,7 @@ class RewardsController extends AppController {
             'isReward' => true
         ));
 
-        $this->Session->setFlash('Please confirm the reward below and then click send.');
+        $this->Flash->set('Please confirm the reward below and then click send.');
         $this->render('/Gifts/compose');
     }
 
@@ -244,13 +244,13 @@ class RewardsController extends AppController {
         $reward = $this->Session->read('reward');
 
         if (empty($reward)) {
-            $this->Session->setFlash('Oops! It appears you have not prepared a reward.', 'flash', array('class' => 'error'));
+            $this->Flash->set('Oops! It appears you have not prepared a reward.', ['params' => ['class' => 'error']]);
             $this->redirect(array('action' => 'compose'));
             return;
         }
 
         if (empty($reward['RewardRecipient'])) {
-            $this->Session->setFlash('You did not specify any valid recipients.', 'flash', array('class' => 'error'));
+            $this->Flash->set('You did not specify any valid recipients.', ['params' => ['class' => 'error']]);
             $this->redirect(array('action' => 'compose'));
             return;
         }
@@ -261,9 +261,9 @@ class RewardsController extends AppController {
         $result = $this->Reward->saveAssociated($reward, array('atomic' => false));
 
         if (!$result['Reward'] || (!empty($result['RewardDetail']) && in_array(false, $result['RewardDetail'])) || in_array(false, $result['RewardRecipient'])) {
-            $this->Session->setFlash('There was an error sending the reward. Please contact an administrator', 'flash', array('class' => 'error'));
+            $this->Flash->set('There was an error sending the reward. Please contact an administrator', ['params' => ['class' => 'error']]);
         } else {
-            $this->Session->setFlash("The reward has been sent! Reward number - #{$this->Reward->id}", 'flash', array('class' => 'success'));
+            $this->Flash->set("The reward has been sent! Reward number - #{$this->Reward->id}", ['params' => ['class' => 'success']]);
         }
 
         $this->Session->delete('reward');

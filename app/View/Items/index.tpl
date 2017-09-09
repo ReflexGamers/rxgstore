@@ -6,7 +6,7 @@
 
 {% block content %}
 
-    {{ session.flash('quickauth') }}
+    {{ flash.render('quickauth') }}
 
     {% if user %}
 

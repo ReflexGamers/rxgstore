@@ -23,7 +23,7 @@ class AccountUtilityComponent extends Component {
     const LOGIN_SKIP_BAN_CHECK = 4;
     const LOGIN_IMPERSONATE = 8;
 
-    public $components = array('Access', 'Auth', 'Cookie', 'Permissions', 'RequestHandler', 'Session');
+    public $components = array('Access', 'Auth', 'Cookie', 'Flash', 'Permissions', 'RequestHandler');
 
     public function initialize(Controller $controller) {
         $this->controller = $controller;
@@ -55,7 +55,7 @@ class AccountUtilityComponent extends Component {
         $steamid = $this->SteamID64FromAccountID($user_id);
 
         if (!($flags & self::LOGIN_SKIP_BAN_CHECK) && $this->Permissions->isPlayerBanned($user_id)) {
-            $this->Session->setFlash('You are currently banned and may not use the store.', 'flash', array('class' => 'error'));
+            $this->Flash->set('You are currently banned and may not use the store.', ['params' => ['class' => 'error']]);
             $this->SavedLogin->deleteForUser($user_id);
             $this->Cookie->delete('saved_login');
             return false;
