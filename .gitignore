@@ -17,6 +17,7 @@
 /app/webroot/maintenance.php
 /cake
 /logs
+/tmpViews
 
 # IDE and editor specific files #
 #################################
