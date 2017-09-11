@@ -86,7 +86,7 @@ class AppController extends Controller {
      *
      * Make sure to only pass signed 32-bit SteamIDs. If you have SteamIDs in another format, convert them first.
      *
-     * @param array $users list of account ids (aka user_id)
+     * @param array|string $users list of account ids (aka user_id)
      * @param string [$extractPath=''] optional path uses to extract ids from a nested array (2nd param of Hash::extract())
      */
     public function addPlayers($users, $extractPath = '') {
