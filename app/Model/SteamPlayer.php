@@ -34,7 +34,7 @@ class SteamPlayer extends AppModel {
         } else {
 
             $beginTime = microtime(true);
-            $steamPlayers = $this->SteamPlayerCache->refreshPlayers($accounts, $timeout);
+            $steamPlayers = $this->SteamPlayerCache->refreshPlayers($accounts, false, $timeout);
             $endTime = microtime(true);
 
             $timeTaken = number_format($endTime - $beginTime, 3);
