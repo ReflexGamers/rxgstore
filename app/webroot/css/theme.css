@@ -833,30 +833,57 @@ tr.liquidate_separator td {
     cursor: default;
 }
 
-.profile_ingame {
-    color: #fff;
-    font-weight: bold;
-    font-size: 16px;
-    text-align: center;
-    background-color: #0a0;
-    border-radius: 5px;
-    margin: 3px 0;
-}
-
-.profile_ingame_icon {
-    font-size: 125%;
-}
-
-.player_member {
+.profile_member {
     color: #fff;
     font-weight: bold;
     font-size: 16px;
     text-align: center;
     background-color: #ad0000;
     border-radius: 5px;
+    padding: 2px 0;
     margin: 0 0 3px;
 }
 
+.profile_game_activity {
+    color: #fff;
+    font-weight: bold;
+    font-size: 15px;
+    text-align: center;
+    background-color: #0a0;
+    border-radius: 5px;
+    padding: 2px 0;
+    margin: 3px 0;
+}
+
+.profile_game_activity_icon {
+    font-size: 125%;
+}
+
+.profile_last_game_activity {
+    background: rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1) inset;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 2px 0;
+    margin: 3px 0;
+
+    font-weight: bold;
+    font-size: 15px;
+    text-align: center;
+}
+
+.profile_last_activity {
+    background: rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1) inset;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 2px 0;
+    margin: 3px 0;
+
+    font-weight: bold;
+    font-size: 15px;
+    text-align: center;
+}
 
 
 .player_heading,

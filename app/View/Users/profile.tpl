@@ -20,16 +20,33 @@
         <div class="player_avatar_full">
             <a href="{{ player.profile }}"><img src="{{ player.avatarfull }}"></a>
             {% if player.member %}
-                <div class="player_member">
+                <div class="profile_member">
                     {% set division = divisions[player.division_id] %}
                     {{ division.abbr ? "RXG #{division.abbr} Division" : 'RXG Member' }}
                 </div>
             {% endif %}
-            {% if player.server %}
-                <div class="profile_ingame">
-                    Currently in-game <i class="fa fa-gamepad profile_ingame_icon"></i>
+
+            {% if currentlyIngame %}
+                <div class="profile_game_activity">
+                    Currently in-game <i class="fa fa-gamepad profile_game_activity_icon"></i>
+                    {% if serverName and canViewServer %}
+                        <br />{{ serverName }}
+                    {% endif %}
+                </div>
+            {% else %}
+                <div class="profile_last_game_activity">
+                    Last in-game:<br />
+                    {{ fn.formatTime(_context, profileUser.ingame) }}
                 </div>
             {% endif %}
+
+            {% if profileUser.last_activity %}
+                <div class="profile_last_activity">
+                    Last online:<br/>
+                    {{ fn.formatTime(_context, profileUser.last_activity) }}
+                </div>
+            {% endif %}
+
             <div class="player_links">
                 <a href="{{ player.profile }}">view steam profile</a>
                 {% if canImpersonate and user.user_id != user_id %}
@@ -41,7 +58,7 @@
             </div>
         </div>
 
-        <p class="player_credit">CASH: {{ fn.currency(credit, {'big': true, 'wrap': true}) }} <span class="cash_spent">({{- fn.currency(totalSpent, {'big': true, 'hideIcon': true}) }} spent)</span></p>
+        <p class="player_credit">CASH: {{ fn.currency(profileUser.credit, {'big': true, 'wrap': true}) }} <span class="cash_spent">({{- fn.currency(totalSpent, {'big': true, 'hideIcon': true}) }} spent)</span></p>
 
         {% if userItems %}
 
@@ -88,11 +105,13 @@
 
     {% include 'Common/reviews.inc.tpl' with {
         'title': 'Item Reviews',
-        'headerClass': 'player_reviews'
+        'headerClass': 'player_reviews',
+        'reviews': reviews
     } %}
 
     {% include 'Common/activity.inc.tpl' with {
-        'title': 'Recent Activity'
+        'title': 'Recent Activity',
+        'activities': activities
     } %}
 
 {% endblock %}

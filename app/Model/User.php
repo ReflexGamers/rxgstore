@@ -658,7 +658,7 @@ class User extends AppModel {
      *
      * @return int
      */
-    private function getIngameTime() {
+    public function getIngameTime() {
         return time() - Configure::read('Store.MaxTimeToConsiderInGame');
     }
 

@@ -25,11 +25,43 @@ class UsersController extends AppController {
 
         $user_id = $this->AccountUtility->AccountIDFromSteamID64($steamid);
 
-        $itemData = $this->User->getCurrentAndPastItems($user_id);
-        $user = $this->User->read('credit', $user_id);
+        if ($user_id === false) {
+            throw new NotFoundException(__('Invalid user'));
+        }
 
-        if (!empty($user)) {
-            $this->set('credit', $user['User']['credit']);
+        $itemData = $this->User->getCurrentAndPastItems($user_id);
+
+        $profileUser = Hash::extract($this->User->findByUserId($user_id, array(
+            'user_id', 'credit', 'last_activity', 'ingame', 'server'
+        )), 'User');
+
+        if (!empty($profileUser)) {
+            $server_ip = $profileUser['server'];
+
+            $currentlyIngame = (
+                !empty($server_ip) &&
+                $profileUser['ingame'] > $this->User->getIngameTime()
+            );
+
+            $canViewServer = $this->Access->check('AdminCP', 'read');
+
+            $this->set(array(
+                'profileUser' => $profileUser,
+                'currentlyIngame' => $currentlyIngame,
+                'canViewServer' => $canViewServer
+            ));
+
+            if (!empty($server_ip) && $canViewServer) {
+                $this->loadModel('Server');
+
+                $server = $this->Server->find('first', array(
+                    'conditions' => array('server_ip' => $server_ip),
+                    'fields' => 'name'
+                ));
+
+                $serverName = Hash::get($server, 'Server.name', $server_ip);
+                $this->set('serverName', $serverName);
+            }
         }
 
         $this->addPlayers($user_id);
