@@ -33,7 +33,7 @@
                         <br />{{ serverName }}
                     {% endif %}
                 </div>
-            {% else %}
+            {% elseif profileUser.ingame %}
                 <div class="profile_last_game_activity">
                     Last in-game:<br />
                     {{ fn.formatTime(_context, profileUser.ingame) }}
