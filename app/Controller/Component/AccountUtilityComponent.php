@@ -258,30 +258,33 @@ class AccountUtilityComponent extends Component {
      * Converts a 64-bit SteamID to the signed 32-bit format.
      *
      * @param int $steamid64
-     * @return false|string
+     * @return string|false
      */
     public function AccountIDFromSteamID64($steamid64) {
-        return SteamID::Parse($steamid64, SteamID::FORMAT_STEAMID64)->Format(SteamID::FORMAT_S32);
+        $steamid = SteamID::Parse($steamid64, SteamID::FORMAT_STEAMID64);
+        return ($steamid === false) ? false : $steamid->Format(SteamID::FORMAT_S32);
     }
 
     /**
      * Converts a signed 32-bit SteamID to the 64-bit format.
      *
      * @param int $accountid
-     * @return false|string
+     * @return string|false
      */
     public function SteamID64FromAccountID($accountid) {
-        return SteamID::Parse($accountid, SteamID::FORMAT_S32)->Format(SteamID::FORMAT_STEAMID64);
+        $steamid = SteamID::Parse($accountid, SteamID::FORMAT_S32);
+        return ($steamid === false) ? false : $steamid->Format(SteamID::FORMAT_STEAMID64);
     }
 
     /**
      * Converts a 32-bit SteamID (string) to the signed 32-bit format.
      *
      * @param int $steamid32
-     * @return false|string
+     * @return string|false
      */
     public function AccountIDFromSteamID32($steamid32) {
-        return SteamID::Parse($steamid32, SteamID::FORMAT_STEAMID32)->Format(SteamID::FORMAT_S32);
+        $steamid = SteamID::Parse($steamid32, SteamID::FORMAT_STEAMID32);
+        return ($steamid === false) ? false : $steamid->Format(SteamID::FORMAT_S32);
     }
 
     /**
