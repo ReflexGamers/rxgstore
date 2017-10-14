@@ -165,7 +165,7 @@ class LiquidationsController extends AppController {
                 'standalone' => true,
                 'title' => 'Return Activity'
             ));
-            $this->render('/Activity/List');
+            $this->render('/Activity/list');
         }
     }
 }
