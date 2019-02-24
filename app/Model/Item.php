@@ -284,7 +284,7 @@ class Item extends AppModel {
                     )
                 ),
                 'order' => 'quantity desc',
-                'group' => 'order.user_id',
+                'group' => array( 'Rating.user_id', 'Rating.item_id', 'rating', 'review.review_id', 'review.created', 'review.modified', 'review.content', 'order.user_id'),
                 'limit' => $limit
             )
         );

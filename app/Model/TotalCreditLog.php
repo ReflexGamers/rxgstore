@@ -22,14 +22,14 @@ class TotalCreditLog extends AppModel {
             'fields' => array(
                 "date_format(date, '%Y-%m-%d') as date"
             ),
-            'group' => 'day(date)'
+            'group' => array('day(date)', 'TotalCreditLog.date')
         )), '0.date');
 
         $creditLog = Hash::extract($this->find('all', array(
             'fields' => array(
                 'round(avg(amount)) as average'
             ),
-            'group' => 'date(date)'
+            'group' => array('date(date)',  'TotalCreditLog.date')
         )), '{n}.0.average');
 
         $currencyMult = Configure::read('Store.CurrencyMultiplier');

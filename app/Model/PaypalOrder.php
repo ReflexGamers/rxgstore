@@ -42,7 +42,7 @@ class PaypalOrder extends AppModel {
                         'date <= ' => $this->formatTimestamp($endTime)
                     ),
                     'group' => 'YEAR(date)',
-                    'order' => 'date asc'
+                    'order' => 'YEAR(date) asc'
                 )
             ),
             '{n}',
@@ -81,7 +81,7 @@ class PaypalOrder extends AppModel {
                         'date < ' => $this->formatTimestamp($endTime)
                     ),
                     'group' => 'MONTH(date)',
-                    'order' => 'date asc'
+                    'order' => 'MONTH(date) asc'
                 )
             ),
             '{n}',
@@ -143,7 +143,7 @@ class PaypalOrder extends AppModel {
                         'date < ' => $this->formatTimestamp($endTime)
                     ),
                     'group' => 'DAY(date)',
-                    'order' => 'date asc'
+                    'order' => 'DAY(date) asc'
                 )
             ),
             '{n}',
